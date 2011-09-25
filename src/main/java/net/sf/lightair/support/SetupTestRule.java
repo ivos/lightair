@@ -13,6 +13,7 @@ import net.sf.lightair.annotation.Setup;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
@@ -25,15 +26,17 @@ import org.junit.runners.model.TestClass;
 public class SetupTestRule implements TestRule {
 
 	private final TestClass testClass;
-	private final Setup classSetup, methodSetup;
+	private Setup setup;
 	private final String classSetupFileName, methodSetupFileName;
 
 	private final Properties properties;
 
 	public SetupTestRule(TestClass testClass, FrameworkMethod method) {
 		this.testClass = testClass;
-		classSetup = testClass.getJavaClass().getAnnotation(Setup.class);
-		methodSetup = method.getAnnotation(Setup.class);
+		setup = method.getAnnotation(Setup.class);
+		if (null == setup) {
+			setup = testClass.getJavaClass().getAnnotation(Setup.class);
+		}
 		classSetupFileName = testClass.getJavaClass().getSimpleName() + ".xml";
 		methodSetupFileName = testClass.getJavaClass().getSimpleName() + '.'
 				+ method.getName() + ".xml";
@@ -66,22 +69,28 @@ public class SetupTestRule implements TestRule {
 
 	protected void setup() throws ClassNotFoundException, SQLException,
 			DatabaseUnitException, Exception {
-		if (null != methodSetup || null != classSetup) {
+		if (null != setup) {
 			connection = createDbUnitConnection();
-		}
-		if (null != methodSetup) {
-			dataSet = new FlatXmlDataSetBuilder().build(testClass
-					.getJavaClass().getResourceAsStream(methodSetupFileName));
-		} else if (null != classSetup) {
-			dataSet = new FlatXmlDataSetBuilder().build(testClass
-					.getJavaClass().getResourceAsStream(classSetupFileName));
-		}
-		if (null != dataSet) {
-			try {
-				DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-			} finally {
-				connection.close();
+			dataSet = loadDataSet(methodSetupFileName);
+			if (null == dataSet) {
+				dataSet = loadDataSet(classSetupFileName);
 			}
+			if (null != dataSet) {
+				try {
+					DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+				} finally {
+					connection.close();
+				}
+			}
+		}
+	}
+
+	private IDataSet loadDataSet(String fileName) {
+		try {
+			return new FlatXmlDataSetBuilder().build(testClass.getJavaClass()
+					.getResourceAsStream(fileName));
+		} catch (DataSetException e) {
+			return null;
 		}
 	}
 

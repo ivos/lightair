@@ -5,11 +5,15 @@ import static org.junit.Assert.*;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.lightair.LightAir;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
+@RunWith(LightAir.class)
 public class SetupTestBase {
 
 	protected final static JdbcTemplate db;
@@ -30,12 +34,16 @@ public class SetupTestBase {
 		db.execute("drop table person");
 	}
 
-	protected void verifyPersons() {
-		assertEquals("Count", 2, db.queryForInt("select count(*) from person"));
+	protected void verifyPersons(int size) {
+		assertEquals("Count", size,
+				db.queryForInt("select count(*) from person"));
 		List<Map<String, Object>> values = db
 				.queryForList("select * from person");
 		assertEquals("1. name", "Joe", values.get(0).get("name"));
 		assertEquals("2. name", "Jane", values.get(1).get("name"));
+		if (size > 2) {
+			assertEquals("3. name", "Sue", values.get(2).get("name"));
+		}
 	}
 
 }
