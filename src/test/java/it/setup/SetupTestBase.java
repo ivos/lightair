@@ -1,28 +1,15 @@
 package it.setup;
 
 import static org.junit.Assert.*;
+import it.common.CommonTestBase;
 
 import java.util.List;
 import java.util.Map;
 
-import net.sf.lightair.LightAir;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
-@RunWith(LightAir.class)
-public class SetupTestBase {
-
-	protected final static JdbcTemplate db;
-
-	static {
-		SingleConnectionDataSource dataSource = new SingleConnectionDataSource(
-				"jdbc:h2:mem:test", "sa", "", true);
-		db = new JdbcTemplate(dataSource);
-	}
+public class SetupTestBase extends CommonTestBase {
 
 	@BeforeClass
 	public static void beforeClass() {

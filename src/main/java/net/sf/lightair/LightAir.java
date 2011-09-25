@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.lightair.support.SetupTestRule;
+import net.sf.lightair.support.VerifyTestRule;
 
 import org.junit.rules.RunRules;
 import org.junit.rules.TestRule;
@@ -21,8 +22,9 @@ public class LightAir extends BlockJUnit4ClassRunner {
 	@Override
 	protected Statement methodBlock(FrameworkMethod method) {
 		Statement statement = super.methodBlock(method);
-		List<TestRule> lightAirRules = Arrays
-				.asList((TestRule) new SetupTestRule(getTestClass(), method));
+		List<TestRule> lightAirRules = Arrays.asList(
+				(TestRule) new SetupTestRule(getTestClass(), method),
+				(TestRule) new VerifyTestRule(getTestClass(), method));
 		statement = new RunRules(statement, lightAirRules,
 				describeChild(method));
 		return statement;
