@@ -5,6 +5,7 @@
 	<artifactId>light-air</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
+	<url>http://lightair.sf.net</url>
 	<properties>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>

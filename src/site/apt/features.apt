@@ -1,0 +1,23 @@
+ ---
+ Features
+ ---
+ Ivo Maixner
+ ---
+ 2011-09-26
+ ---
+
+Features
+
+ [[1]] <<Default @Setup>>\
+ When test method or test class is annotated with @Setup, system locates data set named 
+ '\<test class name\>.\<test method name\>.xml' in the package of the test class, or if it does 
+ not exists, locates data set named '\<test class name\>.xml', and performs "clean insert"
+ database operation with the data set located. 
+ If no such data set exists, system throws exception.
+
+ [[2]] <<Default @Verify>>\
+ When test method or test class is annotated with @Verify, system locates data set named 
+ '\<test class name\>.\<test method name\>.verify.xml' in the package of the test class, 
+ or if it does not exists, locates data set named '\<test class name\>.verify.xml', 
+ and verifies the data set against the database. 
+ If no such data set exists, system throws exception.
