@@ -38,9 +38,10 @@ public class VerifyTestRule implements TestRule {
 		if (null == verify) {
 			verify = testClass.getJavaClass().getAnnotation(Verify.class);
 		}
-		classVerifyFileName = testClass.getJavaClass().getSimpleName() + ".xml";
+		classVerifyFileName = testClass.getJavaClass().getSimpleName()
+				+ "-verify.xml";
 		methodVerifyFileName = testClass.getJavaClass().getSimpleName() + '.'
-				+ method.getName() + ".xml";
+				+ method.getName() + "-verify.xml";
 		properties = new Properties();
 		try {
 			URLConnection urlConnection = getClass().getClassLoader()
