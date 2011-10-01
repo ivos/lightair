@@ -53,6 +53,24 @@
 			<version>1.6.2</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>net.sf.seaf</groupId>
+			<artifactId>seaf-test-commons</artifactId>
+			<version>1.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-legacy</artifactId>
+			<version>2.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock</artifactId>
+			<version>2.5.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<testResources>
