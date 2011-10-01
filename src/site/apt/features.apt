@@ -17,7 +17,7 @@ Features
 
  [[2]] <<Default @Verify>>\
  When test method or test class is annotated with @Verify, system locates data set named 
- '\<test class name\>.\<test method name\>.verify.xml' in the package of the test class, 
- or if it does not exists, locates data set named '\<test class name\>.verify.xml', 
+ '\<test class name\>.\<test method name\>-verify.xml' in the package of the test class, 
+ or if it does not exists, locates data set named '\<test class name\>-verify.xml', 
  and verifies the data set against the database. 
  If no such data set exists, system throws exception.
