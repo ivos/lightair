@@ -3,8 +3,8 @@ package net.sf.lightair;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.lightair.support.SetupTestRule;
-import net.sf.lightair.support.VerifyTestRule;
+import net.sf.lightair.support.junit.SetupTestRule;
+import net.sf.lightair.support.junit.VerifyTestRule;
 
 import org.junit.rules.RunRules;
 import org.junit.rules.TestRule;

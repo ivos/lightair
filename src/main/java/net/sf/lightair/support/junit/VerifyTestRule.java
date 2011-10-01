@@ -1,4 +1,4 @@
-package net.sf.lightair.support;
+package net.sf.lightair.support.junit;
 
 import java.sql.SQLException;
 

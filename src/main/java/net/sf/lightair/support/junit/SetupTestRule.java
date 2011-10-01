@@ -1,4 +1,4 @@
-package net.sf.lightair.support;
+package net.sf.lightair.support.junit;
 
 import java.io.IOException;
 import java.io.InputStream;
