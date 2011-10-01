@@ -1,9 +1,10 @@
 package net.sf.lightair.support.junit;
 
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 
 import net.sf.lightair.annotation.Verify;
-import net.sf.lightair.exception.DataSetNotFoundException;
+import net.sf.lightair.support.dbunit.DataSetLoader;
 import net.sf.lightair.support.dbunit.DbUnitWrapper;
 
 import org.dbunit.Assertion;
@@ -18,20 +19,15 @@ import org.junit.runners.model.TestClass;
 
 public class VerifyTestRule implements TestRule {
 
-	private final TestClass testClass;
 	private Verify verify;
-	private final String classVerifyFileName, methodVerifyFileName;
+	private final Method testMethod;
 
-	public VerifyTestRule(TestClass testClass, FrameworkMethod method) {
-		this.testClass = testClass;
-		verify = method.getAnnotation(Verify.class);
+	public VerifyTestRule(TestClass testClass, FrameworkMethod frameworkMethod) {
+		this.testMethod = frameworkMethod.getMethod();
+		verify = testMethod.getAnnotation(Verify.class);
 		if (null == verify) {
 			verify = testClass.getJavaClass().getAnnotation(Verify.class);
 		}
-		classVerifyFileName = testClass.getJavaClass().getSimpleName()
-				+ "-verify.xml";
-		methodVerifyFileName = testClass.getJavaClass().getSimpleName() + '.'
-				+ method.getName() + "-verify.xml";
 	}
 
 	@Override
@@ -48,23 +44,12 @@ public class VerifyTestRule implements TestRule {
 	protected void verify() throws ClassNotFoundException, SQLException,
 			DatabaseUnitException, Exception {
 		if (null != verify) {
+			IDataSet dataSet = getDataSetLoader().loadDataSet(testMethod);
 			IDatabaseConnection connection = getDbUnit().createConnection();
-			IDataSet dataSet = getDbUnit().loadDataSetIfExists(
-					testClass.getJavaClass(), methodVerifyFileName);
-			if (null == dataSet) {
-				dataSet = getDbUnit().loadDataSetIfExists(
-						testClass.getJavaClass(), classVerifyFileName);
-			}
-			if (null == dataSet) {
-				throw new DataSetNotFoundException(classVerifyFileName,
-						methodVerifyFileName);
-			}
-			if (null != dataSet) {
-				try {
-					Assertion.assertEquals(dataSet, connection.createDataSet());
-				} finally {
-					connection.close();
-				}
+			try {
+				Assertion.assertEquals(dataSet, connection.createDataSet());
+			} finally {
+				connection.close();
 			}
 		}
 	}
@@ -76,6 +61,15 @@ public class VerifyTestRule implements TestRule {
 			dbUnit = new DbUnitWrapper();
 		}
 		return dbUnit;
+	}
+
+	private DataSetLoader dataSetLoader;
+
+	public DataSetLoader getDataSetLoader() {
+		if (null == dataSetLoader) {
+			dataSetLoader = new DataSetLoader();
+		}
+		return dataSetLoader;
 	}
 
 }
