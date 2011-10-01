@@ -1,4 +1,4 @@
-package it.verify;
+package it.verify.annotation;
 
 import it.common.CommonTestBase;
 
