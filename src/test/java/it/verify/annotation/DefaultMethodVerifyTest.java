@@ -1,12 +1,15 @@
 package it.verify.annotation;
 
+import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * Test class is not annotated. Test methods are annotated @Verify.
  */
+@RunWith(LightAir.class)
 public class DefaultMethodVerifyTest extends VerifyTestBase {
 
 	/**
