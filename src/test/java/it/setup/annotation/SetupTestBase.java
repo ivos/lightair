@@ -1,4 +1,4 @@
-package it.setup;
+package it.setup.annotation;
 
 import static org.junit.Assert.*;
 import it.common.CommonTestBase;
