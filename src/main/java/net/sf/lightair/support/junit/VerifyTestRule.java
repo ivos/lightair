@@ -15,18 +15,17 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
-import org.junit.runners.model.TestClass;
 
 public class VerifyTestRule implements TestRule {
 
 	private Verify verify;
 	private final Method testMethod;
 
-	public VerifyTestRule(TestClass testClass, FrameworkMethod frameworkMethod) {
+	public VerifyTestRule(FrameworkMethod frameworkMethod) {
 		this.testMethod = frameworkMethod.getMethod();
 		verify = testMethod.getAnnotation(Verify.class);
 		if (null == verify) {
-			verify = testClass.getJavaClass().getAnnotation(Verify.class);
+			verify = testMethod.getDeclaringClass().getAnnotation(Verify.class);
 		}
 	}
 
@@ -44,8 +43,8 @@ public class VerifyTestRule implements TestRule {
 	protected void verify() throws ClassNotFoundException, SQLException,
 			DatabaseUnitException, Exception {
 		if (null != verify) {
-			IDataSet dataSet = getDataSetLoader().loadDataSet(testMethod);
-			IDatabaseConnection connection = getDbUnit().createConnection();
+			IDataSet dataSet = dataSetLoader.loadDataSet(testMethod);
+			IDatabaseConnection connection = dbUnitWrapper.createConnection();
 			try {
 				Assertion.assertEquals(dataSet, connection.createDataSet());
 			} finally {
@@ -54,22 +53,16 @@ public class VerifyTestRule implements TestRule {
 		}
 	}
 
-	private DbUnitWrapper dbUnit;
+	private DbUnitWrapper dbUnitWrapper;
 
-	public DbUnitWrapper getDbUnit() {
-		if (null == dbUnit) {
-			dbUnit = new DbUnitWrapper();
-		}
-		return dbUnit;
+	public void setDbUnitWrapper(DbUnitWrapper dbUnitWrapper) {
+		this.dbUnitWrapper = dbUnitWrapper;
 	}
 
 	private DataSetLoader dataSetLoader;
 
-	public DataSetLoader getDataSetLoader() {
-		if (null == dataSetLoader) {
-			dataSetLoader = new DataSetLoader();
-		}
-		return dataSetLoader;
+	public void setDataSetLoader(DataSetLoader dataSetLoader) {
+		this.dataSetLoader = dataSetLoader;
 	}
 
 }

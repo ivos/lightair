@@ -3,12 +3,13 @@ package unit.support.dbunit;
 import static org.junit.Assert.*;
 import net.sf.lightair.exception.IllegalDataSetContentException;
 import net.sf.lightair.support.dbunit.DbUnitWrapper;
+import net.sf.lightair.support.factory.Factory;
 
 import org.junit.Test;
 
 public class DbUnitWrapperTest {
 
-	DbUnitWrapper w = new DbUnitWrapper();
+	DbUnitWrapper w = Factory.getInstance().getDbUnitWrapper();
 
 	@Test
 	public void createConnection() throws Exception {

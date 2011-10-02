@@ -69,16 +69,13 @@ public class DbUnitWrapper implements PropertyKeys {
 	}
 
 	private String getProperty(String key) {
-		return getProperties().getProperty(key);
+		return propertiesProvider.getProperty(key);
 	}
 
-	private PropertiesProvider properties;
+	private PropertiesProvider propertiesProvider;
 
-	public PropertiesProvider getProperties() {
-		if (null == properties) {
-			properties = new PropertiesProvider();
-		}
-		return properties;
+	public void setPropertiesProvider(PropertiesProvider propertiesProvider) {
+		this.propertiesProvider = propertiesProvider;
 	}
 
 }

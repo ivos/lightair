@@ -30,11 +30,10 @@ public class DataSetLoader {
 		String methodDataSetName = testClass.getSimpleName() + '.'
 				+ testMethod.getName() + "-verify.xml";
 
-		IDataSet dataSet = getDbUnit().loadDataSetIfExists(testClass,
+		IDataSet dataSet = dbUnit.loadDataSetIfExists(testClass,
 				methodDataSetName);
 		if (null == dataSet) {
-			dataSet = getDbUnit().loadDataSetIfExists(testClass,
-					classDataSetName);
+			dataSet = dbUnit.loadDataSetIfExists(testClass, classDataSetName);
 		}
 
 		if (null == dataSet) {
@@ -45,13 +44,6 @@ public class DataSetLoader {
 	}
 
 	private DbUnitWrapper dbUnit;
-
-	public DbUnitWrapper getDbUnit() {
-		if (null == dbUnit) {
-			dbUnit = new DbUnitWrapper();
-		}
-		return dbUnit;
-	}
 
 	public void setDbUnit(DbUnitWrapper dbUnit) {
 		this.dbUnit = dbUnit;
