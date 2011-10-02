@@ -38,12 +38,12 @@ public class DataSetLoaderTest extends JMockSupport {
 		check(new Expectations() {
 			{
 				one(dbUnit).loadDataSetIfExists(DataSetLoaderTest.class,
-						"DataSetLoaderTest.aMethod-verify.xml");
+						"DataSetLoaderTest.aMethod-suffix.xml");
 				will(returnValue(dataSet));
 			}
 		});
 
-		l.loadDataSet(method);
+		l.loadDataSet(method, "-suffix");
 	}
 
 	@Test
@@ -51,16 +51,16 @@ public class DataSetLoaderTest extends JMockSupport {
 		check(new Expectations() {
 			{
 				one(dbUnit).loadDataSetIfExists(DataSetLoaderTest.class,
-						"DataSetLoaderTest.aMethod-verify.xml");
+						"DataSetLoaderTest.aMethod-suffix.xml");
 				will(returnValue(null));
 
 				one(dbUnit).loadDataSetIfExists(DataSetLoaderTest.class,
-						"DataSetLoaderTest-verify.xml");
+						"DataSetLoaderTest-suffix.xml");
 				will(returnValue(dataSet));
 			}
 		});
 
-		l.loadDataSet(method);
+		l.loadDataSet(method, "-suffix");
 	}
 
 	@Test
@@ -68,21 +68,21 @@ public class DataSetLoaderTest extends JMockSupport {
 		check(new Expectations() {
 			{
 				one(dbUnit).loadDataSetIfExists(DataSetLoaderTest.class,
-						"DataSetLoaderTest.aMethod-verify.xml");
+						"DataSetLoaderTest.aMethod-suffix.xml");
 				will(returnValue(null));
 
 				one(dbUnit).loadDataSetIfExists(DataSetLoaderTest.class,
-						"DataSetLoaderTest-verify.xml");
+						"DataSetLoaderTest-suffix.xml");
 				will(returnValue(null));
 			}
 		});
 
 		try {
-			l.loadDataSet(method);
+			l.loadDataSet(method, "-suffix");
 			fail("Should throw");
 		} catch (DataSetNotFoundException e) {
-			assertEquals("Data set not found [DataSetLoaderTest-verify.xml, "
-					+ "DataSetLoaderTest.aMethod-verify.xml].", e.getMessage());
+			assertEquals("Data set not found [DataSetLoaderTest-suffix.xml, "
+					+ "DataSetLoaderTest.aMethod-suffix.xml].", e.getMessage());
 		}
 	}
 

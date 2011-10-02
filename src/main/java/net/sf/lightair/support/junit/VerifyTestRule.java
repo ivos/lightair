@@ -43,7 +43,8 @@ public class VerifyTestRule implements TestRule {
 	protected void verify() throws ClassNotFoundException, SQLException,
 			DatabaseUnitException, Exception {
 		if (null != verify) {
-			IDataSet dataSet = dataSetLoader.loadDataSet(testMethod);
+			IDataSet dataSet = dataSetLoader.loadDataSet(testMethod,
+					VERIFY_FILE_NAME_SUFFIX);
 			IDatabaseConnection connection = dbUnitWrapper.createConnection();
 			try {
 				Assertion.assertEquals(dataSet, connection.createDataSet());
@@ -52,6 +53,8 @@ public class VerifyTestRule implements TestRule {
 			}
 		}
 	}
+
+	private static final String VERIFY_FILE_NAME_SUFFIX = "-verify";
 
 	private DbUnitWrapper dbUnitWrapper;
 

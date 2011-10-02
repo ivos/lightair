@@ -11,6 +11,8 @@ import org.dbunit.dataset.IDataSet;
  */
 public class DataSetLoader {
 
+	private static final String DATA_SET_FILE_EXTENSION = ".xml";
+
 	/**
 	 * Load data set for a test method.
 	 * <p>
@@ -19,16 +21,19 @@ public class DataSetLoader {
 	 * 
 	 * @param testMethod
 	 *            Test method
+	 * @param suffix
+	 *            File name suffix
 	 * @return Data set configured for the test method
 	 * @throws DataSetNotFoundException
 	 *             When configured data set is not found
 	 */
-	public IDataSet loadDataSet(Method testMethod)
+	public IDataSet loadDataSet(Method testMethod, String suffix)
 			throws DataSetNotFoundException {
 		Class<?> testClass = testMethod.getDeclaringClass();
-		String classDataSetName = testClass.getSimpleName() + "-verify.xml";
+		String classDataSetName = testClass.getSimpleName() + suffix
+				+ DATA_SET_FILE_EXTENSION;
 		String methodDataSetName = testClass.getSimpleName() + '.'
-				+ testMethod.getName() + "-verify.xml";
+				+ testMethod.getName() + suffix + DATA_SET_FILE_EXTENSION;
 
 		IDataSet dataSet = dbUnit.loadDataSetIfExists(testClass,
 				methodDataSetName);

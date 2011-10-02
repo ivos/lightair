@@ -2,6 +2,7 @@ package net.sf.lightair.support.factory;
 
 import net.sf.lightair.support.dbunit.DataSetLoader;
 import net.sf.lightair.support.dbunit.DbUnitWrapper;
+import net.sf.lightair.support.junit.SetupTestRule;
 import net.sf.lightair.support.junit.VerifyTestRule;
 import net.sf.lightair.support.properties.PropertiesProvider;
 
@@ -39,10 +40,17 @@ public class Factory {
 	// getters for classes always newly instantiated
 
 	public VerifyTestRule getVerifyTestRule(FrameworkMethod frameworkMethod) {
-		VerifyTestRule verifyTestRule = new VerifyTestRule(frameworkMethod);
-		verifyTestRule.setDbUnitWrapper(dbUnitWrapper);
-		verifyTestRule.setDataSetLoader(dataSetLoader);
-		return verifyTestRule;
+		VerifyTestRule rule = new VerifyTestRule(frameworkMethod);
+		rule.setDbUnitWrapper(dbUnitWrapper);
+		rule.setDataSetLoader(dataSetLoader);
+		return rule;
+	}
+
+	public SetupTestRule getSetupTestRule(FrameworkMethod frameworkMethod) {
+		SetupTestRule rule = new SetupTestRule(frameworkMethod);
+		rule.setDbUnitWrapper(dbUnitWrapper);
+		rule.setDataSetLoader(dataSetLoader);
+		return rule;
 	}
 
 	// access as singleton
