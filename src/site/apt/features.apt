@@ -21,3 +21,9 @@ Features
  or if it does not exists, locates data set named '\<test class name\>-verify.xml', 
  and verifies the data set against the database. 
  If no such data set exists, system throws exception.
+
+ [[3]] <<Specify data set file names in @Setup>>\
+ When @Setup annotation contains file names of data sets, system uses those file names
+ to locate the data sets in the package of the test class 
+ and performs "clean insert" database operation with all data sets located. 
+ If a specified data set does not exist, system throws exception.

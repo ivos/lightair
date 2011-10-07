@@ -10,4 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 public @interface Setup {
 
+	String[] value() default {};
+
 }

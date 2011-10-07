@@ -31,6 +31,9 @@ public class SetupTestBase extends CommonTestBase {
 		if (size > 2) {
 			assertEquals("3. name", "Sue", values.get(2).get("name"));
 		}
+		if (size > 3) {
+			assertEquals("4. name", "Jake", values.get(3).get("name"));
+		}
 	}
 
 }

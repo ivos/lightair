@@ -36,7 +36,7 @@ public class DbUnitWrapperTest {
 			fail("Shloud throw");
 		} catch (IllegalDataSetContentException e) {
 			assertEquals(
-					"Cannot load content of data set 'data-set-incorrect.xml'.",
+					"Cannot load content of data set [data-set-incorrect.xml].",
 					e.getMessage());
 		}
 	}

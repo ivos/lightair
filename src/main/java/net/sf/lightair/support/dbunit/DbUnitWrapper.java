@@ -35,11 +35,16 @@ public class DbUnitWrapper implements PropertyKeys {
 	 */
 	public IDatabaseConnection createConnection()
 			throws ClassNotFoundException, SQLException, DatabaseUnitException {
+		return createConnection(getProperty(SCHEMA));
+	}
+
+	public IDatabaseConnection createConnection(String schemaName)
+			throws ClassNotFoundException, SQLException, DatabaseUnitException {
 		Class.forName(getProperty(DRIVER_CLASS_NAME));
 		Connection connection = DriverManager.getConnection(
 				getProperty(CONNECTION_URL), getProperty(USER_NAME),
 				getProperty(PASSWORD));
-		return new DatabaseConnection(connection, getProperty(SCHEMA));
+		return new DatabaseConnection(connection, schemaName);
 	}
 
 	/**
@@ -64,7 +69,7 @@ public class DbUnitWrapper implements PropertyKeys {
 		try {
 			return new FlatXmlDataSetBuilder().build(stream);
 		} catch (DataSetException e) {
-			throw new IllegalDataSetContentException(fileName, e);
+			throw new IllegalDataSetContentException(e, fileName);
 		}
 	}
 
