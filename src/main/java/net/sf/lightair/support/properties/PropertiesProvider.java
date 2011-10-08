@@ -13,12 +13,12 @@ import net.sf.lightair.exception.PropertiesNotFoundException;
 public class PropertiesProvider {
 
 	/**
-	 * Name of Light air properties file.
+	 * Name of properties file.
 	 */
 	public static final String PROPERTIES_FILE_NAME = "light-air.properties";
 
 	/**
-	 * Prefix of all Light air properties.
+	 * Prefix of all properties.
 	 */
 	private static final String PROPERTY_PREFIX = "light-air.";
 
@@ -46,7 +46,7 @@ public class PropertiesProvider {
 	}
 
 	/**
-	 * Get property value from Light air properties file.
+	 * Get property value from properties file.
 	 * <p>
 	 * Key gets pre-pended with "light-air.". Value is trimmed.
 	 * 

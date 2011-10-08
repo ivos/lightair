@@ -1,10 +1,10 @@
 package unit.support.dbunit;
 
 import static org.junit.Assert.*;
-import net.sf.lightair.exception.IllegalDataSetContentException;
 import net.sf.lightair.support.dbunit.DbUnitWrapper;
 import net.sf.lightair.support.factory.Factory;
 
+import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
 
 public class DbUnitWrapperTest {
@@ -12,33 +12,20 @@ public class DbUnitWrapperTest {
 	DbUnitWrapper w = Factory.getInstance().getDbUnitWrapper();
 
 	@Test
-	public void createConnection() throws Exception {
-		assertNotNull(w.createConnection());
+	public void createConnection_SchemaPassed() throws Exception {
+		IDatabaseConnection connection = w.createConnection("schema-name");
+		assertNotNull("Created", connection);
+		assertEquals("Schema name matches", "schema-name", connection
+				.getSchema().toLowerCase());
 	}
 
 	@Test
-	public void loadDataSetIfExists_NonExistent() throws Exception {
-		assertNull("Non-existent data set returns null",
-				w.loadDataSetIfExists(DbUnitWrapperTest.class, "non-existent"));
-	}
-
-	@Test
-	public void loadDataSetIfExists_Correct() throws Exception {
-		assertNotNull("Loads correct data set", w.loadDataSetIfExists(
-				DbUnitWrapperTest.class, "data-set-correct.xml"));
-	}
-
-	@Test
-	public void loadDataSetIfExists_IllegalContent() throws Exception {
-		try {
-			w.loadDataSetIfExists(DbUnitWrapperTest.class,
-					"data-set-incorrect.xml");
-			fail("Shloud throw");
-		} catch (IllegalDataSetContentException e) {
-			assertEquals(
-					"Cannot load content of data set [data-set-incorrect.xml].",
-					e.getMessage());
-		}
+	public void createConnection_SchemaNull() throws Exception {
+		IDatabaseConnection connection = w.createConnection(null);
+		assertNotNull("Created", connection);
+		String schema = connection.getSchema();
+		assertNotNull("Schema not null", schema);
+		assertEquals("Schema name matches", "public", schema.toLowerCase());
 	}
 
 }

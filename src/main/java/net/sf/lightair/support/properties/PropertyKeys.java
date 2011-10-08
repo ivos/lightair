@@ -9,6 +9,6 @@ public interface PropertyKeys {
 	String CONNECTION_URL = "connectionUrl";
 	String USER_NAME = "userName";
 	String PASSWORD = "password";
-	String SCHEMA = "schema";
+	String DEFAULT_SCHEMA = "defaultSchema";
 
 }
