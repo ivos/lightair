@@ -27,3 +27,10 @@ Features
  to locate the data sets in the package of the test class 
  and performs "clean insert" database operation with all data sets located. 
  If a specified data set does not exist, system throws exception.
+
+ [[4]] <<Specify data set file names in @Verify>>\
+ When @Verify annotation contains file names of data sets, system uses those file names
+ to locate the data sets in the package of the test class 
+ and verifies the data set against the database with all data sets located merged into one. 
+ If a specified data set does not exist, system throws exception.
+ 

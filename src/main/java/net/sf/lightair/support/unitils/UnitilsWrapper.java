@@ -9,26 +9,49 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
+import org.unitils.dbunit.util.DataSetAssert;
 import org.unitils.dbunit.util.MultiSchemaDataSet;
 
 public class UnitilsWrapper {
 
 	public void setup(Method testMethod, String[] fileNames)
 			throws ClassNotFoundException, SQLException, DatabaseUnitException {
-		MultiSchemaDataSet dataSet = dataSetLoader.load(testMethod, "",
-				fileNames);
-		for (String schemaName : dataSet.getSchemaNames()) {
-			IDataSet schemaDataSet = dataSet.getDataSetForSchema(schemaName);
+		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,
+				"", fileNames);
+		for (String schemaName : multiSchemaDataSet.getSchemaNames()) {
+			IDataSet dataSet = multiSchemaDataSet
+					.getDataSetForSchema(schemaName);
 			IDatabaseConnection connection = dbUnitWrapper
 					.createConnection(schemaName);
 			try {
-				DatabaseOperation.CLEAN_INSERT.execute(connection,
-						schemaDataSet);
+				DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
 			} finally {
 				connection.close();
 			}
 		}
 	}
+
+	public void verify(Method testMethod, String[] fileNames)
+			throws ClassNotFoundException, SQLException, DatabaseUnitException {
+		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,
+				VERIFY_FILE_NAME_SUFFIX, fileNames);
+		DataSetAssert dataSetAssert = new DataSetAssert();
+		for (String schemaName : multiSchemaDataSet.getSchemaNames()) {
+			IDataSet dataSetExpected = multiSchemaDataSet
+					.getDataSetForSchema(schemaName);
+			IDatabaseConnection connection = dbUnitWrapper
+					.createConnection(schemaName);
+			try {
+				IDataSet dataSetActual = connection.createDataSet();
+				dataSetAssert.assertEqualDbUnitDataSets(schemaName,
+						dataSetExpected, dataSetActual);
+			} finally {
+				connection.close();
+			}
+		}
+	}
+
+	private static final String VERIFY_FILE_NAME_SUFFIX = "-verify";
 
 	private DbUnitWrapper dbUnitWrapper;
 

@@ -27,12 +27,6 @@ public class Factory {
 		return dbUnitWrapper;
 	}
 
-	private final net.sf.lightair.support.dbunit.DataSetLoader dataSetLoader2 = new net.sf.lightair.support.dbunit.DataSetLoader();
-
-	public net.sf.lightair.support.dbunit.DataSetLoader getDataSetLoader2() {
-		return dataSetLoader2;
-	}
-
 	private final UnitilsWrapper unitilsWrapper = new UnitilsWrapper();
 
 	public UnitilsWrapper getUnitilsWrapper() {
@@ -55,7 +49,6 @@ public class Factory {
 
 	private void init() {
 		dbUnitWrapper.setPropertiesProvider(propertiesProvider);
-		dataSetLoader2.setDbUnit(dbUnitWrapper);
 		unitilsWrapper.setDbUnitWrapper(dbUnitWrapper);
 		unitilsWrapper.setDataSetLoader(dataSetLoader);
 		dataSetLoader.setDataSetResolver(dataSetResolver);
@@ -66,8 +59,7 @@ public class Factory {
 
 	public VerifyTestRule getVerifyTestRule(FrameworkMethod frameworkMethod) {
 		VerifyTestRule rule = new VerifyTestRule(frameworkMethod);
-		rule.setDbUnitWrapper(dbUnitWrapper);
-		rule.setDataSetLoader(dataSetLoader2);
+		rule.setUnitilsWrapper(unitilsWrapper);
 		return rule;
 	}
 

@@ -4,13 +4,9 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 
 import net.sf.lightair.annotation.Verify;
-import net.sf.lightair.support.dbunit.DataSetLoader;
-import net.sf.lightair.support.dbunit.DbUnitWrapper;
+import net.sf.lightair.support.unitils.UnitilsWrapper;
 
-import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.IDataSet;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.FrameworkMethod;
@@ -43,29 +39,14 @@ public class VerifyTestRule implements TestRule {
 	protected void verify() throws ClassNotFoundException, SQLException,
 			DatabaseUnitException, Exception {
 		if (null != verify) {
-			IDataSet dataSet = dataSetLoader.loadDataSet(testMethod,
-					VERIFY_FILE_NAME_SUFFIX);
-			IDatabaseConnection connection = dbUnitWrapper.createConnection();
-			try {
-				Assertion.assertEquals(dataSet, connection.createDataSet());
-			} finally {
-				connection.close();
-			}
+			unitilsWrapper.verify(testMethod, verify.value());
 		}
 	}
 
-	private static final String VERIFY_FILE_NAME_SUFFIX = "-verify";
+	private UnitilsWrapper unitilsWrapper;
 
-	private DbUnitWrapper dbUnitWrapper;
-
-	public void setDbUnitWrapper(DbUnitWrapper dbUnitWrapper) {
-		this.dbUnitWrapper = dbUnitWrapper;
-	}
-
-	private DataSetLoader dataSetLoader;
-
-	public void setDataSetLoader(DataSetLoader dataSetLoader) {
-		this.dataSetLoader = dataSetLoader;
+	public void setUnitilsWrapper(UnitilsWrapper unitilsWrapper) {
+		this.unitilsWrapper = unitilsWrapper;
 	}
 
 }
