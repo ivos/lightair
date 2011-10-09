@@ -6,6 +6,9 @@ import net.sf.lightair.annotation.Setup;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Setup custom file names.
+ */
 @RunWith(LightAir.class)
 @Setup({ "custom-setup-1.xml", "custom-setup-2.xml", "custom-setup-3.xml" })
 public class CustomSetupTest extends SetupTestBase {
