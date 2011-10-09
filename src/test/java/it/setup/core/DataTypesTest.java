@@ -41,30 +41,27 @@ public class DataTypesTest extends CommonTestBase {
 		assertEquals("Count", 2,
 				db.queryForInt("select count(*) from data_types"));
 		values = db.queryForList("select * from data_types");
-		verifyRow(0, 1, "abcdefghijklmnopqrstuvxyz", 12345678,
-				new DateMidnight(2999, 12, 31), new LocalTime(23, 59, 58),
-				new DateTime(2998, 11, 30, 22, 57, 56, 789));
-		verifyRow(1, 2, "", 0, new DateMidnight(2000, 1, 2), new LocalTime(0,
-				0, 0), new DateTime(2000, 1, 2, 3, 4, 5, 678));
+		verifyRow(0, "abcdefghijklmnopqrstuvxyz", 12345678, new DateMidnight(
+				2999, 12, 31), new LocalTime(23, 59, 58), new DateTime(2998,
+				11, 30, 22, 57, 56, 789));
+		verifyRow(1, "", 0, new DateMidnight(2000, 1, 2),
+				new LocalTime(0, 0, 0), new DateTime(2000, 1, 2, 3, 4, 5, 678));
 	}
 
-	private void verifyRow(int rowId, int id, String string_type,
-			int integer_type, DateMidnight date_type, LocalTime time_type,
-			DateTime timestamp_type) {
-		assertEquals("id " + rowId, id, values.get(rowId).get("id"));
-		assertEquals("string_type " + rowId, string_type, values.get(rowId)
-				.get("string_type"));
-		assertEquals("integer_type " + rowId, integer_type, values.get(rowId)
-				.get("integer_type"));
-		assertEquals("date_type " + rowId, date_type.toDate(), values
-				.get(rowId).get("date_type"));
-		assertEquals(
-				"time_type " + rowId,
-				time_type,
-				LocalTime.fromDateFields((Date) values.get(rowId).get(
-						"time_type")));
-		assertEquals("timestamp_type " + rowId, timestamp_type.toDate(), values
-				.get(rowId).get("timestamp_type"));
+	private void verifyRow(int id, String string_type, int integer_type,
+			DateMidnight date_type, LocalTime time_type, DateTime timestamp_type) {
+		assertEquals("id " + id, id, values.get(id).get("id"));
+		assertEquals("string_type " + id, string_type,
+				values.get(id).get("string_type"));
+		assertEquals("integer_type " + id, integer_type,
+				values.get(id).get("integer_type"));
+		assertEquals("date_type " + id, date_type.toDate(),
+				values.get(id).get("date_type"));
+		assertEquals("time_type " + id, time_type,
+				LocalTime
+						.fromDateFields((Date) values.get(id).get("time_type")));
+		assertEquals("timestamp_type " + id, timestamp_type.toDate(), values
+				.get(id).get("timestamp_type"));
 	}
 
 }

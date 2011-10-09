@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<data_types id="1" string_type="abcdefghijklmnopqrstuvxyz" integer_type="12345678"
+	<data_types id="0" string_type="abcdefghijklmnopqrstuvxyz" integer_type="12345678"
 		date_type="2999-12-31" time_type="23:59:58" timestamp_type="2998-11-30 22:57:56.789" />
-	<data_types id="2" string_type="" integer_type="0" date_type="2000-01-02"
+	<data_types id="1" string_type="" integer_type="0" date_type="2000-01-02"
 		time_type="00:00:00" timestamp_type="2000-01-02 03:04:05.678" />
 </dataset>
