@@ -24,7 +24,6 @@ public abstract class AbstractTestRule<T extends Annotation> implements
 				.getDeclaringClass().getAnnotation(annotationType);
 	}
 
-	@Override
 	public Statement apply(final Statement base, Description description) {
 		return new Statement() {
 			@Override
