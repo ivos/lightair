@@ -1,4 +1,4 @@
-package unit.support.unitils;
+package unit.internal.unitils;
 
 import static org.junit.Assert.*;
 
@@ -6,8 +6,8 @@ import java.io.File;
 import java.lang.reflect.Method;
 
 import net.sf.lightair.exception.IllegalDataSetContentException;
-import net.sf.lightair.support.unitils.DataSetLoader;
-import net.sf.lightair.support.util.DataSetResolver;
+import net.sf.lightair.internal.unitils.DataSetLoader;
+import net.sf.lightair.internal.util.DataSetResolver;
 import net.sf.seaf.test.jmock.JMockSupport;
 
 import org.jmock.Expectations;

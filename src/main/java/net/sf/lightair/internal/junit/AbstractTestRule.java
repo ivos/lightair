@@ -1,9 +1,9 @@
-package net.sf.lightair.support.junit;
+package net.sf.lightair.internal.junit;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import net.sf.lightair.support.unitils.UnitilsWrapper;
+import net.sf.lightair.internal.unitils.UnitilsWrapper;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;

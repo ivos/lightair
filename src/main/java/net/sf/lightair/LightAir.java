@@ -3,7 +3,7 @@ package net.sf.lightair;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.lightair.support.factory.Factory;
+import net.sf.lightair.internal.factory.Factory;
 
 import org.junit.rules.RunRules;
 import org.junit.rules.TestRule;

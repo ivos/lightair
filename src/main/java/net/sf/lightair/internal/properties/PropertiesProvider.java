@@ -1,4 +1,4 @@
-package net.sf.lightair.support.properties;
+package net.sf.lightair.internal.properties;
 
 import java.io.IOException;
 import java.io.InputStream;

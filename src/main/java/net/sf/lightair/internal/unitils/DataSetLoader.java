@@ -1,4 +1,4 @@
-package net.sf.lightair.support.unitils;
+package net.sf.lightair.internal.unitils;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.lightair.exception.IllegalDataSetContentException;
-import net.sf.lightair.support.util.DataSetResolver;
+import net.sf.lightair.internal.util.DataSetResolver;
 
 import org.unitils.core.UnitilsException;
 import org.unitils.dbunit.datasetfactory.DataSetFactory;

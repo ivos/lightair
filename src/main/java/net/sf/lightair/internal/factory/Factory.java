@@ -1,12 +1,12 @@
-package net.sf.lightair.support.factory;
+package net.sf.lightair.internal.factory;
 
-import net.sf.lightair.support.dbunit.DbUnitWrapper;
-import net.sf.lightair.support.junit.SetupTestRule;
-import net.sf.lightair.support.junit.VerifyTestRule;
-import net.sf.lightair.support.properties.PropertiesProvider;
-import net.sf.lightair.support.unitils.DataSetLoader;
-import net.sf.lightair.support.unitils.UnitilsWrapper;
-import net.sf.lightair.support.util.DataSetResolver;
+import net.sf.lightair.internal.dbunit.DbUnitWrapper;
+import net.sf.lightair.internal.junit.SetupTestRule;
+import net.sf.lightair.internal.junit.VerifyTestRule;
+import net.sf.lightair.internal.properties.PropertiesProvider;
+import net.sf.lightair.internal.unitils.DataSetLoader;
+import net.sf.lightair.internal.unitils.UnitilsWrapper;
+import net.sf.lightair.internal.util.DataSetResolver;
 
 import org.junit.runners.model.FrameworkMethod;
 import org.unitils.dbunit.datasetfactory.impl.MultiSchemaXmlDataSetFactory;

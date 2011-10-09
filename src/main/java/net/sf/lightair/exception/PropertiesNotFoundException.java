@@ -1,6 +1,6 @@
 package net.sf.lightair.exception;
 
-import net.sf.lightair.support.properties.PropertiesProvider;
+import net.sf.lightair.internal.properties.PropertiesProvider;
 
 public class PropertiesNotFoundException extends RuntimeException {
 

@@ -1,9 +1,9 @@
-package net.sf.lightair.support.unitils;
+package net.sf.lightair.internal.unitils;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-import net.sf.lightair.support.dbunit.DbUnitWrapper;
+import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;

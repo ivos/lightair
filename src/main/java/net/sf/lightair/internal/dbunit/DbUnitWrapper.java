@@ -1,11 +1,11 @@
-package net.sf.lightair.support.dbunit;
+package net.sf.lightair.internal.dbunit;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import net.sf.lightair.support.properties.PropertiesProvider;
-import net.sf.lightair.support.properties.PropertyKeys;
+import net.sf.lightair.internal.properties.PropertiesProvider;
+import net.sf.lightair.internal.properties.PropertyKeys;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;

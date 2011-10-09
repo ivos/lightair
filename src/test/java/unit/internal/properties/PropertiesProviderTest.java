@@ -1,7 +1,7 @@
-package unit.support.properties;
+package unit.internal.properties;
 
 import static org.junit.Assert.*;
-import net.sf.lightair.support.properties.PropertiesProvider;
+import net.sf.lightair.internal.properties.PropertiesProvider;
 
 import org.junit.Test;
 

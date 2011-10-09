@@ -1,11 +1,11 @@
-package unit.support.util;
+package unit.internal.util;
 
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
 
 import net.sf.lightair.exception.DataSetNotFoundException;
-import net.sf.lightair.support.util.DataSetResolver;
+import net.sf.lightair.internal.util.DataSetResolver;
 
 import org.junit.Before;
 import org.junit.Test;

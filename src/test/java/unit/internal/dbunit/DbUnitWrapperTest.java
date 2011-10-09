@@ -1,8 +1,8 @@
-package unit.support.dbunit;
+package unit.internal.dbunit;
 
 import static org.junit.Assert.*;
-import net.sf.lightair.support.dbunit.DbUnitWrapper;
-import net.sf.lightair.support.factory.Factory;
+import net.sf.lightair.internal.dbunit.DbUnitWrapper;
+import net.sf.lightair.internal.factory.Factory;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;

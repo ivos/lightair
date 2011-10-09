@@ -1,4 +1,4 @@
-package net.sf.lightair.support.util;
+package net.sf.lightair.internal.util;
 
 import java.io.File;
 import java.lang.reflect.Method;
