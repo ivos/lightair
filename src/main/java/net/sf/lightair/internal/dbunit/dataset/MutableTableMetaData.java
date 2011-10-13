@@ -83,4 +83,10 @@ public class MutableTableMetaData implements ITableMetaData {
 		columns.add(column);
 	}
 
+	@Override
+	public String toString() {
+		return "MutableTableMetaData [tableName=" + tableName + ", columns="
+				+ columns + "]";
+	}
+
 }
