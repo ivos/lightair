@@ -6,6 +6,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 
 import net.sf.lightair.exception.IllegalDataSetContentException;
+import net.sf.lightair.internal.unitils.DataSetFactory;
 import net.sf.lightair.internal.unitils.DataSetLoader;
 import net.sf.lightair.internal.util.DataSetResolver;
 import net.sf.seaf.test.jmock.JMockSupport;
@@ -13,8 +14,6 @@ import net.sf.seaf.test.jmock.JMockSupport;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
-import org.unitils.core.UnitilsException;
-import org.unitils.dbunit.datasetfactory.DataSetFactory;
 
 public class DataSetLoaderTest extends JMockSupport {
 
@@ -23,7 +22,7 @@ public class DataSetLoaderTest extends JMockSupport {
 	DataSetResolver dataSetResolver;
 	File file1, file2, file3;
 	DataSetFactory dataSetFactory;
-	UnitilsException cause;
+	IllegalDataSetContentException cause;
 
 	public void aMethod() {
 	}
@@ -40,7 +39,7 @@ public class DataSetLoaderTest extends JMockSupport {
 		file1 = mock(File.class, "file1");
 		file2 = mock(File.class, "file2");
 		file3 = mock(File.class, "file3");
-		cause = new UnitilsException("Unitils message.");
+		cause = new IllegalDataSetContentException(null, "Unitils message.");
 	}
 
 	@Test

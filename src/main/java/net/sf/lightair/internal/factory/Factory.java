@@ -4,12 +4,12 @@ import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.junit.SetupTestRule;
 import net.sf.lightair.internal.junit.VerifyTestRule;
 import net.sf.lightair.internal.properties.PropertiesProvider;
+import net.sf.lightair.internal.unitils.DataSetFactory;
 import net.sf.lightair.internal.unitils.DataSetLoader;
 import net.sf.lightair.internal.unitils.UnitilsWrapper;
 import net.sf.lightair.internal.util.DataSetResolver;
 
 import org.junit.runners.model.FrameworkMethod;
-import org.unitils.dbunit.datasetfactory.impl.MultiSchemaXmlDataSetFactory;
 
 public class Factory {
 
@@ -45,6 +45,12 @@ public class Factory {
 		return dataSetLoader;
 	}
 
+	private final DataSetFactory dataSetFactory = new DataSetFactory();
+
+	public DataSetFactory getDataSetFactory() {
+		return dataSetFactory;
+	}
+
 	// initialize single-instance classes
 
 	private void init() {
@@ -52,7 +58,8 @@ public class Factory {
 		unitilsWrapper.setDbUnitWrapper(dbUnitWrapper);
 		unitilsWrapper.setDataSetLoader(dataSetLoader);
 		dataSetLoader.setDataSetResolver(dataSetResolver);
-		dataSetLoader.setDataSetFactory(new MultiSchemaXmlDataSetFactory());
+		dataSetLoader.setDataSetFactory(dataSetFactory);
+		dataSetFactory.setPropertiesProvider(propertiesProvider);
 	}
 
 	// getters for classes always newly instantiated

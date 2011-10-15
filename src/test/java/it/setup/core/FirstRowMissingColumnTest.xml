@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<first_row_missing_column id="0" first_has_value="0h" />
+	<first_row_missing_column id="1" first_has_value="1h"
+		first_missing="1m" />
+	<first_row_missing_column id="2" first_missing="2m" third_only="2t" />
+</dataset>

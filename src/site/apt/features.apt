@@ -33,4 +33,10 @@ Features
  to locate the data sets in the package of the test class 
  and verifies the data set against the database with all data sets located merged into one. 
  If a specified data set does not exist, system throws exception.
+
+ [[5]] <<Use all columns of a row in setup>>\
+ When inserting a row during setup, fill values to all columns defined on the row,
+ no matter what columns were defined on other rows of the table.\
+ This fixes bug of DbUnit, where the first row of the table freezes columns used
+ by the data set, other columns defined on subsequent rows are ignored by DbUnit.
  

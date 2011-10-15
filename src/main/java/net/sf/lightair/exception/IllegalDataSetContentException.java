@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class IllegalDataSetContentException extends RuntimeException {
 
 	public IllegalDataSetContentException(Throwable cause, String... fileNames) {
-		super("Cannot load content of data set " + Arrays.asList(fileNames)
+		super("Cannot load content of data set " + Arrays.toString(fileNames)
 				+ ".", cause);
 	}
 
