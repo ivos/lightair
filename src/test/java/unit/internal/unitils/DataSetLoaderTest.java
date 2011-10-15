@@ -6,6 +6,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 
 import net.sf.lightair.exception.IllegalDataSetContentException;
+import net.sf.lightair.internal.dbunit.dataset.ReplacementDataSetWrapper;
 import net.sf.lightair.internal.unitils.DataSetFactory;
 import net.sf.lightair.internal.unitils.DataSetLoader;
 import net.sf.lightair.internal.util.DataSetResolver;
@@ -14,6 +15,7 @@ import net.sf.seaf.test.jmock.JMockSupport;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.unitils.dbunit.util.MultiSchemaDataSet;
 
 public class DataSetLoaderTest extends JMockSupport {
 
@@ -22,7 +24,9 @@ public class DataSetLoaderTest extends JMockSupport {
 	DataSetResolver dataSetResolver;
 	File file1, file2, file3;
 	DataSetFactory dataSetFactory;
+	ReplacementDataSetWrapper replacementDataSetWrapper;
 	IllegalDataSetContentException cause;
+	MultiSchemaDataSet msdsCreated, msdsWrapped;
 
 	public void aMethod() {
 	}
@@ -34,12 +38,16 @@ public class DataSetLoaderTest extends JMockSupport {
 		l.setDataSetResolver(dataSetResolver);
 		dataSetFactory = mock(DataSetFactory.class);
 		l.setDataSetFactory(dataSetFactory);
+		replacementDataSetWrapper = mock(ReplacementDataSetWrapper.class);
+		l.setReplacementDataSetWrapper(replacementDataSetWrapper);
 		testMethod = DataSetLoaderTest.class.getDeclaredMethod("aMethod",
 				(Class<?>[]) null);
 		file1 = mock(File.class, "file1");
 		file2 = mock(File.class, "file2");
 		file3 = mock(File.class, "file3");
-		cause = new IllegalDataSetContentException(null, "Unitils message.");
+		cause = new IllegalDataSetContentException(null, "Message.");
+		msdsCreated = mock(MultiSchemaDataSet.class, "msdsCreated");
+		msdsWrapped = mock(MultiSchemaDataSet.class, "msdsWrapped");
 	}
 
 	@Test
@@ -56,10 +64,17 @@ public class DataSetLoaderTest extends JMockSupport {
 				will(returnValue(file3));
 
 				one(dataSetFactory).createDataSet(file1, file2, file3);
+				will(returnValue(msdsCreated));
+
+				one(replacementDataSetWrapper).wrap(msdsCreated);
+				will(returnValue(msdsWrapped));
 			}
 		});
 
-		l.load(testMethod, "suffix", "fileName1", "fileName2", "fileName3");
+		MultiSchemaDataSet actual = l.load(testMethod, "suffix", "fileName1",
+				"fileName2", "fileName3");
+
+		assertSame(msdsWrapped, actual);
 	}
 
 	@Test
@@ -71,10 +86,16 @@ public class DataSetLoaderTest extends JMockSupport {
 				will(returnValue(file1));
 
 				one(dataSetFactory).createDataSet(file1);
+				will(returnValue(msdsCreated));
+
+				one(replacementDataSetWrapper).wrap(msdsCreated);
+				will(returnValue(msdsWrapped));
 			}
 		});
 
-		l.load(testMethod, "suffix");
+		MultiSchemaDataSet actual = l.load(testMethod, "suffix");
+
+		assertSame(msdsWrapped, actual);
 	}
 
 	@Test
@@ -90,10 +111,16 @@ public class DataSetLoaderTest extends JMockSupport {
 				will(returnValue(file1));
 
 				one(dataSetFactory).createDataSet(file1);
+				will(returnValue(msdsCreated));
+
+				one(replacementDataSetWrapper).wrap(msdsCreated);
+				will(returnValue(msdsWrapped));
 			}
 		});
 
-		l.load(testMethod, "suffix");
+		MultiSchemaDataSet actual = l.load(testMethod, "suffix");
+
+		assertSame(msdsWrapped, actual);
 	}
 
 	@Test

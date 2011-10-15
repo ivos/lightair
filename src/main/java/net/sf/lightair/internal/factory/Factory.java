@@ -1,6 +1,7 @@
 package net.sf.lightair.internal.factory;
 
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
+import net.sf.lightair.internal.dbunit.dataset.ReplacementDataSetWrapper;
 import net.sf.lightair.internal.junit.SetupTestRule;
 import net.sf.lightair.internal.junit.VerifyTestRule;
 import net.sf.lightair.internal.properties.PropertiesProvider;
@@ -51,6 +52,12 @@ public class Factory {
 		return dataSetFactory;
 	}
 
+	private final ReplacementDataSetWrapper replacementDataSetWrapper = new ReplacementDataSetWrapper();
+
+	public ReplacementDataSetWrapper getReplacementDataSetWrapper() {
+		return replacementDataSetWrapper;
+	}
+
 	// initialize single-instance classes
 
 	private void init() {
@@ -59,6 +66,7 @@ public class Factory {
 		unitilsWrapper.setDataSetLoader(dataSetLoader);
 		dataSetLoader.setDataSetResolver(dataSetResolver);
 		dataSetLoader.setDataSetFactory(dataSetFactory);
+		dataSetLoader.setReplacementDataSetWrapper(replacementDataSetWrapper);
 		dataSetFactory.setPropertiesProvider(propertiesProvider);
 	}
 

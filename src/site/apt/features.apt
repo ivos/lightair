@@ -39,4 +39,6 @@ Features
  no matter what columns were defined on other rows of the table.\
  This fixes bug of DbUnit, where the first row of the table freezes columns used
  by the data set, other columns defined on subsequent rows are ignored by DbUnit.
+
+ [[6]] <<Replace @null with null value in setup>>
  
