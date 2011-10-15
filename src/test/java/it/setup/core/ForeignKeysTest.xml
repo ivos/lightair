@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<!-- Master 0 with its details: -->
+	<master id="0" m1="01" />
+	<detail id="0" master_id="0" d1="001" />
+	<detail id="1" master_id="0" d1="011" />
+	<detail id="2" master_id="0" d1="021" />
+	<!-- Master 1 with its details: -->
+	<master id="1" m1="11" />
+	<detail id="10" master_id="1" d1="101" />
+	<detail id="11" master_id="1" d1="111" />
+	<detail id="12" master_id="1" d1="121" />
+</dataset>
