@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset xmlns:s1="s1" xmlns:s2="s2" xmlns:s3="s3">
+	<s1:ts1 id="0" a="a10" />
+	<s2:ts2 id="0" a="a20" />
+	<s3:ts3 id="0" a="a30" />
+	<tds id="0" a="ad0" />
+	<s1:ts1 id="1" a="a11" />
+	<s2:ts2 id="1" a="a21" />
+	<s3:ts3 id="1" a="a31" />
+	<tds id="1" a="ad1" />
+	<s1:ts1 id="2" a="a12" />
+	<s2:ts2 id="2" a="a22" />
+	<s3:ts3 id="2" a="a32" />
+	<tds id="2" a="ad2" />
+</dataset>

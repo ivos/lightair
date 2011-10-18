@@ -42,3 +42,5 @@ Features
 
  [[6]] <<Replace @null with null value in setup>>
  
+ [[7]] <<Specify database schema of a table row using XML namespace in setup>>
+ 
