@@ -9,3 +9,17 @@
 Light Air
 
  Welcome to Light Air project site.
+
+ Light Air is a tool to support 
+ integration, functional testing of web applications for developers.
+ 
+ Light Air strives for intuitive, simple usage and common-sense behavior. 
+ 
+ Light Air fixes notorious bugs in DbUnit and 
+ wraps DbUnit, Unitils and JWebUnit in a common, modern usage pattern.
+
+===
+
+ Light Air project is hosted by Sourceforge.net at 
+ {{{http://sf.net/projects/lightair/}Light Air Sourceforge page}}.
+ 

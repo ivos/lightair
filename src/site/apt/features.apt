@@ -8,14 +8,14 @@
 
 Features
 
- [[1]] <<Default @Setup>>\
+ [[1]] <<Default @Setup annotation>>\
  When test method or test class is annotated with @Setup, system locates data set named 
  '\<test class name\>.\<test method name\>.xml' in the package of the test class, or if it does 
  not exists, locates data set named '\<test class name\>.xml', 
  and performs "clean insert" database operation with the data set located. 
  If no such data set exists, system throws exception.
 
- [[2]] <<Default @Verify>>\
+ [[2]] <<Default @Verify annotation>>\
  When test method or test class is annotated with @Verify, system locates data set named 
  '\<test class name\>.\<test method name\>-verify.xml' in the package of the test class, 
  or if it does not exists, locates data set named '\<test class name\>-verify.xml', 
@@ -41,11 +41,20 @@ Features
  by the data set, other columns defined on subsequent rows are ignored by DbUnit.
 
  [[6]] <<Replace @null with null value in setup>>
+ Use @null in XML dataset to specify null value.
  
  [[7]] <<Specify database schema of a table row using XML namespace in setup>>
+ Specify row schema using XML namespace:
+
+---
+<dataset xmlns:s1="SCHEMA1">
+	<s1:table_s1 id="0" />
+</dataset>
+---
  
- [[8]] <<Verification fails when a column value does not match>>
+ [[8]] <<Verification fails when a column value does not match>>\
  Detailed message indicating the particular row and column is displayed.
  
- [[9]] <<Row order is irrelevant in verification>>
+ [[9]] <<Row order is irrelevant in verification>>\
+ Rows in verification dataset may be in any order.
  
