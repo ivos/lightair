@@ -44,3 +44,6 @@ Features
  
  [[7]] <<Specify database schema of a table row using XML namespace in setup>>
  
+ [[8]] <<Verification fails when a column value does not match>>
+ Detailed message indicating the particular row and column is displayed.
+ 

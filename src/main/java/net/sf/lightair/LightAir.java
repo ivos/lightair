@@ -21,12 +21,16 @@ public class LightAir extends BlockJUnit4ClassRunner {
 	@Override
 	protected Statement methodBlock(FrameworkMethod method) {
 		Statement statement = super.methodBlock(method);
-		List<TestRule> lightAirRules = Arrays.asList((TestRule) Factory
-				.getInstance().getSetupTestRule(method), (TestRule) Factory
-				.getInstance().getVerifyTestRule(method));
+		List<TestRule> lightAirRules = createTestRules(method);
 		statement = new RunRules(statement, lightAirRules,
 				describeChild(method));
 		return statement;
+	}
+
+	protected List<TestRule> createTestRules(FrameworkMethod method) {
+		return Arrays.asList(
+				(TestRule) Factory.getInstance().getSetupTestRule(method),
+				(TestRule) Factory.getInstance().getVerifyTestRule(method));
 	}
 
 }
