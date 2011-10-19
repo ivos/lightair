@@ -47,3 +47,5 @@ Features
  [[8]] <<Verification fails when a column value does not match>>
  Detailed message indicating the particular row and column is displayed.
  
+ [[9]] <<Row order is irrelevant in verification>>
+ 
