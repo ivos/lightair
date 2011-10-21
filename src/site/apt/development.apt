@@ -1,0 +1,19 @@
+ ---
+ Development
+ ---
+ Ivo Maixner
+ ---
+ 2011-10-21
+ ---
+
+Development
+
+* Clone GIT repo
+
+ To clone GIT repo (read-only), issue:
+ 
++---+
+git clone git://lightair.git.sourceforge.net/gitroot/lightair/light-air.git/
+cd light-air/
+mvn install
++---+
