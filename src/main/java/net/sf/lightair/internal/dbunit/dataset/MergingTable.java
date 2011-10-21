@@ -93,17 +93,17 @@ public class MergingTable extends AbstractTable {
 	 */
 	public void addTableRows(MergingTable otherTable) {
 		Column[] otherColumns = otherTable.getTableMetaData().getColumns();
-		mergeMetaData(otherTable, otherColumns);
+		mergeMetaData(otherColumns);
 		mergeRows(otherTable, otherColumns);
 	}
 
 	/**
 	 * Add all columns of other table that this table does not have yet.
 	 * 
-	 * @param otherTable
-	 *            Other table
+	 * @param otherColumns
+	 *            Other table columns
 	 */
-	private void mergeMetaData(MergingTable otherTable, Column[] otherColumns) {
+	private void mergeMetaData(Column[] otherColumns) {
 		for (int colId = 0; colId < otherColumns.length; colId++) {
 			Column column = otherColumns[colId];
 			if (!metaData.hasColumn(column.getColumnName())) {
