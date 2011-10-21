@@ -10,15 +10,35 @@ Features
 
  [[1]] <<Default @Setup annotation>>\
  When test method or test class is annotated with @Setup, system locates data set named 
- '\<test class name\>.\<test method name\>.xml' in the package of the test class, or if it does 
- not exists, locates data set named '\<test class name\>.xml', 
+
++---+
+<test class name>.<test method name>.xml
++---+
+
+ in the package of the test class, or if it does 
+ not exists, locates data set named 
+
++---+
+<test class name>.xml
++---+
+
  and performs "clean insert" database operation with the data set located. 
  If no such data set exists, system throws exception.
 
  [[2]] <<Default @Verify annotation>>\
  When test method or test class is annotated with @Verify, system locates data set named 
- '\<test class name\>.\<test method name\>-verify.xml' in the package of the test class, 
- or if it does not exists, locates data set named '\<test class name\>-verify.xml', 
+
++---+
+<test class name>.<test method name>-verify.xml
++---+
+
+ in the package of the test class, 
+ or if it does not exists, locates data set named 
+
++---+
+<test class name>-verify.xml
++---+
+
  and verifies the data set against the database. 
  If no such data set exists, system throws exception.
 
@@ -40,17 +60,17 @@ Features
  This fixes bug of DbUnit, where the first row of the table freezes columns used
  by the data set, other columns defined on subsequent rows are ignored by DbUnit.
 
- [[6]] <<Replace @null with null value in setup>>
+ [[6]] <<Replace @null with null value in setup>>\
  Use @null in XML dataset to specify null value.
  
- [[7]] <<Specify database schema of a table row using XML namespace in setup>>
+ [[7]] <<Specify database schema of a table row using XML namespace in setup>>\
  Specify row schema using XML namespace:
 
----
++---+
 <dataset xmlns:s1="SCHEMA1">
 	<s1:table_s1 id="0" />
 </dataset>
----
++---+
  
  [[8]] <<Verification fails when a column value does not match>>\
  Detailed message indicating the particular row and column is displayed.
