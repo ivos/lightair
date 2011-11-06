@@ -80,4 +80,6 @@ Features
  
  [[10]] <<Verification fails when an expected row is not found in database>>\
  Detailed message indicating the particular row is displayed.
+  
+ [[11]] <<Table not specified in expected dataset is ignored in verification>>\
  
