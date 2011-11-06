@@ -78,3 +78,6 @@ Features
  [[9]] <<Row order is irrelevant in verification>>\
  Rows in verification dataset may be in any order.
  
+ [[10]] <<Verification fails when an expected row is not found in database>>\
+ Detailed message indicating the particular row is displayed.
+ 
