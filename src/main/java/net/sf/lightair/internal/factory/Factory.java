@@ -60,12 +60,6 @@ public class Factory {
 		return dataSetAssert;
 	}
 
-	private final org.unitils.dbunit.util.DataSetAssert unitilsDataSetAssert = new org.unitils.dbunit.util.DataSetAssert();
-
-	public org.unitils.dbunit.util.DataSetAssert getUnitilsDataSetAssert() {
-		return unitilsDataSetAssert;
-	}
-
 	private final TokenReplacingFilter tokenReplacingFilter = new TokenReplacingFilter();
 
 	public TokenReplacingFilter getTokenReplacingFilter() {
@@ -82,7 +76,6 @@ public class Factory {
 		dataSetLoader.setDataSetResolver(dataSetResolver);
 		dataSetLoader.setDataSetFactory(dataSetFactory);
 		dataSetFactory.setPropertiesProvider(propertiesProvider);
-		dataSetAssert.setDataSetAssert(unitilsDataSetAssert);
 	}
 
 	// getters for classes always newly instantiated

@@ -92,3 +92,6 @@ Features
  [[13]] <<Verify that table expected to be empty is empty in database>>\
  Fail when there are rows in the table in database.
  
+ [[14]] <<Verification fails when an unexpected row is found in database>>\
+ Detailed message indicating the particular row is displayed.
+ 

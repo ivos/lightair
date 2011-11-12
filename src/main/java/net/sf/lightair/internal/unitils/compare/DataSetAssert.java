@@ -3,14 +3,17 @@ package net.sf.lightair.internal.unitils.compare;
 import java.util.List;
 
 import org.dbunit.dataset.IDataSet;
+import org.unitils.core.util.ObjectFormatter;
+import org.unitils.dbunit.dataset.Column;
+import org.unitils.dbunit.dataset.Row;
 import org.unitils.dbunit.dataset.Schema;
 
 /**
- * Fork/wrapper of Unitils DataSetAssert to enable using own SchemaFactory.
- * <p>
- * Delegates to Unitils DataSetAssert for the actual comparison work.
+ * Fork of Unitils DataSetAssert to enable customizations.
  */
-public class DataSetAssert {
+public class DataSetAssert extends org.unitils.dbunit.util.DataSetAssert {
+
+	// Extracted to use own SchemaFactory
 
 	/**
 	 * Asserts that the given expected DbUnit dataset is equal to the actual
@@ -29,9 +32,13 @@ public class DataSetAssert {
 	 * @throws AssertionError
 	 *             When the assertion fails.
 	 */
+	@Override
 	public void assertEqualDbUnitDataSets(String schemaName,
 			IDataSet expectedDataSet, IDataSet actualDataSet) {
+
+		// Use own SchemaFactory:
 		SchemaFactory dbUnitDataSetBuilder = createSchemaFactory();
+
 		Schema expectedSchema = dbUnitDataSetBuilder
 				.createSchemaForDbUnitDataSet(schemaName, expectedDataSet);
 
@@ -40,7 +47,7 @@ public class DataSetAssert {
 				.createSchemaForDbUnitDataSet(schemaName, actualDataSet,
 						expectedTableNames);
 
-		dataSetAssert.assertEqualSchemas(expectedSchema, actualSchema);
+		assertEqualSchemas(expectedSchema, actualSchema);
 	}
 
 	/**
@@ -52,16 +59,66 @@ public class DataSetAssert {
 		return new SchemaFactory();
 	}
 
-	private org.unitils.dbunit.util.DataSetAssert dataSetAssert;
+	// Extracted to report unexpected rows
 
 	/**
-	 * Set Unitils DataSetAssert.
+	 * Appends missing and unexpected rows of the given table difference to the
+	 * result.
 	 * 
-	 * @param dataSetAssert
+	 * @param tableDifference
+	 *            The difference, not null
+	 * @param result
+	 *            The result to append to, not null
 	 */
-	public void setDataSetAssert(
-			org.unitils.dbunit.util.DataSetAssert dataSetAssert) {
-		this.dataSetAssert = dataSetAssert;
+	@Override
+	protected void appendMissingRowDifferences(
+			org.unitils.dbunit.dataset.comparison.TableDifference tableDifference,
+			StringBuilder result) {
+		super.appendMissingRowDifferences(tableDifference, result);
+
+		// Report unexpected rows:
+		TableDifference ownTableDifference = (TableDifference) tableDifference;
+		for (Row unexpectedRow : ownTableDifference.getUnexpectedRows()) {
+			result.append("\n  Unexpected row:\n  ");
+			appendPrimaryKeyColumnNames(unexpectedRow, result);
+			appendColumnNames(unexpectedRow, result);
+			result.append("\n  ");
+			appendPrimaryKeyValues(unexpectedRow, result);
+			appendRow(unexpectedRow, result);
+			result.append("\n");
+		}
 	}
+
+	/**
+	 * Appends the primary key column names of the given row to the result.
+	 * 
+	 * @param row
+	 *            The row, not null
+	 * @param result
+	 *            The result to append to, not null
+	 */
+	protected void appendPrimaryKeyColumnNames(Row row, StringBuilder result) {
+		for (Column column : row.getPrimaryKeyColumns()) {
+			result.append(column.getName());
+			result.append(", ");
+		}
+	}
+
+	/**
+	 * Appends the values of the primary key columns of given row to the result.
+	 * 
+	 * @param row
+	 *            The row, not null
+	 * @param result
+	 *            The result to append to, not null
+	 */
+	protected void appendPrimaryKeyValues(Row row, StringBuilder result) {
+		for (Column column : row.getPrimaryKeyColumns()) {
+			result.append(objectFormatter.format(column.getValue()));
+			result.append(", ");
+		}
+	}
+
+	private final ObjectFormatter objectFormatter = new ObjectFormatter();
 
 }

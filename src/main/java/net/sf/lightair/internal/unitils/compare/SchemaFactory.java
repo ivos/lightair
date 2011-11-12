@@ -5,20 +5,59 @@ import java.util.List;
 import net.sf.lightair.internal.dbunit.dataset.MergingTable;
 
 import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.datatype.DataType;
 import org.unitils.dbunit.dataset.Column;
 import org.unitils.dbunit.dataset.Row;
-import org.unitils.dbunit.dataset.Table;
+import org.unitils.dbunit.dataset.Schema;
 
 /**
- * Fork of Unitils SchemaFactory to ignore values of database column not
- * specified in the expected dataset.
+ * Fork of Unitils SchemaFactory to allow for customizations.
  */
 public class SchemaFactory extends org.unitils.dbunit.dataset.SchemaFactory {
 
+	// Extracted to use own Table
+
 	@Override
-	protected void addRows(ITable dbUnitTable, Table table,
+	protected void addTables(IDataSet dbUnitDataSet, Schema schema)
+			throws DataSetException {
+		ITableIterator dbUnitTableIterator = dbUnitDataSet.iterator();
+		while (dbUnitTableIterator.next()) {
+			ITable dbUnitTable = dbUnitTableIterator.getTable();
+			String tableName = dbUnitTable.getTableMetaData().getTableName();
+
+			List<String> primaryKeyColumnNames = getPrimaryKeyColumnNames(dbUnitTable);
+
+			org.unitils.dbunit.dataset.Table table = schema.getTable(tableName);
+			if (table == null) {
+
+				// Use own Table:
+				table = createTable(tableName);
+
+				schema.addTable(table);
+			}
+			addRows(dbUnitTable, table, primaryKeyColumnNames);
+		}
+	}
+
+	/**
+	 * Instantiate Table.
+	 * 
+	 * @param tableName
+	 *            Name of table
+	 * @return New Table instance
+	 */
+	protected org.unitils.dbunit.dataset.Table createTable(String tableName) {
+		return new Table(tableName);
+	}
+
+	// Extracted to ignore column value when column not expected
+
+	@Override
+	protected void addRows(ITable dbUnitTable,
+			org.unitils.dbunit.dataset.Table table,
 			List<String> primaryKeyColumnNames) throws DataSetException {
 		org.dbunit.dataset.Column[] columns = dbUnitTable.getTableMetaData()
 				.getColumns();
