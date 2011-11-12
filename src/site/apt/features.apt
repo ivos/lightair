@@ -88,4 +88,7 @@ Features
  its value in database row is ignored. 
  This works regardless whether the column is specified in the expected dataset 
  on any other row.
+
+ [[13]] <<Verify that table expected to be empty is empty in database>>\
+ Fail when there are rows in the table in database.
  

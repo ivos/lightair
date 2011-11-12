@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<filled id="0" a1="a01" />
+	<filled id="1" a1="a11" />
+	<filled id="2" a1="a21" />
+	<empty_ />
+</dataset>
