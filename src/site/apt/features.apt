@@ -82,4 +82,10 @@ Features
  Detailed message indicating the particular row is displayed.
   
  [[11]] <<Table not specified in expected dataset is ignored in verification>>\
+  
+ [[12]] <<Column not specified in expected row is ignored in verification>>\
+ When a column is not present on a row of an expected dataset, 
+ its value in database row is ignored. 
+ This works regardless whether the column is specified in the expected dataset 
+ on any other row.
  

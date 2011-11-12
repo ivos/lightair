@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.lightair.internal.factory.Factory;
+
 import org.dbunit.dataset.AbstractTable;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.RowOutOfBoundsException;
@@ -29,6 +31,7 @@ public class MergingTable extends AbstractTable {
 	public MergingTable(MutableTableMetaData metaData) {
 		this.metaData = metaData;
 		this.rows = new ArrayList<Map<String, ColumnValue>>();
+		Factory.getInstance().initMergingTable(this);
 	}
 
 	public MutableTableMetaData getTableMetaData() {
@@ -69,6 +72,21 @@ public class MergingTable extends AbstractTable {
 	}
 
 	/**
+	 * Has a value for the row's column been specified?
+	 * 
+	 * @param rowId
+	 *            Id of row
+	 * @param column
+	 *            Name of column
+	 * @return true iff the column is defined on the row
+	 */
+	public boolean hasValue(int rowId, String column) {
+		Map<String, ColumnValue> row = rows.get(rowId);
+		ColumnValue columnValue = row.get(column.toUpperCase());
+		return (null != columnValue);
+	}
+
+	/**
 	 * Add new row with values corresponding to the current table columns.
 	 * 
 	 * @param values
@@ -79,10 +97,28 @@ public class MergingTable extends AbstractTable {
 		Column[] columns = metaData.getColumns();
 		for (int i = 0; i < values.length; i++) {
 			Column column = columns[i];
-			row.put(column.getColumnName().toUpperCase(), new ColumnValue(
-					column, values[i]));
+			setRowColumn(row, column, values[i]);
 		}
 		rows.add(row);
+	}
+
+	/**
+	 * Set value for a row's column.
+	 * <p>
+	 * Replaces possible tokens in the value.
+	 * 
+	 * @param row
+	 *            Row
+	 * @param column
+	 *            Column
+	 * @param rawValue
+	 *            Value
+	 */
+	private void setRowColumn(Map<String, ColumnValue> row, Column column,
+			Object rawValue) {
+		Object value = tokenReplacingFilter.replaceTokens(rawValue);
+		row.put(column.getColumnName().toUpperCase(), new ColumnValue(column,
+				value));
 	}
 
 	/**
@@ -124,9 +160,8 @@ public class MergingTable extends AbstractTable {
 			for (int colId = 0; colId < otherColumns.length; colId++) {
 				Column column = otherColumns[colId];
 				try {
-					row.put(column.getColumnName().toUpperCase(),
-							new ColumnValue(column, otherTable.getValue(rowId,
-									column.getColumnName())));
+					setRowColumn(row, column,
+							otherTable.getValue(rowId, column.getColumnName()));
 				} catch (RowOutOfBoundsException e) {
 					// this should never happen as we iterate until rowCount
 					throw new IllegalStateException(e);
@@ -139,6 +174,18 @@ public class MergingTable extends AbstractTable {
 	@Override
 	public String toString() {
 		return "MergingTable [metaData=" + metaData + ", rows=" + rows + "]";
+	}
+
+	private TokenReplacingFilter tokenReplacingFilter;
+
+	/**
+	 * Set TokenReplacingFilter.
+	 * 
+	 * @param tokenReplacingFilter
+	 */
+	public void setTokenReplacingFilter(
+			TokenReplacingFilter tokenReplacingFilter) {
+		this.tokenReplacingFilter = tokenReplacingFilter;
 	}
 
 }

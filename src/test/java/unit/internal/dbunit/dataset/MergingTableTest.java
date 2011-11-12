@@ -3,6 +3,7 @@ package unit.internal.dbunit.dataset;
 import static org.junit.Assert.*;
 import net.sf.lightair.internal.dbunit.dataset.MergingTable;
 import net.sf.lightair.internal.dbunit.dataset.MutableTableMetaData;
+import net.sf.lightair.internal.dbunit.dataset.TokenReplacingFilter;
 import net.sf.seaf.test.jmock.JMockSupport;
 
 import org.dbunit.dataset.Column;
@@ -17,7 +18,9 @@ public class MergingTableTest extends JMockSupport {
 	MutableTableMetaData metaData;
 	Object v11, v12, v13, v21, v22, v23, ov11, ov12, ov13, ov14, ov21, ov22,
 			ov23, ov24, ov31, ov32, ov33, ov34;
+	Object v11r, v12r, v13r;
 	Column c1, c2, c3, other1, other2;
+	TokenReplacingFilter tokenReplacingFilter;
 
 	@Before
 	public void before() {
@@ -63,6 +66,47 @@ public class MergingTableTest extends JMockSupport {
 		assertEquals("getValue 13", v13, table.getValue(0, "c3Name"));
 		assertEquals("getValue 23", v23, table.getValue(1, "c3Name"));
 		assertEquals("getValue 23 case", v23, table.getValue(1, "C3NAME"));
+	}
+
+	@Test
+	public void replacing() throws RowOutOfBoundsException {
+		metaData = mock(MutableTableMetaData.class);
+		table = new MergingTable(metaData);
+		tokenReplacingFilter = mock(TokenReplacingFilter.class);
+		table.setTokenReplacingFilter(tokenReplacingFilter);
+		v11r = mock(Object.class, "v11r");
+		v12r = mock(Object.class, "v12r");
+		v13r = mock(Object.class, "v13r");
+		check(new Expectations() {
+			{
+				one(metaData).getColumns();
+				will(returnValue(new Column[] { c1, c2, c3 }));
+
+				one(c1).getColumnName();
+				will(returnValue("c1Name"));
+
+				one(c2).getColumnName();
+				will(returnValue("c2Name"));
+
+				one(c3).getColumnName();
+				will(returnValue("c3Name"));
+
+				one(tokenReplacingFilter).replaceTokens(v11);
+				will(returnValue(v11r));
+
+				one(tokenReplacingFilter).replaceTokens(v12);
+				will(returnValue(v12r));
+
+				one(tokenReplacingFilter).replaceTokens(v13);
+				will(returnValue(v13r));
+			}
+		});
+
+		table.addRow(v11, v12, v13);
+
+		assertSame(v11r, table.getValue(0, "c1Name"));
+		assertSame(v12r, table.getValue(0, "c2Name"));
+		assertSame(v13r, table.getValue(0, "c3Name"));
 	}
 
 	@Test

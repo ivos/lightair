@@ -7,7 +7,6 @@ import java.util.List;
 
 import net.sf.lightair.exception.DataSetNotFoundException;
 import net.sf.lightair.exception.IllegalDataSetContentException;
-import net.sf.lightair.internal.dbunit.dataset.ReplacementDataSetWrapper;
 import net.sf.lightair.internal.util.DataSetResolver;
 
 import org.unitils.dbunit.util.MultiSchemaDataSet;
@@ -49,9 +48,8 @@ public class DataSetLoader {
 			} else {
 				addExplicitFiles(testMethod, fileNames, files);
 			}
-			MultiSchemaDataSet multiSchemaDataSet = dataSetFactory
+			return dataSetFactory
 					.createDataSet(files.toArray(new File[] {}));
-			return replacementDataSetWrapper.wrap(multiSchemaDataSet);
 		} catch (IllegalDataSetContentException e) {
 			throw new IllegalDataSetContentException(e, fileNames);
 		} catch (DataSetNotFoundException e) {
@@ -159,18 +157,6 @@ public class DataSetLoader {
 	 */
 	public void setDataSetFactory(DataSetFactory dataSetFactory) {
 		this.dataSetFactory = dataSetFactory;
-	}
-
-	private ReplacementDataSetWrapper replacementDataSetWrapper;
-
-	/**
-	 * Set replacement wrapper.
-	 * 
-	 * @param replacementDataSetWrapper
-	 */
-	public void setReplacementDataSetWrapper(
-			ReplacementDataSetWrapper replacementDataSetWrapper) {
-		this.replacementDataSetWrapper = replacementDataSetWrapper;
 	}
 
 }

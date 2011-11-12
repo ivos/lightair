@@ -4,12 +4,12 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
+import net.sf.lightair.internal.unitils.compare.DataSetAssert;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
-import org.unitils.dbunit.util.DataSetAssert;
 import org.unitils.dbunit.util.MultiSchemaDataSet;
 
 public class UnitilsWrapper {
@@ -35,7 +35,6 @@ public class UnitilsWrapper {
 			throws ClassNotFoundException, SQLException, DatabaseUnitException {
 		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,
 				VERIFY_FILE_NAME_SUFFIX, fileNames);
-		DataSetAssert dataSetAssert = new DataSetAssert();
 		for (String schemaName : multiSchemaDataSet.getSchemaNames()) {
 			IDataSet dataSetExpected = multiSchemaDataSet
 					.getDataSetForSchema(schemaName);
@@ -63,6 +62,12 @@ public class UnitilsWrapper {
 
 	public void setDataSetLoader(DataSetLoader dataSetLoader) {
 		this.dataSetLoader = dataSetLoader;
+	}
+
+	private DataSetAssert dataSetAssert;
+
+	public void setDataSetAssert(DataSetAssert dataSetAssert) {
+		this.dataSetAssert = dataSetAssert;
 	}
 
 }

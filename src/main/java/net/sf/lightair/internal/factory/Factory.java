@@ -1,13 +1,15 @@
 package net.sf.lightair.internal.factory;
 
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
-import net.sf.lightair.internal.dbunit.dataset.ReplacementDataSetWrapper;
+import net.sf.lightair.internal.dbunit.dataset.MergingTable;
+import net.sf.lightair.internal.dbunit.dataset.TokenReplacingFilter;
 import net.sf.lightair.internal.junit.SetupTestRule;
 import net.sf.lightair.internal.junit.VerifyTestRule;
 import net.sf.lightair.internal.properties.PropertiesProvider;
 import net.sf.lightair.internal.unitils.DataSetFactory;
 import net.sf.lightair.internal.unitils.DataSetLoader;
 import net.sf.lightair.internal.unitils.UnitilsWrapper;
+import net.sf.lightair.internal.unitils.compare.DataSetAssert;
 import net.sf.lightair.internal.util.DataSetResolver;
 
 import org.junit.runners.model.FrameworkMethod;
@@ -52,10 +54,22 @@ public class Factory {
 		return dataSetFactory;
 	}
 
-	private final ReplacementDataSetWrapper replacementDataSetWrapper = new ReplacementDataSetWrapper();
+	private final DataSetAssert dataSetAssert = new DataSetAssert();
 
-	public ReplacementDataSetWrapper getReplacementDataSetWrapper() {
-		return replacementDataSetWrapper;
+	public DataSetAssert getDataSetAssert() {
+		return dataSetAssert;
+	}
+
+	private final org.unitils.dbunit.util.DataSetAssert unitilsDataSetAssert = new org.unitils.dbunit.util.DataSetAssert();
+
+	public org.unitils.dbunit.util.DataSetAssert getUnitilsDataSetAssert() {
+		return unitilsDataSetAssert;
+	}
+
+	private final TokenReplacingFilter tokenReplacingFilter = new TokenReplacingFilter();
+
+	public TokenReplacingFilter getTokenReplacingFilter() {
+		return tokenReplacingFilter;
 	}
 
 	// initialize single-instance classes
@@ -64,10 +78,11 @@ public class Factory {
 		dbUnitWrapper.setPropertiesProvider(propertiesProvider);
 		unitilsWrapper.setDbUnitWrapper(dbUnitWrapper);
 		unitilsWrapper.setDataSetLoader(dataSetLoader);
+		unitilsWrapper.setDataSetAssert(dataSetAssert);
 		dataSetLoader.setDataSetResolver(dataSetResolver);
 		dataSetLoader.setDataSetFactory(dataSetFactory);
-		dataSetLoader.setReplacementDataSetWrapper(replacementDataSetWrapper);
 		dataSetFactory.setPropertiesProvider(propertiesProvider);
+		dataSetAssert.setDataSetAssert(unitilsDataSetAssert);
 	}
 
 	// getters for classes always newly instantiated
@@ -82,6 +97,10 @@ public class Factory {
 		SetupTestRule rule = new SetupTestRule(frameworkMethod);
 		rule.setUnitilsWrapper(unitilsWrapper);
 		return rule;
+	}
+
+	public void initMergingTable(MergingTable mergingTable) {
+		mergingTable.setTokenReplacingFilter(tokenReplacingFilter);
 	}
 
 	// access as singleton
