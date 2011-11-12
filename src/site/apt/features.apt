@@ -58,7 +58,7 @@ Features
  When inserting a row during setup, fill values to all columns defined on the row,
  no matter what columns were defined on other rows of the table.\
  This fixes bug of DbUnit, where the first row of the table freezes columns used
- by the data set, other columns defined on subsequent rows are ignored by DbUnit.
+ by the data set, other columns defined on subsequent rows are then ignored by DbUnit.
 
  [[6]] <<Replace @null with null value in setup>>\
  Use @null in XML dataset to specify null value.
@@ -81,7 +81,7 @@ Features
  [[10]] <<Verification fails when an expected row is not found in database>>\
  Detailed message indicating the particular row is displayed.
   
- [[11]] <<Table not specified in expected dataset is ignored in verification>>\
+ [[11]] <<Table not specified in expected dataset is ignored in verification>>
   
  [[12]] <<Column not specified in expected row is ignored in verification>>\
  When a column is not present on a row of an expected dataset, 
