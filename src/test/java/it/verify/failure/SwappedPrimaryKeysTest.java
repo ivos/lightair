@@ -11,6 +11,14 @@ import org.junit.runner.RunWith;
 
 import test.support.ExceptionVerifyingJUnitRunner;
 
+/**
+ * When two rows have exchanged primary keys, do not match rows by the primary
+ * keys, but by the other matching columns, thus limiting the number of
+ * differences to minimum.
+ * <p>
+ * In other words, primary keys are considered just as any other columns in row
+ * matching, they are not given priority.
+ */
 @RunWith(ExceptionVerifyingJUnitRunner.class)
 @Verify
 public class SwappedPrimaryKeysTest extends CommonTestBase {
