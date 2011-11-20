@@ -95,3 +95,9 @@ Features
  [[14]] <<Verification fails when an unexpected row is found in database>>\
  Detailed message indicating the particular row is displayed.
  
+ [[15]] <<Match table rows by number of matching columns in verification>>\
+ When matching rows of a database table, 
+ first sort actual rows by the number of matching columns 
+ to any best-matching expected row, 
+ then match each actual row in that order to best-matching remaining expected row.
+ 

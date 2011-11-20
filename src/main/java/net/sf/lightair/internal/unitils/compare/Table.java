@@ -1,7 +1,7 @@
 package net.sf.lightair.internal.unitils.compare;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
 import org.unitils.dbunit.dataset.Row;
@@ -38,7 +38,7 @@ public class Table extends org.unitils.dbunit.dataset.Table {
 			return result;
 		}
 
-		compareRows(getRows(), actualTable, result);
+		compareRows(actualTable, result);
 		if (result.isMatch()) {
 			return null;
 		}
@@ -57,42 +57,55 @@ public class Table extends org.unitils.dbunit.dataset.Table {
 		return new TableDifference(this, actualTable);
 	}
 
-	// Extracted to report unexpected rows
+	// Extracted to re-implement the row matching algorithm
 
-	protected void compareRows(List<Row> rows,
-			org.unitils.dbunit.dataset.Table actualTable, TableDifference result) {
-		List<Row> rowsWithoutMatch = new ArrayList<Row>(rows);
+	protected void compareRows(org.unitils.dbunit.dataset.Table actualTable,
+			TableDifference result) {
+		List<RowComparison> rowComparisons = new ArrayList<RowComparison>();
+		int actualRowIndex = 0;
 		for (Row actualRow : actualTable.getRows()) {
-			Iterator<Row> rowIterator = rowsWithoutMatch.iterator();
-			boolean isUnexpected = true;
-			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();
-
-				if (row.hasDifferentPrimaryKeyColumns(actualRow)) {
-					continue;
-				}
-				isUnexpected = false;
-				RowDifference rowDifference = row.compare(actualRow);
-				if (rowDifference == null) {
-					result.setMatchingRow(row, actualRow);
-					rowIterator.remove();
-					break;
-				} else {
-					result.setIfBestRowDifference(rowDifference);
-				}
-			}
-
-			// Report unexpected rows:
-			if (isUnexpected) {
+			RowComparison bestRowComparison = findBestRowComparison(actualRow,
+					actualRowIndex, getRows());
+			rowComparisons.add(bestRowComparison);
+			actualRowIndex++;
+		}
+		Collections.sort(rowComparisons, new RowComparisonComparator());
+		List<Row> sortedActualRows = new ArrayList<Row>();
+		for (RowComparison rowComparison : rowComparisons) {
+			sortedActualRows.add(rowComparison.getActualRow());
+		}
+		List<Row> unmatchedExpectedRows = new ArrayList<Row>(getRows());
+		for (Row actualRow : sortedActualRows) {
+			if (unmatchedExpectedRows.isEmpty()) {
 				result.addUnexpectedRow(actualRow);
+				continue;
+			}
+			RowComparison bestRowComparison = findBestRowComparison(actualRow,
+					0, unmatchedExpectedRows);
+			Row matchedExpectedRow = bestRowComparison.getExpectedRow();
+			unmatchedExpectedRows.remove(matchedExpectedRow);
+			RowDifference rowDifference = matchedExpectedRow.compare(actualRow);
+			if (null != rowDifference) {
+				result.setBestRowDifference(rowDifference);
 			}
 		}
+		for (Row row : unmatchedExpectedRows) {
+			result.addMissingRow(row);
+		}
+	}
 
-		for (Row row : rowsWithoutMatch) {
-			if (result.getBestRowDifference(row) == null) {
-				result.addMissingRow(row);
+	private RowComparison findBestRowComparison(Row actualRow,
+			int actualRowIndex, List<Row> expectedRows) {
+		RowComparison bestRowComparison = null;
+		for (Row expectedRow : expectedRows) {
+			RowComparison rowComparison = new RowComparison(expectedRow,
+					actualRow, actualRowIndex);
+			if (null == bestRowComparison
+					|| bestRowComparison.isBetterMatch(rowComparison)) {
+				bestRowComparison = rowComparison;
 			}
 		}
+		return bestRowComparison;
 	}
 
 }
