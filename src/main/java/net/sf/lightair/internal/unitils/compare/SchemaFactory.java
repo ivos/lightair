@@ -3,13 +3,13 @@ package net.sf.lightair.internal.unitils.compare;
 import java.util.List;
 
 import net.sf.lightair.internal.dbunit.dataset.MergingTable;
+import net.sf.lightair.internal.factory.Factory;
 
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.datatype.DataType;
-import org.unitils.dbunit.dataset.Column;
 import org.unitils.dbunit.dataset.Row;
 import org.unitils.dbunit.dataset.Schema;
 
@@ -54,6 +54,7 @@ public class SchemaFactory extends org.unitils.dbunit.dataset.SchemaFactory {
 	}
 
 	// Extracted to ignore column value when column not expected
+	// and to use own Column
 
 	@Override
 	protected void addRows(ITable dbUnitTable,
@@ -77,7 +78,8 @@ public class SchemaFactory extends org.unitils.dbunit.dataset.SchemaFactory {
 
 				Object value = dbUnitTable.getValue(rowIndex, columnName);
 
-				Column column = new Column(columnName, columnType, value);
+				org.unitils.dbunit.dataset.Column column = createColumn(
+						columnName, columnType, value);
 				if (primaryKeyColumnNames.contains(columnName)) {
 					row.addPrimaryKeyColumn(column);
 				} else {
@@ -108,5 +110,23 @@ public class SchemaFactory extends org.unitils.dbunit.dataset.SchemaFactory {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Instantiate Column.
+	 * 
+	 * @param columnName
+	 *            Name of column
+	 * @param columnType
+	 *            Type of column
+	 * @param value
+	 *            Column value
+	 * @return New Column instance
+	 */
+	protected org.unitils.dbunit.dataset.Column createColumn(String columnName,
+			DataType columnType, Object value) {
+		Column column = new Column(columnName, columnType, value);
+		Factory.getInstance().initColumn(column);
+		return column;
 	}
 }

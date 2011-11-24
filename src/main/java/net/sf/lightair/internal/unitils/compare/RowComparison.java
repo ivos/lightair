@@ -3,7 +3,6 @@ package net.sf.lightair.internal.unitils.compare;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.unitils.dbunit.dataset.Column;
 import org.unitils.dbunit.dataset.Row;
 import org.unitils.dbunit.dataset.comparison.ColumnDifference;
 
@@ -14,7 +13,7 @@ public class RowComparison {
 
 	private final Row expectedRow, actualRow;
 	private final int actualRowIndex;
-	private final List<Column> missingColumns = new ArrayList<Column>();
+	private final List<org.unitils.dbunit.dataset.Column> missingColumns = new ArrayList<org.unitils.dbunit.dataset.Column>();
 	private final List<ColumnDifference> columnDifferences = new ArrayList<ColumnDifference>();
 
 	/**
@@ -48,14 +47,16 @@ public class RowComparison {
 	 * @param expectedColumns
 	 *            Expected columns to compare
 	 */
-	private void compareColumns(List<Column> expectedColumns) {
-		for (Column expectedColumn : expectedColumns) {
-			Column actualColumn = actualRow.getColumn(expectedColumn.getName());
+	private void compareColumns(
+			List<org.unitils.dbunit.dataset.Column> expectedColumns) {
+		for (org.unitils.dbunit.dataset.Column expectedColumn : expectedColumns) {
+			org.unitils.dbunit.dataset.Column actualColumn = actualRow
+					.getColumn(expectedColumn.getName());
 			if (actualColumn == null) {
 				missingColumns.add(expectedColumn);
 			} else {
-				ColumnDifference columnDifference = expectedColumn
-						.compare(actualColumn);
+				ColumnDifference columnDifference = ((Column) expectedColumn)
+						.preCompare(actualColumn);
 				if (columnDifference != null) {
 					columnDifferences.add(columnDifference);
 				}

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<!-- Master 0 with its details: -->
+	<master id="$master-id-0" m1="m10" />
+	<detail id="0" master_id="$master-id-0" d1="d100" />
+	<detail id="1" master_id="$master-id-0" d1="d101" />
+	<detail id="2" master_id="$master-id-0" d1="d102" />
+	<!-- Master 1 with its details: -->
+	<master id="$master-id-1" m1="m11" />
+	<detail id="3" master_id="$master-id-1" d1="d113" />
+	<detail id="4" master_id="$master-id-1" d1="d114" />
+	<detail id="5" master_id="$master-id-1" d1="d115" />
+	<!-- Master 2 with its details: -->
+	<master id="$master-id-2" m1="m12" />
+	<detail id="6" master_id="$master-id-2" d1="d126" />
+	<detail id="7" master_id="$master-id-2" d1="d127" />
+	<detail id="8" master_id="$master-id-2" d1="d128" />
+</dataset>

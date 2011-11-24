@@ -9,7 +9,9 @@ import net.sf.lightair.internal.properties.PropertiesProvider;
 import net.sf.lightair.internal.unitils.DataSetFactory;
 import net.sf.lightair.internal.unitils.DataSetLoader;
 import net.sf.lightair.internal.unitils.UnitilsWrapper;
+import net.sf.lightair.internal.unitils.compare.Column;
 import net.sf.lightair.internal.unitils.compare.DataSetAssert;
+import net.sf.lightair.internal.unitils.compare.VariableResolver;
 import net.sf.lightair.internal.util.DataSetResolver;
 
 import org.junit.runners.model.FrameworkMethod;
@@ -66,6 +68,8 @@ public class Factory {
 		return tokenReplacingFilter;
 	}
 
+	private final VariableResolver variableResolver = new VariableResolver();
+
 	// initialize single-instance classes
 
 	private void init() {
@@ -94,6 +98,10 @@ public class Factory {
 
 	public void initMergingTable(MergingTable mergingTable) {
 		mergingTable.setTokenReplacingFilter(tokenReplacingFilter);
+	}
+
+	public void initColumn(Column column) {
+		column.setVariableResolver(variableResolver);
 	}
 
 	// access as singleton

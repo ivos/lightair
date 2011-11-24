@@ -100,4 +100,10 @@ Features
  first sort actual rows by the number of matching columns 
  to any best-matching expected row, 
  then match each actual row in that order to best-matching remaining expected row.
+  
+ [[16]] <<Support variables in verification>>\
+ Use $name expressions as variables in verification datasets 
+ to verify that two (or more) column values are equal.
+ This can be used for example to verify a foreign key 
+ referencing a generated primary key.
  
