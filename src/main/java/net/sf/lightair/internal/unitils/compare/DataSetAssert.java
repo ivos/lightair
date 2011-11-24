@@ -80,43 +80,31 @@ public class DataSetAssert extends org.unitils.dbunit.util.DataSetAssert {
 		TableDifference ownTableDifference = (TableDifference) tableDifference;
 		for (Row unexpectedRow : ownTableDifference.getUnexpectedRows()) {
 			result.append("\n  Unexpected row:\n  ");
-			appendPrimaryKeyColumnNames(unexpectedRow, result);
 			appendColumnNames(unexpectedRow, result);
 			result.append("\n  ");
-			appendPrimaryKeyValues(unexpectedRow, result);
 			appendRow(unexpectedRow, result);
 			result.append("\n");
 		}
 	}
 
-	/**
-	 * Appends the primary key column names of the given row to the result.
-	 * 
-	 * @param row
-	 *            The row, not null
-	 * @param result
-	 *            The result to append to, not null
-	 */
-	protected void appendPrimaryKeyColumnNames(Row row, StringBuilder result) {
+	// Extracted to include primary keys in verification failure message
+
+	@Override
+	protected void appendColumnNames(Row row, StringBuilder result) {
 		for (Column column : row.getPrimaryKeyColumns()) {
 			result.append(column.getName());
 			result.append(", ");
 		}
+		super.appendColumnNames(row, result);
 	}
 
-	/**
-	 * Appends the values of the primary key columns of given row to the result.
-	 * 
-	 * @param row
-	 *            The row, not null
-	 * @param result
-	 *            The result to append to, not null
-	 */
-	protected void appendPrimaryKeyValues(Row row, StringBuilder result) {
+	@Override
+	protected void appendRow(Row row, StringBuilder result) {
 		for (Column column : row.getPrimaryKeyColumns()) {
 			result.append(objectFormatter.format(column.getValue()));
 			result.append(", ");
 		}
+		super.appendRow(row, result);
 	}
 
 	private final ObjectFormatter objectFormatter = new ObjectFormatter();

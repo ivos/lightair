@@ -39,7 +39,7 @@ public class VariableFailureTest extends CommonTestBase {
 				+ "  Different row: \n  id, a1\n  \"1\", \"$var1\"\n\n"
 				+ "  Best matching differences:  \n  a1: \"$var1\" <-> \"value2\"\n"
 				+ "\n\nActual database content:\n\n"
-				+ "PUBLIC.A\n  A1\n  \"value1\"\n  \"value2\"\n\n";
+				+ "PUBLIC.A\n  ID, A1\n  0, \"value1\"\n  1, \"value2\"\n\n";
 		assertEquals(msg, error.getMessage());
 	}
 

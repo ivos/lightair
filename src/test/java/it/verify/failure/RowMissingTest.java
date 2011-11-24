@@ -37,8 +37,8 @@ public class RowMissingTest extends CommonTestBase {
 				+ "Differences found between the expected data set and actual database content.\n"
 				+ "Found differences for table PUBLIC.a:\n\n"
 				+ "  Missing row:\n  id, a1\n  \"1\", \"11\"\n\n\n"
-				+ "Actual database content:\n\nPUBLIC.A\n  A1\n  \"01\"\n"
-				+ "  \"21\"\n\n";
+				+ "Actual database content:\n\nPUBLIC.A\n  ID, A1\n"
+				+ "  0, \"01\"\n  2, \"21\"\n\n";
 		assertEquals(msg, error.getMessage());
 	}
 

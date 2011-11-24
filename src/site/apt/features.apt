@@ -107,3 +107,7 @@ Features
  This can be used for example to verify a foreign key 
  referencing a generated primary key.
  
+ [[17]] <<Include primary keys in verification failure message>>\
+ Display actual database content in verification failure message 
+ including primary key column values.
+ 

@@ -41,8 +41,8 @@ public class UnexpectedRowTest extends CommonTestBase {
 				+ "Differences found between the expected data set and actual database content.\n"
 				+ "Found differences for table PUBLIC.a:\n\n"
 				+ "  Unexpected row:\n  ID, A1\n  1, \"11\"\n\n\n"
-				+ "Actual database content:\n\nPUBLIC.A\n  A1\n  \"01\"\n"
-				+ "  \"11\"\n  \"21\"\n\n";
+				+ "Actual database content:\n\nPUBLIC.A\n  ID, A1\n"
+				+ "  0, \"01\"\n  1, \"11\"\n  2, \"21\"\n\n";
 		assertEquals(msg, error.getMessage());
 	}
 
@@ -64,8 +64,8 @@ public class UnexpectedRowTest extends CommonTestBase {
 				+ "  Unexpected row:\n  ID, A1\n  1, \"11\"\n\n"
 				+ "  Different row: \n  id, a1\n  \"2\", \"21\"\n\n"
 				+ "  Best matching differences:  \n  a1: \"21\" <-> \"21w\"\n\n\n"
-				+ "Actual database content:\n\nPUBLIC.A\n  A1\n  \"01\"\n"
-				+ "  \"11\"\n  \"21w\"\n\n";
+				+ "Actual database content:\n\nPUBLIC.A\n  ID, A1\n"
+				+ "  0, \"01\"\n  1, \"11\"\n  2, \"21w\"\n\n";
 		assertEquals(msg, error.getMessage());
 	}
 

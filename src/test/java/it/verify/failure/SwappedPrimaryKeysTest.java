@@ -52,8 +52,8 @@ public class SwappedPrimaryKeysTest extends CommonTestBase {
 				+ "  \"0\", \"11\", \"12\", \"13\"\n\n"
 				+ "  Best matching differences:  \n  id: \"0\" <-> 1\n\n"
 				+ "\nActual database content:\n\n"
-				+ "PUBLIC.A\n  A1, A2, A3\n  \"01\", \"02\", \"03\"\n"
-				+ "  \"11\", \"12\", \"13\"\n\n";
+				+ "PUBLIC.A\n  ID, A1, A2, A3\n  0, \"01\", \"02\", \"03\"\n"
+				+ "  1, \"11\", \"12\", \"13\"\n\n";
 		assertEquals(msg, error.getMessage());
 	}
 
