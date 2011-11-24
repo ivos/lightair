@@ -160,7 +160,6 @@ public class MergingTableTest extends JMockSupport {
 		assertArrayEquals("Columns added", new Column[] { c1, c2, c3, other1,
 				other2 }, table.getTableMetaData().getColumns());
 		assertEquals("Added rows", 5, table.getRowCount());
-		System.out.println(table);
 		verifyMergedRow(table, 0, v11, v12, v13, null, null);
 		verifyMergedRow(table, 1, v21, v22, v23, null, null);
 		verifyMergedRow(table, 2, null, ov11, ov13, ov12, ov14);
