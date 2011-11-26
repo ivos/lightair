@@ -2,8 +2,17 @@ package net.sf.lightair.exception;
 
 import net.sf.lightair.internal.properties.PropertiesProvider;
 
-public class PropertiesNotFoundException extends RuntimeException {
+/**
+ * Thrown when Light air properties file was not found.
+ */
+public class PropertiesNotFoundException extends AbstractException {
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param cause
+	 *            Cause exception
+	 */
 	public PropertiesNotFoundException(Throwable cause) {
 		super("Light air properties file '"
 				+ PropertiesProvider.PROPERTIES_FILE_NAME + "' not found.",

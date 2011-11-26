@@ -2,17 +2,41 @@ package net.sf.lightair.exception;
 
 import java.util.Arrays;
 
-public class DataSetNotFoundException extends IllegalArgumentException {
+/**
+ * Thrown when dataset was not found.
+ */
+public class DataSetNotFoundException extends AbstractException {
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param fileNames
+	 *            Names of dataset files
+	 */
 	public DataSetNotFoundException(String... fileNames) {
-		super(getMessage(fileNames));
+		super(formatMessage(fileNames));
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param cause
+	 *            Cause exception
+	 * @param fileNames
+	 *            Names of dataset files
+	 */
 	public DataSetNotFoundException(Throwable cause, String... fileNames) {
-		super(getMessage(fileNames), cause);
+		super(formatMessage(fileNames), cause);
 	}
 
-	private static String getMessage(String... fileNames) {
+	/**
+	 * Format the exception message.
+	 * 
+	 * @param fileNames
+	 *            Names of dataset files
+	 * @return Message
+	 */
+	private static String formatMessage(String... fileNames) {
 		return "Data set not found " + Arrays.toString(fileNames) + ".";
 	}
 

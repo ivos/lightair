@@ -1,5 +1,9 @@
 package net.sf.lightair.internal.factory;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.dbunit.dataset.MergingTable;
 import net.sf.lightair.internal.dbunit.dataset.TokenReplacingFilter;
@@ -14,11 +18,18 @@ import net.sf.lightair.internal.unitils.compare.DataSetAssert;
 import net.sf.lightair.internal.unitils.compare.VariableResolver;
 import net.sf.lightair.internal.util.DataSetResolver;
 
+import org.dbunit.DatabaseUnitException;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.operation.DatabaseOperation;
 import org.junit.runners.model.FrameworkMethod;
 
+/**
+ * Factory class.
+ */
 public class Factory {
 
-	// single-instance classes and getters
+	// single-instance classes and their getters
 
 	private final PropertiesProvider propertiesProvider = new PropertiesProvider();
 
@@ -70,13 +81,16 @@ public class Factory {
 
 	private final VariableResolver variableResolver = new VariableResolver();
 
-	// initialize single-instance classes
-
+	/**
+	 * Initialize single-instance classes.
+	 */
 	private void init() {
 		dbUnitWrapper.setPropertiesProvider(propertiesProvider);
+		dbUnitWrapper.setFactory(this);
 		unitilsWrapper.setDbUnitWrapper(dbUnitWrapper);
 		unitilsWrapper.setDataSetLoader(dataSetLoader);
 		unitilsWrapper.setDataSetAssert(dataSetAssert);
+		unitilsWrapper.setFactory(this);
 		dataSetLoader.setDataSetResolver(dataSetResolver);
 		dataSetLoader.setDataSetFactory(dataSetFactory);
 		dataSetFactory.setPropertiesProvider(propertiesProvider);
@@ -96,12 +110,30 @@ public class Factory {
 		return rule;
 	}
 
+	public IDatabaseConnection createDatabaseConnection(Connection connection,
+			String schemaName) throws DatabaseUnitException {
+		return new DatabaseConnection(connection, schemaName);
+	}
+
+	// init methods
+
 	public void initMergingTable(MergingTable mergingTable) {
 		mergingTable.setTokenReplacingFilter(tokenReplacingFilter);
 	}
 
 	public void initColumn(Column column) {
 		column.setVariableResolver(variableResolver);
+	}
+
+	// static method call wrappers
+
+	public Connection getConnection(String connectionUrl, String userName,
+			String password) throws SQLException {
+		return DriverManager.getConnection(connectionUrl, userName, password);
+	}
+
+	public DatabaseOperation getCleanInsertDatabaseOperation() {
+		return DatabaseOperation.CLEAN_INSERT;
 	}
 
 	// access as singleton
@@ -112,6 +144,11 @@ public class Factory {
 		init();
 	}
 
+	/**
+	 * Return singleton Factory instance.
+	 * 
+	 * @return Factory instance
+	 */
 	public static Factory getInstance() {
 		return instance;
 	}
