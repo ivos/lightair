@@ -1,0 +1,35 @@
+ ---
+ Usage
+ ---
+ Ivo Maixner
+ ---
+ 2011-10-21
+ ---
+
+Usage
+
+* Maven dependency
+
+ Add dependency to your POM:
+
++---+
+<dependency>
+	<groupId>net.sf.lightair</groupId>
+	<artifactId>light-air</artifactId>
+	<version>${project.version}</version>
+	<scope>test</scope>
+</dependency>
++---+
+
+* Properties file
+
+ Create <<<light-air.properties>>> file in <<<src/test/resources>>>
+ with the following content (example for H2 database):
+ 
++---+
+database.driverClassName = org.h2.Driver 
+database.connectionUrl = jdbc:h2:mem:test 
+database.userName = sa 
+database.password = 
+database.defaultSchema = PUBLIC 
++---+
