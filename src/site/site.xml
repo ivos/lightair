@@ -4,9 +4,10 @@
 	<body>
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
-			<item name="Usage" href="./usage.html" />
-			<item name="Features" href="./features.html" />
-			<item name="Development" href="./development.html" />
+			<item name="Motivation" href="motivation.html" />
+			<item name="Usage" href="usage.html" />
+			<item name="Features" href="features.html" />
+			<item name="Development" href="development.html" />
 		</menu>
 		<menu ref="reports" />
 	</body>

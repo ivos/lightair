@@ -1,0 +1,102 @@
+ ---
+ Motivation
+ ---
+ Ivo Maixner
+ ---
+ 2011-11-26
+ ---
+
+Motivation, or Is Light Air for me?
+
+ I develop web applications.
+ I want my application tested before I hand it out to customer.
+
+ I want to test the application as a whole, 
+ because that is what I hand out to my customer. 
+ I am not interested for example in testing a method on a DAO class, 
+ I want to test the relevant functionality of the complete application, 
+ from user interface down to the database. 
+ Once I have a test for the complete functionality, 
+ testing a method on a DAO becomes usually irrelevant.
+
+ Testing the whole application implies 
+ it has to be deployed in a target runtime environment as a complete WAR, 
+ partial deployment of a couple of classes cannot be used, 
+ because almost the whole WAR would have to be deployed anyway before each test, 
+ so then it is more efficient to deploy it completely at the start of tests 
+ and then run all the tests, 
+ each one assuming the application is already deployed and accessible on a given URL.
+
+ So, what will a typical test look like? It boils down to:
+
+ [[1]] Setup.
+
+ [[1]] Execute.
+
+ [[1]] Verify.
+ 
+ []
+
+ Each test will start with setting up the test data. 
+ I want the test to be repeatable, 
+ so it will first delete all rows from the relevant tables, 
+ then insert rows with data that the test will operate on.\
+ Since the algorithm is given (delete, insert), 
+ I don't want to code it all over again, 
+ I want a test tool to take care of it and only declaratively define the setup data.
+
+ I want to specify setup data in the DbUnit's "flat XML format". 
+ It's the simplest data format based on XML. 
+ It's also the most convenient one. 
+ And with any average XML editor it requires less typing than other formats, 
+ including those constructed exactly for this purpose.
+
+ I want the test tool to generate XSD from database 
+ to support me when writing the test data by suggesting names of tables and columns. 
+ I want to configure the generation of XSD in my Maven build, 
+ alongside generating DDL by the hibernate3-maven-plugin 
+ so that it is run whenever my database schema changes.
+
+ Similarly, I want the tool to verify database content after each test execution.
+ I want to specify the data in the same format, as for setup.
+
+ For both setup and verification data definitions,
+ I want standard tokens, like @any, @null, @now, @today, 
+ pre-defined and be able to use them immediately without any hassle.
+ 
+ I want the tool to interpret the data definitions according to common sense.
+ This includes, for example:
+ 
+ * When a column value is defined on a row, it is used (inserted or verified).
+ If a column is not defined on a row, 
+ it is ignored (not inserted, or not verified at all).
+
+ * In verification, rows should be matched by the number of matching columns.
+ This leads to the least possible number of differences.
+ 
+ * Verification fails if an expected row is missing in the database. 
+ It also fails, if an unexpected row is found in the database.
+ 
+ []
+ 
+ I generally use surrogate primary keys generated as a sequence number.
+ I want to be able to verify foreign keys referencing such generated
+ primary keys. I want to use the mechanism of variables for this purpose.
+ 
++---+
+<order id="$orderId" number="1234-567" />
+<line_item id="@any" order_id="$orderId" quantity="10" />
+<line_item id="@any" order_id="$orderId" quantity="30" />
++---+
+ 
+ The above dataset verifies there is one row in the order table with the given number, 
+ and there are two rows in the line_item table with the given quantities.
+ What is important, it also verifies, that the two line items are related
+ to the order via foreign key order_id, no matter what the actual value
+ of that foreign key is. 
+ The expression $orderId is a variable, 
+ which on its first occurrence (in this case in order.id) 
+ takes the actual value from the database and defines a variable having this value.
+ On any subsequent occurrence (in this case in both the line_item.order_id column values)
+ it verifies that the actual database value is equal to the already defined value of the variable.
+ 

@@ -6,17 +6,23 @@
  2011-09-26
  ---
 
-Light Air
-
- Welcome to Light Air project site.
-
+ <<Light Air - testing web applications with common sense.>>
+ 
  Light Air is a tool to support 
  integration, functional testing of web applications for developers.
  
- Light Air strives for intuitive, simple usage and common-sense behavior. 
+ It strives for intuitive, simple usage and common-sense behavior. 
  
- Light Air fixes notorious bugs in DbUnit and 
+ It straightens a couple of features in DbUnit and Unitils 
+ that are not exactly intuitive or simple to be used and 
  wraps DbUnit, Unitils and JWebUnit in a common, modern usage pattern.
+ 
+ \ 
+
+ Please proceed to {{{./motivation.html}motivation}} 
+ to find out whether Light Air is suitable for you.
+ 
+ \ 
 
 ===
 

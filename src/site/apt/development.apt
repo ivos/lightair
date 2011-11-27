@@ -10,7 +10,7 @@ Development
 
 * Clone GIT repo
 
- To clone GIT repo (read-only), issue:
+ To clone GIT repo (read-only):
  
 +---+
 git clone git://lightair.git.sourceforge.net/gitroot/lightair/light-air.git/
