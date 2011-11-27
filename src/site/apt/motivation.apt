@@ -9,7 +9,7 @@
 Motivation, or Is Light Air for me?
 
  I develop web applications.
- I want my application tested before I hand it out to customer.
+ I want my application tested before I hand it out to my customer.
 
  I want to test the application as a whole, 
  because that is what I hand out to my customer. 
@@ -91,7 +91,7 @@ Motivation, or Is Light Air for me?
  
  The above dataset verifies there is one row in the order table with the given number, 
  and there are two rows in the line_item table with the given quantities.
- What is important, it also verifies, that the two line items are related
+ What is important, it also verifies that the two line items are related
  to the order via foreign key order_id, no matter what the actual value
  of that foreign key is. 
  The expression $orderId is a variable, 
