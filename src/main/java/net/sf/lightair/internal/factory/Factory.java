@@ -85,6 +85,7 @@ public class Factory {
 	 * Initialize single-instance classes.
 	 */
 	private void init() {
+		propertiesProvider.init();
 		dbUnitWrapper.setPropertiesProvider(propertiesProvider);
 		dbUnitWrapper.setFactory(this);
 		unitilsWrapper.setDbUnitWrapper(dbUnitWrapper);

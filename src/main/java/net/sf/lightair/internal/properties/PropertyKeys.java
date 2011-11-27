@@ -5,10 +5,10 @@ package net.sf.lightair.internal.properties;
  */
 public interface PropertyKeys {
 
-	String DRIVER_CLASS_NAME = "driverClassName";
-	String CONNECTION_URL = "connectionUrl";
-	String USER_NAME = "userName";
-	String PASSWORD = "password";
-	String DEFAULT_SCHEMA = "defaultSchema";
+	String DRIVER_CLASS_NAME = "database.driverClassName";
+	String CONNECTION_URL = "database.connectionUrl";
+	String USER_NAME = "database.userName";
+	String PASSWORD = "database.password";
+	String DEFAULT_SCHEMA = "database.defaultSchema";
 
 }

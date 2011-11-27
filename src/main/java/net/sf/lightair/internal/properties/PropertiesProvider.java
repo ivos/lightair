@@ -2,60 +2,68 @@ package net.sf.lightair.internal.properties;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.Properties;
 
+import net.sf.lightair.exception.MissingPropertyException;
 import net.sf.lightair.exception.PropertiesNotFoundException;
+import net.sf.lightair.exception.PropertiesUnreadableException;
 
 /**
  * Provides Light air properties.
  */
 public class PropertiesProvider {
 
-	/**
-	 * Name of properties file.
-	 */
-	public static final String PROPERTIES_FILE_NAME = "light-air.properties";
+	private final Properties properties = new Properties();
 
 	/**
-	 * Prefix of all properties.
+	 * Initialize.
+	 * <p>
+	 * Loads properties from the .properties file.
 	 */
-	private static final String PROPERTY_PREFIX = "light-air.";
-
-	private final Properties properties;
-
-	/**
-	 * Default constructor.
-	 */
-	public PropertiesProvider() {
-		properties = new Properties();
-		loadProperties();
-	}
-
-	private void loadProperties() {
+	public void init() {
 		try {
-			URLConnection urlConnection = getClass().getClassLoader()
-					.getResource(PROPERTIES_FILE_NAME).openConnection();
+			URL resource = getClass().getClassLoader().getResource(
+					propertiesFileName);
+			if (null == resource) {
+				throw new PropertiesNotFoundException(propertiesFileName);
+			}
+			URLConnection urlConnection = resource.openConnection();
 			urlConnection.setUseCaches(false);
 			InputStream is = urlConnection.getInputStream();
-			properties.load(is);
-			is.close();
+			try {
+				properties.load(is);
+			} finally {
+				is.close();
+			}
 		} catch (IOException e) {
-			throw new PropertiesNotFoundException(e);
+			throw new PropertiesUnreadableException(propertiesFileName);
 		}
+	}
+
+	public static final String DEFAULT_PROPERTIES_FILE_NAME = "light-air.properties";
+	private String propertiesFileName = DEFAULT_PROPERTIES_FILE_NAME;
+
+	public void setPropertiesFileName(String propertiesFileName) {
+		this.propertiesFileName = propertiesFileName;
 	}
 
 	/**
 	 * Get property value from properties file.
 	 * <p>
-	 * Key gets pre-pended with "light-air.". Value is trimmed.
+	 * Value is trimmed.
 	 * 
 	 * @param key
 	 *            Property key, excluding the "light-air." prefix
 	 * @return Trimmed property value
 	 */
 	public String getProperty(String key) {
-		return properties.getProperty(PROPERTY_PREFIX + key).trim();
+		String rawValue = properties.getProperty(key);
+		if (null == rawValue) {
+			throw new MissingPropertyException(key);
+		}
+		return rawValue.trim();
 	}
 
 }
