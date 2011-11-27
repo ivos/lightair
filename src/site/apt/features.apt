@@ -111,3 +111,6 @@ Features
  Display actual database content in verification failure message 
  including primary key column values.
  
+ [[18]] <<Set base URL using annotation>>\
+ Use @BaseUrl to set base URL for a test.
+ 

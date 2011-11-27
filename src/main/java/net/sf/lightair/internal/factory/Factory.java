@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.dbunit.dataset.MergingTable;
 import net.sf.lightair.internal.dbunit.dataset.TokenReplacingFilter;
+import net.sf.lightair.internal.junit.BaseUrlTestRule;
 import net.sf.lightair.internal.junit.SetupTestRule;
 import net.sf.lightair.internal.junit.VerifyTestRule;
 import net.sf.lightair.internal.properties.PropertiesProvider;
@@ -99,16 +100,20 @@ public class Factory {
 
 	// getters for classes always newly instantiated
 
+	public SetupTestRule getSetupTestRule(FrameworkMethod frameworkMethod) {
+		SetupTestRule rule = new SetupTestRule(frameworkMethod);
+		rule.setUnitilsWrapper(unitilsWrapper);
+		return rule;
+	}
+
 	public VerifyTestRule getVerifyTestRule(FrameworkMethod frameworkMethod) {
 		VerifyTestRule rule = new VerifyTestRule(frameworkMethod);
 		rule.setUnitilsWrapper(unitilsWrapper);
 		return rule;
 	}
 
-	public SetupTestRule getSetupTestRule(FrameworkMethod frameworkMethod) {
-		SetupTestRule rule = new SetupTestRule(frameworkMethod);
-		rule.setUnitilsWrapper(unitilsWrapper);
-		return rule;
+	public BaseUrlTestRule getBaseUrlTestRule(FrameworkMethod frameworkMethod) {
+		return new BaseUrlTestRule(frameworkMethod);
 	}
 
 	public IDatabaseConnection createDatabaseConnection(Connection connection,
