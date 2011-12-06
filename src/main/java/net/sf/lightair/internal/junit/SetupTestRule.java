@@ -4,13 +4,18 @@ import java.sql.SQLException;
 
 import net.sf.lightair.annotation.Setup;
 
+import org.apache.commons.lang.time.StopWatch;
 import org.dbunit.DatabaseUnitException;
 import org.junit.runners.model.FrameworkMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JUnit test rule to setup database before test method execution.
  */
 public class SetupTestRule extends AbstractTestRule<Setup> {
+
+	private final Logger log = LoggerFactory.getLogger(SetupTestRule.class);
 
 	/**
 	 * Constructor.
@@ -33,7 +38,15 @@ public class SetupTestRule extends AbstractTestRule<Setup> {
 	protected void before() throws ClassNotFoundException, SQLException,
 			DatabaseUnitException {
 		if (null != getAnnotation()) {
-			unitilsWrapper.setup(getTestMethod(), getAnnotation().value());
+			String[] fileNames = getAnnotation().value();
+			log.info("Setting up database for test method {} "
+					+ "with configured file names {}.", getTestMethod(),
+					fileNames);
+			StopWatch stopWatch = new StopWatch();
+			stopWatch.start();
+			unitilsWrapper.setup(getTestMethod(), fileNames);
+			stopWatch.stop();
+			log.debug("Database set up in {} ms.", stopWatch.getTime());
 		}
 	}
 

@@ -13,12 +13,16 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.unitils.dbunit.util.MultiSchemaDataSet;
 
 /**
  * Wrapper around Unitils.
  */
 public class UnitilsWrapper {
+
+	private final Logger log = LoggerFactory.getLogger(UnitilsWrapper.class);
 
 	/**
 	 * Setup database for test method.
@@ -29,6 +33,8 @@ public class UnitilsWrapper {
 	 *            File names from @Setup annotation
 	 */
 	public void setup(Method testMethod, String[] fileNames) {
+		log.debug("Setting up database for test method {} "
+				+ "with configured file names {}.", testMethod, fileNames);
 		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,
 				"", fileNames);
 		final DatabaseOperation cleanInsert = factory
@@ -58,6 +64,8 @@ public class UnitilsWrapper {
 	 */
 	public void verify(Method testMethod, String[] fileNames)
 			throws SQLException {
+		log.debug("Verifying database for test method {} "
+				+ "with configured file names {}.", testMethod, fileNames);
 		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,
 				VERIFY_FILE_NAME_SUFFIX, fileNames);
 		for (final String schemaName : multiSchemaDataSet.getSchemaNames()) {

@@ -25,7 +25,7 @@ import org.xml.sax.XMLReader;
  */
 public class MultiSchemaXmlDataSetReader {
 
-	private final Logger logger = LoggerFactory
+	private final Logger log = LoggerFactory
 			.getLogger(MultiSchemaXmlDataSetReader.class);
 
 	/**
@@ -45,12 +45,15 @@ public class MultiSchemaXmlDataSetReader {
 	public MultiSchemaDataSet readDataSetXml(String defaultSchemaName,
 			File... dataSetFiles) throws DataSetNotFoundException,
 			IllegalDataSetContentException {
+		log.debug("Reading dataset with default schema {} and files {}.",
+				defaultSchemaName, dataSetFiles);
 		DataSetContentHandler dataSetContentHandler = new DataSetContentHandler(
 				defaultSchemaName);
 		XMLReader xmlReader = createXMLReader();
 		xmlReader.setContentHandler(dataSetContentHandler);
 		xmlReader.setErrorHandler(dataSetContentHandler);
 		for (File dataSetFile : dataSetFiles) {
+			log.debug("Reading XML dataset file {}.", dataSetFile);
 			InputStream dataSetInputStream = null;
 			try {
 				dataSetInputStream = new FileInputStream(dataSetFile);
@@ -90,7 +93,7 @@ public class MultiSchemaXmlDataSetReader {
 		try {
 			saxParserFactory.setFeature(EXTERNAL_PARAMETER_ENTITIES, false);
 		} catch (Exception e) {
-			logger.debug("Unable to set "
+			log.debug("Unable to set "
 					+ EXTERNAL_PARAMETER_ENTITIES
 					+ " feature on SAX parser factory to false. Igoring exception: "
 					+ e.getMessage());
@@ -98,7 +101,7 @@ public class MultiSchemaXmlDataSetReader {
 		try {
 			saxParserFactory.setFeature(LOAD_EXTERNAL_DTD, false);
 		} catch (Exception e) {
-			logger.debug("Unable to set "
+			log.debug("Unable to set "
 					+ LOAD_EXTERNAL_DTD
 					+ " feature on SAX parser factory to false. Igoring exception: "
 					+ e.getMessage());

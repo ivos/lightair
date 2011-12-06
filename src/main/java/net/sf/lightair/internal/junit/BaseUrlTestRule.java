@@ -4,11 +4,15 @@ import static net.sourceforge.jwebunit.junit.JWebUnit.*;
 import net.sf.lightair.annotation.BaseUrl;
 
 import org.junit.runners.model.FrameworkMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JUnit test rule to set base URL before test method execution.
  */
 public class BaseUrlTestRule extends AbstractTestRule<BaseUrl> {
+
+	private final Logger log = LoggerFactory.getLogger(BaseUrlTestRule.class);
 
 	/**
 	 * Constructor.
@@ -26,7 +30,9 @@ public class BaseUrlTestRule extends AbstractTestRule<BaseUrl> {
 	@Override
 	protected void before() throws Throwable {
 		if (null != getAnnotation()) {
-			setBaseUrl(getAnnotation().value());
+			String baseUrl = getAnnotation().value();
+			log.info("Applying base URL [{}].", baseUrl);
+			setBaseUrl(baseUrl);
 		}
 	}
 

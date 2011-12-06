@@ -9,12 +9,16 @@ import net.sf.lightair.exception.DataSetNotFoundException;
 import net.sf.lightair.exception.IllegalDataSetContentException;
 import net.sf.lightair.internal.util.DataSetResolver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.unitils.dbunit.util.MultiSchemaDataSet;
 
 /**
  * Loads multi-schema dataset for a test method.
  */
 public class DataSetLoader {
+
+	private final Logger log = LoggerFactory.getLogger(DataSetLoader.class);
 
 	private static final String DATA_SET_FILE_EXTENSION = ".xml";
 
@@ -41,6 +45,9 @@ public class DataSetLoader {
 	 */
 	public MultiSchemaDataSet load(Method testMethod, String suffix,
 			String... fileNames) {
+		log.debug("Resolving dataset for method {} with suffix [{}] "
+				+ "and configured file names {}.", new Object[] { testMethod,
+				suffix, fileNames });
 		try {
 			List<File> files = new ArrayList<File>();
 			if (fileNames.length == 0) {
@@ -48,8 +55,8 @@ public class DataSetLoader {
 			} else {
 				addExplicitFiles(testMethod, fileNames, files);
 			}
-			return dataSetFactory
-					.createDataSet(files.toArray(new File[] {}));
+			log.debug("Creating dataset for resolved files {}.", files);
+			return dataSetFactory.createDataSet(files.toArray(new File[] {}));
 		} catch (IllegalDataSetContentException e) {
 			throw new IllegalDataSetContentException(e, fileNames);
 		} catch (DataSetNotFoundException e) {

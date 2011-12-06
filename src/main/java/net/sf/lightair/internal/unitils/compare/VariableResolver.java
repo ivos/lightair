@@ -44,11 +44,11 @@ public class VariableResolver {
 		if (isVariable(expectedValue)) {
 			if (variables.containsKey(expectedValue)) {
 				Object variableValue = variables.get(expectedValue);
-				log.debug("Returning variable {} value {}", expectedValue,
+				log.debug("Returning variable {} value {}.", expectedValue,
 						variableValue);
 				return variableValue;
 			}
-			log.debug("Storing variable {} value {}", expectedValue,
+			log.debug("Storing variable {} value {}.", expectedValue,
 					actualValue);
 			variables.put(expectedValue, actualValue);
 			return actualValue;

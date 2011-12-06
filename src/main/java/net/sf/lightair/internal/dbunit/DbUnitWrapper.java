@@ -4,20 +4,25 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import net.sf.lightair.exception.DatabaseAccessException;
 import net.sf.lightair.exception.CreateDatabaseConnectionException;
+import net.sf.lightair.exception.DatabaseAccessException;
 import net.sf.lightair.exception.DatabaseDriverClassNotFoundException;
 import net.sf.lightair.internal.factory.Factory;
 import net.sf.lightair.internal.properties.PropertiesProvider;
 import net.sf.lightair.internal.properties.PropertyKeys;
 
+import org.apache.commons.lang.time.StopWatch;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper around DbUnit.
  */
 public class DbUnitWrapper implements PropertyKeys {
+
+	private final Logger log = LoggerFactory.getLogger(DbUnitWrapper.class);
 
 	/**
 	 * Create a DbUnit connection for a given schema.
@@ -39,16 +44,24 @@ public class DbUnitWrapper implements PropertyKeys {
 	public IDatabaseConnection createConnection(String schemaName)
 			throws DatabaseDriverClassNotFoundException,
 			CreateDatabaseConnectionException, DatabaseAccessException {
+		if (null == schemaName) {
+			schemaName = getProperty(DEFAULT_SCHEMA);
+		}
+		log.info("Creating database connection for schema {}", schemaName);
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
 		String driverClassName = getProperty(DRIVER_CLASS_NAME);
 		try {
 			Class.forName(driverClassName);
 			Connection connection = factory.getConnection(
 					getProperty(CONNECTION_URL), getProperty(USER_NAME),
 					getProperty(PASSWORD));
-			if (null == schemaName) {
-				schemaName = getProperty(DEFAULT_SCHEMA);
-			}
-			return factory.createDatabaseConnection(connection, schemaName);
+			IDatabaseConnection dbConnection = factory
+					.createDatabaseConnection(connection, schemaName);
+			stopWatch.stop();
+			log.debug("Created database connection for schema {} in {} ms.",
+					schemaName, stopWatch.getTime());
+			return dbConnection;
 		} catch (ClassNotFoundException e) {
 			throw new DatabaseDriverClassNotFoundException(driverClassName, e);
 		} catch (SQLException e) {

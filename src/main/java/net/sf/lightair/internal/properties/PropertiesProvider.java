@@ -10,10 +10,17 @@ import net.sf.lightair.exception.MissingPropertyException;
 import net.sf.lightair.exception.PropertiesNotFoundException;
 import net.sf.lightair.exception.PropertiesUnreadableException;
 
+import org.apache.commons.lang.time.StopWatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Provides Light air properties.
  */
 public class PropertiesProvider {
+
+	private final Logger log = LoggerFactory
+			.getLogger(PropertiesProvider.class);
 
 	private final Properties properties = new Properties();
 
@@ -23,6 +30,9 @@ public class PropertiesProvider {
 	 * Loads properties from the .properties file.
 	 */
 	public void init() {
+		log.info("Initializing properties.");
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
 		try {
 			URL resource = getClass().getClassLoader().getResource(
 					propertiesFileName);
@@ -40,6 +50,8 @@ public class PropertiesProvider {
 		} catch (IOException e) {
 			throw new PropertiesUnreadableException(propertiesFileName);
 		}
+		stopWatch.stop();
+		log.debug("Initialized properties in {} ms.", stopWatch.getTime());
 	}
 
 	public static final String DEFAULT_PROPERTIES_FILE_NAME = "light-air.properties";
@@ -63,7 +75,9 @@ public class PropertiesProvider {
 		if (null == rawValue) {
 			throw new MissingPropertyException(key);
 		}
-		return rawValue.trim();
+		String trimmedValue = rawValue.trim();
+		log.debug("Providing property [{}] as [{}].", key, trimmedValue);
+		return trimmedValue;
 	}
 
 }

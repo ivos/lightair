@@ -9,6 +9,8 @@ import net.sf.lightair.internal.dbunit.dataset.MutableTableMetaData;
 import org.apache.commons.lang.StringUtils;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.datatype.DataType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.unitils.dbunit.util.MultiSchemaDataSet;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
@@ -17,6 +19,9 @@ import org.xml.sax.helpers.DefaultHandler;
  * SAX handler to parse {@link FlatXmlDataSet}.
  */
 public class DataSetContentHandler extends DefaultHandler {
+
+	private final Logger log = LoggerFactory
+			.getLogger(DataSetContentHandler.class);
 
 	private String defaultSchemaName;
 	private final Map<String, FlatXmlDataSet> dataSets = new HashMap<String, FlatXmlDataSet>();
@@ -34,6 +39,7 @@ public class DataSetContentHandler extends DefaultHandler {
 	@Override
 	public void startElement(String namespace, String localName, String qName,
 			Attributes attributes) {
+		log.debug("Processing XML element {}:{}.", namespace, localName);
 		if (processDatasetElement(namespace, localName)) {
 			return;
 		}
@@ -176,6 +182,8 @@ public class DataSetContentHandler extends DefaultHandler {
 		for (int i = 0; i < columns.length; i++) {
 			Column column = columns[i];
 			rowValues[i] = attributes.getValue(column.getColumnName());
+			log.debug("Parsed XML column {} with value [{}].",
+					column.getColumnName(), rowValues[i]);
 		}
 		dataSet.setRowValues(rowValues);
 	}
