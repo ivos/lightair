@@ -107,6 +107,7 @@ public class Factory {
 	}
 
 	public VerifyTestRule getVerifyTestRule(FrameworkMethod frameworkMethod) {
+		variableResolver.clear();
 		VerifyTestRule rule = new VerifyTestRule(frameworkMethod);
 		rule.setUnitilsWrapper(unitilsWrapper);
 		return rule;

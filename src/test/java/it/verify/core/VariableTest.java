@@ -30,4 +30,11 @@ public class VariableTest extends CommonTestBase {
 		db.update("insert into a (id,a1) values (1,'value1')");
 	}
 
+	@Test
+	public void variablesAreClearedBetweenTests() {
+		db.execute("delete from a");
+		db.update("insert into a (id,a1) values (0,'value2')");
+		db.update("insert into a (id,a1) values (1,'value2')");
+	}
+
 }

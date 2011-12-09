@@ -56,4 +56,11 @@ public class VariableResolver {
 		return expectedValue;
 	}
 
+	/**
+	 * Clear variable definitions.
+	 */
+	public void clear() {
+		variables.clear();
+	}
+
 }

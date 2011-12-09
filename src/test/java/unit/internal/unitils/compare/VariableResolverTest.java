@@ -29,6 +29,13 @@ public class VariableResolverTest {
 				r.resolveValue("$expectedValue", "actualValue1"));
 		assertEquals("Use variable 2", "actualValue0",
 				r.resolveValue("$expectedValue", "actualValue2"));
+
+		r.clear();
+		assertEquals("Create variable with same key and new value",
+				"actualValueNew0",
+				r.resolveValue("$expectedValue", "actualValueNew0"));
+		assertEquals("Use new variable", "actualValueNew0",
+				r.resolveValue("$expectedValue", "actualValueNew1"));
 	}
 
 }
