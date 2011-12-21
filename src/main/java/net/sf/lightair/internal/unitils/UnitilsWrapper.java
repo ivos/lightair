@@ -62,8 +62,7 @@ public class UnitilsWrapper {
 	 * @param fileNames
 	 *            File names from @Setup annotation
 	 */
-	public void verify(Method testMethod, String[] fileNames)
-			throws SQLException {
+	public void verify(Method testMethod, String[] fileNames) {
 		log.debug("Verifying database for test method {} "
 				+ "with configured file names {}.", testMethod, fileNames);
 		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,

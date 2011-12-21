@@ -1,11 +1,8 @@
 package net.sf.lightair.internal.junit;
 
-import java.sql.SQLException;
-
 import net.sf.lightair.annotation.Setup;
 
 import org.apache.commons.lang.time.StopWatch;
-import org.dbunit.DatabaseUnitException;
 import org.junit.runners.model.FrameworkMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,14 +26,9 @@ public class SetupTestRule extends AbstractTestRule<Setup> {
 
 	/**
 	 * If the method is annotated with @{@link Setup}, set up the database.
-	 * 
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 * @throws DatabaseUnitException
 	 */
 	@Override
-	protected void before() throws ClassNotFoundException, SQLException,
-			DatabaseUnitException {
+	protected void before() {
 		if (null != getAnnotation()) {
 			String[] fileNames = getAnnotation().value();
 			log.info("Setting up database for test method {} "

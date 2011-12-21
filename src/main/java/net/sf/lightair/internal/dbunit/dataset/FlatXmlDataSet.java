@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.dbunit.database.AmbiguousTableNameException;
 import org.dbunit.dataset.AbstractDataSet;
-import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableIterator;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
@@ -21,8 +20,7 @@ public class FlatXmlDataSet extends AbstractDataSet {
 	private MergingTable currentTable;
 
 	@Override
-	protected ITableIterator createIterator(boolean reversed)
-			throws DataSetException {
+	protected ITableIterator createIterator(boolean reversed) {
 		@SuppressWarnings("unchecked")
 		ITable[] tableArray = ((Collection<ITable>) tables.orderedValues())
 				.toArray(new ITable[0]);

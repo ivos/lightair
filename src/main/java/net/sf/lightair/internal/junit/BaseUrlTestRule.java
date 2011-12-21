@@ -28,7 +28,7 @@ public class BaseUrlTestRule extends AbstractTestRule<BaseUrl> {
 	 * If the method is annotated with @{@link BaseUrl}, set the base URL.
 	 */
 	@Override
-	protected void before() throws Throwable {
+	protected void before() {
 		if (null != getAnnotation()) {
 			String baseUrl = getAnnotation().value();
 			log.info("Applying base URL [{}].", baseUrl);

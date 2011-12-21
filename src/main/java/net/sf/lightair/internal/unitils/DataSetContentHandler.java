@@ -109,11 +109,20 @@ public class DataSetContentHandler extends DefaultHandler {
 		String schemaName = getSchemaName(namespace);
 		FlatXmlDataSet dataSet = dataSets.get(schemaName);
 		if (dataSet == null) {
-			dataSet = new FlatXmlDataSet();
+			dataSet = createFlatXmlDataSet();
 			dataSet.startDataSet();
 			dataSets.put(schemaName, dataSet);
 		}
 		return dataSet;
+	}
+
+	/**
+	 * Instantiate a new {@link FlatXmlDataSet}.
+	 * 
+	 * @return New {@link FlatXmlDataSet}
+	 */
+	protected FlatXmlDataSet createFlatXmlDataSet() {
+		return new FlatXmlDataSet();
 	}
 
 	/**
@@ -153,10 +162,23 @@ public class DataSetContentHandler extends DefaultHandler {
 		for (int i = 0; i < attributes.getLength(); i++) {
 			columns[i] = new Column(attributes.getQName(i), DataType.UNKNOWN);
 		}
-		MutableTableMetaData tableMetaData = new MutableTableMetaData(
+		MutableTableMetaData tableMetaData = createMutableTableMetaData(
 				tableName, columns);
 		dataSet.startRow(tableMetaData);
 		return tableMetaData;
+	}
+
+	/**
+	 * Instantiate new {@link MutableTableMetaData}.
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param columns
+	 * @return New {@link MutableTableMetaData}
+	 */
+	protected MutableTableMetaData createMutableTableMetaData(String tableName,
+			Column[] columns) {
+		return new MutableTableMetaData(tableName, columns);
 	}
 
 	/**

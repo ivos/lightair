@@ -23,7 +23,9 @@ public class MutableTableMetaData implements ITableMetaData {
 	 * Default constructor.
 	 * 
 	 * @param tableName
+	 *            Table name
 	 * @param columns
+	 *            Initial table columns
 	 */
 	public MutableTableMetaData(String tableName, Column... columns) {
 		this.tableName = tableName;

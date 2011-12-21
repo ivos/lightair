@@ -33,7 +33,7 @@ public class MultiSchemaXmlDataSetReader {
 	 * format.
 	 * 
 	 * @param defaultSchemaName
-	 *            Default database schema name.
+	 *            Default database schema name
 	 * @param dataSetFiles
 	 *            Files with datasets
 	 * @return Multi-schema dataset
@@ -47,8 +47,7 @@ public class MultiSchemaXmlDataSetReader {
 			IllegalDataSetContentException {
 		log.debug("Reading dataset with default schema {} and files {}.",
 				defaultSchemaName, dataSetFiles);
-		DataSetContentHandler dataSetContentHandler = new DataSetContentHandler(
-				defaultSchemaName);
+		DataSetContentHandler dataSetContentHandler = createDataSetContentHandler(defaultSchemaName);
 		XMLReader xmlReader = createXMLReader();
 		xmlReader.setContentHandler(dataSetContentHandler);
 		xmlReader.setErrorHandler(dataSetContentHandler);
@@ -68,6 +67,18 @@ public class MultiSchemaXmlDataSetReader {
 			}
 		}
 		return dataSetContentHandler.getMultiSchemaDataSet();
+	}
+
+	/**
+	 * Instantiate new {@link DataSetContentHandler}.
+	 * 
+	 * @param defaultSchemaName
+	 *            Default database schema name
+	 * @return New DataSetContentHandler
+	 */
+	protected DataSetContentHandler createDataSetContentHandler(
+			String defaultSchemaName) {
+		return new DataSetContentHandler(defaultSchemaName);
 	}
 
 	private XMLReader createXMLReader() {

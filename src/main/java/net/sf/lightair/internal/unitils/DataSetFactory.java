@@ -20,9 +20,18 @@ public class DataSetFactory implements PropertyKeys {
 	 * @return Multi-schema dataset
 	 */
 	public MultiSchemaDataSet createDataSet(File... dataSetFiles) {
-		MultiSchemaXmlDataSetReader multiSchemaXmlDataSetReader = new MultiSchemaXmlDataSetReader();
+		MultiSchemaXmlDataSetReader multiSchemaXmlDataSetReader = createMultiSchemaXmlDataSetReader();
 		return multiSchemaXmlDataSetReader.readDataSetXml(
 				propertiesProvider.getProperty(DEFAULT_SCHEMA), dataSetFiles);
+	}
+
+	/**
+	 * Instantiate new {@link MultiSchemaXmlDataSetReader}.
+	 * 
+	 * @return New MultiSchemaXmlDataSetReader
+	 */
+	protected MultiSchemaXmlDataSetReader createMultiSchemaXmlDataSetReader() {
+		return new MultiSchemaXmlDataSetReader();
 	}
 
 	// dependencies and setters
