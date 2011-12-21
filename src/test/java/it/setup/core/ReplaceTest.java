@@ -1,4 +1,4 @@
-package it.setup.replace;
+package it.setup.core;
 
 import static org.junit.Assert.*;
 import it.common.CommonTestBase;
@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(LightAir.class)
 @Setup
-public class NullTest extends CommonTestBase {
+public class ReplaceTest extends CommonTestBase {
 
 	List<Map<String, Object>> values;
 

@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<a id="0" a1="value0" />
+	<a id="1" a1="@null" />
+	<a id="2" a1="value2" />
+</dataset>
