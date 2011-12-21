@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<a id="0" expected="e0" />
+	<a id="1" expected="e1" unspecified="u1" />
+	<a id="2" expected="e2" />
+</dataset>
