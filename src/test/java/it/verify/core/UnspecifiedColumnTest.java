@@ -9,6 +9,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Unspecified column on a given row is ignored. (And not verified to be null.)
+ */
 @RunWith(LightAir.class)
 @Verify
 public class UnspecifiedColumnTest extends CommonTestBase {
