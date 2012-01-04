@@ -39,18 +39,6 @@ Features
  This fixes bug of DbUnit, where the first row of the table freezes columns used
  by the data set, other columns defined on subsequent rows are then ignored by DbUnit.
 
- [[4]] <<Replace @null with null value in setup>>\
- Use @null in XML dataset to specify null value.
- 
- [[5]] <<Specify database schema of a table row using XML namespace in setup>>\
- Specify row schema using XML namespace:
-
-+---+
-<dataset xmlns:s1="SCHEMA1">
-	<s1:table_s1 id="0" />
-</dataset>
-+---+
-
 * Verify
 
  [[1]] <<Default @Verify annotation>>\
@@ -121,10 +109,12 @@ Features
  Display actual database content in verification failure message 
  including primary key column values.
 
- [[14]] <<Replace @null with null value in verification>>\
- Use @null in XML dataset to verify a column has null value.
-  
- [[15]] <<Specify database schema of a table row using XML namespace in verification>>\
+* Common database features (setup and verify)
+
+ [[1]] <<Replace @null with null value>>\
+ Use @null in XML dataset to setup column to null value and to verify a column has null value.
+ 
+ [[2]] <<Specify database schema of a table row using XML namespace>>\
  Specify row schema using XML namespace:
 
 +---+
@@ -132,9 +122,9 @@ Features
 	<s1:table_s1 id="0" />
 </dataset>
 +---+
- 
+
 * Execute
  
  [[1]] <<Set base URL using annotation>>\
- Use @BaseUrl to set base URL for a test.
+ Annotate test method or test class with @BaseUrl to set base URL for a test.
  
