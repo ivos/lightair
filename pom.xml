@@ -29,6 +29,7 @@
 		<maven.compiler.target>1.5</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<jwebunit-version>3.0</jwebunit-version>
 	</properties>
 	<scm>
 		<connection>scm:git:git://lightair.git.sourceforge.net/gitroot/lightair/light-air.git/</connection>
@@ -105,6 +106,7 @@
 		<dependency>
 			<groupId>net.sourceforge.jwebunit</groupId>
 			<artifactId>jwebunit-core</artifactId>
+			<!-- ! version extracted to ${jwebunit-version} for project-setup.apt.vm -->
 			<version>3.0</version>
 			<exclusions>
 				<exclusion>

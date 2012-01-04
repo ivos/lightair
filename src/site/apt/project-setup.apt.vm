@@ -1,0 +1,86 @@
+ ---
+ Project setup
+ ---
+ Ivo Maixner
+ ---
+ 2011-10-21
+ ---
+
+Project setup
+
+* Maven dependencies
+
+ Add Light Air dependency to your POM:
+
++---+
+<dependency>
+	<groupId>net.sf.lightair</groupId>
+	<artifactId>light-air</artifactId>
+	<version>${project.version}</version>
+	<scope>test</scope>
+</dependency>
++---+
+
+ Add JWebUnit plugin dependency of your choice: either HtmlUnit or Selenium.
+ HtmlUnit plugin is recommended.
+ Use a version compatible with jwebunit-core pulled in by Light Air itself.
+
++---+
+<dependency>
+	<groupId>net.sourceforge.jwebunit</groupId>
+	<artifactId>jwebunit-htmlunit-plugin</artifactId>
+	<version>${jwebunit-version}</version>
+	<scope>test</scope>
+</dependency>
++---+
+
+ Have an slf4j runtime compatible with slf4j used by Light Air.
+ Logback is recommended.
+
++---+
+<dependency>
+	<groupId>ch.qos.logback</groupId>
+	<artifactId>logback-classic</artifactId>
+	<version>1.0.0</version>
+	<scope>test</scope>
+</dependency>
++---+
+
+* Properties file
+
+ Create <<<light-air.properties>>> file in <<<src/test/resources>>>
+ with the following content (example for H2 database):
+ 
++---+
+database.driverClassName = org.h2.Driver 
+database.connectionUrl = jdbc:h2:mem:test 
+database.userName = sa 
+database.password = 
+database.defaultSchema = PUBLIC 
++---+
+
+ Note, that the URL will probably be different, 
+ as the same database instance would typically need to be accessed 
+ from both the application under test running in an application server 
+ and the Light Air tests themselves.\
+ So an URL like the following is a bit more realistic example:
+ 
++---+
+database.connectionUrl=jdbc:h2:~/data/my-project/db;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
++---+
+
+ The same connection URL must be configured for the data source of the application 
+ in the application server.
+
+* Logback test configuration file
+
+ If you use Logback as the slf4j runtime, 
+ create a file named <<<logback-test.xml>>> in <<<src/test/resources>>>
+ with content recommended on Logback site.
+ 
+ This file lets you manage logging in tests, including log output from Light Air.
+ 
+* Resolving problems with slf4j runtime versions
+
+ If another dependency overrides slf4j API with a conflicting incompatible version  
+ you may have to override it explicitly in POM.
