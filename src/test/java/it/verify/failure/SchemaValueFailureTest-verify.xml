@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset xmlns:s1="s1">
+	<s1:ts1 id="0" a="a10" />
+	<s1:ts1 id="1" a="jkl" />
+	<s1:ts1 id="2" a="a12" />
+</dataset>

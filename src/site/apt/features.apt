@@ -123,6 +123,15 @@ Features
 
  [[14]] <<Replace @null with null value in verification>>\
  Use @null in XML dataset to verify a column has null value.
+  
+ [[15]] <<Specify database schema of a table row using XML namespace in verification>>\
+ Specify row schema using XML namespace:
+
++---+
+<dataset xmlns:s1="SCHEMA1">
+	<s1:table_s1 id="0" />
+</dataset>
++---+
  
 * Execute
  
