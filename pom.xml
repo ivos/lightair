@@ -8,6 +8,7 @@
 	<name>Light Air</name>
 	<description>Integration functional testing of web applications for developers.</description>
 	<url>http://lightair.sf.net</url>
+	<inceptionYear>2011</inceptionYear>
 	<developers>
 		<developer>
 			<id>imaixner</id>
@@ -37,6 +38,17 @@
 		<url>http://lightair.git.sourceforge.net/git/gitweb.cgi?p=lightair/light-air.git</url>
 	</scm>
 	<distributionManagement>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+		<repository>
+			<id>sonatype-nexus-staging</id>
+			<name>Nexus Release Repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
 		<site>
 			<id>lightair.sf.net</id>
 			<url>scp://shell.sourceforge.net/home/project-web/lightair/htdocs/</url>
@@ -323,4 +335,34 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	<profiles>
+		<!-- Actions to take when releasing -->
+		<profile>
+			<id>profile.release</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<!-- Sign artifacts -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<id>sign</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
