@@ -8,7 +8,9 @@
 
 Project setup
 
-* Maven dependencies
+* POM
+
+** Maven dependencies
 
  Add Light Air dependency to your POM:
 
@@ -46,29 +48,123 @@ Project setup
 </dependency>
 +---+
 
+** Test resources
+
+ The XML dataset files are expected to be next to the test class, in the same package.
+ This way you are not required to chase them all over the project 
+ or switch regularly between the test class directory and test resources directory.
+ 
+ To support this properly in Maven (and m2eclipse), use the following:
+ 
++---+
+<build>
+	<testResources>
+		<testResource>
+			<directory>src/test/resources</directory>
+		</testResource>
+		<testResource>
+			<directory>src/test/java</directory>
+			<includes>
+				<include>**</include>
+			</includes>
+			<excludes>
+				<exclude>**/*.java</exclude>
+			</excludes>
+		</testResource>
+	</testResources>
+</build>
++---+
+
+** Integration tests profile
+
+ As Light Air tests require the application to be deployed and running
+ on an application server, 
+ it is typically not desirable that they be run as unit tests in 
+ the Maven <<<test>>> lifecycle phase.
+ 
+ A way to approach this issue is to name the test with "*IT.java" suffix
+ (as opposed to "*Test.java"). 
+ This excludes them from the Maven <<<test>>> lifecycle phase.
+ Next, define a profile to run the Light Air tests:
+
++---+
+<profiles>
+	<profile>
+		<id>it</id>
+		<build>
+			<plugins>
+				<plugin>
+					<groupId>org.jboss.as.plugins</groupId>
+					<artifactId>jboss-as-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>deploy-pre-integration-test</id>
+							<phase>pre-integration-test</phase>
+							<goals>
+								<goal>deploy</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.9</version>
+					<executions>
+						<execution>
+							<id>integration-test</id>
+							<phase>integration-test</phase>
+							<goals>
+								<goal>test</goal>
+							</goals>
+							<configuration>
+								<includes>
+									<include>**/*IT.java</include>
+								</includes>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</build>
+	</profile>
+</profiles>
++---+
+
+ The example above also includes the deployment of the packaged application
+ to a JBoss AS. You would replace that with corresponding configuration.
+ 
+ Now, you can package your WAR file, deploy it to application server and 
+ execute all Light Air integration tests by issuing:
+
++---+
+mvn clean install -Pit
++---+
+
+ where <<<-Pit>>> activates the "integration tests" profile.
+ 
+ After that, you can open any test in your IDE and run it as an ordinary unit test 
+ to take advantage of IDE support.
+
 * Properties file
 
  Create <<<light-air.properties>>> file in <<<src/test/resources>>>
  with the following content (example for H2 database):
  
 +---+
-database.driverClassName = org.h2.Driver 
-database.connectionUrl = jdbc:h2:mem:test 
-database.userName = sa 
-database.password = 
-database.defaultSchema = PUBLIC 
-+---+
-
- Note, that the URL will probably be different, 
- as the same database instance would typically need to be accessed 
- from both the application under test running in an application server 
- and the Light Air tests themselves.\
- So an URL like the following is a bit more realistic example:
- 
-+---+
+database.driverClassName=org.h2.Driver
 database.connectionUrl=jdbc:h2:~/data/my-project/db;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
+database.userName=sa
+database.password= 
+database.defaultSchema=PUBLIC 
 +---+
 
+ Be aware, that Light Air tests must connect to the same database instance
+ as the application running within the application server.
+ 
+ Therefore you are looking to access the database in a "server mode", 
+ or via "TCP connection", as opposed to "in-memory mode" or "embedded mode".
+ 
  The same connection URL must be configured for the data source of the application 
  in the application server.
 
@@ -82,7 +178,7 @@ database.connectionUrl=jdbc:h2:~/data/my-project/db;AUTO_SERVER=TRUE;DB_CLOSE_ON
  
 * Resolving problems with slf4j runtime versions
 
- If another dependency overrides slf4j API with a conflicting incompatible version  
+ When another dependency overrides slf4j API with a conflicting incompatible version  
  you may have to override it explicitly in POM.
 
 *--:
