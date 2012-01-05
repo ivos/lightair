@@ -1,0 +1,83 @@
+ ---
+ Write a test
+ ---
+ Ivo Maixner
+ ---
+ 2012-01-05
+ ---
+
+Write a test
+
+ The following example tests updating of user's profile:
+
++---+
+package it.user;
+
+import static net.sourceforge.jwebunit.junit.JWebUnit.*;
+import net.sf.lightair.LightAir;
+import net.sf.lightair.annotation.BaseUrl;
+import net.sf.lightair.annotation.Setup;
+import net.sf.lightair.annotation.Verify;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+@RunWith(LightAir.class)
+@Setup
+@Verify
+@BaseUrl("http://localhost:8080/my-application")
+public class ProfileUpdateIT {
+
+	@Test
+	public void test() {
+		beginAt("login");
+		setTextField("form:userBeanUserEmail", "email2");
+		setTextField("form:userBeanUserPassword", "password2");
+		submit();
+		assertTextPresent("Logged in as: email2");
+
+		clickLink("_f_login:_l_profile");
+
+		setTextField("f_profile:currentUserBeanUserFullName", "Full Name 2_a");
+		submit();
+
+		assertTextFieldEquals("f_profile:currentUserBeanUserFullName",
+				"Full Name 2_a");
+	}
+
+}
++---+
+
+ Next to the class (in the same package), create <<<ProfileUpdateIT.xml>>> file
+ to setup database before the test:
+ 
++---+
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<user id="1" email="email1" full_name="Full Name 1" password="password1" version="1" />
+	<user id="2" email="email2" full_name="Full Name 2" password="password2" version="1" />
+	<user id="3" email="email3" full_name="Full Name 3" password="password3" version="1" />
+</dataset>
++---+
+
+ Finally, create <<<ProfileUpdateIT-verify.xml>>> file to verify database
+ was properly updated:
+ 
++---+
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<user id="1" email="email1" full_name="Full Name 1" password="password1" version="1" />
+	<user id="2" email="email2" full_name="Full Name 2_a" password="password2" />
+	<user id="3" email="email3" full_name="Full Name 3" password="password3" version="1" />
+</dataset>
++---+
+
+ Note that the version column of the updated row in verification dataset is not specified,
+ this means its value is not verified 
+ (as opposed to other tools where it would be verified to be null).
+ 
+ See the list of features for other examples of "straightening" the functionality.
+
+*--:
+ {{{./features.html}Next: Features >>}}
+*--:

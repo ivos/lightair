@@ -6,6 +6,7 @@
 			<item name="Introduction" href="index.html" />
 			<item name="Motivation" href="motivation.html" />
 			<item name="Project setup" href="project-setup.html" />
+			<item name="Write a test" href="write-test.html" />
 			<item name="Features" href="features.html" />
 			<item name="Development" href="development.html" />
 		</menu>

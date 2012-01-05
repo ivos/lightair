@@ -8,6 +8,10 @@
 
 Development
 
+ Any help with development of Light Air is very welcome. 
+ Please contact me if you have any addition.
+ You can also create a ticket on the project's Sourceforege pages.
+
 * Clone GIT repo
 
  To clone GIT repo (read-only):
@@ -17,3 +21,7 @@ git clone git://lightair.git.sourceforge.net/gitroot/lightair/light-air.git/
 cd light-air/
 mvn install
 +---+
+
+*--:
+ {{{./index.html}Back to Introduction >>}}
+*--:

@@ -99,4 +99,7 @@ Motivation, or Is Light Air for me?
  takes the actual value from the database and defines a variable having this value.
  On any subsequent occurrence (in this case in both the line_item.order_id column values)
  it verifies that the actual database value is equal to the already defined value of the variable.
- 
+
+*--:
+ {{{./project-setup.html}Next: Project setup >>}}
+*--:

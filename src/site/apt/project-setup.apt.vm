@@ -84,3 +84,7 @@ database.connectionUrl=jdbc:h2:~/data/my-project/db;AUTO_SERVER=TRUE;DB_CLOSE_ON
 
  If another dependency overrides slf4j API with a conflicting incompatible version  
  you may have to override it explicitly in POM.
+
+*--:
+ {{{./write-test.html}Next: Write a test >>}}
+*--:
