@@ -58,10 +58,10 @@ Motivation, or Is Light Air for me?
  so that it is run whenever my database schema changes.
 
  Similarly, I want the tool to verify database content after each test execution.
- I want to specify the data in the same format, as for setup.
+ I want to specify the data in the same format as for setup.
 
  For both setup and verification data definitions,
- I want standard tokens, like @any, @null, @now, @today, 
+ I want standard tokens, like @null, @any, @now, @today, 
  pre-defined and be able to use them immediately without any hassle.
  
  I want the tool to interpret the data definitions according to common sense.

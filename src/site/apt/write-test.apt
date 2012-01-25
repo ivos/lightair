@@ -8,7 +8,7 @@
 
 Write a test
 
- The following example tests updating of user's profile:
+ The following example tests updating of user's profile on an example web application:
 
 +---+
 package it.user;

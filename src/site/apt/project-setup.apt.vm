@@ -132,7 +132,8 @@ Project setup
 +---+
 
  The example above also includes the deployment of the packaged application
- to a JBoss AS. You would replace that with corresponding configuration.
+ to a JBoss AS. You would replace that with a configuration corresponding
+ to your application/web server.
  
  Now, you can package your WAR file, deploy it to application server and 
  execute all Light Air integration tests by issuing:
