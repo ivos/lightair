@@ -1,8 +1,13 @@
 package net.sf.lightair.internal.dbunit.dataset;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +38,10 @@ public class TokenReplacingFilter {
 	 */
 	protected void init() {
 		tokens.put("@null", null);
+		tokens.put("@date", new Date(new DateMidnight().getMillis()));
+		tokens.put("@time", new Time(new DateTime().withDate(1970, 1, 1)
+				.withMillisOfSecond(0).getMillis()));
+		tokens.put("@timestamp", new Timestamp(new DateTime().getMillis()));
 	}
 
 	/**

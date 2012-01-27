@@ -61,7 +61,7 @@ Motivation, or Is Light Air for me?
  I want to specify the data in the same format as for setup.
 
  For both setup and verification data definitions,
- I want standard tokens, like @null, @any, @now, @today, 
+ I want standard tokens, like @null, @any, @date, @time, @timestamp, 
  pre-defined and be able to use them immediately without any hassle.
  
  I want the tool to interpret the data definitions according to common sense.

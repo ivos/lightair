@@ -1,7 +1,13 @@
 package net.sf.lightair.internal.unitils.compare;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 import org.unitils.core.UnitilsException;
 import org.unitils.dbunit.dataset.comparison.ColumnDifference;
 
@@ -89,17 +95,41 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		return (getValue() == null && actualColumn.getValue() != null);
 	}
 
-	private boolean isCastedValueEqual(Object value,
+	private boolean isCastedValueEqual(Object expectedValue,
 			org.unitils.dbunit.dataset.Column actualColumn) {
-		Object castedValue = getCastedValue(value, actualColumn.getType());
+		Object castedValue = getCastedValue(expectedValue,
+				actualColumn.getType());
 		return castedValue.equals(actualColumn.getValue());
 	}
 
-	private Object getCastedValue(Object value, DataType castType) {
+	private Object getCastedValue(Object expectedValue, DataType castType) {
+		// convert java.sql.Date to SQL TIME
+		// always return midnight: 00:00:00
+		if (expectedValue instanceof Date && DataType.TIME == castType) {
+			return new Time(new DateMidnight(1970, 1, 1).getMillis());
+		}
+		// convert java.sql.Time to SQL DATE
+		// always return starting date of java.sql.Time: 1970-01-01
+		if (expectedValue instanceof Time && DataType.DATE == castType) {
+			return new Date(new DateMidnight(1970, 1, 1).getMillis());
+		}
+		// convert java.sql.Timestamp to SQL DATE
+		// wipe out time info, only leaving date, yyyy-MM-dd
+		if (expectedValue instanceof Timestamp && DataType.DATE == castType) {
+			return new Date(new DateTime(expectedValue).toDateMidnight()
+					.getMillis());
+		}
+		// convert java.sql.Timestamp to SQL TIME
+		// set date to starting date of java.sql.Time, wipe out milliseconds,
+		// only leaving time, HH:mm:ss
+		if (expectedValue instanceof Timestamp && DataType.TIME == castType) {
+			return new Time(new DateTime(expectedValue).withDate(1970, 1, 1)
+					.withMillisOfSecond(0).getMillis());
+		}
 		try {
-			return castType.typeCast(value);
+			return castType.typeCast(expectedValue);
 		} catch (TypeCastException e) {
-			throw new UnitilsException("Unable to convert \"" + value
+			throw new UnitilsException("Unable to convert \"" + expectedValue
 					+ "\" to " + castType.toString() + ". Column name: "
 					+ getName() + ", current type: " + getType().toString(), e);
 		}
