@@ -27,16 +27,10 @@ public class TokenReplacingFilter {
 	private final Map<Object, Object> tokens = new HashMap<Object, Object>();
 
 	/**
-	 * Default constructor.
-	 */
-	public TokenReplacingFilter() {
-		init();
-	}
-
-	/**
 	 * Initialize map of tokens.
 	 */
-	protected void init() {
+	public void init() {
+		log.debug("Initializing tokens.");
 		tokens.put("@null", null);
 		tokens.put("@date", new Date(new DateMidnight().getMillis()));
 		tokens.put("@time", new Time(new DateTime().withDate(1970, 1, 1)

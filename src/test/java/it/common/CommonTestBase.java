@@ -1,5 +1,7 @@
 package it.common;
 
+import net.sf.lightair.internal.factory.Factory;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +17,7 @@ public class CommonTestBase {
 		db = new JdbcTemplate(dataSource);
 		DateTimeUtils.setCurrentMillisFixed(new DateTime(2009, 8, 28, 19, 49,
 				59, 987).getMillis());
+		Factory.getInstance().init();
 	}
 
 }

@@ -15,6 +15,7 @@ public class TokenReplacingFilterTest {
 		DateTimeUtils.setCurrentMillisFixed(new DateTime(2009, 8, 28, 19, 49,
 				59, 987).getMillis());
 		TokenReplacingFilter f = new TokenReplacingFilter();
+		f.init();
 		assertEquals("Generic value", "value1", f.replaceTokens("value1"));
 		assertEquals("@null", null, f.replaceTokens("@null"));
 		assertEquals("@date", new DateMidnight(2009, 8, 28),

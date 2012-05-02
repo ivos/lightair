@@ -85,8 +85,9 @@ public class Factory {
 	/**
 	 * Initialize single-instance classes.
 	 */
-	private void init() {
+	public void init() {
 		propertiesProvider.init();
+		tokenReplacingFilter.init();
 		dbUnitWrapper.setPropertiesProvider(propertiesProvider);
 		dbUnitWrapper.setFactory(this);
 		unitilsWrapper.setDbUnitWrapper(dbUnitWrapper);
