@@ -62,13 +62,15 @@ public class PropertiesProvider {
 	}
 
 	/**
-	 * Get property value from properties file.
+	 * Get mandatory property value from properties file.
 	 * <p>
 	 * Value is trimmed.
 	 * 
 	 * @param key
-	 *            Property key, excluding the "light-air." prefix
+	 *            Property key
 	 * @return Trimmed property value
+	 * @throws MissingPropertyException
+	 *             when no such property is defined.
 	 */
 	public String getProperty(String key) {
 		String rawValue = properties.getProperty(key);
@@ -78,6 +80,31 @@ public class PropertiesProvider {
 		String trimmedValue = rawValue.trim();
 		log.debug("Providing property [{}] as [{}].", key, trimmedValue);
 		return trimmedValue;
+	}
+
+	/**
+	 * Get optional property value from properties file as long.
+	 * <p>
+	 * Property value is trimmed and converted to long.
+	 * 
+	 * @param key
+	 *            Property key
+	 * @param defaultValue
+	 *            Default value to return when the property is not defined
+	 * @return Property value converted to long or the default value when the
+	 *         property is not defined
+	 */
+	public long getProperty(String key, long defaultValue) {
+		String rawValue = properties.getProperty(key);
+		long longValue;
+		if (null == rawValue) {
+			longValue = defaultValue;
+		} else {
+			String trimmedValue = rawValue.trim();
+			longValue = Long.valueOf(trimmedValue).longValue();
+		}
+		log.debug("Providing property [{}] as [{}].", key, longValue);
+		return longValue;
 	}
 
 }

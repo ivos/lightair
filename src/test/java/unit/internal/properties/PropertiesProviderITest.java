@@ -19,7 +19,7 @@ public class PropertiesProviderITest implements PropertyKeys {
 	}
 
 	@Test
-	public void ok() {
+	public void mandatory_Ok() {
 		assertEquals("1. property", "org.h2.Driver",
 				p.getProperty(DRIVER_CLASS_NAME));
 		assertEquals("2. property", "jdbc:h2:mem:test",
@@ -28,7 +28,7 @@ public class PropertiesProviderITest implements PropertyKeys {
 	}
 
 	@Test
-	public void fail_MissingPropertyException() {
+	public void mandatory_Fail_MissingPropertyException() {
 		try {
 			p.getProperty("non-existent-property");
 			fail("Should throw");
@@ -38,4 +38,12 @@ public class PropertiesProviderITest implements PropertyKeys {
 					e.getMessage());
 		}
 	}
+
+	@Test
+	public void optional() {
+		assertEquals("Defined", 0, p.getProperty(TIME_DIFFERENCE_LIMIT, 123));
+		assertEquals("Not defined", 123,
+				p.getProperty("un-defined-property", 123));
+	}
+
 }

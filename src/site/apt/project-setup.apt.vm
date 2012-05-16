@@ -158,6 +158,8 @@ database.connectionUrl=jdbc:h2:~/data/my-project/db;AUTO_SERVER=TRUE;DB_CLOSE_ON
 database.userName=sa
 database.password= 
 database.defaultSchema=PUBLIC 
+
+time.difference.limit.millis=0
 +---+
 
  Be aware, that Light Air tests must connect to the same database instance

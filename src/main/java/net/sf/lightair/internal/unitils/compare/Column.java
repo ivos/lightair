@@ -97,9 +97,23 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 
 	private boolean isCastedValueEqual(Object expectedValue,
 			org.unitils.dbunit.dataset.Column actualColumn) {
-		Object castedValue = getCastedValue(expectedValue,
+		Object castedExpectedValue = getCastedValue(expectedValue,
 				actualColumn.getType());
-		return castedValue.equals(actualColumn.getValue());
+		Object actualValue = actualColumn.getValue();
+
+		if (castedExpectedValue instanceof java.util.Date) {
+			return isTemporalWithinLimit(castedExpectedValue, actualValue);
+		}
+
+		return castedExpectedValue.equals(actualValue);
+	}
+
+	private boolean isTemporalWithinLimit(Object castedExpectedValue,
+			Object actualValue) {
+		long expectedMillis = ((java.util.Date) castedExpectedValue).getTime();
+		long actualMillis = ((java.util.Date) actualValue).getTime();
+		long difference = Math.abs(actualMillis - expectedMillis);
+		return difference <= timeDifferenceLimit;
 	}
 
 	private Object getCastedValue(Object expectedValue, DataType castType) {
@@ -147,6 +161,17 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	 */
 	public void setVariableResolver(VariableResolver variableResolver) {
 		this.variableResolver = variableResolver;
+	}
+
+	private long timeDifferenceLimit;
+
+	/**
+	 * Set time difference limit.
+	 * 
+	 * @param timeDifferenceLimit
+	 */
+	public void setTimeDifferenceLimit(long timeDifferenceLimit) {
+		this.timeDifferenceLimit = timeDifferenceLimit;
 	}
 
 }

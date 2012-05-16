@@ -109,6 +109,12 @@ Features
  Display actual database content in verification failure message 
  including primary key column values.
 
+ [[14]] <<Set time difference limit>>\
+ Set the time.difference.limit.millis property to define a maximum
+ allowable difference in milliseconds of temporal columns.\
+ Set this to an expected duration of the longest test, with some safety margin.
+ A possible value would be 60000 (= 1 minute).
+
 * Common database features (setup and verify)
 
  [[1]] <<Replace @null with null value>>\

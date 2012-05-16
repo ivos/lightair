@@ -11,6 +11,7 @@ import net.sf.lightair.internal.junit.BaseUrlTestRule;
 import net.sf.lightair.internal.junit.SetupTestRule;
 import net.sf.lightair.internal.junit.VerifyTestRule;
 import net.sf.lightair.internal.properties.PropertiesProvider;
+import net.sf.lightair.internal.properties.PropertyKeys;
 import net.sf.lightair.internal.unitils.DataSetFactory;
 import net.sf.lightair.internal.unitils.DataSetLoader;
 import net.sf.lightair.internal.unitils.UnitilsWrapper;
@@ -28,7 +29,7 @@ import org.junit.runners.model.FrameworkMethod;
 /**
  * Factory class.
  */
-public class Factory {
+public class Factory implements PropertyKeys {
 
 	// single-instance classes and their getters
 
@@ -97,6 +98,8 @@ public class Factory {
 		dataSetLoader.setDataSetResolver(dataSetResolver);
 		dataSetLoader.setDataSetFactory(dataSetFactory);
 		dataSetFactory.setPropertiesProvider(propertiesProvider);
+		timeDifferenceLimit = propertiesProvider.getProperty(
+				TIME_DIFFERENCE_LIMIT, 0);
 	}
 
 	// getters for classes always newly instantiated
@@ -131,6 +134,7 @@ public class Factory {
 
 	public void initColumn(Column column) {
 		column.setVariableResolver(variableResolver);
+		column.setTimeDifferenceLimit(timeDifferenceLimit);
 	}
 
 	// static method call wrappers
@@ -142,6 +146,19 @@ public class Factory {
 
 	public DatabaseOperation getCleanInsertDatabaseOperation() {
 		return DatabaseOperation.CLEAN_INSERT;
+	}
+
+	// properties
+
+	private long timeDifferenceLimit;
+
+	/**
+	 * Set time difference limit.
+	 * 
+	 * @param timeDifferenceLimit
+	 */
+	public void setTimeDifferenceLimit(long timeDifferenceLimit) {
+		this.timeDifferenceLimit = timeDifferenceLimit;
 	}
 
 	// access as singleton
