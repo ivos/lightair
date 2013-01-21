@@ -110,6 +110,12 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 
 	private boolean isTemporalWithinLimit(Object castedExpectedValue,
 			Object actualValue) {
+
+		// Fix NPE
+		if (null == actualValue) {
+			return false;
+		}
+
 		long expectedMillis = ((java.util.Date) castedExpectedValue).getTime();
 		long actualMillis = ((java.util.Date) actualValue).getTime();
 		long difference = Math.abs(actualMillis - expectedMillis);
