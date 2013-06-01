@@ -33,9 +33,9 @@
 		<jwebunit-version>3.0</jwebunit-version>
 	</properties>
 	<scm>
-		<connection>scm:git:git://lightair.git.sourceforge.net/gitroot/lightair/light-air.git/</connection>
-		<developerConnection>scm:git:ssh://imaixner@lightair.git.sourceforge.net/gitroot/lightair/light-air.git/</developerConnection>
-		<url>http://lightair.git.sourceforge.net/git/gitweb.cgi?p=lightair/light-air.git</url>
+		<connection>scm:git:git://git.code.sf.net/p/lightair/code</connection>
+		<developerConnection>scm:git:ssh://imaixner@git.code.sf.net/p/lightair/code</developerConnection>
+		<url>http://sourceforge.net/p/lightair/code</url>
 	</scm>
 	<distributionManagement>
 		<snapshotRepository>
