@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.lightair</groupId>
 	<artifactId>light-air</artifactId>
@@ -6,7 +7,7 @@
 	<packaging>jar</packaging>
 	<name>Light Air</name>
 	<description>Integration functional testing of web applications for developers.</description>
-	<url>http://lightair.sf.net</url>
+	<url>http://lightair.sourceforge.net</url>
 	<inceptionYear>2011</inceptionYear>
 	<developers>
 		<developer>
