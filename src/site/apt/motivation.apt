@@ -9,9 +9,9 @@
 Motivation, or Is Light Air for me?
 
  I develop web applications.
- I want my application tested before I hand it out to my customer.
+ <<I want my application tested>> before I hand it out to my customer.
 
- I want to test the application as a whole, 
+ I want to <<test the application as a whole>>, 
  because that is what I hand out to my customer. 
  I am not interested for example in testing a method on a DAO class, 
  I want to test the relevant functionality of the complete application, 
@@ -37,8 +37,8 @@ Motivation, or Is Light Air for me?
  
  []
 
- Each test will start with setting up the test data. 
- I want the test to be repeatable, 
+ Each test will start with <<setting up the test data>>. 
+ I want the test to be <<repeatable>>, 
  so it will first delete all rows from the relevant tables, 
  then insert rows with data that the test will operate on.\
  Since the algorithm is given (delete, insert), 
@@ -46,8 +46,8 @@ Motivation, or Is Light Air for me?
  I want a test tool to take care of it and only declaratively define the setup data.
 
  I want to specify setup data in the DbUnit's "flat XML format". 
- It's the simplest data format based on XML. 
- It's also the most convenient one. 
+ It's the <<simplest data format>> based on XML. 
+ It's also <<the most convenient one>>. 
  And with any average XML editor it requires less typing than other formats, 
  including those constructed exactly for this purpose.
 
@@ -57,14 +57,14 @@ Motivation, or Is Light Air for me?
  alongside generating DDL by the hibernate3-maven-plugin 
  so that it is run whenever my database schema changes.
 
- Similarly, I want the tool to verify database content after each test execution.
+ Similarly, I want the tool to <<verify database content>> after each test execution.
  I want to specify the data in the same format as for setup.
 
  For both setup and verification data definitions,
- I want standard tokens, like @null, @any, @date, @time, @timestamp, 
+ I want <<standard tokens>>, like @null, @any, @date, @time, @timestamp, 
  pre-defined and be able to use them immediately without any hassle.
  
- I want the tool to interpret the data definitions according to common sense.
+ I want the tool to <<interpret the data definitions according to common sense>>.
  This includes, for example:
  
  * When a column value is defined on a row, it is used (inserted or verified).
@@ -80,7 +80,7 @@ Motivation, or Is Light Air for me?
  []
  
  I generally use surrogate primary keys generated as a sequence number.
- I want to be able to verify foreign keys referencing such generated
+ I want to be able to <<verify foreign keys>> referencing such generated
  primary keys. I want to use the mechanism of variables for this purpose.
  
 +---+
@@ -91,7 +91,7 @@ Motivation, or Is Light Air for me?
  
  The above dataset verifies there is one row in the order table with the given number, 
  and there are two rows in the line_item table with the given quantities.
- What is important, it also verifies that the two line items are related
+ What is important, it also verifies that the two <<line items are related>>
  to the order via foreign key order_id, no matter what the actual value
  of that foreign key is. 
  The expression $orderId is a variable, 
