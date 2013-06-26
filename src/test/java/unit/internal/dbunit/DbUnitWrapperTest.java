@@ -19,6 +19,8 @@ import net.sf.seaf.test.jmock.JMockSupport;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.database.statement.PreparedStatementFactory;
+import org.dbunit.ext.h2.H2DataTypeFactory;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
@@ -152,19 +154,21 @@ public class DbUnitWrapperTest extends JMockSupport implements PropertyKeys {
 
 				one(propertiesProvider).getProperty(
 						"dbunit.properties.property-name2");
-				will(returnValue("property-value2"));
+				will(returnValue("org.dbunit.ext.h2.H2DataTypeFactory"));
 
-				one(config).setProperty(
-						"http://www.dbunit.org/properties/property-name2",
-						"property-value2");
+				one(config)
+						.setProperty(
+								with(equal("http://www.dbunit.org/properties/property-name2")),
+								with(any(H2DataTypeFactory.class)));
 
 				one(propertiesProvider).getProperty(
 						"dbunit.properties.property-name3");
-				will(returnValue("property-value3"));
+				will(returnValue("org.dbunit.database.statement.PreparedStatementFactory"));
 
-				one(config).setProperty(
-						"http://www.dbunit.org/properties/property-name3",
-						"property-value3");
+				one(config)
+						.setProperty(
+								with(equal("http://www.dbunit.org/properties/property-name3")),
+								with(any(PreparedStatementFactory.class)));
 			}
 		});
 	}

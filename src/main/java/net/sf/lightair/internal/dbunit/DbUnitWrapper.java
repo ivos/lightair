@@ -87,6 +87,7 @@ public class DbUnitWrapper implements PropertyKeys {
 					+ featureName.substring(16);
 			Boolean value = Boolean.valueOf(propertiesProvider
 					.getProperty(featureName));
+			log.debug("Setting DbUnit feature {} to {}.", dbUnitName, value);
 			config.setProperty(dbUnitName, value);
 		}
 
@@ -94,8 +95,19 @@ public class DbUnitWrapper implements PropertyKeys {
 		for (String propertyName : propertyNames) {
 			String dbUnitName = "http://www.dbunit.org/properties/"
 					+ propertyName.substring(18);
-			config.setProperty(dbUnitName,
-					propertiesProvider.getProperty(propertyName));
+			String string = propertiesProvider.getProperty(propertyName);
+			Object value = convertPropertyValue(string);
+			log.debug("Setting DbUnit property {} to {}.", dbUnitName, value);
+			config.setProperty(dbUnitName, value);
+		}
+	}
+
+	private Object convertPropertyValue(String value) {
+		try {
+			Class<?> clazz = Class.forName(value);
+			return clazz.newInstance();
+		} catch (Exception e) {
+			return value;
 		}
 	}
 
