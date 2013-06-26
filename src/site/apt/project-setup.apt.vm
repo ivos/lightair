@@ -172,6 +172,9 @@ database.password=
 database.defaultSchema=PUBLIC 
 
 time.difference.limit.millis=0
+
+# uncomment to escape table and column names:
+#dbunit.properties.escapePattern="?"
 +---+
 
  Be aware, that Light Air tests must connect to the same database instance

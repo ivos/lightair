@@ -4,9 +4,11 @@ import static org.junit.Assert.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
-import net.sf.lightair.exception.DatabaseAccessException;
 import net.sf.lightair.exception.CreateDatabaseConnectionException;
+import net.sf.lightair.exception.DatabaseAccessException;
 import net.sf.lightair.exception.DatabaseDriverClassNotFoundException;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.factory.Factory;
@@ -15,6 +17,7 @@ import net.sf.lightair.internal.properties.PropertyKeys;
 import net.sf.seaf.test.jmock.JMockSupport;
 
 import org.dbunit.DatabaseUnitException;
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -27,6 +30,9 @@ public class DbUnitWrapperTest extends JMockSupport implements PropertyKeys {
 	Connection connection;
 	Factory factory;
 	IDatabaseConnection dbc;
+	DatabaseConfig config;
+	Set<String> featureNames;
+	Set<String> propertyNames;
 
 	@Before
 	public void before() {
@@ -37,6 +43,15 @@ public class DbUnitWrapperTest extends JMockSupport implements PropertyKeys {
 		factory = mock(Factory.class);
 		w.setFactory(factory);
 		dbc = mock(IDatabaseConnection.class);
+		config = mock(DatabaseConfig.class);
+		featureNames = new HashSet<String>();
+		featureNames.add("dbunit.features.feature-name1");
+		featureNames.add("dbunit.features.feature-name2");
+		featureNames.add("dbunit.features.feature-name3");
+		propertyNames = new HashSet<String>();
+		propertyNames.add("dbunit.properties.property-name1");
+		propertyNames.add("dbunit.properties.property-name2");
+		propertyNames.add("dbunit.properties.property-name3");
 	}
 
 	@Test
@@ -49,6 +64,7 @@ public class DbUnitWrapperTest extends JMockSupport implements PropertyKeys {
 				will(returnValue(dbc));
 			}
 		});
+		checkSetFeaturesAndProperties();
 
 		assertSame(dbc, w.createConnection("schema1"));
 	}
@@ -66,6 +82,7 @@ public class DbUnitWrapperTest extends JMockSupport implements PropertyKeys {
 				will(returnValue(dbc));
 			}
 		});
+		checkSetFeaturesAndProperties();
 
 		assertSame(dbc, w.createConnection(null));
 	}
@@ -87,6 +104,67 @@ public class DbUnitWrapperTest extends JMockSupport implements PropertyKeys {
 
 				one(factory).getConnection("url1", "user1", "pass1");
 				will(returnValue(connection));
+			}
+		});
+	}
+
+	private void checkSetFeaturesAndProperties() throws DatabaseUnitException,
+			SQLException {
+		check(new Expectations() {
+			{
+				one(dbc).getConfig();
+				will(returnValue(config));
+
+				one(propertiesProvider).getDbUnitFeatureNames();
+				will(returnValue(featureNames));
+
+				one(propertiesProvider).getProperty(
+						"dbunit.features.feature-name1");
+				will(returnValue("true"));
+
+				one(config).setProperty(
+						"http://www.dbunit.org/features/feature-name1", true);
+
+				one(propertiesProvider).getProperty(
+						"dbunit.features.feature-name2");
+				will(returnValue("false"));
+
+				one(config).setProperty(
+						"http://www.dbunit.org/features/feature-name2", false);
+
+				one(propertiesProvider).getProperty(
+						"dbunit.features.feature-name3");
+				will(returnValue("true"));
+
+				one(config).setProperty(
+						"http://www.dbunit.org/features/feature-name3", true);
+
+				one(propertiesProvider).getDbUnitPropertyNames();
+				will(returnValue(propertyNames));
+
+				one(propertiesProvider).getProperty(
+						"dbunit.properties.property-name1");
+				will(returnValue("property-value1"));
+
+				one(config).setProperty(
+						"http://www.dbunit.org/properties/property-name1",
+						"property-value1");
+
+				one(propertiesProvider).getProperty(
+						"dbunit.properties.property-name2");
+				will(returnValue("property-value2"));
+
+				one(config).setProperty(
+						"http://www.dbunit.org/properties/property-name2",
+						"property-value2");
+
+				one(propertiesProvider).getProperty(
+						"dbunit.properties.property-name3");
+				will(returnValue("property-value3"));
+
+				one(config).setProperty(
+						"http://www.dbunit.org/properties/property-name3",
+						"property-value3");
 			}
 		});
 	}

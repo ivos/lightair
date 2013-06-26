@@ -152,8 +152,34 @@ Features
 * Execute
  
  [[1]] <<Set base URL using annotation>>\
- Annotate test method or test class with @BaseUrl to set base URL for a test.
+ Annotate test method or test class with @BaseUrl to set base URL for a test.\
  Annotate base class of multiple test classes with @BaseUrl to set base URL for all the inheriting test classes.
+
+* Configuration
+
+ [[1]] <<Configure DbUnit>>\
+ Use the following pattern to configure DbUnit features and properties in <<<light-air.properties>>>:
+
++---+
+dbunit.properties.<property-name>=<property-value>
+dbunit.features.<feature-name>=<feature-value>
++---+
+
+ where:
+
+  * <<<\<property-name\>>>> is the remainder of the DbUnit property name 
+ after the <<<http://www.dbunit.org/properties/>>> prefix, 
+
+  * <<<\<feature-name\>>>> is the remainder of the DbUnit property name 
+ after the <<<http://www.dbunit.org/features/>>>.
+
+ See {{{http://dbunit.sourceforge.net/properties.html} DbUnit properties and features documentation}}.
+ 
+ Example: to set the escape pattern to quote the table and column names in double-quotes, use this:
+
++---+
+dbunit.properties.escapePattern="?"
++---+
 
  []
 

@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import net.sf.lightair.exception.MissingPropertyException;
 import net.sf.lightair.exception.PropertiesNotFoundException;
@@ -105,6 +108,36 @@ public class PropertiesProvider {
 		}
 		log.debug("Providing property [{}] as [{}].", key, longValue);
 		return longValue;
+	}
+
+	/**
+	 * Return all property names with prefix "dbunit.features.".
+	 * 
+	 * @return The property names
+	 */
+	public Set<String> getDbUnitFeatureNames() {
+		return getPropertyKeysWithPrefix("dbunit.features.");
+	}
+
+	/**
+	 * Return all property names with prefix "dbunit.properties.".
+	 * 
+	 * @return The property names
+	 */
+	public Set<String> getDbUnitPropertyNames() {
+		return getPropertyKeysWithPrefix("dbunit.properties.");
+	}
+
+	private Set<String> getPropertyKeysWithPrefix(String prefix) {
+		Set<String> names = new HashSet<String>();
+		Enumeration<Object> keys = properties.keys();
+		for (String key; keys.hasMoreElements();) {
+			key = (String) keys.nextElement();
+			if (key.startsWith(prefix)) {
+				names.add(key);
+			}
+		}
+		return names;
 	}
 
 }

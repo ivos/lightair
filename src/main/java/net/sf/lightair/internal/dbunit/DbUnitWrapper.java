@@ -3,6 +3,7 @@ package net.sf.lightair.internal.dbunit;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Set;
 
 import net.sf.lightair.exception.CreateDatabaseConnectionException;
 import net.sf.lightair.exception.DatabaseAccessException;
@@ -13,6 +14,7 @@ import net.sf.lightair.internal.properties.PropertyKeys;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.dbunit.DatabaseUnitException;
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +63,7 @@ public class DbUnitWrapper implements PropertyKeys {
 			stopWatch.stop();
 			log.debug("Created database connection for schema {} in {} ms.",
 					schemaName, stopWatch.getTime());
+			setFeaturesAndProperties(dbConnection);
 			return dbConnection;
 		} catch (ClassNotFoundException e) {
 			throw new DatabaseDriverClassNotFoundException(driverClassName, e);
@@ -73,6 +76,27 @@ public class DbUnitWrapper implements PropertyKeys {
 
 	private String getProperty(String key) {
 		return propertiesProvider.getProperty(key);
+	}
+
+	private void setFeaturesAndProperties(IDatabaseConnection dbConnection) {
+		DatabaseConfig config = dbConnection.getConfig();
+
+		Set<String> featureNames = propertiesProvider.getDbUnitFeatureNames();
+		for (String featureName : featureNames) {
+			String dbUnitName = "http://www.dbunit.org/features/"
+					+ featureName.substring(16);
+			Boolean value = Boolean.valueOf(propertiesProvider
+					.getProperty(featureName));
+			config.setProperty(dbUnitName, value);
+		}
+
+		Set<String> propertyNames = propertiesProvider.getDbUnitPropertyNames();
+		for (String propertyName : propertyNames) {
+			String dbUnitName = "http://www.dbunit.org/properties/"
+					+ propertyName.substring(18);
+			config.setProperty(dbUnitName,
+					propertiesProvider.getProperty(propertyName));
+		}
 	}
 
 	// beans and their setters;
