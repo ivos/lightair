@@ -35,7 +35,8 @@ public class MergeColumnsAcrossFilesTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		assertEquals("Count", 5, db.queryForInt("select count(*) from a"));
+		assertEquals("Count", new Integer(5),
+				db.queryForObject("select count(*) from a", Integer.class));
 		values = db.queryForList("select * from a");
 		// file 1:
 		verifyRow(0, "01", null, null, null);

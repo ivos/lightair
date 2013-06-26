@@ -37,7 +37,8 @@ public class ReplaceTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		assertEquals("Count", 5, db.queryForInt("select count(*) from a"));
+		assertEquals("Count", new Integer(5),
+				db.queryForObject("select count(*) from a", Integer.class));
 		values = db.queryForList("select * from a");
 		verifyRow(0, "01", new LocalDate(2011, 10, 21), new LocalTime(22, 49,
 				48), new DateTime(2011, 11, 21, 23, 59, 58, 123));

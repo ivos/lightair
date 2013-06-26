@@ -21,9 +21,9 @@ public class SetupTestBase extends CommonTestBase {
 		db.execute("drop table person");
 	}
 
-	protected void verifyPersons(int size) {
+	protected void verifyPersons(Integer size) {
 		assertEquals("Count", size,
-				db.queryForInt("select count(*) from person"));
+				db.queryForObject("select count(*) from person", Integer.class));
 		List<Map<String, Object>> values = db
 				.queryForList("select * from person");
 		assertEquals("1. name", "Joe", values.get(0).get("name"));

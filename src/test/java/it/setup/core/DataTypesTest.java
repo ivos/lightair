@@ -38,8 +38,8 @@ public class DataTypesTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		assertEquals("Count", 2,
-				db.queryForInt("select count(*) from data_types"));
+		assertEquals("Count", new Integer(2), db.queryForObject(
+				"select count(*) from data_types", Integer.class));
 		values = db.queryForList("select * from data_types");
 		verifyRow(0, "abcdefghijklmnopqrstuvxyz", 12345678, new DateMidnight(
 				2999, 12, 31), new LocalTime(23, 59, 58), new DateTime(2998,

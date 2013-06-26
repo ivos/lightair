@@ -34,8 +34,8 @@ public class FirstRowMissingColumnTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		assertEquals("Count", 3,
-				db.queryForInt("select count(*) from first_row_missing_column"));
+		assertEquals("Count", new Integer(3), db.queryForObject(
+				"select count(*) from first_row_missing_column", Integer.class));
 		values = db.queryForList("select * from first_row_missing_column");
 		verifyRow(0, "0h", null, null);
 		verifyRow(1, "1h", "1m", null);
