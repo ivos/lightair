@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.lightair</groupId>
 	<artifactId>light-air</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.3</version>
 	<packaging>jar</packaging>
 	<name>Light Air</name>
 	<description>Integration functional testing of web applications for developers.</description>
