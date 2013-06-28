@@ -104,8 +104,7 @@ public class DbUnitWrapper implements PropertyKeys {
 
 	private Object convertPropertyValue(String value) {
 		try {
-			Class<?> clazz = Class.forName(value);
-			return clazz.newInstance();
+			return Class.forName(value).newInstance();
 		} catch (Exception e) {
 			return value;
 		}
