@@ -29,13 +29,19 @@ Motivation, or Is Light Air for me?
 
  So, what will a typical test look like? It boils down to:
 
- [[1]] Setup.
+ [[1]] Clean up database.
 
- [[1]] Execute.
+ [[1]] Setup database into a known state required for the test.
 
- [[1]] Verify.
+ [[1]] Execute the tested functionality with the application.
+
+ [[1]] Verify application output.
+
+ [[1]] Verify database state after the functionality was executed.
  
  []
+
+* Working with the database
 
  Each test will start with <<setting up the test data>>. 
  I want the test to be <<repeatable>>, 
@@ -100,6 +106,19 @@ Motivation, or Is Light Air for me?
  On any subsequent occurrence (in this case in both the line_item.order_id column values)
  it verifies that the actual database value is equal to the already defined value of the variable.
 
-*--:
+* Working with the application
+
+ I want to write my test in Java by hand.
+ The test code should be written manually, 
+ so that it can be maintained, <<refactored>>, <<re-used>>, and extended.
+ I don't want to use any tools that generate some obscure scripts, 
+ that do not allow me to refactor and reuse the test code.
+ 
+ I want my test code to <<sustain trivial changes>> in user interface.
+ In a web application, the UI is ever-changing.
+ The test must remain valid when "trivial" changes are performed,
+ e.g. swap two fields, or wrap fields in a group to provide for border or alignment.
+
+*---:
  {{{./project-setup.html}Next: Project setup >>}}
-*--:
+*---:

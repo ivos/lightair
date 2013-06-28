@@ -31,18 +31,17 @@ public class ProfileUpdateIT {
 	@Test
 	public void test() {
 		beginAt("login");
-		setTextField("form:userBeanUserEmail", "email2");
-		setTextField("form:userBeanUserPassword", "password2");
+		setTextField("email", "email2");
+		setTextField("password", "pwd2");
 		submit();
 		assertTextPresent("Logged in as: email2");
 
-		clickLink("_f_login:_l_profile");
+		clickLink("profile");
 
-		setTextField("f_profile:currentUserBeanUserFullName", "Full Name 2_a");
+		setTextField("name", "Name 2_a");
 		submit();
 
-		assertTextFieldEquals("f_profile:currentUserBeanUserFullName",
-				"Full Name 2_a");
+		assertTextFieldEquals("name", "Name 2_a");
 	}
 
 }
@@ -54,9 +53,9 @@ public class ProfileUpdateIT {
 +---+
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<user id="1" email="email1" full_name="Full Name 1" password="password1" version="1" />
-	<user id="2" email="email2" full_name="Full Name 2" password="password2" version="1" />
-	<user id="3" email="email3" full_name="Full Name 3" password="password3" version="1" />
+	<user id="1" email="email1" name="Name 1" password="pwd1" version="1" />
+	<user id="2" email="email2" name="Name 2" password="pwd2" version="1" />
+	<user id="3" email="email3" name="Name 3" password="pwd3" version="1" />
 </dataset>
 +---+
 
@@ -66,9 +65,9 @@ public class ProfileUpdateIT {
 +---+
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<user id="1" email="email1" full_name="Full Name 1" password="password1" version="1" />
-	<user id="2" email="email2" full_name="Full Name 2_a" password="password2" />
-	<user id="3" email="email3" full_name="Full Name 3" password="password3" version="1" />
+	<user id="1" email="email1" name="Name 1" password="pwd1" version="1" />
+	<user id="2" email="email2" name="Name 2_a" password="pwd2" />
+	<user id="3" email="email3" name="Name 3" password="pwd3" version="1" />
 </dataset>
 +---+
 
