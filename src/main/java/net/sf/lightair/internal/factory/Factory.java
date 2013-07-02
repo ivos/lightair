@@ -88,7 +88,6 @@ public class Factory implements PropertyKeys {
 	 */
 	public void init() {
 		propertiesProvider.init();
-		tokenReplacingFilter.init();
 		dbUnitWrapper.setPropertiesProvider(propertiesProvider);
 		dbUnitWrapper.setFactory(this);
 		unitilsWrapper.setDbUnitWrapper(dbUnitWrapper);
