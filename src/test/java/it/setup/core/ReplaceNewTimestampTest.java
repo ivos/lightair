@@ -60,7 +60,6 @@ public class ReplaceNewTimestampTest extends CommonTestBase {
 	private void verifyColumn(String column, String name) {
 		long timeA = ((Date) bothValues.get(0).get("time1")).getTime();
 		long timeB = ((Date) bothValues.get(1).get("time1")).getTime();
-		System.out.println(" a " + timeA + ", b " + timeB);
 		assertTrue(name + " increased on second run", timeB - timeA > 0);
 	}
 
