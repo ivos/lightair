@@ -35,7 +35,7 @@ public class SchemaValueFailureTest extends CommonTestBase {
 		db.update("insert into s1.ts1 (id,a) values (2,'a12')");
 	}
 
-	public void testVerifyException(AssertionError error) {
+	public void testVerifyException(Throwable error) {
 		String msg = "Assertion failed. "
 				+ "Differences found between the expected data set and actual database content.\n"
 				+ "Found differences for table s1.ts1:\n\n"

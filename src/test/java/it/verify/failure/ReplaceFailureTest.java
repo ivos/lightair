@@ -37,7 +37,7 @@ public class ReplaceFailureTest extends CommonTestBase {
 				+ "(2,'value2','2011-10-22','22:49:49','2011-11-22 23:59:59.124')");
 	}
 
-	public void testVerifyException(AssertionError error) {
+	public void testVerifyException(Throwable error) {
 		String msg = "Assertion failed. "
 				+ "Differences found between the expected data set and actual database content.\n"
 				+ "Found differences for table PUBLIC.a:\n\n"

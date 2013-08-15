@@ -40,7 +40,7 @@ public class ExpectedEmptyTableWithRowTest extends CommonTestBase {
 		db.update("insert into empty_ (id,b1) values (0,'b01')");
 	}
 
-	public void testVerifyException(AssertionError error) {
+	public void testVerifyException(Throwable error) {
 		String msg = "Assertion failed. "
 				+ "Differences found between the expected data set and actual database content.\n"
 				+ "Expected table to be empty but found rows for table PUBLIC.empty_\n\n\n"

@@ -34,7 +34,7 @@ public class ValueFailureTest extends CommonTestBase {
 		db.update("insert into a (id,a1,a2,a3) values (2,'21','22','23')");
 	}
 
-	public void testVerifyException(AssertionError error) {
+	public void testVerifyException(Throwable error) {
 		String msg = "Assertion failed. "
 				+ "Differences found between the expected data set and actual database content.\n"
 				+ "Found differences for table PUBLIC.a:\n\n"

@@ -44,6 +44,9 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	 */
 	public ColumnDifference preCompare(
 			org.unitils.dbunit.dataset.Column actualColumn) {
+		if ("@any".equals(getValue())) {
+			return null;
+		}
 		if (valuesSame(actualColumn)) {
 			return null;
 		}
@@ -72,6 +75,9 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	@Override
 	public ColumnDifference compare(
 			org.unitils.dbunit.dataset.Column actualColumn) {
+		if ("@any".equals(getValue())) {
+			return null;
+		}
 		if (valuesSame(actualColumn)) {
 			return null;
 		}

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import net.sf.lightair.exception.CloseDatabaseConnectionException;
 import net.sf.lightair.exception.DatabaseAccessException;
+import net.sf.lightair.exception.TokenAnyInSetupException;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.factory.Factory;
 import net.sf.lightair.internal.unitils.compare.DataSetAssert;
@@ -35,6 +36,7 @@ public class UnitilsWrapper {
 	public void setup(Method testMethod, String[] fileNames) {
 		log.debug("Setting up database for test method {} "
 				+ "with configured file names {}.", testMethod, fileNames);
+		Factory.getInstance().initDataSetProcessing();
 		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,
 				"", fileNames);
 		final DatabaseOperation cleanInsert = factory
@@ -52,6 +54,10 @@ public class UnitilsWrapper {
 				}
 			}.execute(connection);
 		}
+		if (Factory.getInstance().getDataSetProcessingData()
+				.isTokenAnyPresent()) {
+			throw new TokenAnyInSetupException();
+		}
 	}
 
 	/**
@@ -65,6 +71,7 @@ public class UnitilsWrapper {
 	public void verify(Method testMethod, String[] fileNames) {
 		log.debug("Verifying database for test method {} "
 				+ "with configured file names {}.", testMethod, fileNames);
+		Factory.getInstance().initDataSetProcessing();
 		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,
 				VERIFY_FILE_NAME_SUFFIX, fileNames);
 		for (final String schemaName : multiSchemaDataSet.getSchemaNames()) {

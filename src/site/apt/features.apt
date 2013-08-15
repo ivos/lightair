@@ -195,6 +195,12 @@ public class MyTest {
  Set this to an expected duration of the longest test, with some safety margin.
  A possible value would be 60000 (= 1 minute).
 
+ [[15]] <<Ignore column with value @any>>\
+ Use <<<@any>>> in verification XML dataset to specify 
+ that the actual column value should be <<ignored>>.\
+ This is equivalent to omitting the column in the row.
+ By using @any you can <<explicitly>> specify that the column value should be ignored. 
+
 * Common database features (apply for both setup and verification)
 
  [[1]] <<Replace @null with null value>>\

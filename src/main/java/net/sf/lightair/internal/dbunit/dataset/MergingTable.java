@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.lightair.internal.factory.Factory;
+import net.sf.lightair.internal.util.DataSetProcessingData;
 
 import org.dbunit.dataset.AbstractTable;
 import org.dbunit.dataset.Column;
@@ -116,6 +117,9 @@ public class MergingTable extends AbstractTable {
 	 */
 	private void setRowColumn(Map<String, ColumnValue> row, Column column,
 			Object rawValue) {
+		if ("@any".equals(rawValue)) {
+			dataSetProcessingData.setTokenAnyPresent();
+		}
 		Object value = tokenReplacingFilter.replaceTokens(rawValue);
 		row.put(column.getColumnName().toUpperCase(), new ColumnValue(column,
 				value));
@@ -188,4 +192,15 @@ public class MergingTable extends AbstractTable {
 		this.tokenReplacingFilter = tokenReplacingFilter;
 	}
 
+	private DataSetProcessingData dataSetProcessingData;
+
+	/**
+	 * Set DataSetProcessingData.
+	 * 
+	 * @param dataSetProcessingData
+	 */
+	public void setDataSetProcessingData(
+			DataSetProcessingData dataSetProcessingData) {
+		this.dataSetProcessingData = dataSetProcessingData;
+	}
 }

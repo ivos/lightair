@@ -18,6 +18,7 @@ import net.sf.lightair.internal.unitils.UnitilsWrapper;
 import net.sf.lightair.internal.unitils.compare.Column;
 import net.sf.lightair.internal.unitils.compare.DataSetAssert;
 import net.sf.lightair.internal.unitils.compare.VariableResolver;
+import net.sf.lightair.internal.util.DataSetProcessingData;
 import net.sf.lightair.internal.util.DataSetResolver;
 
 import org.dbunit.DatabaseUnitException;
@@ -101,6 +102,18 @@ public class Factory implements PropertyKeys {
 				TIME_DIFFERENCE_LIMIT, 0);
 	}
 
+	// custom lifecycle classes
+
+	private DataSetProcessingData dataSetProcessingData;
+
+	public DataSetProcessingData getDataSetProcessingData() {
+		return dataSetProcessingData;
+	}
+
+	public void initDataSetProcessing() {
+		dataSetProcessingData = new DataSetProcessingData();
+	}
+
 	// getters for classes always newly instantiated
 
 	public SetupTestRule getSetupTestRule(FrameworkMethod frameworkMethod) {
@@ -125,10 +138,11 @@ public class Factory implements PropertyKeys {
 		return new DatabaseConnection(connection, schemaName);
 	}
 
-	// init methods
+	// init methods for produced objects
 
 	public void initMergingTable(MergingTable mergingTable) {
 		mergingTable.setTokenReplacingFilter(tokenReplacingFilter);
+		mergingTable.setDataSetProcessingData(dataSetProcessingData);
 	}
 
 	public void initColumn(Column column) {

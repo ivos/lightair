@@ -36,7 +36,7 @@ public class UnexpectedRowTest extends CommonTestBase {
 		db.update("insert into a (id,a1) values (2,'21')");
 	}
 
-	public void onlyUnexpectedVerifyException(AssertionError error) {
+	public void onlyUnexpectedVerifyException(Throwable error) {
 		String msg = "Assertion failed. "
 				+ "Differences found between the expected data set and actual database content.\n"
 				+ "Found differences for table PUBLIC.a:\n\n"
@@ -57,7 +57,7 @@ public class UnexpectedRowTest extends CommonTestBase {
 		db.update("insert into a (id,a1) values (2,'21w')");
 	}
 
-	public void unexpectedAndOtherDifVerifyException(AssertionError error) {
+	public void unexpectedAndOtherDifVerifyException(Throwable error) {
 		String msg = "Assertion failed. "
 				+ "Differences found between the expected data set and actual database content.\n"
 				+ "Found differences for table PUBLIC.a:\n\n"
