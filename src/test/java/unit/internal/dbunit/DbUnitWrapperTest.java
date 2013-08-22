@@ -66,6 +66,7 @@ public class DbUnitWrapperTest extends JMockSupport implements PropertyKeys {
 				will(returnValue(dbc));
 			}
 		});
+		checkSetDatabaseDialect();
 		checkSetFeaturesAndProperties();
 
 		assertSame(dbc, w.createConnection("schema1"));
@@ -84,6 +85,7 @@ public class DbUnitWrapperTest extends JMockSupport implements PropertyKeys {
 				will(returnValue(dbc));
 			}
 		});
+		checkSetDatabaseDialect();
 		checkSetFeaturesAndProperties();
 
 		assertSame(dbc, w.createConnection(null));
@@ -106,6 +108,24 @@ public class DbUnitWrapperTest extends JMockSupport implements PropertyKeys {
 
 				one(factory).getConnection("url1", "user1", "pass1");
 				will(returnValue(connection));
+			}
+		});
+	}
+
+	private void checkSetDatabaseDialect() throws DatabaseUnitException,
+			SQLException {
+		check(new Expectations() {
+			{
+				one(dbc).getConfig();
+				will(returnValue(config));
+
+				one(propertiesProvider).getProperty(DATABASE_DIALECT);
+				will(returnValue("h2"));
+
+				one(config)
+						.setProperty(
+								with(equal("http://www.dbunit.org/properties/datatypeFactory")),
+								with(any(H2DataTypeFactory.class)));
 			}
 		});
 	}

@@ -3,6 +3,8 @@ package net.sf.lightair.internal.dbunit;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import net.sf.lightair.exception.CreateDatabaseConnectionException;
@@ -63,6 +65,7 @@ public class DbUnitWrapper implements PropertyKeys {
 			stopWatch.stop();
 			log.debug("Created database connection for schema {} in {} ms.",
 					schemaName, stopWatch.getTime());
+			setDatabaseDialect(dbConnection);
 			setFeaturesAndProperties(dbConnection);
 			return dbConnection;
 		} catch (ClassNotFoundException e) {
@@ -76,6 +79,41 @@ public class DbUnitWrapper implements PropertyKeys {
 
 	private String getProperty(String key) {
 		return propertiesProvider.getProperty(key);
+	}
+
+	private void setDatabaseDialect(IDatabaseConnection dbConnection) {
+		DatabaseConfig config = dbConnection.getConfig();
+
+		String dbUnitName = "http://www.dbunit.org/properties/datatypeFactory";
+		String dialect = propertiesProvider.getProperty(DATABASE_DIALECT);
+		String className = DATATYPE_FACTORIES.get(dialect);
+		Object value = convertPropertyValue(className);
+		log.debug(
+				"Setting database dialect to {}, DbUnit datatype factory will be {}.",
+				dialect, className);
+		config.setProperty(dbUnitName, value);
+	}
+
+	private static final Map<String, String> DATATYPE_FACTORIES = new HashMap<String, String>();
+	{
+		DATATYPE_FACTORIES.put("h2", "org.dbunit.ext.h2.H2DataTypeFactory");
+		DATATYPE_FACTORIES.put("oracle",
+				"org.dbunit.ext.oracle.OracleDataTypeFactory");
+		DATATYPE_FACTORIES.put("oracle9",
+				"org.dbunit.ext.oracle.OracleDataTypeFactory");
+		DATATYPE_FACTORIES.put("oracle10",
+				"org.dbunit.ext.oracle.OracleDataTypeFactory");
+		DATATYPE_FACTORIES.put("hsqldb",
+				"org.dbunit.ext.hsqldb.HsqldbDataTypeFactory");
+		DATATYPE_FACTORIES.put("mysql",
+				"org.dbunit.ext.mysql.MySqlDataTypeFactory");
+		DATATYPE_FACTORIES.put("db2", "org.dbunit.ext.db2.Db2DataTypeFactory");
+		DATATYPE_FACTORIES.put("postgresql",
+				"org.dbunit.dataset.datatype.DefaultDataTypeFactory");
+		DATATYPE_FACTORIES.put("derby",
+				"org.dbunit.dataset.datatype.DefaultDataTypeFactory");
+		DATATYPE_FACTORIES.put("mssql",
+				"org.dbunit.ext.mssql.MsSqlDataTypeFactory");
 	}
 
 	private void setFeaturesAndProperties(IDatabaseConnection dbConnection) {

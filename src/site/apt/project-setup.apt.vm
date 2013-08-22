@@ -165,23 +165,30 @@ mvn clean install -Pit
  with the following content (example for H2 database):
  
 +---+
+# Database connection
 database.driverClassName=org.h2.Driver
 database.connectionUrl=jdbc:h2:~/data/my-project/db;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
 database.userName=sa
-database.password= 
-database.defaultSchema=PUBLIC 
+database.password=
 
-time.difference.limit.millis=0
+# Database dialect
+# Select one of: h2, oracle, oracle9, oracle10, hsqldb, mysql, db2, postgresql, derby, mssql
+database.dialect=h2
+
+# Database default schema
+# Set the schema to be used when no schema is specified in a dataset
+database.defaultSchema=PUBLIC
+
+# Set the maximum allowable difference of temporal column values in verification
+# This value should be greater than the maximum duration of any test case (on any environment)
+time.difference.limit.millis=5000
 
 # uncomment to escape table and column names:
 #dbunit.properties.escapePattern="?"
-# uncomment to set DB dialect to Oracle 10+:
-#dbunit.properties.datatypeFactory=org.dbunit.ext.oracle.Oracle10DataTypeFactory
 +---+
 
- Be aware, that Light Air tests must connect to the same database instance
- as the application running within the application server.
- 
+ Be aware, that Light Air tests must connect to <<the same database instance>>
+ as the application running within the application server.\
  Therefore you are looking to access the database in a "server mode", 
  or via "TCP connection", as opposed to "in-memory mode" or "embedded mode".
  
