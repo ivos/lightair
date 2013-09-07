@@ -9,6 +9,10 @@
 	<description>Integration functional testing of web applications for developers.</description>
 	<url>http://lightair.sourceforge.net</url>
 	<inceptionYear>2011</inceptionYear>
+	<organization>
+		<name>Lastware, sro.</name>
+		<url>http://www.lastware.cz</url>
+	</organization>
 	<developers>
 		<developer>
 			<id>imaixner</id>

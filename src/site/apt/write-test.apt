@@ -52,7 +52,8 @@ public class ProfileUpdateIT {
  
 +---+
 <?xml version='1.0' encoding='UTF-8'?>
-<dataset>
+<dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../dataset.xsd">
 	<user id="1" email="email1" name="Name 1" password="pwd1" version="1" />
 	<user id="2" email="email2" name="Name 2" password="pwd2" version="1" />
 	<user id="3" email="email3" name="Name 3" password="pwd3" version="1" />
@@ -64,7 +65,8 @@ public class ProfileUpdateIT {
  
 +---+
 <?xml version='1.0' encoding='UTF-8'?>
-<dataset>
+<dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../dataset.xsd">
 	<user id="1" email="email1" name="Name 1" password="pwd1" version="1" />
 	<user id="2" email="email2" name="Name 2_a" password="pwd2" />
 	<user id="3" email="email3" name="Name 3" password="pwd3" version="1" />

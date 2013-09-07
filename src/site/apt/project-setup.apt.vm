@@ -179,6 +179,10 @@ database.dialect=h2
 # Set the schema to be used when no schema is specified in a dataset
 database.defaultSchema=PUBLIC
 
+# Names of database schemas from which to generate the XSDs
+# Use a comma-separated list for multiple schemas: SCHEMA1,SCHEMA2,SCHEMA3
+database.schemaNames=PUBLIC
+
 # Set the maximum allowable difference of temporal column values in verification
 # This value should be greater than the maximum duration of any test case (on any environment)
 time.difference.limit.millis=5000
@@ -194,6 +198,11 @@ time.difference.limit.millis=5000
  
  The same connection URL must be configured for the data source of the application 
  in the application server.
+
+* Generate XSD files
+
+ Use the {{{http://lightairmp.sourceforge.net/} LightAir Maven plugin}} 
+ to generate XSD files from the database.
 
 * Logback test configuration file
 

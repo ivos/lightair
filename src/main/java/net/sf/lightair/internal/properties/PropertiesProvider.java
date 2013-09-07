@@ -140,4 +140,8 @@ public class PropertiesProvider {
 		return names;
 	}
 
+	protected Properties getProperties() {
+		return properties;
+	}
+
 }

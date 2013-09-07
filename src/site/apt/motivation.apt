@@ -57,8 +57,8 @@ Motivation, or Is Light Air for me?
  And with any average XML editor it requires less typing than other formats, 
  including those constructed exactly for this purpose.
 
- I want the test tool to generate XSD from database 
- to support me when writing the test data by suggesting names of tables and columns. 
+ I want the test tool to <<generate XSD from database>> 
+ to support me when writing the test data by <<suggesting names of tables and columns>>. 
  I want to configure the generation of XSD in my Maven build, 
  alongside generating DDL by the hibernate3-maven-plugin 
  so that it is run whenever my database schema changes.

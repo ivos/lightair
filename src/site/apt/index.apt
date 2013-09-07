@@ -14,8 +14,12 @@ Testing web applications with common sense
  It strives for <<intuitive>>, simple usage and <<common-sense behavior>>. 
  
  It straightens a couple of features in DbUnit and Unitils 
- that are not exactly intuitive or simple to be used and 
- wraps DbUnit, Unitils and JWebUnit in a common, <<modern usage pattern>>.
+ that are not exactly intuitive or simple to be used \
+ and wraps
+ {{{http://dbunit.sourceforge.net/}DbUnit}}, 
+ {{{http://www.unitils.org/}Unitils}} and 
+ {{{http://jwebunit.sourceforge.net/}JWebUnit}}
+ in a common, <<modern usage pattern>>.
  
  \ 
 
@@ -28,4 +32,3 @@ Testing web applications with common sense
 
  Light Air project is hosted by Sourceforge.net at 
  {{{http://sf.net/projects/lightair/}Light Air Sourceforge page}}.
- 

@@ -17,7 +17,7 @@ Development
  To clone GIT repo (read-only):
  
 +---+
-git clone git://lightair.git.sourceforge.net/gitroot/lightair/light-air.git/
+git clone git://git.code.sf.net/p/lightair/code light-air
 cd light-air/
 mvn install
 +---+

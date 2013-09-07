@@ -13,6 +13,7 @@ public interface PropertyKeys {
 	static final String DATABASE_DIALECT = "database.dialect";
 
 	static final String DEFAULT_SCHEMA = "database.defaultSchema";
+	static final String SCHEMA_NAMES = "database.schemaNames";
 
 	static final String TIME_DIFFERENCE_LIMIT = "time.difference.limit.millis";
 
