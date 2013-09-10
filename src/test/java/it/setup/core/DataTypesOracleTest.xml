@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<data_types id="0" char_type="ABCDEFGHIJKLMNOP" string_type="abcdefghijklmnopqrstuvxyz"
+		integer_type="12345678" date_type="2999-12-31" timestamp_type="2998-11-30 22:57:56.789"
+		double_type="8765.4321" boolean_type="1" bigint_type="9223372036854770000"
+		decimal_type="12345678901234.56" clob_type="text1" blob_type="EjRWeJCrze8="
+		raw_type="/ty6CYdlQyE=" />
+	<data_types id="1" char_type="ABCDEFGHIJKLMNO2" string_type="abcdefghijklmnopqrstuvxy2"
+		integer_type="12345672" date_type="2999-12-21" timestamp_type="2998-11-20 22:57:26.789"
+		double_type="8762.4322" boolean_type="0" bigint_type="9223372036854770002"
+		decimal_type="12345678901232.52" clob_type="text2" blob_type="EjRWeJCrzeI="
+		raw_type="/ty6CYdlQyI=" />
+</dataset>

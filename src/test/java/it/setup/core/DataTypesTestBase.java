@@ -33,6 +33,10 @@ public class DataTypesTestBase {
 		assertEquals("Count", new Integer(2), db.queryForObject(
 				"select count(*) from data_types", Integer.class));
 		values = db.queryForList("select * from data_types");
+		verify();
+	}
+
+	protected void verify() {
 		verifyRow(0, "abcdefghijklmnopqrstuvxyz", 12345678, new DateMidnight(
 				2999, 12, 31), new LocalTime(23, 59, 58), new DateTime(2998,
 				11, 30, 22, 57, 56, 789), 8765.4321, true,
