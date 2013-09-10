@@ -102,7 +102,7 @@ public class DbUnitWrapper implements PropertyKeys {
 		DATATYPE_FACTORIES.put("oracle9",
 				"org.dbunit.ext.oracle.OracleDataTypeFactory");
 		DATATYPE_FACTORIES.put("oracle10",
-				"org.dbunit.ext.oracle.OracleDataTypeFactory");
+				"org.dbunit.ext.oracle.Oracle10DataTypeFactory");
 		DATATYPE_FACTORIES.put("hsqldb",
 				"org.dbunit.ext.hsqldb.HsqldbDataTypeFactory");
 		DATATYPE_FACTORIES.put("mysql",
