@@ -39,7 +39,7 @@ public class AnyTest extends CommonTestBase {
 		db.update("insert into a (id,a1,int1,double1,date1,time1,timestamp1) values "
 				+ "(1,'value1',321,987.65,'2010-12-24','09:45:32','2010-12-24 09:45:32.654')");
 		db.update("insert into a (id,a1,int1,double1,date1,time1,timestamp1) values "
-				+ "(2,null,null,null,null,null,null)");
+				+ "(2,'value2',322,982.62,'2012-12-22','02:45:32','2012-12-22 09:42:32.652')");
 
 		db.update("insert into a (id,a1,int1,double1,date1,time1,timestamp1) values "
 				+ "(3,'value2',124,568.90,'2011-10-22','22:49:49','2011-11-22 23:59:59.124')");

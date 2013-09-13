@@ -189,11 +189,13 @@ public class MyTest {
  Display actual database content in verification failure message 
  including primary key column values.
 
- [[14]] <<Ignore column with value @any>>\
+ [[14]] <<Specify a column can have any non-null value with @any>>\
  Use <<<@any>>> in verification XML dataset to specify 
- that the actual column value should be <<ignored>>.\
- This is equivalent to omitting the column in the row.
- By using @any you can <<explicitly>> specify that the column value should be ignored. 
+ that the actual column should have <<any non-null>> value.\
+ When you omit the column in the row, its value will be ignored.
+ By using <<<@any>>> you can <<explicitly>> specify that the column value should be ignored,
+ provided there is a value at all.
+ (Use <<<@null>>> to verify the column has no value.) 
 
 * Common database features (apply for both setup and verification)
 

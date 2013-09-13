@@ -44,8 +44,8 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	 */
 	public ColumnDifference preCompare(
 			org.unitils.dbunit.dataset.Column actualColumn) {
-		if ("@any".equals(getValue())) {
-			return null;
+		if (isAny()) {
+			return getDifferenceForAny(actualColumn);
 		}
 		if (valuesSame(actualColumn)) {
 			return null;
@@ -75,8 +75,8 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	@Override
 	public ColumnDifference compare(
 			org.unitils.dbunit.dataset.Column actualColumn) {
-		if ("@any".equals(getValue())) {
-			return null;
+		if (isAny()) {
+			return getDifferenceForAny(actualColumn);
 		}
 		if (valuesSame(actualColumn)) {
 			return null;
@@ -87,6 +87,18 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		Object value = variableResolver.resolveValue(getValue(),
 				actualColumn.getValue());
 		if (!isCastedValueEqual(value, actualColumn)) {
+			return new ColumnDifference(this, actualColumn);
+		}
+		return null;
+	}
+
+	private boolean isAny() {
+		return "@any".equals(getValue());
+	}
+
+	private ColumnDifference getDifferenceForAny(
+			org.unitils.dbunit.dataset.Column actualColumn) {
+		if (null == actualColumn.getValue()) {
 			return new ColumnDifference(this, actualColumn);
 		}
 		return null;
