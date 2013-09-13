@@ -36,6 +36,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<jwebunit-version>3.1</jwebunit-version>
 		<junit-version>4.11</junit-version>
+		<oracle.install>/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6_g.jar</oracle.install>
 	</properties>
 	<scm>
 		<connection>scm:git:git://git.code.sf.net/p/lightair/code</connection>
@@ -220,7 +221,7 @@
 			<version>11.2.0.2.0</version>
 			<scope>system</scope>
 			<optional>true</optional>
-			<systemPath>/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6_g.jar</systemPath>
+			<systemPath>${oracle.install}</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
