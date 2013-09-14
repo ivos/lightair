@@ -6,6 +6,7 @@ import net.sf.lightair.annotation.Setup;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @RunWith(LightAir.class)
 @Setup("DataTypesTest.xml")
@@ -19,13 +20,26 @@ public class DataTypesDerbyTest extends DataTypesTestBase {
 
 	@BeforeClass
 	public static void beforeClass() {
-		// Bug in Spring JdbcTemplate: CLOB does not work
-		createTable__NoClob(db);
+		createTable(db);
+	}
+
+	public static void createTable(JdbcTemplate db) {
+		// Bug in Spring JdbcTemplate: LOB does not work
+		db.execute("create table data_types (id int primary key, char_type char(20), "
+				+ "varchar_type varchar(50), integer_type integer, "
+				+ "date_type date, time_type time, timestamp_type timestamp, "
+				+ "double_type double, boolean_type boolean, bigint_type bigint, "
+				+ "decimal_type decimal(20,2), clob_type varchar(20), blob_type varchar(20), binary_type varchar(20))");
 	}
 
 	@Test
 	public void test() {
 		perform();
+	}
+
+	@Override
+	protected String convertBytesToString(Object bytes) {
+		return (String) bytes;
 	}
 
 }
