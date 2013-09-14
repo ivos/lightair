@@ -5,7 +5,6 @@ import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
 
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,10 +22,6 @@ public class ReplaceTest extends CommonTestBase {
 	@AfterClass
 	public static void afterClass() {
 		db.execute("drop table a");
-	}
-
-	@Before
-	public void before() {
 	}
 
 	@Test
