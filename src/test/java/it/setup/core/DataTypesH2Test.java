@@ -14,15 +14,15 @@ import org.junit.runner.RunWith;
 
 @RunWith(LightAir.class)
 @Setup("DataTypesTest.xml")
-public class DataTypesH2Test extends DataTypesTestBase {
+public class DataTypesH2Test extends DataTypesSetupTestBase {
 
 	static {
-		db = connect("jdbc:h2:mem:test", "sa", "");
+		connect("jdbc:h2:mem:test", "sa", "");
 	}
 
 	@BeforeClass
 	public static void beforeClass() {
-		createTable(db);
+		createTable();
 	}
 
 	@Test
@@ -38,8 +38,10 @@ public class DataTypesH2Test extends DataTypesTestBase {
 				9223372036854770000L, new BigDecimal("12345678901234.56"),
 				"text1", "EjRWeJCrzeI=", "/ty6CYdlQyI=");
 		verifyRow(1, "", "", 0, new DateMidnight(2000, 1, 2), new LocalTime(0,
-				0, 0), new DateTime(2000, 1, 2, 3, 4, 5, 678), 0, false, 0L,
+				0, 0), new DateTime(2000, 1, 2, 3, 4, 5, 678), 0., false, 0L,
 				new BigDecimal("0.00"), "", "", "");
+		verifyRow(2, null, null, null, null, null, null, null, null, null,
+				null, null, null, null);
 	}
 
 }

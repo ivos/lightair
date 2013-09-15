@@ -14,16 +14,16 @@ import org.junit.runner.RunWith;
 
 @RunWith(LightAir.class)
 @Setup("DataTypesTest.xml")
-public class DataTypesHsqlTest extends DataTypesTestBase {
+public class DataTypesHsqlTest extends DataTypesSetupTestBase {
 
 	static {
-		db = connect("jdbc:hsqldb:target/data/test", "sa", "");
+		connect("jdbc:hsqldb:mem:test", "sa", "");
 		replaceConfig("hsql");
 	}
 
 	@BeforeClass
 	public static void beforeClass() {
-		createTable(db);
+		createTable();
 	}
 
 	@Test
@@ -41,8 +41,10 @@ public class DataTypesHsqlTest extends DataTypesTestBase {
 				"/ty6CYdlQyI=");
 		verifyRow(1, "                    ", "", 0,
 				new DateMidnight(2000, 1, 2), new LocalTime(0, 0, 0),
-				new DateTime(2000, 1, 2, 3, 4, 5, 678), 0, false, 0L,
+				new DateTime(2000, 1, 2, 3, 4, 5, 678), 0., false, 0L,
 				new BigDecimal("0.00"), "", "", "AAAAAAAAAAA=");
+		verifyRow(2, null, null, null, null, null, null, null, null, null,
+				null, null, null, null);
 	}
 
 }

@@ -6,24 +6,22 @@ import net.sf.lightair.annotation.Setup;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 @RunWith(LightAir.class)
 @Setup("DataTypesTest.xml")
-public class DataTypesDerbyTest extends DataTypesTestBase {
+public class DataTypesDerbyTest extends DataTypesSetupTestBase {
 
 	static {
-		db = connect("jdbc:derby:memory:target/data/test;create=true", "root",
-				"root");
+		connect("jdbc:derby:memory:test;create=true", "root", "root");
 		replaceConfig("derby");
 	}
 
 	@BeforeClass
 	public static void beforeClass() {
-		createTable(db);
+		createTable();
 	}
 
-	public static void createTable(JdbcTemplate db) {
+	public static void createTable() {
 		// Bug in Spring JdbcTemplate: LOB does not work
 		db.execute("create table data_types (id int primary key, char_type char(20), "
 				+ "varchar_type varchar(50), integer_type integer, "

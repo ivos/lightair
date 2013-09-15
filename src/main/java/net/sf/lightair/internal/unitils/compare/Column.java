@@ -3,6 +3,7 @@ package net.sf.lightair.internal.unitils.compare;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Arrays;
 
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
@@ -122,7 +123,10 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		if (castedExpectedValue instanceof java.util.Date) {
 			return isTemporalWithinLimit(castedExpectedValue, actualValue);
 		}
-
+		if (castedExpectedValue instanceof byte[]) {
+			return Arrays.equals((byte[]) castedExpectedValue,
+					(byte[]) actualValue);
+		}
 		return castedExpectedValue.equals(actualValue);
 	}
 
