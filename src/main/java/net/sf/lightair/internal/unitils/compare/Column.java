@@ -5,6 +5,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
+import org.apache.commons.codec.binary.Base64;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
 import org.joda.time.DateMidnight;
@@ -58,7 +59,7 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 			return new ColumnDifference(this, actualColumn);
 		}
 		if (!isCastedValueEqual(getValue(), actualColumn)) {
-			return new ColumnDifference(this, actualColumn);
+			return createDifferenceForCasted(getValue(), actualColumn);
 		}
 		return null;
 	}
@@ -88,7 +89,7 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		Object value = variableResolver.resolveValue(getValue(),
 				actualColumn.getValue());
 		if (!isCastedValueEqual(value, actualColumn)) {
-			return new ColumnDifference(this, actualColumn);
+			return createDifferenceForCasted(value, actualColumn);
 		}
 		return null;
 	}
@@ -128,6 +129,20 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 					(byte[]) actualValue);
 		}
 		return castedExpectedValue.equals(actualValue);
+	}
+
+	private ColumnDifference createDifferenceForCasted(Object expectedValue,
+			org.unitils.dbunit.dataset.Column actualColumn) {
+		Object castedExpectedValue = getCastedValue(expectedValue,
+				actualColumn.getType());
+		if (castedExpectedValue instanceof byte[]) {
+			return new ColumnDifference(this,
+					new org.unitils.dbunit.dataset.Column(
+							actualColumn.getName(), actualColumn.getType(),
+							Base64.encodeBase64String((byte[]) actualColumn
+									.getValue())));
+		}
+		return new ColumnDifference(this, actualColumn);
 	}
 
 	private boolean isTemporalWithinLimit(Object castedExpectedValue,
