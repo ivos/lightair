@@ -12,9 +12,11 @@ import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+@Ignore
 @RunWith(LightAir.class)
 @Setup
 public class DataTypesOracleTest extends DataTypesSetupTestBase {
@@ -41,7 +43,6 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 	// requires Oracle XE 11.2.0
 	// installed locally at default path /u01/app/oracle/product/11.2.0/xe
 	// with user SYSTEM / password
-	// @Ignore
 	public void test() {
 		perform();
 	}

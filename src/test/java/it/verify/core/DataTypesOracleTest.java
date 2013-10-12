@@ -5,9 +5,11 @@ import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+@Ignore
 @RunWith(LightAir.class)
 @Verify
 public class DataTypesOracleTest extends DataTypesTestBase {
