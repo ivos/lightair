@@ -114,6 +114,8 @@ public class DbUnitWrapper implements PropertyKeys {
 				"org.dbunit.dataset.datatype.DefaultDataTypeFactory");
 		DATATYPE_FACTORIES.put("mssql",
 				"org.dbunit.ext.mssql.MsSqlDataTypeFactory");
+		DATATYPE_FACTORIES.put("informix",
+				"org.dbunit.dataset.datatype.DefaultDataTypeFactory");
 	}
 
 	private void setFeaturesAndProperties(IDatabaseConnection dbConnection) {
