@@ -92,7 +92,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema(schemaName);
 				will(returnValue(dsE));
 
-				one(dbUnitWrapper).createConnection(schemaName);
+				one(dbUnitWrapper).getConnection(schemaName);
 				will(returnValue(c));
 
 				one(c).createDataSet();
@@ -115,7 +115,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema("schema1");
 				will(returnValue(dsE1));
 
-				one(dbUnitWrapper).createConnection("schema1");
+				one(dbUnitWrapper).getConnection("schema1");
 				will(returnValue(c1));
 
 				one(c1).createDataSet();
@@ -143,7 +143,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema("schema1");
 				will(returnValue(dsE1));
 
-				one(dbUnitWrapper).createConnection("schema1");
+				one(dbUnitWrapper).getConnection("schema1");
 				will(returnValue(c1));
 
 				one(c1).createDataSet();

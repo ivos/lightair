@@ -92,7 +92,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema(schemaName);
 				will(returnValue(ds));
 
-				one(dbUnitWrapper).createConnection(schemaName);
+				one(dbUnitWrapper).getConnection(schemaName);
 				will(returnValue(c));
 
 				one(dbo).execute(c, ds);
@@ -112,7 +112,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema("schema1");
 				will(returnValue(ds1));
 
-				one(dbUnitWrapper).createConnection("schema1");
+				one(dbUnitWrapper).getConnection("schema1");
 				will(returnValue(c1));
 
 				one(dbo).execute(c1, ds1);
@@ -141,7 +141,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema("schema1");
 				will(returnValue(ds1));
 
-				one(dbUnitWrapper).createConnection("schema1");
+				one(dbUnitWrapper).getConnection("schema1");
 				will(returnValue(c1));
 
 				one(dbo).execute(c1, ds1);
@@ -170,7 +170,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema("schema1");
 				will(returnValue(ds1));
 
-				one(dbUnitWrapper).createConnection("schema1");
+				one(dbUnitWrapper).getConnection("schema1");
 				will(returnValue(c1));
 
 				one(dbo).execute(c1, ds1);

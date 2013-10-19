@@ -1,22 +1,8 @@
 package net.sf.lightair.internal.dbunit;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import net.sf.lightair.exception.CreateDatabaseConnectionException;
-import net.sf.lightair.exception.DatabaseAccessException;
-import net.sf.lightair.exception.DatabaseDriverClassNotFoundException;
-import net.sf.lightair.internal.factory.Factory;
 import net.sf.lightair.internal.properties.PropertiesProvider;
 import net.sf.lightair.internal.properties.PropertyKeys;
 
-import org.apache.commons.lang.time.StopWatch;
-import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +14,14 @@ public class DbUnitWrapper implements PropertyKeys {
 
 	private final Logger log = LoggerFactory.getLogger(DbUnitWrapper.class);
 
+	// private final Map<String, IDatabaseConnection> connectionCache = new
+	// HashMap<String, IDatabaseConnection>();
+
+	// unitils caching of dbunit connections does not work with multiple
+	// schemas, why?
+
 	/**
-	 * Create a DbUnit connection for a given schema.
+	 * Retrieve a DbUnit connection for a given schema.
 	 * <p>
 	 * Pass schema <code>null</code> to use the default schema from properties.
 	 * 
@@ -37,120 +29,43 @@ public class DbUnitWrapper implements PropertyKeys {
 	 *            Schema to connect to, or <code>null</code> to use default
 	 *            schema
 	 * @return DbUnit connection
-	 * @throws DatabaseDriverClassNotFoundException
-	 *             When database driver class cannot be loaded
-	 * @throws CreateDatabaseConnectionException
-	 *             When {@link DriverManager} cannot open connection to database
-	 * @throws DatabaseAccessException
-	 *             When DbUnit cannot establish itself on the database
-	 *             connection, typically when schema does not exist
 	 */
-	public IDatabaseConnection createConnection(String schemaName)
-			throws DatabaseDriverClassNotFoundException,
-			CreateDatabaseConnectionException, DatabaseAccessException {
+	public IDatabaseConnection getConnection(String schemaName) {
+		log.debug("Retrieving connection for schema {}.", schemaName);
+
 		if (null == schemaName) {
-			schemaName = getProperty(DEFAULT_SCHEMA);
-		}
-		log.info("Creating database connection for schema {}", schemaName);
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
-		String driverClassName = getProperty(DRIVER_CLASS_NAME);
-		try {
-			Class.forName(driverClassName);
-			Connection connection = factory.getConnection(
-					getProperty(CONNECTION_URL), getProperty(USER_NAME),
-					getProperty(PASSWORD));
-			IDatabaseConnection dbConnection = factory
-					.createDatabaseConnection(connection, schemaName);
-			stopWatch.stop();
-			log.debug("Created database connection for schema {} in {} ms.",
-					schemaName, stopWatch.getTime());
-			setDatabaseDialect(dbConnection);
-			setFeaturesAndProperties(dbConnection);
-			return dbConnection;
-		} catch (ClassNotFoundException e) {
-			throw new DatabaseDriverClassNotFoundException(driverClassName, e);
-		} catch (SQLException e) {
-			throw new CreateDatabaseConnectionException(e);
-		} catch (DatabaseUnitException e) {
-			throw new DatabaseAccessException(e);
-		}
-	}
-
-	private String getProperty(String key) {
-		return propertiesProvider.getProperty(key);
-	}
-
-	private void setDatabaseDialect(IDatabaseConnection dbConnection) {
-		DatabaseConfig config = dbConnection.getConfig();
-
-		String dbUnitName = "http://www.dbunit.org/properties/datatypeFactory";
-		String dialect = propertiesProvider.getProperty(DATABASE_DIALECT);
-		String className = DATATYPE_FACTORIES.get(dialect);
-		Object value = convertPropertyValue(className);
-		log.debug(
-				"Setting database dialect to {}, DbUnit datatype factory will be {}.",
-				dialect, className);
-		config.setProperty(dbUnitName, value);
-	}
-
-	private static final Map<String, String> DATATYPE_FACTORIES = new HashMap<String, String>();
-	{
-		DATATYPE_FACTORIES.put("h2", "org.dbunit.ext.h2.H2DataTypeFactory");
-		DATATYPE_FACTORIES.put("oracle",
-				"org.dbunit.ext.oracle.OracleDataTypeFactory");
-		DATATYPE_FACTORIES.put("oracle9",
-				"org.dbunit.ext.oracle.OracleDataTypeFactory");
-		DATATYPE_FACTORIES.put("oracle10",
-				"org.dbunit.ext.oracle.Oracle10DataTypeFactory");
-		DATATYPE_FACTORIES.put("hsqldb",
-				"org.dbunit.ext.hsqldb.HsqldbDataTypeFactory");
-		DATATYPE_FACTORIES.put("mysql",
-				"org.dbunit.ext.mysql.MySqlDataTypeFactory");
-		DATATYPE_FACTORIES.put("db2", "org.dbunit.ext.db2.Db2DataTypeFactory");
-		DATATYPE_FACTORIES.put("postgresql",
-				"org.dbunit.dataset.datatype.DefaultDataTypeFactory");
-		DATATYPE_FACTORIES.put("derby",
-				"org.dbunit.dataset.datatype.DefaultDataTypeFactory");
-		DATATYPE_FACTORIES.put("mssql",
-				"org.dbunit.ext.mssql.MsSqlDataTypeFactory");
-		DATATYPE_FACTORIES.put("informix",
-				"org.dbunit.dataset.datatype.DefaultDataTypeFactory");
-	}
-
-	private void setFeaturesAndProperties(IDatabaseConnection dbConnection) {
-		DatabaseConfig config = dbConnection.getConfig();
-
-		Set<String> featureNames = propertiesProvider.getDbUnitFeatureNames();
-		for (String featureName : featureNames) {
-			String dbUnitName = "http://www.dbunit.org/features/"
-					+ featureName.substring(16);
-			Boolean value = Boolean.valueOf(propertiesProvider
-					.getProperty(featureName));
-			log.debug("Setting DbUnit feature {} to {}.", dbUnitName, value);
-			config.setProperty(dbUnitName, value);
+			schemaName = propertiesProvider.getProperty(DEFAULT_SCHEMA);
+			log.debug("Resolved unspecified schema as default {}.", schemaName);
 		}
 
-		Set<String> propertyNames = propertiesProvider.getDbUnitPropertyNames();
-		for (String propertyName : propertyNames) {
-			String dbUnitName = "http://www.dbunit.org/properties/"
-					+ propertyName.substring(18);
-			String string = propertiesProvider.getProperty(propertyName);
-			Object value = convertPropertyValue(string);
-			log.debug("Setting DbUnit property {} to {}.", dbUnitName, value);
-			config.setProperty(dbUnitName, value);
-		}
+		IDatabaseConnection connection;// = connectionCache.get(schemaName);
+		// if (null == connection) {
+		log.debug("Creating new connection for schema {}.", schemaName);
+		connection = connectionFactory.createConnection(schemaName);
+		// connectionCache.put(schemaName, connection);
+		// } else {
+		// log.debug("Retrieved connection from cache for schema {}.",
+		// schemaName);
+		// }
+		return connection;
 	}
 
-	private Object convertPropertyValue(String value) {
-		try {
-			return Class.forName(value).newInstance();
-		} catch (Exception e) {
-			return value;
-		}
+	public void resetConnectionCache() {
+		// connectionCache.clear();
 	}
 
 	// beans and their setters;
+
+	private ConnectionFactory connectionFactory;
+
+	/**
+	 * Set connectionFactory.
+	 * 
+	 * @param connectionFactory
+	 */
+	public void setConnectionFactory(ConnectionFactory connectionFactory) {
+		this.connectionFactory = connectionFactory;
+	}
 
 	private PropertiesProvider propertiesProvider;
 
@@ -162,18 +77,6 @@ public class DbUnitWrapper implements PropertyKeys {
 	 */
 	public void setPropertiesProvider(PropertiesProvider propertiesProvider) {
 		this.propertiesProvider = propertiesProvider;
-	}
-
-	private Factory factory;
-
-	/**
-	 * Set factory.
-	 * 
-	 * @param factory
-	 *            Factory
-	 */
-	public void setFactory(Factory factory) {
-		this.factory = factory;
 	}
 
 }

@@ -45,7 +45,7 @@ public class UnitilsWrapper {
 			final IDataSet dataSet = multiSchemaDataSet
 					.getDataSetForSchema(schemaName);
 			final IDatabaseConnection connection = dbUnitWrapper
-					.createConnection(schemaName);
+					.getConnection(schemaName);
 			new Template() {
 				@Override
 				void databaseOperation() throws DatabaseUnitException,
@@ -78,7 +78,7 @@ public class UnitilsWrapper {
 			final IDataSet dataSetExpected = multiSchemaDataSet
 					.getDataSetForSchema(schemaName);
 			final IDatabaseConnection connection = dbUnitWrapper
-					.createConnection(schemaName);
+					.getConnection(schemaName);
 			new Template() {
 				@Override
 				void databaseOperation() throws DatabaseUnitException,
@@ -110,6 +110,10 @@ public class UnitilsWrapper {
 				} catch (SQLException e) {
 					throw new DatabaseAccessException(e);
 				} finally {
+					// unitils caching of dbunit connections does not work with
+					// multiple schemas
+					// ((DbUnitDatabaseConnection) connection)
+					// .closeJdbcConnection();
 					connection.close();
 				}
 			} catch (SQLException e) {
