@@ -189,6 +189,12 @@ time.difference.limit.millis=5000
 
 # uncomment to escape table and column names:
 #dbunit.properties.escapePattern="?"
+
+# uncomment to use batched statements:
+#dbunit.features.batchedStatements=true
+
+# uncomment to skip Oracle recycle bin tables:
+#dbunit.features.skipOracleRecycleBinTables=true
 +---+
 
  Be aware, that Light Air tests must connect to <<the same database instance>>
