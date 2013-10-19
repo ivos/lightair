@@ -33,7 +33,7 @@ public class PropertiesProvider {
 	 * Loads properties from the .properties file.
 	 */
 	public void init() {
-		log.info("Initializing properties.");
+		log.debug("Initializing properties.");
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		try {
