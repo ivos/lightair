@@ -25,6 +25,7 @@ import net.sf.lightair.internal.unitils.compare.DataSetAssert;
 import net.sf.lightair.internal.unitils.compare.VariableResolver;
 import net.sf.lightair.internal.util.DataSetProcessingData;
 import net.sf.lightair.internal.util.DataSetResolver;
+import net.sf.lightair.internal.util.DurationParser;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
@@ -99,6 +100,12 @@ public class Factory implements PropertyKeys {
 		return dataSetAssert;
 	}
 
+	private final DurationParser durationParser = new DurationParser();
+
+	public DurationParser getDurationParser() {
+		return durationParser;
+	}
+
 	private final TokenReplacingFilter tokenReplacingFilter = new TokenReplacingFilter();
 
 	public TokenReplacingFilter getTokenReplacingFilter() {
@@ -128,6 +135,7 @@ public class Factory implements PropertyKeys {
 		dataSetFactory.setPropertiesProvider(propertiesProvider);
 		timeDifferenceLimit = propertiesProvider.getProperty(
 				TIME_DIFFERENCE_LIMIT, 0);
+		tokenReplacingFilter.setDurationParser(durationParser);
 	}
 
 	private void initDataSource() {

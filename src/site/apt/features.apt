@@ -221,8 +221,28 @@ public class MyTest {
  and to verify a column has that value.\
  The current timestamp value includes <<<yyyy-MM-dd HH:mm:ss.SSS>>>
  as in <2012-12-31 23:59:58.123>.
- 
- [[5]] <<Specify database schema of a table row using XML namespace>>\
+
+ [[5]] <<Modify the temporal tokens with a duration>>\
+ You can modify the temporal tokens <<<@date>>>, <<<@time>>> and <<<@timestamp>>> by 
+ appending a sign (+ or -) and a 
+ {{{http://en.wikipedia.org/wiki/ISO_8601#Durations}duration in ISO 8601 format}}.
+ This will move the time instant represented by the temporal token 
+ in the direction of the sing by the duration specified.
+
+ <Examples:>
+
+  * The bare token <<<@date>>> represents the last midnight.
+
+  * This <<<@date+P1D>>> represents the first following midnight.
+
+  * This <<<@date-P1M>>> represents the midnight one month before the last one.
+
+  * This <<<@timestamp+PT1H>>> represents one hour in the future.
+
+  * This <<<@timestamp-P2Y3M4DT5H6M7S>>> represents 
+  2 years, 3 months, 4 days, 5 hours, 6 minutes and 7 seconds in the past.
+
+ [[6]] <<Specify database schema of a table row using XML namespace>>\
  Specify row <<schema>> using XML namespace:
 
 +---+

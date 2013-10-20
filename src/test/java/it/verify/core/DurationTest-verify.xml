@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<a id="0" date1="2011-10-21" time1="22:49:48" timestamp1="2011-11-21 23:59:58.123" />
+	<a id="1" date1="@date-P2D" time1="@date+PT3S" timestamp1="@date+P4MT5M" />
+	<a id="2" date1="@time+P2M" time1="@time-PT3H" timestamp1="@time+P4Y5DT6M7S" />
+	<a id="3" date1="@timestamp-P2Y3M4D" time1="@timestamp+PT2H3M4S"
+		timestamp1="@timestamp-P2Y3M4DT5H6M7S" />
+	<a id="4" date1="2011-10-22" time1="22:49:49" timestamp1="2011-11-22 23:59:59.124" />
+</dataset>
