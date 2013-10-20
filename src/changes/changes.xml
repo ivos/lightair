@@ -1,0 +1,19 @@
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+	xmlns:xsi="http://http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
+	<properties>
+		<title>Changes</title>
+		<author email="ivo.maixner@gmail.com">Ivo Maixner</author>
+	</properties>
+	<body>
+		<release date="" version="" description="">
+			<action type="add">Add support for duration in temporal tokens.
+			</action>
+			<action type="add">Use datasource to pool database connections.
+			</action>
+			<action type="add">Add support for Informix.</action>
+		</release>
+		<release date="2013-09-15" version="0.5">
+		</release>
+	</body>
+</document>
