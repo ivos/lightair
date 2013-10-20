@@ -124,7 +124,7 @@ public class ConnectionFactory implements PropertyKeys {
 		}
 	}
 
-	// beans and their setters;
+	// beans and their setters
 
 	private PropertiesProvider propertiesProvider;
 
