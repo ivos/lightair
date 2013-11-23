@@ -10,6 +10,7 @@
 			<item name="Write a test" href="write-test.html" />
 			<item name="Features" href="features.html" />
 			<item name="Development" href="development.html" />
+			<item name="Maven plugin" href="http://lightairmp.sourceforge.net/" />
 		</menu>
 		<menu ref="reports" />
 	</body>
