@@ -5,16 +5,16 @@ package net.sf.lightair.internal.properties;
  */
 public interface PropertyKeys {
 
-	static final String DRIVER_CLASS_NAME = "database.driverClassName";
-	static final String CONNECTION_URL = "database.connectionUrl";
-	static final String USER_NAME = "database.userName";
-	static final String PASSWORD = "database.password";
+	String DRIVER_CLASS_NAME = "database.driverClassName";
+	String CONNECTION_URL = "database.connectionUrl";
+	String USER_NAME = "database.userName";
+	String PASSWORD = "database.password";
 
-	static final String DATABASE_DIALECT = "database.dialect";
+	String DATABASE_DIALECT = "database.dialect";
 
-	static final String DEFAULT_SCHEMA = "database.defaultSchema";
-	static final String SCHEMA_NAMES = "database.schemaNames";
+	String DEFAULT_SCHEMA = "database.defaultSchema";
+	String SCHEMA_NAMES = "database.schemaNames";
 
-	static final String TIME_DIFFERENCE_LIMIT = "time.difference.limit.millis";
+	String TIME_DIFFERENCE_LIMIT = "time.difference.limit.millis";
 
 }
