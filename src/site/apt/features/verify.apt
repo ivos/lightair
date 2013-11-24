@@ -1,69 +1,12 @@
  ---
- Features
+ Verify database
  ---
  Ivo Maixner
  ---
  2011-09-26
  ---
 
-Features
-
-* Setup-specific features
-
- [[1]] <<Default @Setup annotation>>\
- When test method or test class is annotated with <<<@Setup>>>, system locates dataset named\
- <<<\<test class name\>.\<test method name\>.xml>>>\
- in the package of the test class, or if it does 
- not exists, locates dataset named\
- <<<\<test class name\>.xml>>>\
- and performs <<"clean insert">> database operation with the dataset located. 
- If no such dataset exists, system throws exception.
-
- <Examples:>
-
-+---+
-@Setup
-public class MyTest {
-	@Test
-	public void test() {
-	}
-}
-+---+
-
- [[2]] <<Specify dataset file names in @Setup>>\
- When <<<@Setup>>> annotation contains <<file names>> of datasets, system uses those file names
- to locate the datasets in the package of the test class 
- and performs "clean insert" database operation with <<all>> datasets located. 
- If a specified dataset does not exist, system throws exception.
-
- <Examples:>
-
-+---+
-@Setup({ "setup-1.xml", "setup-2.xml" })
-public class MyTest {
-	@Test
-	public void test() {
-	}
-}
-+---+
-
- [[3]] <<Use all columns of a row in setup>>\
- When inserting a row during setup, fill values to all columns defined <<on the row>>,
- no matter what columns were defined on other rows of the table.\
- This fixes bug of DbUnit, where the first row of the table freezes columns used
- by the dataset, other columns defined on subsequent rows are then ignored by DbUnit.
-
- <Examples:>
-
-+---+
-<dataset>
-	<table first_has_value="a" />
-	<table first_has_value="b" first_missing="c" />
-	<table                     first_missing="d" third_only="e" />
-</dataset>
-+---+
-
-* Verification-specific features
+Verify database
 
  [[1]] <<Default @Verify annotation>>\
  When test method or test class is annotated with <<<@Verify>>>, system locates dataset named\
@@ -197,32 +140,27 @@ public class MyTest {
  provided there is a value at all.
  (Use <<<@null>>> to verify the column has no value.) 
 
-* Common database features (apply for both setup and verification)
+ [[15]] <<Replace @null with null value>>\
+ Use <<<@null>>> in XML dataset to verify a column has <<null value>>.
 
- [[1]] <<Replace @null with null value>>\
- Use <<<@null>>> in XML dataset to setup column to <<null value>> and to verify a column has null value.
-
- [[2]] <<Replace @date with current date>>\
- Use <<<@date>>> in XML dataset to setup column to <<current date>> midnight value 
- and to verify a column has that value.\
+ [[16]] <<Replace @date with current date>>\
+ Use <<<@date>>> in XML dataset to verify a column has <<current date>> midnight value.\
  The current date value includes <<<yyyy-MM-dd>>>
  as in <2012-12-31>.\
- The time part it set to / verified to be midnight <00:00:00.000>.
+ The time part is verified to be midnight <00:00:00.000>.
 
- [[3]] <<Replace @time with current time>>\
- Use <<<@time>>> in XML dataset to setup column to <<current time>> value 
- and to verify a column has that value.\
+ [[17]] <<Replace @time with current time>>\
+ Use <<<@time>>> in XML dataset to verify a column has <<current time>> value.\
  The current time value includes <<<HH:mm:ss>>> as in <23:59:58>.\
- The date part is set to / verified to be 1970-01-01. 
- The milliseconds are set to / verified to be 0 (zero).
+ The date part is verified to be 1970-01-01. 
+ The milliseconds are verified to be 0 (zero).
 
- [[4]] <<Replace @timestamp with current timestamp>>\
- Use <<<@timestamp>>> in XML dataset to setup column to <<current timestamp>> value 
- and to verify a column has that value.\
+ [[18]] <<Replace @timestamp with current timestamp>>\
+ Use <<<@timestamp>>> in XML dataset to verify a column has <<current timestamp>> value.\
  The current timestamp value includes <<<yyyy-MM-dd HH:mm:ss.SSS>>>
  as in <2012-12-31 23:59:58.123>.
 
- [[5]] <<Modify the temporal tokens with a duration>>\
+ [[19]] <<Modify the temporal tokens with a duration>>\
  You can modify the temporal tokens <<<@date>>>, <<<@time>>> and <<<@timestamp>>> by 
  appending a sign (+ or -) and a 
  {{{http://en.wikipedia.org/wiki/ISO_8601#Durations}duration in ISO 8601 format}}.
@@ -237,12 +175,14 @@ public class MyTest {
 
   * This <<<@date-P1M>>> represents the midnight one month before the last one.
 
+  * This <<<@date+PT12H>>> represents noon today.
+
   * This <<<@timestamp+PT1H>>> represents one hour in the future.
 
   * This <<<@timestamp-P2Y3M4DT5H6M7S>>> represents 
   2 years, 3 months, 4 days, 5 hours, 6 minutes and 7 seconds in the past.
 
- [[6]] <<Specify database schema of a table row using XML namespace>>\
+ [[20]] <<Specify database schema of a table row using XML namespace>>\
  Specify row <<schema>> using XML namespace:
 
 +---+
@@ -251,71 +191,8 @@ public class MyTest {
 </dataset>
 +---+
 
-* Execute application
- 
- [[1]] <<Set base URL using annotation>>\
- Annotate test method or test class with <<<@BaseUrl>>> to set <<base URL>> for a test.\
- Annotate <<base class>> of multiple test classes with @BaseUrl to set base URL for all the inheriting test classes.
-
-* Configuration
-
- [[1]] <<Database dialect>>\
- Set the <<<database.dialect>>> property to the name of the database you use for the tests.\
- Select one of: <<<h2>>>, <<<oracle>>>, <<<oracle9>>>, <<<oracle10>>>, <<<hsqldb>>>, 
- <<<mysql>>>, <<<db2>>>, <<<postgresql>>>, <<<derby>>>, <<<mssql>>>, <<<informix>>>.
-
- [[2]] <<Set time difference limit>>\
- Set the <<<time.difference.limit.millis>>> property to define a <<maximum
- allowable difference>> in milliseconds of <<temporal columns>>.\
- Set this to an expected duration of the longest test on the slowest environment,
- with some safety margin.
-
- <Examples:> 5000 (= 5 seconds), 60000 (= 1 minute).
-
- [[3]] <<Configure DbUnit>>\
- Use the following pattern to configure <<DbUnit features and properties>> in <<<light-air.properties>>>:
-
-+---+
-dbunit.features.<feature-name>=<feature-value>
-dbunit.properties.<property-name>=<property-value>
-+---+
-
- where:
-
-  * <<<\<feature-name\>>>> is the remainder of the DbUnit property name 
- after the <<<http://www.dbunit.org/features/>>>
-
-  * <<<\<property-name\>>>> is the remainder of the DbUnit property name 
- after the <<<http://www.dbunit.org/properties/>>> prefix
-
- If the property value is a valid Java <<class name>> and the class has a public, no-args constructor,
- an <<instance>> of the class is <<instantiated>> and passed to DbUnit.
-
- See {{{http://dbunit.sourceforge.net/properties.html} DbUnit properties and features documentation}}.
- 
- <Examples:>
-
- To set the escape pattern to quote the table and column names in double-quotes:
-
-+---+
-dbunit.properties.escapePattern="?"
-+---+
-
- To override the DbUnit database dialect to Oracle 10+:
-
-+---+
-dbunit.properties.datatypeFactory=org.dbunit.ext.oracle.Oracle10DataTypeFactory
-+---+
-
-* Generate XSD
- 
- [[1]] <<Generate XSD from database to enable writing dataset files>>\
- Use the {{{http://lightairmp.sourceforge.net/} LightAir Maven plugin}} 
- to generate XSD files from the database
- that will help you write the XML dataset files.
-
  []
 
 *--:
- {{{./development.html}Next: Development >>}}
+ {{{./execute.html}Next: Execute web application >>}}
 *--:

@@ -1,0 +1,19 @@
+ ---
+ Execute web application
+ ---
+ Ivo Maixner
+ ---
+ 2011-09-26
+ ---
+
+Execute web application
+ 
+ [[1]] <<Set base URL using annotation>>\
+ Annotate test method or test class with <<<@BaseUrl>>> to set <<base URL>> for a test.\
+ Annotate <<base class>> of multiple test classes with @BaseUrl to set base URL for all the inheriting test classes.
+
+ []
+
+*--:
+ {{{./configure.html}Next: Configure Light Air >>}}
+*--:

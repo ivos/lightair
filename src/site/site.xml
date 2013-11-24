@@ -8,7 +8,13 @@
 			<item name="Motivation" href="motivation.html" />
 			<item name="Project setup" href="project-setup.html" />
 			<item name="Write a test" href="write-test.html" />
-			<item name="Features" href="features.html" />
+			<item name="Features" href="features/setup.html" collapse="true">
+				<item name="Setup database" href="features/setup.html" />
+				<item name="Verify database" href="features/verify.html" />
+				<item name="Execute web application" href="features/execute.html" />
+				<item name="Configure Light Air" href="features/configure.html" />
+				<item name="Generate XSD" href="features/generate-xsd.html" />
+			</item>
 			<item name="Development" href="development.html" />
 			<item name="Maven plugin" href="http://lightairmp.sourceforge.net/" />
 		</menu>

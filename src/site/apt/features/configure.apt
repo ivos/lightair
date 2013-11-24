@@ -1,0 +1,57 @@
+ ---
+ Configure Light Air
+ ---
+ Ivo Maixner
+ ---
+ 2011-09-26
+ ---
+
+Configure Light Air
+
+ [[1]] <<Database dialect>>\
+ Set the <<<database.dialect>>> property to the name of the database you use for the tests.\
+ Select one of: <<<h2>>>, <<<oracle>>>, <<<oracle9>>>, <<<oracle10>>>, <<<hsqldb>>>, 
+ <<<mysql>>>, <<<db2>>>, <<<postgresql>>>, <<<derby>>>, <<<mssql>>>, <<<informix>>>.
+
+ [[2]] <<Set time difference limit>>\
+ Set the <<<time.difference.limit.millis>>> property to define a <<maximum
+ allowable difference>> in milliseconds of <<temporal columns>>.\
+ Set this to an expected duration of the longest test on the slowest environment,
+ with some safety margin.
+
+ <Examples:> 5000 (= 5 seconds), 60000 (= 1 minute).
+
+ [[3]] <<Configure DbUnit>>\
+ Use the following pattern to configure <<DbUnit features and properties>> in <<<light-air.properties>>>:
+
++---+
+dbunit.features.<feature-name>=<feature-value>
+dbunit.properties.<property-name>=<property-value>
++---+
+
+ where:
+
+  * <<<\<feature-name\>>>> is the remainder of the DbUnit property name 
+ after the <<<http://www.dbunit.org/features/>>>
+
+  * <<<\<property-name\>>>> is the remainder of the DbUnit property name 
+ after the <<<http://www.dbunit.org/properties/>>> prefix
+
+ If the property value is a valid Java <<class name>> and the class has a public, no-args constructor,
+ an <<instance>> of the class is <<instantiated>> and passed to DbUnit.
+
+ See {{{http://dbunit.sourceforge.net/properties.html} DbUnit properties and features documentation}}.
+ 
+ <Examples:>
+
+ To set the escape pattern to quote the table and column names in double-quotes:
+
++---+
+dbunit.properties.escapePattern="?"
++---+
+
+ []
+
+*--:
+ {{{./generate-xsd.html}Next: Generate XSD >>}}
+*--:
