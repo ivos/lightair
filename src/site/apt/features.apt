@@ -262,7 +262,7 @@ public class MyTest {
  [[1]] <<Database dialect>>\
  Set the <<<database.dialect>>> property to the name of the database you use for the tests.\
  Select one of: <<<h2>>>, <<<oracle>>>, <<<oracle9>>>, <<<oracle10>>>, <<<hsqldb>>>, 
- <<<mysql>>>, <<<db2>>>, <<<postgresql>>>, <<<derby>>>, <<<mssql>>>.
+ <<<mysql>>>, <<<db2>>>, <<<postgresql>>>, <<<derby>>>, <<<mssql>>>, <<<informix>>>.
 
  [[2]] <<Set time difference limit>>\
  Set the <<<time.difference.limit.millis>>> property to define a <<maximum
