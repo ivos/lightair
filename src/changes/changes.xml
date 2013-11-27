@@ -6,7 +6,14 @@
 		<author email="ivo.maixner@gmail.com">Ivo Maixner</author>
 	</properties>
 	<body>
-		<release date="2012-11-24" version="1.0.0" description="Pool connections. Durations.">
+		<release date="2013-11-27" version="1.1.0"
+			description="Configurable properties file location">
+			<action type="add">Enable configure location of Light Air properties
+				file using system property.
+			</action>
+		</release>
+		<release date="2013-11-24" version="1.0.0"
+			description="Pool connections. Durations.">
 			<action type="add">Add support for duration in temporal tokens.
 			</action>
 			<action type="add">Use datasource to pool database connections.

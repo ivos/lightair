@@ -8,12 +8,19 @@
 
 Configure Light Air
 
- [[1]] <<Database dialect>>\
+ [[1]] <<Light Air properties file>>\
+ Light Air reads configuration from a .properties file.\
+ By default, it is named <<<light-air.properties>>>, and is read from the (test) classpath, 
+ so it should reside in <<<src/test/resources>>>.\
+ You can override the location of the .properties file by setting a system (environment) property
+ named <<<light.air.properties>>> to the name of your custom .properties file.
+
+ [[2]] <<Database dialect>>\
  Set the <<<database.dialect>>> property to the name of the database you use for the tests.\
  Select one of: <<<h2>>>, <<<oracle>>>, <<<oracle9>>>, <<<oracle10>>>, <<<hsqldb>>>, 
  <<<mysql>>>, <<<db2>>>, <<<postgresql>>>, <<<derby>>>, <<<mssql>>>, <<<informix>>>.
 
- [[2]] <<Set time difference limit>>\
+ [[3]] <<Set time difference limit>>\
  Set the <<<time.difference.limit.millis>>> property to define a <<maximum
  allowable difference>> in milliseconds of <<temporal columns>>.\
  Set this to an expected duration of the longest test on the slowest environment,
@@ -21,7 +28,7 @@ Configure Light Air
 
  <Examples:> 5000 (= 5 seconds), 60000 (= 1 minute).
 
- [[3]] <<Configure DbUnit>>\
+ [[4]] <<Configure DbUnit>>\
  Use the following pattern to configure <<DbUnit features and properties>> in <<<light-air.properties>>>:
 
 +---+

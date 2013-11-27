@@ -33,14 +33,17 @@ public class PropertiesProvider {
 	 * Loads properties from the .properties file.
 	 */
 	public void init() {
-		log.debug("Initializing properties.");
+		final String resolvedPropertiesFileName = getPropertiesFileName();
+		log.debug("Initializing properties from {}.",
+				resolvedPropertiesFileName);
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		try {
 			URL resource = getClass().getClassLoader().getResource(
-					propertiesFileName);
+					resolvedPropertiesFileName);
 			if (null == resource) {
-				throw new PropertiesNotFoundException(propertiesFileName);
+				throw new PropertiesNotFoundException(
+						resolvedPropertiesFileName);
 			}
 			URLConnection urlConnection = resource.openConnection();
 			urlConnection.setUseCaches(false);
@@ -51,7 +54,7 @@ public class PropertiesProvider {
 				is.close();
 			}
 		} catch (IOException e) {
-			throw new PropertiesUnreadableException(propertiesFileName);
+			throw new PropertiesUnreadableException(resolvedPropertiesFileName);
 		}
 		stopWatch.stop();
 		log.debug("Initialized properties in {} ms.", stopWatch.getTime());
@@ -63,6 +66,27 @@ public class PropertiesProvider {
 	public void setPropertiesFileName(String propertiesFileName) {
 		this.propertiesFileName = propertiesFileName;
 	}
+
+	/**
+	 * Resolve properties file name.
+	 * <p>
+	 * If a system property of name <code>light.air.properties</code> is set,
+	 * get the name of the properties file from this system property.
+	 * <p>
+	 * Otherwise, default to <code>light-air.properties</code>.
+	 * 
+	 * @return
+	 */
+	public String getPropertiesFileName() {
+		final String propertiesOverride = System
+				.getProperty(PROPERTIES_PROPERTY_NAME);
+		if (null != propertiesOverride) {
+			return propertiesOverride;
+		}
+		return propertiesFileName;
+	}
+
+	public static final String PROPERTIES_PROPERTY_NAME = "light.air.properties";
 
 	/**
 	 * Get mandatory property value from properties file.
