@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import net.sf.lightair.exception.CreateDatabaseConnectionException;
 import net.sf.lightair.exception.DataSourceSetupException;
 import net.sf.lightair.exception.DatabaseAccessException;
+import net.sf.lightair.internal.dbunit.AutoPreparedStatementFactory;
 import net.sf.lightair.internal.dbunit.ConnectionFactory;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.dbunit.dataset.MergingTable;
@@ -30,6 +31,9 @@ import net.sf.lightair.internal.util.DurationParser;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.database.statement.PreparedStatementFactory;
+import org.dbunit.operation.AutoInsertOperation;
+import org.dbunit.operation.CompositeOperation;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.runners.model.FrameworkMethod;
 import org.slf4j.Logger;
@@ -113,6 +117,17 @@ public class Factory implements PropertyKeys {
 	}
 
 	private final VariableResolver variableResolver = new VariableResolver();
+
+	private final PreparedStatementFactory statementFactory = new AutoPreparedStatementFactory();
+
+	public PreparedStatementFactory getStatementFactory() {
+		return statementFactory;
+	}
+
+	private static final DatabaseOperation INSERT = new AutoInsertOperation();
+
+	private static final DatabaseOperation CLEAN_INSERT = new CompositeOperation(
+			DatabaseOperation.DELETE_ALL, INSERT);
 
 	/**
 	 * Initialize single-instance classes.
@@ -220,7 +235,7 @@ public class Factory implements PropertyKeys {
 	// static method call wrappers
 
 	public DatabaseOperation getCleanInsertDatabaseOperation() {
-		return DatabaseOperation.CLEAN_INSERT;
+		return CLEAN_INSERT;
 	}
 
 	// properties
