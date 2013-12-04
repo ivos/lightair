@@ -2,6 +2,8 @@ package net.sf.lightair.internal.dbunit;
 
 import java.sql.SQLException;
 
+import net.sf.lightair.internal.util.AutoValueGenerator;
+
 import org.dbunit.database.statement.IPreparedBatchStatement;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
@@ -15,14 +17,22 @@ public class AutoPreparedBatchStatement implements IPreparedBatchStatement {
 
 	private final IPreparedBatchStatement delegate;
 
-	public AutoPreparedBatchStatement(IPreparedBatchStatement delegate) {
+	private final AutoValueGenerator autoValueGenerator;
+
+	public AutoPreparedBatchStatement(IPreparedBatchStatement delegate,
+			AutoValueGenerator autoValueGenerator) {
 		this.delegate = delegate;
+		this.autoValueGenerator = autoValueGenerator;
 	}
 
 	public void addValue(Object value, DataType dataType, String tableName,
 			String columnName) throws TypeCastException, SQLException {
 		log.debug("Adding value {} for data type {} on {}.{}.", value,
 				dataType, tableName, columnName);
+		if ("@auto".equals(value)) {
+			value = autoValueGenerator.generateAutoValue(dataType, tableName,
+					columnName);
+		}
 		addValue(value, dataType);
 	}
 

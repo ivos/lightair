@@ -24,9 +24,12 @@ import net.sf.lightair.internal.unitils.UnitilsWrapper;
 import net.sf.lightair.internal.unitils.compare.Column;
 import net.sf.lightair.internal.unitils.compare.DataSetAssert;
 import net.sf.lightair.internal.unitils.compare.VariableResolver;
+import net.sf.lightair.internal.util.AutoNumberGenerator;
+import net.sf.lightair.internal.util.AutoValueGenerator;
 import net.sf.lightair.internal.util.DataSetProcessingData;
 import net.sf.lightair.internal.util.DataSetResolver;
 import net.sf.lightair.internal.util.DurationParser;
+import net.sf.lightair.internal.util.HashGenerator;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
@@ -118,7 +121,7 @@ public class Factory implements PropertyKeys {
 
 	private final VariableResolver variableResolver = new VariableResolver();
 
-	private final PreparedStatementFactory statementFactory = new AutoPreparedStatementFactory();
+	private final AutoPreparedStatementFactory statementFactory = new AutoPreparedStatementFactory();
 
 	public PreparedStatementFactory getStatementFactory() {
 		return statementFactory;
@@ -128,6 +131,10 @@ public class Factory implements PropertyKeys {
 
 	private static final DatabaseOperation CLEAN_INSERT = new CompositeOperation(
 			DatabaseOperation.DELETE_ALL, INSERT);
+
+	private final HashGenerator hashGenerator = new HashGenerator();
+	private final AutoNumberGenerator autoNumberGenerator = new AutoNumberGenerator();
+	private final AutoValueGenerator autoValueGenerator = new AutoValueGenerator();
 
 	/**
 	 * Initialize single-instance classes.
@@ -151,6 +158,9 @@ public class Factory implements PropertyKeys {
 		timeDifferenceLimit = propertiesProvider.getProperty(
 				TIME_DIFFERENCE_LIMIT, 0);
 		tokenReplacingFilter.setDurationParser(durationParser);
+		autoNumberGenerator.setHashGenerator(hashGenerator);
+		autoValueGenerator.setAutoNumberGenerator(autoNumberGenerator);
+		statementFactory.setAutoValueGenerator(autoValueGenerator);
 	}
 
 	private void initDataSource() {
