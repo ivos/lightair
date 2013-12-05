@@ -13,6 +13,7 @@ import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.dbunit.dataset.MergingTable;
 import net.sf.lightair.internal.dbunit.dataset.TokenReplacingFilter;
 import net.sf.lightair.internal.junit.BaseUrlTestRule;
+import net.sf.lightair.internal.junit.SetupExecutor;
 import net.sf.lightair.internal.junit.SetupTestRule;
 import net.sf.lightair.internal.junit.VerifyTestRule;
 import net.sf.lightair.internal.properties.PropertiesProvider;
@@ -76,6 +77,12 @@ public class Factory implements PropertyKeys {
 		return unitilsWrapper;
 	}
 
+	private final SetupExecutor setupExecutor = new SetupExecutor();
+
+	public SetupExecutor getSetupExecutor() {
+		return setupExecutor;
+	}
+
 	private final DataSetResolver dataSetResolver = new DataSetResolver();
 
 	public DataSetResolver getDataSetResolver() {
@@ -130,6 +137,7 @@ public class Factory implements PropertyKeys {
 		unitilsWrapper.setDataSetLoader(dataSetLoader);
 		unitilsWrapper.setDataSetAssert(dataSetAssert);
 		unitilsWrapper.setFactory(this);
+		setupExecutor.setUnitilsWrapper(unitilsWrapper);
 		dataSetLoader.setDataSetResolver(dataSetResolver);
 		dataSetLoader.setDataSetFactory(dataSetFactory);
 		dataSetFactory.setPropertiesProvider(propertiesProvider);
@@ -175,7 +183,7 @@ public class Factory implements PropertyKeys {
 
 	public SetupTestRule getSetupTestRule(FrameworkMethod frameworkMethod) {
 		SetupTestRule rule = new SetupTestRule(frameworkMethod);
-		rule.setUnitilsWrapper(unitilsWrapper);
+		rule.setSetupExecutor(setupExecutor);
 		return rule;
 	}
 

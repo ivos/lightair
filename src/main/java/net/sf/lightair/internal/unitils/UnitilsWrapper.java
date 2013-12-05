@@ -30,12 +30,15 @@ public class UnitilsWrapper {
 	 * 
 	 * @param testMethod
 	 *            Test method
+	 * @param profile
+	 *            Profile name
 	 * @param fileNames
 	 *            File names from @Setup annotation
 	 */
-	public void setup(Method testMethod, String[] fileNames) {
+	public void setup(Method testMethod, String profile, String[] fileNames) {
 		log.debug("Setting up database for test method {} "
-				+ "with configured file names {}.", testMethod, fileNames);
+				+ "and profile {} with configured file names {}.", testMethod,
+				profile, fileNames);
 		Factory.getInstance().initDataSetProcessing();
 		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,
 				"", fileNames);
