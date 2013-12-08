@@ -45,7 +45,42 @@ public class MyTest {
 }
 +---+
 
- [[3]] <<Use all columns of a row in setup>>\
+ [[3]] <<Specify profile in @Setup>>\
+ Use <<<profile>>> attribute of <<<@Setup>>> annotation to instruct Light Air to 
+ apply the datasets on the <<connection defined by the profile>>.\
+ See the Profiles section in {{{./configure.html}Configure Light Air}} for details
+ on how to setup profiles.
+
+ <Examples:>
+
++---+
+@Setup(value = { "setup-1.xml", "setup-2.xml" }, profile = "oracle")
+public class MyTest {
+	@Test
+	public void test() {
+	}
+}
++---+
+
+ [[4]] <<Specify multiple @Setup annotations>>\
+ Use <<<@Setup.List>>> annotation to define <<multiple>> <<<@Setup>>> <<annotations>>
+ for the same test class or test method.
+
+ <Examples:>
+
++---+
+@Setup.List({
+	@Setup("setup-h2.xml"),
+	@Setup(value = "setup-hsql.xml", profile = "hsql"),
+	@Setup(value = { "setup-ora-1.xml", "setup-ora-2.xml" }, profile = "oracle") })
+public class MyTest {
+	@Test
+	public void test() {
+	}
+}
++---+
+
+ [[5]] <<Use all columns of a row in setup>>\
  When inserting a row during setup, fill values to all columns defined <<on the row>>,
  no matter what columns were defined on other rows of the table.\
  This fixes bug of DbUnit, where the first row of the table freezes columns used
@@ -61,28 +96,28 @@ public class MyTest {
 </dataset>
 +---+
 
- [[4]] <<Replace @null with null value>>\
+ [[6]] <<Replace @null with null value>>\
  Use <<<@null>>> in XML dataset to setup column to <<null value>> explicitly.
  (By omitting the column on the row you can also set it up to null value implicitly.)
 
- [[5]] <<Replace @date with current date>>\
+ [[7]] <<Replace @date with current date>>\
  Use <<<@date>>> in XML dataset to setup column to <<current date>> midnight value.\
  The current date value includes <<<yyyy-MM-dd>>>
  as in <2012-12-31>.\
  The time part is set to midnight <00:00:00.000>.
 
- [[6]] <<Replace @time with current time>>\
+ [[8]] <<Replace @time with current time>>\
  Use <<<@time>>> in XML dataset to setup column to <<current time>> value.\
  The current time value includes <<<HH:mm:ss>>> as in <23:59:58>.\
  The date part is set to 1970-01-01. 
  The milliseconds are set to 0 (zero).
 
- [[7]] <<Replace @timestamp with current timestamp>>\
+ [[9]] <<Replace @timestamp with current timestamp>>\
  Use <<<@timestamp>>> in XML dataset to setup column to <<current timestamp>> value.\
  The current timestamp value includes <<<yyyy-MM-dd HH:mm:ss.SSS>>>
  as in <2012-12-31 23:59:58.123>.
 
- [[8]] <<Modify the temporal tokens with a duration>>\
+ [[10]] <<Modify the temporal tokens with a duration>>\
  You can modify the temporal tokens <<<@date>>>, <<<@time>>> and <<<@timestamp>>> by 
  appending a sign (+ or -) and a 
  {{{http://en.wikipedia.org/wiki/ISO_8601#Durations}duration in ISO 8601 format}}.
@@ -104,7 +139,7 @@ public class MyTest {
   * This <<<@timestamp-P2Y3M4DT5H6M7S>>> represents 
   2 years, 3 months, 4 days, 5 hours, 6 minutes and 7 seconds in the past.
 
- [[9]] <<Specify database schema of a table row using XML namespace>>\
+ [[11]] <<Specify database schema of a table row using XML namespace>>\
  Specify row <<schema>> using XML namespace:
 
 +---+

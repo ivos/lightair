@@ -3,8 +3,6 @@ package net.sf.lightair.internal.junit;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import net.sf.lightair.internal.unitils.UnitilsWrapper;
-
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.FrameworkMethod;
@@ -94,20 +92,6 @@ public abstract class AbstractTestRule<T extends Annotation> implements
 	 */
 	public Method getTestMethod() {
 		return testMethod;
-	}
-
-	// beans and their setters:
-
-	protected UnitilsWrapper unitilsWrapper;
-
-	/**
-	 * Set Unitils wrapper.
-	 * 
-	 * @param unitilsWrapper
-	 *            Unitils wrapper
-	 */
-	public void setUnitilsWrapper(UnitilsWrapper unitilsWrapper) {
-		this.unitilsWrapper = unitilsWrapper;
 	}
 
 }

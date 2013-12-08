@@ -32,7 +32,7 @@ public class PropertiesProviderTest {
 		p.setPropertiesFileName("light-air.provider.unit.test.properties");
 		p.init();
 
-		Set<String> names = p.getDbUnitFeatureNames();
+		Set<String> names = p.getDbUnitFeatureNames(null);
 
 		assertTrue(names.contains("dbunit.features.feature-name1"));
 		assertTrue(names.contains("dbunit.features.feature-name2"));
@@ -46,7 +46,7 @@ public class PropertiesProviderTest {
 		p.setPropertiesFileName("light-air.provider.unit.test.properties");
 		p.init();
 
-		Set<String> names = p.getDbUnitPropertyNames();
+		Set<String> names = p.getDbUnitPropertyNames(null);
 
 		assertTrue(names.contains("dbunit.properties.property-name1"));
 		assertTrue(names.contains("dbunit.properties.property-name2"));

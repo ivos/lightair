@@ -3,6 +3,7 @@ package net.sf.lightair.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -29,6 +30,7 @@ import net.sourceforge.jwebunit.junit.JWebUnit;
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
+@Documented
 public @interface BaseUrl {
 
 	/**

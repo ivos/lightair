@@ -8,13 +8,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import test.support.ConfigSupport;
+
 @RunWith(LightAir.class)
 @Verify
 public class DataTypesHsqlTest extends DataTypesTestBase {
 
 	static {
 		connect("jdbc:hsqldb:mem:test", "sa", "");
-		replaceConfig("hsql");
+		ConfigSupport.replaceConfig("hsql");
 	}
 
 	@BeforeClass

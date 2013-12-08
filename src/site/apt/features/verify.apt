@@ -44,19 +44,54 @@ public class MyTest {
 	}
 }
 +---+
- 
- [[3]] <<Verification fails when a column value does not match>>\
+
+ [[3]] <<Specify profile in @Verify>>\
+ Use <<<profile>>> attribute of <<<@Verify>>> annotation to instruct Light Air to 
+ apply the datasets on the <<connection defined by the profile>>.\
+ See the Profiles section in {{{./configure.html}Configure Light Air}} for details
+ on how to setup profiles.
+
+ <Examples:>
+
++---+
+@Verify(value = { "verify-1.xml", "verify-2.xml" }, profile = "oracle")
+public class MyTest {
+	@Test
+	public void test() {
+	}
+}
++---+
+
+ [[4]] <<Specify multiple @Verify annotations>>\
+ Use <<<@Verify.List>>> annotation to define <<multiple>> <<<@Verify>>> <<annotations>>
+ for the same test class or test method.
+
+ <Examples:>
+
++---+
+@Verify.List({
+	@Verify("verify-h2.xml"),
+	@Verify(value = "verify-hsql.xml", profile = "hsql"),
+	@Verify(value = { "verify-ora-1.xml", "verify-ora-2.xml" }, profile = "oracle") })
+public class MyTest {
+	@Test
+	public void test() {
+	}
+}
++---+
+
+ [[5]] <<Verification fails when a column value does not match>>\
  Detailed message indicating the particular row and column is displayed.
 
- [[4]] <<Row order is irrelevant in verification>>\
+ [[6]] <<Row order is irrelevant in verification>>\
  Rows in verification dataset may be in <<any order>>.
 
- [[5]] <<Verification fails when an expected row is not found in database>>\
+ [[7]] <<Verification fails when an expected row is not found in database>>\
  Detailed message indicating the particular row is displayed.
 
- [[6]] <<Table not specified in expected dataset is ignored in verification>>
+ [[8]] <<Table not specified in expected dataset is ignored in verification>>
 
- [[7]] <<Column not specified in expected row is ignored in verification>>\
+ [[9]] <<Column not specified in expected row is ignored in verification>>\
  When a column is not present on a row of an expected dataset, 
  its value in database row is <<ignored>>. 
  This works regardless whether the column is specified in the expected dataset 
@@ -74,7 +109,7 @@ public class MyTest {
 
  The value of column <<<unspecified>>> in the second row will be ignored.
 
- [[8]] <<Use all columns of a row in verification>>\
+ [[10]] <<Use all columns of a row in verification>>\
  When verifying a row, use values of all columns defined <<on the row>>,
  no matter what columns were defined on other rows of the table.\
  This fixes bug of DbUnit, where the first row of the table freezes columns used
@@ -92,7 +127,7 @@ public class MyTest {
 
  The value of column <<<unspecified>>> in the second row will be verified.
 
- [[9]] <<Verify that table expected to be empty is empty in database>>\
+ [[11]] <<Verify that table expected to be empty is empty in database>>\
  Fail when there are rows in the table in database.
 
  <Examples:>
@@ -103,16 +138,16 @@ public class MyTest {
 </dataset>
 +---+
 
- [[10]] <<Verification fails when an unexpected row is found in database>>\
+ [[12]] <<Verification fails when an unexpected row is found in database>>\
  Detailed message indicating the particular row is displayed.
 
- [[11]] <<Match table rows by number of matching columns in verification>>\
+ [[13]] <<Match table rows by number of matching columns in verification>>\
  When matching rows of a database table, 
  first sort actual rows by the <<number of matching columns>> 
  to any best-matching expected row, 
  then match each actual row in that order to best-matching remaining expected row.
 
- [[12]] <<Support variables in verification>>\
+ [[14]] <<Support variables in verification>>\
  Use <<$name>> expressions as <<variables>> in verification datasets 
  to verify that two (or more) column values are equal.
  This can be used for example to verify a <<foreign key>> 
@@ -128,11 +163,11 @@ public class MyTest {
 </dataset>
 +---+
 
- [[13]] <<Include primary keys in verification failure message>>\
+ [[15]] <<Include primary keys in verification failure message>>\
  Display actual database content in verification failure message 
  including primary key column values.
 
- [[14]] <<Specify a column can have any non-null value with @any>>\
+ [[16]] <<Specify a column can have any non-null value with @any>>\
  Use <<<@any>>> in verification XML dataset to specify 
  that the actual column should have <<any non-null>> value.\
  When you omit the column in the row, its value will be ignored.
@@ -140,27 +175,27 @@ public class MyTest {
  provided there is a value at all.
  (Use <<<@null>>> to verify the column has no value.) 
 
- [[15]] <<Replace @null with null value>>\
+ [[17]] <<Replace @null with null value>>\
  Use <<<@null>>> in XML dataset to verify a column has <<null value>>.
 
- [[16]] <<Replace @date with current date>>\
+ [[18]] <<Replace @date with current date>>\
  Use <<<@date>>> in XML dataset to verify a column has <<current date>> midnight value.\
  The current date value includes <<<yyyy-MM-dd>>>
  as in <2012-12-31>.\
  The time part is verified to be midnight <00:00:00.000>.
 
- [[17]] <<Replace @time with current time>>\
+ [[19]] <<Replace @time with current time>>\
  Use <<<@time>>> in XML dataset to verify a column has <<current time>> value.\
  The current time value includes <<<HH:mm:ss>>> as in <23:59:58>.\
  The date part is verified to be 1970-01-01. 
  The milliseconds are verified to be 0 (zero).
 
- [[18]] <<Replace @timestamp with current timestamp>>\
+ [[20]] <<Replace @timestamp with current timestamp>>\
  Use <<<@timestamp>>> in XML dataset to verify a column has <<current timestamp>> value.\
  The current timestamp value includes <<<yyyy-MM-dd HH:mm:ss.SSS>>>
  as in <2012-12-31 23:59:58.123>.
 
- [[19]] <<Modify the temporal tokens with a duration>>\
+ [[21]] <<Modify the temporal tokens with a duration>>\
  You can modify the temporal tokens <<<@date>>>, <<<@time>>> and <<<@timestamp>>> by 
  appending a sign (+ or -) and a 
  {{{http://en.wikipedia.org/wiki/ISO_8601#Durations}duration in ISO 8601 format}}.
@@ -182,7 +217,7 @@ public class MyTest {
   * This <<<@timestamp-P2Y3M4DT5H6M7S>>> represents 
   2 years, 3 months, 4 days, 5 hours, 6 minutes and 7 seconds in the past.
 
- [[20]] <<Specify database schema of a table row using XML namespace>>\
+ [[22]] <<Specify database schema of a table row using XML namespace>>\
  Specify row <<schema>> using XML namespace:
 
 +---+

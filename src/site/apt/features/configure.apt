@@ -28,7 +28,41 @@ Configure Light Air
 
  <Examples:> 5000 (= 5 seconds), 60000 (= 1 minute).
 
- [[4]] <<Configure DbUnit>>\
+ [[4]] <<Profiles>>\
+ Use profiles to <<connect to multiple databases>>.\
+ To set up a new profile, create a new .properties file for the profile with the usual Light Air properties.
+ Then link to this profile .properties from the "<main>" Light Air .properties file 
+ using a property of the following form:
+
++---+
+profile.[profile name]=[profile properties file name]
++---+
+ 
+ <Example:>
+ 
+ Apart from connecting to H2 as defined in the main <<<light-air.properties>>> file, 
+ we want to also connect to an Oracle database.
+ 
+ We create a profile .properties file named <<<light-air-oracle.properties>>> that contains
+ the <<<database.driverClassName>>>, <<<database.connectionUrl>>>, <<<database.userName>>>,
+ <<<database.password>>>, etc. properties for connecting to the Oracle database.
+ 
+ Then we link from the main <<<light-air.properties>>> file to the <<<light-air-oracle.properties>>>
+ by adding the following property to it: 
+
++---+
+profile.oracle=light-air-oracle.properties
++---+
+
+ Now, Light Air will on start up connect both to H2 as defined in the main .properties file, 
+ but also to Oracle as defined in the <<<oracle>>> profile .properties file.
+ 
+ We can now set the <<<profile>>> attribute of <<<@Setup>>> and <<<@Verify>>> annotations
+ to designate their datasets to be applied on the profile connection. 
+ We can also use <<<@Setup.List>>> and <<<@Verify.List>>> to setup and verify
+ multiple databases on the same test class or test method.
+
+ [[5]] <<Configure DbUnit>>\
  Use the following pattern to configure <<DbUnit features and properties>> in <<<light-air.properties>>>:
 
 +---+

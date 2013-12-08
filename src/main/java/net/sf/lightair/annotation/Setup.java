@@ -3,6 +3,7 @@ package net.sf.lightair.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -48,9 +49,15 @@ import java.lang.annotation.Target;
  * System performs "clean insert" database operation with all datasets located,
  * which means all tables in the datasets are deleted in reverse order, then all
  * rows are inserted in the order specified.
+ * <p>
+ * Use {@link Setup.List} to define multiple <code>@Setup</code> annotations on
+ * the same element.
+ * 
+ * @see Setup.List
  */
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
+@Documented
 public @interface Setup {
 
 	/**
@@ -59,5 +66,28 @@ public @interface Setup {
 	 * @return
 	 */
 	String[] value() default {};
+
+	/**
+	 * Name of the profile.
+	 * <p>
+	 * A profile lets you connect to a different database. A profile must be
+	 * defined in LightAir properties file and must have its own properties file
+	 * which defines the connection to the profile database.
+	 * 
+	 * @return
+	 */
+	String profile() default "";
+
+	/**
+	 * Defines several <code>@Setup</code> annotations on the same element.
+	 * 
+	 * @see Setup
+	 */
+	@Target({ TYPE, METHOD })
+	@Retention(RUNTIME)
+	@Documented
+	@interface List {
+		Setup[] value();
+	}
 
 }

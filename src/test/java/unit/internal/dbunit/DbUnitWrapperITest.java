@@ -13,7 +13,7 @@ public class DbUnitWrapperITest {
 
 	@Test
 	public void createConnection_SchemaPassed() throws Exception {
-		IDatabaseConnection connection = w.getConnection("schema-name");
+		IDatabaseConnection connection = w.getConnection(null, "schema-name");
 		assertNotNull("Created", connection);
 		assertEquals("Schema name matches", "schema-name", connection
 				.getSchema().toLowerCase());
@@ -21,7 +21,7 @@ public class DbUnitWrapperITest {
 
 	@Test
 	public void createConnection_SchemaNull() throws Exception {
-		IDatabaseConnection connection = w.getConnection(null);
+		IDatabaseConnection connection = w.getConnection(null, null);
 		assertNotNull("Created", connection);
 		String schema = connection.getSchema();
 		assertNotNull("Schema not null", schema);

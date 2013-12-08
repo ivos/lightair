@@ -5,9 +5,10 @@ import net.sf.lightair.annotation.Setup;
 import org.junit.runners.model.FrameworkMethod;
 
 /**
- * JUnit test rule to setup database before test method execution.
+ * JUnit test rule to setup database with multiple <code>@Setup</code>
+ * annotations before test method execution.
  */
-public class SetupTestRule extends AbstractTestRule<Setup> {
+public class SetupListTestRule extends AbstractTestRule<Setup.List> {
 
 	/**
 	 * Constructor.
@@ -15,8 +16,8 @@ public class SetupTestRule extends AbstractTestRule<Setup> {
 	 * @param frameworkMethod
 	 *            JUnit framework method on which the test rule is being applied
 	 */
-	public SetupTestRule(FrameworkMethod frameworkMethod) {
-		super(frameworkMethod, Setup.class);
+	public SetupListTestRule(FrameworkMethod frameworkMethod) {
+		super(frameworkMethod, Setup.List.class);
 	}
 
 	/**
@@ -25,7 +26,10 @@ public class SetupTestRule extends AbstractTestRule<Setup> {
 	@Override
 	protected void before() {
 		if (null != getAnnotation()) {
-			setupExecutor.execute(getAnnotation(), getTestMethod());
+			Setup[] setups = getAnnotation().value();
+			for (Setup setup : setups) {
+				setupExecutor.execute(setup, getTestMethod());
+			}
 		}
 	}
 

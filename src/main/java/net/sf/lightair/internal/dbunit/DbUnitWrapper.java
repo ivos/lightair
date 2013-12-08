@@ -25,23 +25,26 @@ public class DbUnitWrapper implements PropertyKeys {
 	 * <p>
 	 * Pass schema <code>null</code> to use the default schema from properties.
 	 * 
+	 * @param profile
+	 *            Profile
 	 * @param schemaName
 	 *            Schema to connect to, or <code>null</code> to use default
 	 *            schema
 	 * @return DbUnit connection
 	 */
-	public IDatabaseConnection getConnection(String schemaName) {
+	public IDatabaseConnection getConnection(String profile, String schemaName) {
 		log.debug("Retrieving connection for schema {}.", schemaName);
 
 		if (null == schemaName) {
-			schemaName = propertiesProvider.getProperty(DEFAULT_SCHEMA);
+			schemaName = propertiesProvider
+					.getProperty(profile, DEFAULT_SCHEMA);
 			log.debug("Resolved unspecified schema as default {}.", schemaName);
 		}
 
 		IDatabaseConnection connection;// = connectionCache.get(schemaName);
 		// if (null == connection) {
 		log.debug("Creating new connection for schema {}.", schemaName);
-		connection = connectionFactory.createConnection(schemaName);
+		connection = connectionFactory.createConnection(profile, schemaName);
 		// connectionCache.put(schemaName, connection);
 		// } else {
 		// log.debug("Retrieved connection from cache for schema {}.",

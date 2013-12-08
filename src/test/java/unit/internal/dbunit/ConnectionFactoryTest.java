@@ -58,14 +58,14 @@ public class ConnectionFactoryTest extends JMockSupport implements PropertyKeys 
 			SQLException {
 		check(new Expectations() {
 			{
-				one(factory).createDatabaseConnection("schema1");
+				one(factory).createDatabaseConnection("profile1", "schema1");
 				will(returnValue(dbc));
 			}
 		});
 		checkSetDatabaseDialect();
 		checkSetFeaturesAndProperties();
 
-		assertSame(dbc, cf.createConnection("schema1"));
+		assertSame(dbc, cf.createConnection("profile1", "schema1"));
 	}
 
 	private void checkSetDatabaseDialect() throws DatabaseUnitException,
@@ -75,7 +75,8 @@ public class ConnectionFactoryTest extends JMockSupport implements PropertyKeys 
 				one(dbc).getConfig();
 				will(returnValue(config));
 
-				one(propertiesProvider).getProperty(DATABASE_DIALECT);
+				one(propertiesProvider).getProperty("profile1",
+						DATABASE_DIALECT);
 				will(returnValue("h2"));
 
 				one(config)
@@ -93,34 +94,34 @@ public class ConnectionFactoryTest extends JMockSupport implements PropertyKeys 
 				one(dbc).getConfig();
 				will(returnValue(config));
 
-				one(propertiesProvider).getDbUnitFeatureNames();
+				one(propertiesProvider).getDbUnitFeatureNames("profile1");
 				will(returnValue(featureNames));
 
-				one(propertiesProvider).getProperty(
+				one(propertiesProvider).getProperty("profile1",
 						"dbunit.features.feature-name1");
 				will(returnValue("true"));
 
 				one(config).setProperty(
 						"http://www.dbunit.org/features/feature-name1", true);
 
-				one(propertiesProvider).getProperty(
+				one(propertiesProvider).getProperty("profile1",
 						"dbunit.features.feature-name2");
 				will(returnValue("false"));
 
 				one(config).setProperty(
 						"http://www.dbunit.org/features/feature-name2", false);
 
-				one(propertiesProvider).getProperty(
+				one(propertiesProvider).getProperty("profile1",
 						"dbunit.features.feature-name3");
 				will(returnValue("true"));
 
 				one(config).setProperty(
 						"http://www.dbunit.org/features/feature-name3", true);
 
-				one(propertiesProvider).getDbUnitPropertyNames();
+				one(propertiesProvider).getDbUnitPropertyNames("profile1");
 				will(returnValue(propertyNames));
 
-				one(propertiesProvider).getProperty(
+				one(propertiesProvider).getProperty("profile1",
 						"dbunit.properties.property-name1");
 				will(returnValue("property-value1"));
 
@@ -128,7 +129,7 @@ public class ConnectionFactoryTest extends JMockSupport implements PropertyKeys 
 						"http://www.dbunit.org/properties/property-name1",
 						"property-value1");
 
-				one(propertiesProvider).getProperty(
+				one(propertiesProvider).getProperty("profile1",
 						"dbunit.properties.property-name2");
 				will(returnValue("org.dbunit.ext.h2.H2DataTypeFactory"));
 
@@ -137,7 +138,7 @@ public class ConnectionFactoryTest extends JMockSupport implements PropertyKeys 
 								with(equal("http://www.dbunit.org/properties/property-name2")),
 								with(any(H2DataTypeFactory.class)));
 
-				one(propertiesProvider).getProperty(
+				one(propertiesProvider).getProperty("profile1",
 						"dbunit.properties.property-name3");
 				will(returnValue("org.dbunit.database.statement.PreparedStatementFactory"));
 

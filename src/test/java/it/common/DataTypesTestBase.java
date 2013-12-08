@@ -6,12 +6,13 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import net.sf.lightair.internal.factory.Factory;
-import net.sf.lightair.internal.properties.PropertiesProvider;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+
+import test.support.ConfigSupport;
 
 public class DataTypesTestBase {
 
@@ -22,13 +23,13 @@ public class DataTypesTestBase {
 	@BeforeClass
 	public static void initDataTypesTestBase() {
 		Factory.getInstance().init();
-		propertiesProvider = Factory.getInstance().getPropertiesProvider();
+		ConfigSupport.init();
 	}
 
 	@AfterClass
 	public static void afterClass() {
 		dropTable();
-		restoreConfig();
+		ConfigSupport.restoreConfig();
 	}
 
 	public static void connect(String url, String username, String password) {
@@ -47,20 +48,6 @@ public class DataTypesTestBase {
 
 	public static void dropTable() {
 		db.execute("drop table data_types");
-	}
-
-	static PropertiesProvider propertiesProvider;
-
-	public static void replaceConfig(String dbName) {
-		propertiesProvider.setPropertiesFileName("light-air-" + dbName
-				+ ".properties");
-		Factory.getInstance().init();
-	}
-
-	public static void restoreConfig() {
-		propertiesProvider
-				.setPropertiesFileName(PropertiesProvider.DEFAULT_PROPERTIES_FILE_NAME);
-		Factory.getInstance().init();
 	}
 
 }

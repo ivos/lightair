@@ -6,8 +6,11 @@
 		<author email="ivo.maixner@gmail.com">Ivo Maixner</author>
 	</properties>
 	<body>
-		<release date="2013-11-27" version="1.1.0"
+		<release date="2013-11-27" version="2.0.0"
 			description="Configurable properties file location">
+			<action type="add">Add support for profiles - connections to
+				multiple databases.
+			</action>
 			<action type="add">Enable configure location of Light Air properties
 				file using system property.
 			</action>

@@ -28,6 +28,8 @@ public class ConnectionFactory implements PropertyKeys {
 	 * <p>
 	 * Pass schema <code>null</code> to use the default schema from properties.
 	 * 
+	 * @param profile
+	 *            Profile
 	 * @param schemaName
 	 *            Schema to connect to, or <code>null</code> to use default
 	 *            schema
@@ -38,16 +40,17 @@ public class ConnectionFactory implements PropertyKeys {
 	 *             When DbUnit cannot establish itself on the database
 	 *             connection, typically when schema does not exist
 	 */
-	public IDatabaseConnection createConnection(String schemaName)
-			throws DatabaseAccessException, CreateDatabaseConnectionException {
+	public IDatabaseConnection createConnection(String profile,
+			String schemaName) throws DatabaseAccessException,
+			CreateDatabaseConnectionException {
 		log.info("Creating database connection for schema {}.", schemaName);
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 
-		IDatabaseConnection connection = factory
-				.createDatabaseConnection(schemaName);
-		setDatabaseDialect(connection);
-		setFeaturesAndProperties(connection);
+		IDatabaseConnection connection = factory.createDatabaseConnection(
+				profile, schemaName);
+		setDatabaseDialect(profile, connection);
+		setFeaturesAndProperties(profile, connection);
 
 		stopWatch.stop();
 		log.debug("Created database connection for schema {} in {} ms.",
@@ -55,11 +58,13 @@ public class ConnectionFactory implements PropertyKeys {
 		return connection;
 	}
 
-	private void setDatabaseDialect(IDatabaseConnection dbConnection) {
+	private void setDatabaseDialect(String profile,
+			IDatabaseConnection dbConnection) {
 		DatabaseConfig config = dbConnection.getConfig();
 
 		String dbUnitName = "http://www.dbunit.org/properties/datatypeFactory";
-		String dialect = propertiesProvider.getProperty(DATABASE_DIALECT);
+		String dialect = propertiesProvider.getProperty(profile,
+				DATABASE_DIALECT);
 		String className = DATATYPE_FACTORIES.get(dialect);
 		Object value = convertPropertyValue(className);
 		log.debug(
@@ -92,24 +97,28 @@ public class ConnectionFactory implements PropertyKeys {
 				"org.dbunit.dataset.datatype.DefaultDataTypeFactory");
 	}
 
-	private void setFeaturesAndProperties(IDatabaseConnection dbConnection) {
+	private void setFeaturesAndProperties(String profile,
+			IDatabaseConnection dbConnection) {
 		DatabaseConfig config = dbConnection.getConfig();
 
-		Set<String> featureNames = propertiesProvider.getDbUnitFeatureNames();
+		Set<String> featureNames = propertiesProvider
+				.getDbUnitFeatureNames(profile);
 		for (String featureName : featureNames) {
 			String dbUnitName = "http://www.dbunit.org/features/"
 					+ featureName.substring(16);
-			Boolean value = Boolean.valueOf(propertiesProvider
-					.getProperty(featureName));
+			Boolean value = Boolean.valueOf(propertiesProvider.getProperty(
+					profile, featureName));
 			log.debug("Setting DbUnit feature {} to {}.", dbUnitName, value);
 			config.setProperty(dbUnitName, value);
 		}
 
-		Set<String> propertyNames = propertiesProvider.getDbUnitPropertyNames();
+		Set<String> propertyNames = propertiesProvider
+				.getDbUnitPropertyNames(profile);
 		for (String propertyName : propertyNames) {
 			String dbUnitName = "http://www.dbunit.org/properties/"
 					+ propertyName.substring(18);
-			String string = propertiesProvider.getProperty(propertyName);
+			String string = propertiesProvider.getProperty(profile,
+					propertyName);
 			Object value = convertPropertyValue(string);
 			log.debug("Setting DbUnit property {} to {}.", dbUnitName, value);
 			config.setProperty(dbUnitName, value);

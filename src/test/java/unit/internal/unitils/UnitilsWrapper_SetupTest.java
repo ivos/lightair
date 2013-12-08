@@ -65,13 +65,13 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 		checkExecuteForSchema("schema2", ds2, c2);
 		checkExecuteForSchema("schema3", ds3, c3);
 
-		w.setup(testMethod, fileNames);
+		w.setup(testMethod, "profile1", fileNames);
 	}
 
 	private void checkCommons() {
 		check(new Expectations() {
 			{
-				one(dataSetLoader).load(testMethod, "", fileNames);
+				one(dataSetLoader).load("profile1", testMethod, "", fileNames);
 				will(returnValue(multiSchemaDataSet));
 
 				one(factory).getCleanInsertDatabaseOperation();
@@ -92,7 +92,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema(schemaName);
 				will(returnValue(ds));
 
-				one(dbUnitWrapper).getConnection(schemaName);
+				one(dbUnitWrapper).getConnection("profile1", schemaName);
 				will(returnValue(c));
 
 				one(dbo).execute(c, ds);
@@ -112,7 +112,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema("schema1");
 				will(returnValue(ds1));
 
-				one(dbUnitWrapper).getConnection("schema1");
+				one(dbUnitWrapper).getConnection("profile1", "schema1");
 				will(returnValue(c1));
 
 				one(dbo).execute(c1, ds1);
@@ -123,7 +123,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 		});
 
 		try {
-			w.setup(testMethod, fileNames);
+			w.setup(testMethod, "profile1", fileNames);
 			fail("Should throw");
 		} catch (DatabaseAccessException e) {
 			assertEquals("Message", "Error accessing database.", e.getMessage());
@@ -141,7 +141,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema("schema1");
 				will(returnValue(ds1));
 
-				one(dbUnitWrapper).getConnection("schema1");
+				one(dbUnitWrapper).getConnection("profile1", "schema1");
 				will(returnValue(c1));
 
 				one(dbo).execute(c1, ds1);
@@ -152,7 +152,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 		});
 
 		try {
-			w.setup(testMethod, fileNames);
+			w.setup(testMethod, "profile1", fileNames);
 			fail("Should throw");
 		} catch (DatabaseAccessException e) {
 			assertEquals("Message", "Error accessing database.", e.getMessage());
@@ -170,7 +170,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema("schema1");
 				will(returnValue(ds1));
 
-				one(dbUnitWrapper).getConnection("schema1");
+				one(dbUnitWrapper).getConnection("profile1", "schema1");
 				will(returnValue(c1));
 
 				one(dbo).execute(c1, ds1);
@@ -181,7 +181,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 		});
 
 		try {
-			w.setup(testMethod, fileNames);
+			w.setup(testMethod, "profile1", fileNames);
 			fail("Should throw");
 		} catch (CloseDatabaseConnectionException e) {
 			assertEquals("Message", "Cannot close connection to database.",

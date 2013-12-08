@@ -15,14 +15,18 @@ public class DataSetFactory implements PropertyKeys {
 	/**
 	 * Create multi-schema dataset by parsing a set of XML dataset files.
 	 * 
+	 * @param profile
+	 *            Profile
 	 * @param dataSetFiles
 	 *            Dataset files
 	 * @return Multi-schema dataset
 	 */
-	public MultiSchemaDataSet createDataSet(File... dataSetFiles) {
+	public MultiSchemaDataSet createDataSet(String profile,
+			File... dataSetFiles) {
 		MultiSchemaXmlDataSetReader multiSchemaXmlDataSetReader = createMultiSchemaXmlDataSetReader();
 		return multiSchemaXmlDataSetReader.readDataSetXml(
-				propertiesProvider.getProperty(DEFAULT_SCHEMA), dataSetFiles);
+				propertiesProvider.getProperty(profile, DEFAULT_SCHEMA),
+				dataSetFiles);
 	}
 
 	/**
