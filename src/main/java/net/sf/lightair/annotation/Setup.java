@@ -49,6 +49,11 @@ import java.lang.annotation.Target;
  * System performs "clean insert" database operation with all datasets located,
  * which means all tables in the datasets are deleted in reverse order, then all
  * rows are inserted in the order specified.
+ * <p>
+ * Use {@link Setup.List} to define multiple <code>@Setup</code> annotations on
+ * the same element.
+ * 
+ * @see Setup.List
  */
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)

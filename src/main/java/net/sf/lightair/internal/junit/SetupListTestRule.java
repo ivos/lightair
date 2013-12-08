@@ -5,7 +5,8 @@ import net.sf.lightair.annotation.Setup;
 import org.junit.runners.model.FrameworkMethod;
 
 /**
- * JUnit test rule to setup database before test method execution.
+ * JUnit test rule to setup database with multiple <code>@Setup</code>
+ * annotations before test method execution.
  */
 public class SetupListTestRule extends AbstractTestRule<Setup.List> {
 

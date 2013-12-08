@@ -19,6 +19,7 @@ import net.sf.lightair.internal.junit.SetupExecutor;
 import net.sf.lightair.internal.junit.SetupListTestRule;
 import net.sf.lightair.internal.junit.SetupTestRule;
 import net.sf.lightair.internal.junit.VerifyExecutor;
+import net.sf.lightair.internal.junit.VerifyListTestRule;
 import net.sf.lightair.internal.junit.VerifyTestRule;
 import net.sf.lightair.internal.properties.PropertiesProvider;
 import net.sf.lightair.internal.properties.PropertyKeys;
@@ -219,6 +220,14 @@ public class Factory implements PropertyKeys {
 	public VerifyTestRule getVerifyTestRule(FrameworkMethod frameworkMethod) {
 		variableResolver.clear();
 		VerifyTestRule rule = new VerifyTestRule(frameworkMethod);
+		rule.setVerifyExecutor(verifyExecutor);
+		return rule;
+	}
+
+	public VerifyListTestRule getVerifyListTestRule(
+			FrameworkMethod frameworkMethod) {
+		variableResolver.clear();
+		VerifyListTestRule rule = new VerifyListTestRule(frameworkMethod);
 		rule.setVerifyExecutor(verifyExecutor);
 		return rule;
 	}

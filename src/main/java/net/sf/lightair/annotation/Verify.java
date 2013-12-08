@@ -48,6 +48,11 @@ import java.lang.annotation.Target;
  * </pre>
  * <p>
  * System verifies all datasets located against the database.
+ * <p>
+ * Use {@link Verify.List} to define multiple <code>@Verify</code> annotations
+ * on the same element.
+ * 
+ * @see Verify.List
  */
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)

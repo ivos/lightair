@@ -89,6 +89,7 @@ public class LightAir extends BlockJUnit4ClassRunner {
 				(TestRule) Factory.getInstance().getSetupTestRule(method),
 				(TestRule) Factory.getInstance().getSetupListTestRule(method),
 				(TestRule) Factory.getInstance().getVerifyTestRule(method),
+				(TestRule) Factory.getInstance().getVerifyListTestRule(method),
 				(TestRule) Factory.getInstance().getBaseUrlTestRule(method));
 	}
 
