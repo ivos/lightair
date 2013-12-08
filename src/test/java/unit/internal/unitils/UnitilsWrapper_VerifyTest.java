@@ -68,13 +68,14 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 		checkExecuteForSchema("schema2", dsE2, dsA2, c2);
 		checkExecuteForSchema("schema3", dsE3, dsA3, c3);
 
-		w.verify(testMethod, fileNames);
+		w.verify(testMethod, "profile1", fileNames);
 	}
 
 	private void checkCommons() {
 		check(new Expectations() {
 			{
-				one(dataSetLoader).load(testMethod, "-verify", fileNames);
+				one(dataSetLoader).load("profile1", testMethod, "-verify",
+						fileNames);
 				will(returnValue(multiSchemaDataSet));
 
 				one(multiSchemaDataSet).getSchemaNames();
@@ -92,7 +93,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema(schemaName);
 				will(returnValue(dsE));
 
-				one(dbUnitWrapper).getConnection(schemaName);
+				one(dbUnitWrapper).getConnection("profile1", schemaName);
 				will(returnValue(c));
 
 				one(c).createDataSet();
@@ -115,7 +116,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema("schema1");
 				will(returnValue(dsE1));
 
-				one(dbUnitWrapper).getConnection("schema1");
+				one(dbUnitWrapper).getConnection("profile1", "schema1");
 				will(returnValue(c1));
 
 				one(c1).createDataSet();
@@ -126,7 +127,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 		});
 
 		try {
-			w.verify(testMethod, fileNames);
+			w.verify(testMethod, "profile1", fileNames);
 			fail("Should throw");
 		} catch (DatabaseAccessException e) {
 			assertEquals("Message", "Error accessing database.", e.getMessage());
@@ -143,7 +144,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 				one(multiSchemaDataSet).getDataSetForSchema("schema1");
 				will(returnValue(dsE1));
 
-				one(dbUnitWrapper).getConnection("schema1");
+				one(dbUnitWrapper).getConnection("profile1", "schema1");
 				will(returnValue(c1));
 
 				one(c1).createDataSet();
@@ -158,7 +159,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 		});
 
 		try {
-			w.verify(testMethod, fileNames);
+			w.verify(testMethod, "profile1", fileNames);
 			fail("Should throw");
 		} catch (CloseDatabaseConnectionException e) {
 			assertEquals("Message", "Cannot close connection to database.",

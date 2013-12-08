@@ -58,13 +58,14 @@ public class DataSetLoaderTest extends JMockSupport {
 				one(dataSetResolver).resolve(testMethod, "fileName3");
 				will(returnValue(file3));
 
-				one(dataSetFactory).createDataSet(file1, file2, file3);
+				one(dataSetFactory).createDataSet("profile1", file1, file2,
+						file3);
 				will(returnValue(msds));
 			}
 		});
 
-		MultiSchemaDataSet actual = l.load(testMethod, "suffix", "fileName1",
-				"fileName2", "fileName3");
+		MultiSchemaDataSet actual = l.load("profile1", testMethod, "suffix",
+				"fileName1", "fileName2", "fileName3");
 
 		assertSame(msds, actual);
 	}
@@ -77,12 +78,12 @@ public class DataSetLoaderTest extends JMockSupport {
 						"DataSetLoaderTest.aMethodsuffix.xml");
 				will(returnValue(file1));
 
-				one(dataSetFactory).createDataSet(file1);
+				one(dataSetFactory).createDataSet("profile1", file1);
 				will(returnValue(msds));
 			}
 		});
 
-		MultiSchemaDataSet actual = l.load(testMethod, "suffix");
+		MultiSchemaDataSet actual = l.load("profile1", testMethod, "suffix");
 
 		assertSame(msds, actual);
 	}
@@ -99,12 +100,12 @@ public class DataSetLoaderTest extends JMockSupport {
 						"DataSetLoaderTestsuffix.xml");
 				will(returnValue(file1));
 
-				one(dataSetFactory).createDataSet(file1);
+				one(dataSetFactory).createDataSet("profile1", file1);
 				will(returnValue(msds));
 			}
 		});
 
-		MultiSchemaDataSet actual = l.load(testMethod, "suffix");
+		MultiSchemaDataSet actual = l.load("profile1", testMethod, "suffix");
 
 		assertSame(msds, actual);
 	}
@@ -122,7 +123,8 @@ public class DataSetLoaderTest extends JMockSupport {
 				one(dataSetResolver).resolve(testMethod, "fileName3");
 				will(returnValue(file3));
 
-				one(dataSetFactory).createDataSet(file1, file2, file3);
+				one(dataSetFactory).createDataSet("profile1", file1, file2,
+						file3);
 				will(throwException(cause));
 			}
 		});
@@ -139,7 +141,7 @@ public class DataSetLoaderTest extends JMockSupport {
 						"DataSetLoaderTest.aMethodsuffix.xml");
 				will(returnValue(file1));
 
-				one(dataSetFactory).createDataSet(file1);
+				one(dataSetFactory).createDataSet("profile1", file1);
 				will(throwException(cause));
 			}
 		});
@@ -159,7 +161,7 @@ public class DataSetLoaderTest extends JMockSupport {
 						"DataSetLoaderTestsuffix.xml");
 				will(returnValue(file1));
 
-				one(dataSetFactory).createDataSet(file1);
+				one(dataSetFactory).createDataSet("profile1", file1);
 				will(throwException(cause));
 			}
 		});
@@ -169,7 +171,7 @@ public class DataSetLoaderTest extends JMockSupport {
 
 	private void performIllegalContent(String messageFiles, String... fileNames) {
 		try {
-			l.load(testMethod, "suffix", fileNames);
+			l.load("profile1", testMethod, "suffix", fileNames);
 			fail("Should throw");
 		} catch (IllegalDataSetContentException e) {
 			assertEquals("Message", "Cannot load content of data set ["

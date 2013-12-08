@@ -2,6 +2,8 @@ package net.sf.lightair.internal.factory;
 
 import java.beans.PropertyVetoException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -15,6 +17,7 @@ import net.sf.lightair.internal.dbunit.dataset.TokenReplacingFilter;
 import net.sf.lightair.internal.junit.BaseUrlTestRule;
 import net.sf.lightair.internal.junit.SetupExecutor;
 import net.sf.lightair.internal.junit.SetupTestRule;
+import net.sf.lightair.internal.junit.VerifyExecutor;
 import net.sf.lightair.internal.junit.VerifyTestRule;
 import net.sf.lightair.internal.properties.PropertiesProvider;
 import net.sf.lightair.internal.properties.PropertyKeys;
@@ -27,6 +30,7 @@ import net.sf.lightair.internal.unitils.compare.VariableResolver;
 import net.sf.lightair.internal.util.DataSetProcessingData;
 import net.sf.lightair.internal.util.DataSetResolver;
 import net.sf.lightair.internal.util.DurationParser;
+import net.sf.lightair.internal.util.Profiles;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
@@ -53,10 +57,10 @@ public class Factory implements PropertyKeys {
 		return propertiesProvider;
 	}
 
-	private ComboPooledDataSource dataSource;
+	private final Map<String, ComboPooledDataSource> dataSources = new HashMap<String, ComboPooledDataSource>();
 
-	public DataSource getDataSource() {
-		return dataSource;
+	public DataSource getDataSource(String profile) {
+		return dataSources.get(Profiles.getProfile(profile));
 	}
 
 	private final ConnectionFactory connectionFactory = new ConnectionFactory();
@@ -81,6 +85,12 @@ public class Factory implements PropertyKeys {
 
 	public SetupExecutor getSetupExecutor() {
 		return setupExecutor;
+	}
+
+	private final VerifyExecutor verifyExecutor = new VerifyExecutor();
+
+	public VerifyExecutor getVerifyExecutor() {
+		return verifyExecutor;
 	}
 
 	private final DataSetResolver dataSetResolver = new DataSetResolver();
@@ -127,7 +137,7 @@ public class Factory implements PropertyKeys {
 	public void init() {
 		log.debug("Initializing factory.");
 		propertiesProvider.init();
-		initDataSource();
+		initDataSources();
 		connectionFactory.setPropertiesProvider(propertiesProvider);
 		connectionFactory.setFactory(this);
 		dbUnitWrapper.setConnectionFactory(connectionFactory);
@@ -138,25 +148,35 @@ public class Factory implements PropertyKeys {
 		unitilsWrapper.setDataSetAssert(dataSetAssert);
 		unitilsWrapper.setFactory(this);
 		setupExecutor.setUnitilsWrapper(unitilsWrapper);
+		verifyExecutor.setUnitilsWrapper(unitilsWrapper);
 		dataSetLoader.setDataSetResolver(dataSetResolver);
 		dataSetLoader.setDataSetFactory(dataSetFactory);
 		dataSetFactory.setPropertiesProvider(propertiesProvider);
-		timeDifferenceLimit = propertiesProvider.getProperty(
+		timeDifferenceLimit = propertiesProvider.getProperty(null,
 				TIME_DIFFERENCE_LIMIT, 0);
 		tokenReplacingFilter.setDurationParser(durationParser);
 	}
 
-	private void initDataSource() {
-		dataSource = new ComboPooledDataSource();
-		final String driverClassName = propertiesProvider
-				.getProperty(DRIVER_CLASS_NAME);
-		final String connectionUrl = propertiesProvider
-				.getProperty(CONNECTION_URL);
-		final String userName = propertiesProvider.getProperty(USER_NAME);
-		final String password = propertiesProvider.getProperty(PASSWORD);
+	private void initDataSources() {
+		initDataSource(Profiles.DEFAULT_PROFILE);
+		for (String profile : propertiesProvider.getProfileNames()) {
+			initDataSource(profile);
+		}
+	}
+
+	private void initDataSource(String profile) {
+		ComboPooledDataSource dataSource = new ComboPooledDataSource();
+		final String driverClassName = propertiesProvider.getProperty(profile,
+				DRIVER_CLASS_NAME);
+		final String connectionUrl = propertiesProvider.getProperty(profile,
+				CONNECTION_URL);
+		final String userName = propertiesProvider.getProperty(profile,
+				USER_NAME);
+		final String password = propertiesProvider.getProperty(profile,
+				PASSWORD);
 		log.info(
-				"Initializing DataSource for driver [{}], url [{}], user name [{}], password [{}].",
-				driverClassName, connectionUrl, userName, password);
+				"Initializing DataSource for profile {}, driver [{}], url [{}], user name [{}], password [{}].",
+				profile, driverClassName, connectionUrl, userName, password);
 		try {
 			dataSource.setDriverClass(driverClassName);
 		} catch (PropertyVetoException e) {
@@ -165,6 +185,7 @@ public class Factory implements PropertyKeys {
 		dataSource.setJdbcUrl(connectionUrl);
 		dataSource.setUser(userName);
 		dataSource.setPassword(password);
+		dataSources.put(profile, dataSource);
 	}
 
 	// custom lifecycle classes
@@ -190,7 +211,7 @@ public class Factory implements PropertyKeys {
 	public VerifyTestRule getVerifyTestRule(FrameworkMethod frameworkMethod) {
 		variableResolver.clear();
 		VerifyTestRule rule = new VerifyTestRule(frameworkMethod);
-		rule.setUnitilsWrapper(unitilsWrapper);
+		rule.setVerifyExecutor(verifyExecutor);
 		return rule;
 	}
 
@@ -198,11 +219,12 @@ public class Factory implements PropertyKeys {
 		return new BaseUrlTestRule(frameworkMethod);
 	}
 
-	public IDatabaseConnection createDatabaseConnection(String schemaName)
-			throws DatabaseAccessException, CreateDatabaseConnectionException {
+	public IDatabaseConnection createDatabaseConnection(String profile,
+			String schemaName) throws DatabaseAccessException,
+			CreateDatabaseConnectionException {
 		try {
-			return new DatabaseConnection(dataSource.getConnection(),
-					schemaName);
+			return new DatabaseConnection(getDataSource(profile)
+					.getConnection(), schemaName);
 		} catch (DatabaseUnitException e) {
 			throw new DatabaseAccessException(e);
 		} catch (SQLException e) {

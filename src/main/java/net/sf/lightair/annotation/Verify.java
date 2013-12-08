@@ -61,4 +61,27 @@ public @interface Verify {
 	 */
 	String[] value() default {};
 
+	/**
+	 * Name of the profile.
+	 * <p>
+	 * A profile lets you connect to a different database. A profile must be
+	 * defined in LightAir properties file and must have its own properties file
+	 * which defines the connection to the profile database.
+	 * 
+	 * @return
+	 */
+	String profile() default "";
+
+	/**
+	 * Defines several <code>@Verify</code> annotations on the same element.
+	 * 
+	 * @see Verify
+	 */
+	@Target({ TYPE, METHOD })
+	@Retention(RUNTIME)
+	@Documented
+	@interface List {
+		Verify[] value();
+	}
+
 }

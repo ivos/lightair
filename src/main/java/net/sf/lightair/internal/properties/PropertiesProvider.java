@@ -5,13 +5,17 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import net.sf.lightair.exception.MissingPropertyException;
+import net.sf.lightair.exception.ProfileNotDefinedException;
 import net.sf.lightair.exception.PropertiesNotFoundException;
 import net.sf.lightair.exception.PropertiesUnreadableException;
+import net.sf.lightair.internal.util.Profiles;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.slf4j.Logger;
@@ -25,7 +29,11 @@ public class PropertiesProvider {
 	private final Logger log = LoggerFactory
 			.getLogger(PropertiesProvider.class);
 
-	private final Properties properties = new Properties();
+	private final Map<String, Properties> properties = new HashMap<String, Properties>();
+
+	public PropertiesProvider() {
+		properties.put(Profiles.DEFAULT_PROFILE, new Properties());
+	}
 
 	/**
 	 * Initialize.
@@ -38,26 +46,47 @@ public class PropertiesProvider {
 				resolvedPropertiesFileName);
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
+
+		loadPropertiesForProfile(Profiles.DEFAULT_PROFILE,
+				resolvedPropertiesFileName);
+		loadPropertiesForProfiles();
+
+		stopWatch.stop();
+		log.debug("Initialized properties in {} ms.", stopWatch.getTime());
+	}
+
+	protected void loadPropertiesForProfile(String profile,
+			String propertiesFileName) {
 		try {
 			URL resource = getClass().getClassLoader().getResource(
-					resolvedPropertiesFileName);
+					propertiesFileName);
 			if (null == resource) {
-				throw new PropertiesNotFoundException(
-						resolvedPropertiesFileName);
+				throw new PropertiesNotFoundException(propertiesFileName);
 			}
 			URLConnection urlConnection = resource.openConnection();
 			urlConnection.setUseCaches(false);
 			InputStream is = urlConnection.getInputStream();
 			try {
-				properties.load(is);
+				getProfileProperties(profile).load(is);
 			} finally {
 				is.close();
 			}
 		} catch (IOException e) {
-			throw new PropertiesUnreadableException(resolvedPropertiesFileName);
+			throw new PropertiesUnreadableException(propertiesFileName);
 		}
-		stopWatch.stop();
-		log.debug("Initialized properties in {} ms.", stopWatch.getTime());
+	}
+
+	protected void loadPropertiesForProfiles() {
+		final String profilePrefix = "profile.";
+		final Set<String> profiles = getPropertyKeysWithPrefix(
+				Profiles.DEFAULT_PROFILE, profilePrefix);
+		for (String key : profiles) {
+			String profileName = key.substring(profilePrefix.length());
+			String profilePropertiesFileName = getProperty(
+					Profiles.DEFAULT_PROFILE, key);
+			properties.put(profileName, new Properties());
+			loadPropertiesForProfile(profileName, profilePropertiesFileName);
+		}
 	}
 
 	public static final String DEFAULT_PROPERTIES_FILE_NAME = "light-air.properties";
@@ -88,19 +117,30 @@ public class PropertiesProvider {
 
 	public static final String PROPERTIES_PROPERTY_NAME = "light.air.properties";
 
+	protected Properties getProfileProperties(String profile) {
+		final Properties profileProperties = properties.get(Profiles
+				.getProfile(profile));
+		if (null == profileProperties) {
+			throw new ProfileNotDefinedException(profile);
+		}
+		return profileProperties;
+	}
+
 	/**
 	 * Get mandatory property value from properties file.
 	 * <p>
 	 * Value is trimmed.
 	 * 
+	 * @param profile
+	 *            Name of profile, null or empty string for default profile
 	 * @param key
 	 *            Property key
 	 * @return Trimmed property value
 	 * @throws MissingPropertyException
 	 *             when no such property is defined.
 	 */
-	public String getProperty(String key) {
-		String rawValue = properties.getProperty(key);
+	public String getProperty(String profile, String key) {
+		String rawValue = getProfileProperties(profile).getProperty(key);
 		if (null == rawValue) {
 			throw new MissingPropertyException(key);
 		}
@@ -114,6 +154,8 @@ public class PropertiesProvider {
 	 * <p>
 	 * Property value is trimmed and converted to long.
 	 * 
+	 * @param profile
+	 *            Name of profile, null or empty string for default profile
 	 * @param key
 	 *            Property key
 	 * @param defaultValue
@@ -121,8 +163,8 @@ public class PropertiesProvider {
 	 * @return Property value converted to long or the default value when the
 	 *         property is not defined
 	 */
-	public long getProperty(String key, long defaultValue) {
-		String rawValue = properties.getProperty(key);
+	public long getProperty(String profile, String key, long defaultValue) {
+		String rawValue = getProfileProperties(profile).getProperty(key);
 		long longValue;
 		if (null == rawValue) {
 			longValue = defaultValue;
@@ -137,24 +179,29 @@ public class PropertiesProvider {
 	/**
 	 * Return all property names with prefix "dbunit.features.".
 	 * 
+	 * @param profile
+	 *            Name of profile, null or empty string for default profile
 	 * @return The property names
 	 */
-	public Set<String> getDbUnitFeatureNames() {
-		return getPropertyKeysWithPrefix("dbunit.features.");
+	public Set<String> getDbUnitFeatureNames(String profile) {
+		return getPropertyKeysWithPrefix(profile, "dbunit.features.");
 	}
 
 	/**
 	 * Return all property names with prefix "dbunit.properties.".
 	 * 
+	 * @param profile
+	 *            Name of profile, null or empty string for default profile
 	 * @return The property names
 	 */
-	public Set<String> getDbUnitPropertyNames() {
-		return getPropertyKeysWithPrefix("dbunit.properties.");
+	public Set<String> getDbUnitPropertyNames(String profile) {
+		return getPropertyKeysWithPrefix(profile, "dbunit.properties.");
 	}
 
-	private Set<String> getPropertyKeysWithPrefix(String prefix) {
+	protected Set<String> getPropertyKeysWithPrefix(String profile,
+			String prefix) {
 		Set<String> names = new HashSet<String>();
-		Enumeration<Object> keys = properties.keys();
+		Enumeration<Object> keys = getProfileProperties(profile).keys();
 		for (String key; keys.hasMoreElements();) {
 			key = (String) keys.nextElement();
 			if (key.startsWith(prefix)) {
@@ -164,8 +211,8 @@ public class PropertiesProvider {
 		return names;
 	}
 
-	protected Properties getProperties() {
-		return properties;
+	public Set<String> getProfileNames() {
+		return properties.keySet();
 	}
 
 }

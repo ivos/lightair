@@ -35,12 +35,14 @@ public class DbUnitWrapperTest extends JMockSupport {
 	public void getConnection_CreateNew_SchemaExplicit() {
 		check(new Expectations() {
 			{
-				one(connectionFactory).createConnection("schemaName1");
+				one(connectionFactory).createConnection("profile1",
+						"schemaName1");
 				will(returnValue(connection1));
 			}
 		});
 
-		final IDatabaseConnection actual = w.getConnection("schemaName1");
+		final IDatabaseConnection actual = w.getConnection("profile1",
+				"schemaName1");
 
 		assertSame(connection1, actual);
 	}
@@ -49,16 +51,17 @@ public class DbUnitWrapperTest extends JMockSupport {
 	public void getConnection_CreateNew_SchemaNull() {
 		check(new Expectations() {
 			{
-				one(propertiesProvider)
-						.getProperty(PropertyKeys.DEFAULT_SCHEMA);
+				one(propertiesProvider).getProperty("profile1",
+						PropertyKeys.DEFAULT_SCHEMA);
 				will(returnValue("schemaName2"));
 
-				one(connectionFactory).createConnection("schemaName2");
+				one(connectionFactory).createConnection("profile1",
+						"schemaName2");
 				will(returnValue(connection1));
 			}
 		});
 
-		final IDatabaseConnection actual = w.getConnection(null);
+		final IDatabaseConnection actual = w.getConnection("profile1", null);
 
 		assertSame(connection1, actual);
 	}
@@ -68,18 +71,22 @@ public class DbUnitWrapperTest extends JMockSupport {
 	public void getConnection_FromCache() {
 		check(new Expectations() {
 			{
-				one(connectionFactory).createConnection("schemaName1");
+				one(connectionFactory).createConnection("profile1",
+						"schemaName1");
 				will(returnValue(connection1));
 			}
 		});
 
-		IDatabaseConnection connection11 = w.getConnection("schemaName1");
+		IDatabaseConnection connection11 = w.getConnection("profile1",
+				"schemaName1");
 		assertSame(connection1, connection11);
 
-		IDatabaseConnection connection12 = w.getConnection("schemaName1");
+		IDatabaseConnection connection12 = w.getConnection("profile1",
+				"schemaName1");
 		assertSame(connection1, connection12);
 
-		IDatabaseConnection connection13 = w.getConnection("schemaName1");
+		IDatabaseConnection connection13 = w.getConnection("profile1",
+				"schemaName1");
 		assertSame(connection1, connection13);
 	}
 
@@ -88,48 +95,60 @@ public class DbUnitWrapperTest extends JMockSupport {
 	public void getConnection_FromCache_SeparateBySchema() {
 		check(new Expectations() {
 			{
-				one(connectionFactory).createConnection("schemaName1");
+				one(connectionFactory).createConnection("profile1",
+						"schemaName1");
 				will(returnValue(connection1));
 
-				one(connectionFactory).createConnection("schemaName2");
+				one(connectionFactory).createConnection("profile1",
+						"schemaName2");
 				will(returnValue(connection2));
 
-				one(connectionFactory).createConnection("schemaName3");
+				one(connectionFactory).createConnection("profile1",
+						"schemaName3");
 				will(returnValue(connection3));
 			}
 		});
 
 		// schema 1
 
-		IDatabaseConnection connection11 = w.getConnection("schemaName1");
+		IDatabaseConnection connection11 = w.getConnection("profile1",
+				"schemaName1");
 		assertSame(connection1, connection11);
 
-		IDatabaseConnection connection12 = w.getConnection("schemaName1");
+		IDatabaseConnection connection12 = w.getConnection("profile1",
+				"schemaName1");
 		assertSame(connection1, connection12);
 
-		IDatabaseConnection connection13 = w.getConnection("schemaName1");
+		IDatabaseConnection connection13 = w.getConnection("profile1",
+				"schemaName1");
 		assertSame(connection1, connection13);
 
 		// schema 2
 
-		IDatabaseConnection connection21 = w.getConnection("schemaName2");
+		IDatabaseConnection connection21 = w.getConnection("profile1",
+				"schemaName2");
 		assertSame(connection2, connection21);
 
-		IDatabaseConnection connection22 = w.getConnection("schemaName2");
+		IDatabaseConnection connection22 = w.getConnection("profile1",
+				"schemaName2");
 		assertSame(connection2, connection22);
 
-		IDatabaseConnection connection23 = w.getConnection("schemaName2");
+		IDatabaseConnection connection23 = w.getConnection("profile1",
+				"schemaName2");
 		assertSame(connection2, connection23);
 
 		// schema 3
 
-		IDatabaseConnection connection31 = w.getConnection("schemaName3");
+		IDatabaseConnection connection31 = w.getConnection("profile1",
+				"schemaName3");
 		assertSame(connection3, connection31);
 
-		IDatabaseConnection connection32 = w.getConnection("schemaName3");
+		IDatabaseConnection connection32 = w.getConnection("profile1",
+				"schemaName3");
 		assertSame(connection3, connection32);
 
-		IDatabaseConnection connection33 = w.getConnection("schemaName3");
+		IDatabaseConnection connection33 = w.getConnection("profile1",
+				"schemaName3");
 		assertSame(connection3, connection33);
 	}
 

@@ -40,15 +40,15 @@ public class UnitilsWrapper {
 				+ "and profile {} with configured file names {}.", testMethod,
 				profile, fileNames);
 		Factory.getInstance().initDataSetProcessing();
-		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,
-				"", fileNames);
+		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(profile,
+				testMethod, "", fileNames);
 		final DatabaseOperation cleanInsert = factory
 				.getCleanInsertDatabaseOperation();
 		for (String schemaName : multiSchemaDataSet.getSchemaNames()) {
 			final IDataSet dataSet = multiSchemaDataSet
 					.getDataSetForSchema(schemaName);
-			final IDatabaseConnection connection = dbUnitWrapper
-					.getConnection(schemaName);
+			final IDatabaseConnection connection = dbUnitWrapper.getConnection(
+					profile, schemaName);
 			new Template() {
 				@Override
 				void databaseOperation() throws DatabaseUnitException,
@@ -68,20 +68,22 @@ public class UnitilsWrapper {
 	 * 
 	 * @param testMethod
 	 *            Test method
+	 * @param profile
+	 *            Profile name
 	 * @param fileNames
 	 *            File names from @Setup annotation
 	 */
-	public void verify(Method testMethod, String[] fileNames) {
+	public void verify(Method testMethod, String profile, String[] fileNames) {
 		log.debug("Verifying database for test method {} "
 				+ "with configured file names {}.", testMethod, fileNames);
 		Factory.getInstance().initDataSetProcessing();
-		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(testMethod,
-				VERIFY_FILE_NAME_SUFFIX, fileNames);
+		MultiSchemaDataSet multiSchemaDataSet = dataSetLoader.load(profile,
+				testMethod, VERIFY_FILE_NAME_SUFFIX, fileNames);
 		for (final String schemaName : multiSchemaDataSet.getSchemaNames()) {
 			final IDataSet dataSetExpected = multiSchemaDataSet
 					.getDataSetForSchema(schemaName);
-			final IDatabaseConnection connection = dbUnitWrapper
-					.getConnection(schemaName);
+			final IDatabaseConnection connection = dbUnitWrapper.getConnection(
+					profile, schemaName);
 			new Template() {
 				@Override
 				void databaseOperation() throws DatabaseUnitException,

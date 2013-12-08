@@ -35,6 +35,8 @@ public class DataSetLoader {
 	 * Wrap datasets in loaded multi-schema dataset with replacement wrapper
 	 * replacing common replacements, see {@link ReplacementDataSetWrapper}.
 	 * 
+	 * @param profile
+	 *            Profile
 	 * @param testMethod
 	 *            Test method
 	 * @param suffix
@@ -43,8 +45,8 @@ public class DataSetLoader {
 	 *            Explicit file names
 	 * @return Multi-schema dataset
 	 */
-	public MultiSchemaDataSet load(Method testMethod, String suffix,
-			String... fileNames) {
+	public MultiSchemaDataSet load(String profile, Method testMethod,
+			String suffix, String... fileNames) {
 		log.debug("Resolving dataset for method {} with suffix [{}] "
 				+ "and configured file names {}.", new Object[] { testMethod,
 				suffix, fileNames });
@@ -56,7 +58,8 @@ public class DataSetLoader {
 				addExplicitFiles(testMethod, fileNames, files);
 			}
 			log.debug("Creating dataset for resolved files {}.", files);
-			return dataSetFactory.createDataSet(files.toArray(new File[] {}));
+			return dataSetFactory.createDataSet(profile,
+					files.toArray(new File[] {}));
 		} catch (IllegalDataSetContentException e) {
 			throw new IllegalDataSetContentException(e, fileNames);
 		} catch (DataSetNotFoundException e) {
