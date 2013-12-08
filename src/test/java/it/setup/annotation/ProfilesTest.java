@@ -20,9 +20,10 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import test.support.ConfigSupport;
 
 @RunWith(LightAir.class)
-@Setup.List({ @Setup("profiles-defaulth2.xml"),
+@Setup.List({
+		@Setup("profiles-defaulth2.xml"),
 		@Setup(value = "profiles-hsqldb.xml", profile = "hsqldb"),
-		@Setup(value = "profiles-derby.xml", profile = "derby") })
+		@Setup(value = { "profiles-derby1.xml", "profiles-derby2.xml" }, profile = "derby") })
 public class ProfilesTest {
 
 	static JdbcTemplate connect(String url, String username, String password) {
@@ -62,17 +63,18 @@ public class ProfilesTest {
 
 	@Test
 	public void profiles() {
-		verifyProfile(dbDefaultH2, "defaultPerson", "defaultName", "Joe");
-		verifyProfile(dbHsqldb, "hsqldbPerson", "hsqldbName", "Jane");
-		verifyProfile(dbDerby, "derbyPerson", "derbyName", "Jake");
+		verifyProfile(dbDefaultH2, "defaultPerson", "defaultName", 1, 0, "Joe");
+		verifyProfile(dbHsqldb, "hsqldbPerson", "hsqldbName", 1, 0, "Jane");
+		verifyProfile(dbDerby, "derbyPerson", "derbyName", 2, 0, "Jake");
+		verifyProfile(dbDerby, "derbyPerson", "derbyName", 2, 1, "Hank");
 	}
 
 	private void verifyProfile(JdbcTemplate db, String tableName,
-			String columnName, String value) {
+			String columnName, int size, int index, String value) {
 		values = db.queryForList("select * from " + tableName);
-		assertEquals("Size of " + tableName, 1, values.size());
+		assertEquals("Size of " + tableName, size, values.size());
 		assertEquals("Value of " + columnName, value,
-				values.get(0).get(columnName));
+				values.get(index).get(columnName));
 	}
 
 }
