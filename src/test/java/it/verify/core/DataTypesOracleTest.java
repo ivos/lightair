@@ -9,6 +9,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import test.support.ConfigSupport;
+
 @Ignore
 @RunWith(LightAir.class)
 @Verify
@@ -16,7 +18,7 @@ public class DataTypesOracleTest extends DataTypesTestBase {
 
 	static {
 		connect("jdbc:oracle:thin:@localhost:1521:xe", "SYSTEM", "password");
-		replaceConfig("oracle");
+		ConfigSupport.replaceConfig("oracle");
 	}
 
 	@BeforeClass

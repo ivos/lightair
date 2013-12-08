@@ -1,7 +1,7 @@
 package net.sf.lightair.exception;
 
 /**
- * Thrown when a specified profile is not defined in Light air properties.
+ * Thrown when a specified profile is not defined in Light Air properties.
  */
 public class ProfileNotDefinedException extends AbstractException {
 
@@ -13,7 +13,7 @@ public class ProfileNotDefinedException extends AbstractException {
 	 */
 	public ProfileNotDefinedException(String profile) {
 		super("Profile '" + profile
-				+ "' is not defined in Ligt Air properties."
+				+ "' is not defined in Light Air properties."
 				+ " You can define it with profile.name=profile.properties.");
 	}
 

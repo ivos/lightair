@@ -7,13 +7,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import test.support.ConfigSupport;
+
 @RunWith(LightAir.class)
 @Setup("DataTypesTest.xml")
 public class DataTypesDerbyTest extends DataTypesSetupTestBase {
 
 	static {
 		connect("jdbc:derby:memory:test;create=true", "root", "root");
-		replaceConfig("derby");
+		ConfigSupport.replaceConfig("derby");
 	}
 
 	@BeforeClass

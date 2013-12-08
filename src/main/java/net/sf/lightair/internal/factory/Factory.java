@@ -16,6 +16,7 @@ import net.sf.lightair.internal.dbunit.dataset.MergingTable;
 import net.sf.lightair.internal.dbunit.dataset.TokenReplacingFilter;
 import net.sf.lightair.internal.junit.BaseUrlTestRule;
 import net.sf.lightair.internal.junit.SetupExecutor;
+import net.sf.lightair.internal.junit.SetupListTestRule;
 import net.sf.lightair.internal.junit.SetupTestRule;
 import net.sf.lightair.internal.junit.VerifyExecutor;
 import net.sf.lightair.internal.junit.VerifyTestRule;
@@ -204,6 +205,13 @@ public class Factory implements PropertyKeys {
 
 	public SetupTestRule getSetupTestRule(FrameworkMethod frameworkMethod) {
 		SetupTestRule rule = new SetupTestRule(frameworkMethod);
+		rule.setSetupExecutor(setupExecutor);
+		return rule;
+	}
+
+	public SetupListTestRule getSetupListTestRule(
+			FrameworkMethod frameworkMethod) {
+		SetupListTestRule rule = new SetupListTestRule(frameworkMethod);
 		rule.setSetupExecutor(setupExecutor);
 		return rule;
 	}

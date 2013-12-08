@@ -17,10 +17,12 @@ import org.junit.runner.RunWith;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
+import test.support.ConfigSupport;
+
 @RunWith(LightAir.class)
 @Setup.List({ @Setup("profiles-defaulth2.xml"),
-		@Setup(value = "profiles-hsqldb.xml", profile = "profiles-hsqldb.xml"),
-		@Setup(value = "profiles-derby.xml", profile = "profiles-derby.xml") })
+		@Setup(value = "profiles-hsqldb.xml", profile = "hsqldb"),
+		@Setup(value = "profiles-derby.xml", profile = "derby") })
 public class ProfilesTest {
 
 	static JdbcTemplate connect(String url, String username, String password) {
@@ -44,6 +46,8 @@ public class ProfilesTest {
 				.execute("create table defaultPerson (defaultName varchar(50))");
 		dbHsqldb.execute("create table hsqldbPerson (hsqldbName varchar(50))");
 		dbDerby.execute("create table derbyPerson (derbyName varchar(50))");
+		ConfigSupport.init();
+		ConfigSupport.replaceConfig("profiles");
 	}
 
 	@AfterClass
@@ -51,6 +55,7 @@ public class ProfilesTest {
 		dbDefaultH2.execute("drop table defaultPerson");
 		dbHsqldb.execute("drop table hsqldbPerson");
 		dbDerby.execute("drop table derbyPerson");
+		ConfigSupport.restoreConfig();
 	}
 
 	public List<Map<String, Object>> values;
@@ -66,7 +71,8 @@ public class ProfilesTest {
 			String columnName, String value) {
 		values = db.queryForList("select * from " + tableName);
 		assertEquals("Size of " + tableName, 1, values.size());
-		assertEquals("Value of " + value, 1, values.get(0).get(columnName));
+		assertEquals("Value of " + columnName, value,
+				values.get(0).get(columnName));
 	}
 
 }
