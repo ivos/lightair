@@ -29,7 +29,7 @@ public class PropertiesProvider {
 	private final Logger log = LoggerFactory
 			.getLogger(PropertiesProvider.class);
 
-	private final Map<String, Properties> properties = new HashMap<String, Properties>();
+	protected final Map<String, Properties> properties = new HashMap<String, Properties>();
 
 	public PropertiesProvider() {
 		properties.put(Profiles.DEFAULT_PROFILE, new Properties());
