@@ -98,14 +98,14 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	@Test
 	public void blob_0_1234567() {
 		check(0, 1234567);
-		assertEquals("columnName1 1234567",
+		assertEquals("Y29sdW1uTmFtZTEgMTIzNDU2Nw==",
 				g.generateAutoValue(DataType.BLOB, "tableName1", "columnName1"));
 	}
 
 	@Test
 	public void varbinary_0_1234567() {
 		check(0, 1234567);
-		assertEquals("columnName1 1234567", g.generateAutoValue(
+		assertEquals("Y29sdW1uTmFtZTEgMTIzNDU2Nw==", g.generateAutoValue(
 				DataType.VARBINARY, "tableName1", "columnName1"));
 	}
 
@@ -385,21 +385,38 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	@Test
 	public void decimal_0_0() {
 		check(0, 0);
-		assertEquals("0", g.generateAutoValue(DataType.DECIMAL, "tableName1",
+		assertEquals("0.0", g.generateAutoValue(DataType.DECIMAL, "tableName1",
 				"columnName1"));
 	}
 
 	@Test
 	public void decimal_0_1() {
 		check(0, 1);
-		assertEquals("1", g.generateAutoValue(DataType.DECIMAL, "tableName1",
-				"columnName1"));
+		assertEquals("0.01", g.generateAutoValue(DataType.DECIMAL,
+				"tableName1", "columnName1"));
 	}
 
 	@Test
 	public void decimal_0_9999999() {
 		check(0, 9999999);
-		assertEquals("9999999", g.generateAutoValue(DataType.DECIMAL,
+		assertEquals("99999.99", g.generateAutoValue(DataType.DECIMAL,
 				"tableName1", "columnName1"));
 	}
+
+	@Test
+	public void rowIncremented() {
+		check(0, 0);
+		check(1, 10);
+		check(2, 20);
+		check(3, 30);
+		assertEquals("0", g.generateAutoValue(DataType.INTEGER, "tableName1",
+				"columnName1"));
+		assertEquals("10", g.generateAutoValue(DataType.INTEGER, "tableName1",
+				"columnName1"));
+		assertEquals("20", g.generateAutoValue(DataType.INTEGER, "tableName1",
+				"columnName1"));
+		assertEquals("30", g.generateAutoValue(DataType.INTEGER, "tableName1",
+				"columnName1"));
+	}
+
 }

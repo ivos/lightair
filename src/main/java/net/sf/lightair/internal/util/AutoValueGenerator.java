@@ -5,9 +5,12 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.lightair.exception.UnsupportedDataType;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.dbunit.dataset.datatype.DataType;
 import org.joda.time.LocalDate;
@@ -24,10 +27,11 @@ public class AutoValueGenerator {
 
 	public String generateAutoValue(DataType dataType, String tableName,
 			String columnName) {
+		final int rowIndex = getNextRowIndex(tableName, columnName);
 		int autoNumber = autoNumberGenerator.generateAutoNumber(tableName,
-				columnName, 0);
+				columnName, rowIndex);
 		String value = generate(dataType, columnName, autoNumber);
-		log.debug("Generated auto value for {}.{} data type {} as {}.",
+		log.debug("Generated auto value for {}.{} data type {} as [{}].",
 				tableName, columnName, dataType, value);
 		return value;
 	}
@@ -35,13 +39,13 @@ public class AutoValueGenerator {
 	private String generate(DataType dataType, String columnName, int autoNumber) {
 		String autoNumberString = StringUtils.leftPad(
 				String.valueOf(autoNumber), 7, '0');
-		int offset = new GregorianCalendar().get(Calendar.ZONE_OFFSET);
+		String stringValue = columnName + ' ' + autoNumberString;
 
 		switch (dataType.getSqlType()) {
 		case Types.INTEGER:
 		case Types.BIGINT:
-		case Types.DECIMAL:
 			return String.valueOf(autoNumber);
+		case Types.DECIMAL:
 		case Types.DOUBLE:
 			return String.valueOf(((double) autoNumber) / 100);
 		case Types.BOOLEAN:
@@ -49,9 +53,10 @@ public class AutoValueGenerator {
 		case Types.CHAR:
 		case Types.VARCHAR:
 		case Types.CLOB:
+			return stringValue;
 		case Types.BLOB:
 		case Types.VARBINARY:
-			return columnName + ' ' + autoNumberString;
+			return Base64.encodeBase64String(stringValue.getBytes());
 		case Types.DATE:
 			// Add autoNumber days from local date 1900-01-01, wrapping
 			// approximately around 2100.
@@ -60,6 +65,7 @@ public class AutoValueGenerator {
 					.toString();
 		case Types.TIME:
 			// Add autoNumber of seconds to local time 0:00:00.
+			int offset = new GregorianCalendar().get(Calendar.ZONE_OFFSET);
 			return new Time(1000L * autoNumber - offset).toString();
 		case Types.TIMESTAMP:
 			// Put autoNumber twice after each other.
@@ -73,6 +79,28 @@ public class AutoValueGenerator {
 		}
 		throw new UnsupportedDataType(dataType.toString());
 	}
+
+	private final Map<String, Integer> rowIndexes = new HashMap<String, Integer>();
+
+	private int getNextRowIndex(String tableName, String columnName) {
+		StringBuffer sb = new StringBuffer();
+		sb.append('"');
+		sb.append(tableName);
+		sb.append("\".\"");
+		sb.append(columnName);
+		sb.append('"');
+		String key = sb.toString();
+		Integer currentValue = rowIndexes.get(key);
+		if (null == currentValue) {
+			currentValue = 0;
+		} else {
+			currentValue++;
+		}
+		rowIndexes.put(key, currentValue);
+		return currentValue;
+	}
+
+	// bean setters
 
 	public void setAutoNumberGenerator(AutoNumberGenerator autoNumberGenerator) {
 		this.autoNumberGenerator = autoNumberGenerator;

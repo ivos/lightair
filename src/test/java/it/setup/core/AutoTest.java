@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import it.common.CommonTestBase;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,17 +33,17 @@ public class AutoTest extends CommonTestBase {
 				+ "varchar_type varchar(50), integer_type integer, "
 				+ "date_type date, time_type time, timestamp_type timestamp, "
 				+ "double_type double, boolean_type boolean, bigint_type bigint, "
-				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(8))");
+				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(20))");
 		db.execute("create table a2 (id int primary key, char_type char(20), "
 				+ "varchar_type varchar(50), integer_type integer, "
 				+ "date_type date, time_type time, timestamp_type timestamp, "
 				+ "double_type double, boolean_type boolean, bigint_type bigint, "
-				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(8))");
+				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(20))");
 		db.execute("create table a3 (id int primary key, char_type char(20), "
 				+ "varchar_type varchar(50), integer_type integer, "
 				+ "date_type date, time_type time, timestamp_type timestamp, "
 				+ "double_type double, boolean_type boolean, bigint_type bigint, "
-				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(8))");
+				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(20))");
 	}
 
 	@AfterClass
@@ -54,66 +55,78 @@ public class AutoTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		verifyRow(0, "efghijklmnopqrs", "abcdefghijklmnopqrstuvxyz", 12345678,
-				new DateMidnight(2999, 12, 31), new LocalTime(23, 59, 58),
-				new DateTime(2998, 11, 30, 22, 57, 56, 789), 8765.4321, true,
-				9223372036854770000L, new BigDecimal("12345678901234.56"),
-				"text1", "EjRWeJCrzeI=", "/ty6CYdlQyI=");
-		verifyRow(1, "", "", 0, new DateMidnight(2000, 1, 2), new LocalTime(0,
-				0, 0), new DateTime(2000, 1, 2, 3, 4, 5, 678), 0., false, 0L,
-				new BigDecimal("0.00"), "", "", "");
-		verifyRow(2, null, null, null, null, null, null, null, null, null,
-				null, null, null, null);
+		assertEquals("Count", new Integer(3),
+				db.queryForObject("select count(*) from a1", Integer.class));
+		values = db.queryForList("select * from a1");
+
+		verifyRow(0, 2736700, "CHAR_TYPE 2734500", "VARCHAR_TYPE 2735200",
+				2731500, new DateMidnight(1983, 03, 27), new LocalTime(15, 51,
+						40), new DateTime(2002, 05, 26, 16, 40, 00, 400),
+				27375.0, false, 2735300L, new BigDecimal("27310.00"),
+				"CLOB_TYPE 2733900", "QkxPQl9UWVBFIDI3Mzc1MDA=",
+				"QklOQVJZX1RZUEUgMjczMTgwMA==");
+		verifyRow(1, 2736701, "CHAR_TYPE 2734501", "VARCHAR_TYPE 2735201",
+				2731501, new DateMidnight(1983, 03, 28), new LocalTime(15, 51,
+						41), new DateTime(2002, 05, 27, 16, 40, 1, 401),
+				27375.01, true, 2735301L, new BigDecimal("27310.01"),
+				"CLOB_TYPE 2733901", "QkxPQl9UWVBFIDI3Mzc1MDE=",
+				"QklOQVJZX1RZUEUgMjczMTgwMQ==");
+		verifyRow(2, 2736702, "CHAR_TYPE 2734502", "VARCHAR_TYPE 2735202",
+				2731502, new DateMidnight(1983, 03, 29), new LocalTime(15, 51,
+						42), new DateTime(2002, 05, 28, 16, 40, 2, 402),
+				27375.02, false, 2735302L, new BigDecimal("27310.02"),
+				"CLOB_TYPE 2733902", "QkxPQl9UWVBFIDI3Mzc1MDI=",
+				"QklOQVJZX1RZUEUgMjczMTgwMg==");
 	}
 
-	protected void verifyRow(int id, String char_type, String varchar_type,
-			Integer integer_type, DateMidnight date_type, LocalTime time_type,
-			DateTime timestamp_type, Double double_type, Boolean boolean_type,
-			Long bigint_type, BigDecimal decimal_type, String clob_type,
-			String blob_type, String binary_type) {
-		assertEquals("id " + id, id, values.get(id).get("id"));
-		assertEquals("char_type " + id, char_type,
-				values.get(id).get("char_type"));
-		assertEquals("varchar_type " + id, varchar_type,
-				values.get(id).get("varchar_type"));
-		assertEquals("integer_type " + id, integer_type,
-				values.get(id).get("integer_type"));
+	protected void verifyRow(int row, int id, String char_type,
+			String varchar_type, Integer integer_type, DateMidnight date_type,
+			LocalTime time_type, DateTime timestamp_type, Double double_type,
+			Boolean boolean_type, Long bigint_type, BigDecimal decimal_type,
+			String clob_type, String blob_type, String binary_type) {
+		assertEquals("id " + row, id, values.get(row).get("id"));
+		assertEquals("char_type " + row, char_type,
+				values.get(row).get("char_type"));
+		assertEquals("varchar_type " + row, varchar_type,
+				values.get(row).get("varchar_type"));
+		assertEquals("integer_type " + row, integer_type,
+				values.get(row).get("integer_type"));
 		if (null == date_type) {
-			assertNull("date_type " + id, values.get(id).get("date_type"));
+			assertNull("date_type " + row, values.get(row).get("date_type"));
 		} else {
-			assertEquals("date_type " + id, date_type.toDate(), values.get(id)
-					.get("date_type"));
+			assertEquals("date_type " + row, date_type.toDate(), values
+					.get(row).get("date_type"));
 		}
 		if (null == time_type) {
-			assertNull("time_type " + id, values.get(id).get("time_type"));
+			assertNull("time_type " + row, values.get(row).get("time_type"));
 		} else {
 			assertEquals(
-					"time_type " + id,
+					"time_type " + row,
 					time_type,
-					LocalTime.fromDateFields((Date) values.get(id).get(
+					LocalTime.fromDateFields((Date) values.get(row).get(
 							"time_type")));
 		}
 		if (null == timestamp_type) {
-			assertNull("timestamp_type " + id,
-					values.get(id).get("timestamp_type"));
+			assertNull("timestamp_type " + row,
+					values.get(row).get("timestamp_type"));
 		} else {
-			assertEquals("timestamp_type " + id, timestamp_type.toDate(),
-					values.get(id).get("timestamp_type"));
+			assertEquals("timestamp_type " + row, new Timestamp(timestamp_type
+					.toDate().getTime()), values.get(row).get("timestamp_type"));
 		}
-		assertEquals("double_type type " + id, double_type,
-				values.get(id).get("double_type"));
-		assertEquals("boolean_type type " + id, boolean_type, values.get(id)
+		assertEquals("double_type type " + row, double_type, values.get(row)
+				.get("double_type"));
+		assertEquals("boolean_type type " + row, boolean_type, values.get(row)
 				.get("boolean_type"));
-		assertEquals("bigint_type type " + id, bigint_type,
-				values.get(id).get("bigint_type"));
-		assertEquals("decimal_type type " + id, decimal_type, values.get(id)
+		assertEquals("bigint_type type " + row, bigint_type, values.get(row)
+				.get("bigint_type"));
+		assertEquals("decimal_type type " + row, decimal_type, values.get(row)
 				.get("decimal_type"));
-		assertEquals("clob_type type " + id, clob_type,
-				values.get(id).get("clob_type"));
-		assertEquals("blob_type type " + id, blob_type,
-				convertBytesToString(values.get(id).get("blob_type")));
-		assertEquals("binary_type type " + id, binary_type,
-				convertBytesToString(values.get(id).get("binary_type")));
+		assertEquals("clob_type type " + row, clob_type,
+				values.get(row).get("clob_type"));
+		assertEquals("blob_type type " + row, blob_type,
+				convertBytesToString(values.get(row).get("blob_type")));
+		assertEquals("binary_type type " + row, binary_type,
+				convertBytesToString(values.get(row).get("binary_type")));
 	}
 
 	protected String convertBytesToString(Object bytes) {
