@@ -203,7 +203,7 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	@Test
 	public void timestamp_0_0() {
 		check(0, 0);
-		assertEquals("1900-01-01 00:00:00.0", g.generateAutoValue(
+		assertEquals("1900-01-01 00:00:00.000", g.generateAutoValue(
 				DataType.TIMESTAMP, "tableName1", "columnName1"));
 	}
 
@@ -224,14 +224,14 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	@Test
 	public void timestamp_0_10() {
 		check(0, 10);
-		assertEquals("1900-01-11 00:00:10.01", g.generateAutoValue(
+		assertEquals("1900-01-11 00:00:10.010", g.generateAutoValue(
 				DataType.TIMESTAMP, "tableName1", "columnName1"));
 	}
 
 	@Test
 	public void timestamp_0_100() {
 		check(0, 100);
-		assertEquals("1900-04-11 00:01:40.1", g.generateAutoValue(
+		assertEquals("1900-04-11 00:01:40.100", g.generateAutoValue(
 				DataType.TIMESTAMP, "tableName1", "columnName1"));
 	}
 
@@ -245,7 +245,7 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	@Test
 	public void timestamp_0_1000() {
 		check(0, 1000);
-		assertEquals("1902-09-28 00:16:40.0", g.generateAutoValue(
+		assertEquals("1902-09-28 00:16:40.000", g.generateAutoValue(
 				DataType.TIMESTAMP, "tableName1", "columnName1"));
 	}
 
@@ -259,7 +259,7 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	@Test
 	public void timestamp_0_73000() {
 		check(0, 73000);
-		assertEquals("1900-01-01 20:16:40.0", g.generateAutoValue(
+		assertEquals("1900-01-01 20:16:40.000", g.generateAutoValue(
 				DataType.TIMESTAMP, "tableName1", "columnName1"));
 	}
 
@@ -273,7 +273,7 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	@Test
 	public void timestamp_0_86400() {
 		check(0, 86400);
-		assertEquals("1936-09-09 00:00:00.4", g.generateAutoValue(
+		assertEquals("1936-09-09 00:00:00.400", g.generateAutoValue(
 				DataType.TIMESTAMP, "tableName1", "columnName1"));
 	}
 

@@ -1,10 +1,6 @@
 package net.sf.lightair.internal.util;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.sql.Types;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,9 +11,13 @@ import org.apache.commons.lang.StringUtils;
 import org.dbunit.dataset.datatype.DataType;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Generate <code>@auto</code> value.
+ */
 public class AutoValueGenerator {
 
 	private final Logger log = LoggerFactory
@@ -25,13 +25,22 @@ public class AutoValueGenerator {
 
 	private AutoNumberGenerator autoNumberGenerator;
 
+	/**
+	 * Generate <code>@auto</code> value for table column, based on the column
+	 * data type.
+	 * 
+	 * @param dataType
+	 * @param tableName
+	 * @param columnName
+	 * @return
+	 */
 	public String generateAutoValue(DataType dataType, String tableName,
 			String columnName) {
 		final int rowIndex = getNextRowIndex(tableName, columnName);
 		int autoNumber = autoNumberGenerator.generateAutoNumber(tableName,
 				columnName, rowIndex);
 		String value = generate(dataType, columnName, autoNumber);
-		log.debug("Generated auto value for {}.{} data type {} as [{}].",
+		log.debug("Generated auto value for {}.{} of data type {} as [{}].",
 				tableName, columnName, dataType, value);
 		return value;
 	}
@@ -65,17 +74,19 @@ public class AutoValueGenerator {
 					.toString();
 		case Types.TIME:
 			// Add autoNumber of seconds to local time 0:00:00.
-			int offset = new GregorianCalendar().get(Calendar.ZONE_OFFSET);
-			return new Time(1000L * autoNumber - offset).toString();
+			return new LocalTime(0, 0, 0).plusSeconds(autoNumber).toString(
+					"HH:mm:ss");
 		case Types.TIMESTAMP:
-			// Put autoNumber twice after each other.
-			// Add resulting number of milliseconds from local date 1900-01-01,
-			// wrapping approximately around 2100.
-			return new Timestamp(new LocalDateTime(1900, 1, 1, 0, 0, 0)
+			// Add autoNumber days from local date 1900-01-01, wrapping
+			// approximately around 2100.
+			// Add autoNumber of seconds to local time 0:00:00, wrapping at 1
+			// day.
+			// Add autoNumber of milliseconds, wrapping at 1 second.
+			return new LocalDateTime(1900, 1, 1, 0, 0, 0)
 					.plusDays(autoNumber % 73000)
 					.plusSeconds(autoNumber % 86400)
-					.plusMillis(autoNumber % 1000).toDate().getTime())
-					.toString();
+					.plusMillis(autoNumber % 1000)
+					.toString("yyyy-MM-dd HH:mm:ss.SSS");
 		}
 		throw new UnsupportedDataType(dataType.toString());
 	}
@@ -100,6 +111,9 @@ public class AutoValueGenerator {
 		return currentValue;
 	}
 
+	/**
+	 * Reset cache of row indexes.
+	 */
 	public void init() {
 		rowIndexes.clear();
 	}
