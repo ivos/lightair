@@ -2,10 +2,6 @@ package it.setup.core;
 
 import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.exception.TokenAnyInSetupException;
 
@@ -19,8 +15,6 @@ import test.support.ExceptionVerifyingJUnitRunner;
 @RunWith(ExceptionVerifyingJUnitRunner.class)
 @Setup
 public class AnyTest extends CommonTestBase {
-
-	List<Map<String, Object>> values;
 
 	@BeforeClass
 	public static void beforeClass() {

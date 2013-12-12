@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.sf.lightair.internal.dbunit.AutoPreparedStatementFactory;
 import net.sf.lightair.internal.dbunit.ConnectionFactory;
 import net.sf.lightair.internal.factory.Factory;
 import net.sf.lightair.internal.properties.PropertiesProvider;
@@ -83,6 +84,11 @@ public class ConnectionFactoryTest extends JMockSupport implements PropertyKeys 
 						.setProperty(
 								with(equal("http://www.dbunit.org/properties/datatypeFactory")),
 								with(any(H2DataTypeFactory.class)));
+
+				one(config)
+						.setProperty(
+								with(equal("http://www.dbunit.org/properties/statementFactory")),
+								with(any(AutoPreparedStatementFactory.class)));
 			}
 		});
 	}
@@ -91,9 +97,6 @@ public class ConnectionFactoryTest extends JMockSupport implements PropertyKeys 
 			SQLException {
 		check(new Expectations() {
 			{
-				one(dbc).getConfig();
-				will(returnValue(config));
-
 				one(propertiesProvider).getDbUnitFeatureNames("profile1");
 				will(returnValue(featureNames));
 

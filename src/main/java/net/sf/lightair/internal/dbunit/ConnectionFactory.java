@@ -49,8 +49,10 @@ public class ConnectionFactory implements PropertyKeys {
 
 		IDatabaseConnection connection = factory.createDatabaseConnection(
 				profile, schemaName);
-		setDatabaseDialect(profile, connection);
-		setFeaturesAndProperties(profile, connection);
+		DatabaseConfig config = connection.getConfig();
+		setDatabaseDialect(profile, config);
+		setStatementFactory(config);
+		setFeaturesAndProperties(profile, config);
 
 		stopWatch.stop();
 		log.debug("Created database connection for schema {} in {} ms.",
@@ -58,10 +60,7 @@ public class ConnectionFactory implements PropertyKeys {
 		return connection;
 	}
 
-	private void setDatabaseDialect(String profile,
-			IDatabaseConnection dbConnection) {
-		DatabaseConfig config = dbConnection.getConfig();
-
+	private void setDatabaseDialect(String profile, DatabaseConfig config) {
 		String dbUnitName = "http://www.dbunit.org/properties/datatypeFactory";
 		String dialect = propertiesProvider.getProperty(profile,
 				DATABASE_DIALECT);
@@ -71,6 +70,11 @@ public class ConnectionFactory implements PropertyKeys {
 				"Setting database dialect to {}, DbUnit datatype factory will be {}.",
 				dialect, className);
 		config.setProperty(dbUnitName, value);
+	}
+
+	private void setStatementFactory(DatabaseConfig config) {
+		config.setProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY, Factory
+				.getInstance().getStatementFactory());
 	}
 
 	private static final Map<String, String> DATATYPE_FACTORIES = new HashMap<String, String>();
@@ -97,10 +101,7 @@ public class ConnectionFactory implements PropertyKeys {
 				"org.dbunit.dataset.datatype.DefaultDataTypeFactory");
 	}
 
-	private void setFeaturesAndProperties(String profile,
-			IDatabaseConnection dbConnection) {
-		DatabaseConfig config = dbConnection.getConfig();
-
+	private void setFeaturesAndProperties(String profile, DatabaseConfig config) {
 		Set<String> featureNames = propertiesProvider
 				.getDbUnitFeatureNames(profile);
 		for (String featureName : featureNames) {

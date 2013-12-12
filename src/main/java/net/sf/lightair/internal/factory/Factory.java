@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import net.sf.lightair.exception.CreateDatabaseConnectionException;
 import net.sf.lightair.exception.DataSourceSetupException;
 import net.sf.lightair.exception.DatabaseAccessException;
+import net.sf.lightair.internal.dbunit.AutoPreparedStatementFactory;
 import net.sf.lightair.internal.dbunit.ConnectionFactory;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.dbunit.dataset.MergingTable;
@@ -29,14 +30,20 @@ import net.sf.lightair.internal.unitils.UnitilsWrapper;
 import net.sf.lightair.internal.unitils.compare.Column;
 import net.sf.lightair.internal.unitils.compare.DataSetAssert;
 import net.sf.lightair.internal.unitils.compare.VariableResolver;
+import net.sf.lightair.internal.util.AutoNumberGenerator;
+import net.sf.lightair.internal.util.AutoValueGenerator;
 import net.sf.lightair.internal.util.DataSetProcessingData;
 import net.sf.lightair.internal.util.DataSetResolver;
 import net.sf.lightair.internal.util.DurationParser;
+import net.sf.lightair.internal.util.HashGenerator;
 import net.sf.lightair.internal.util.Profiles;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.database.statement.PreparedStatementFactory;
+import org.dbunit.operation.AutoInsertOperation;
+import org.dbunit.operation.CompositeOperation;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.runners.model.FrameworkMethod;
 import org.slf4j.Logger;
@@ -133,6 +140,21 @@ public class Factory implements PropertyKeys {
 
 	private final VariableResolver variableResolver = new VariableResolver();
 
+	private final AutoPreparedStatementFactory statementFactory = new AutoPreparedStatementFactory();
+
+	public PreparedStatementFactory getStatementFactory() {
+		return statementFactory;
+	}
+
+	private static final DatabaseOperation INSERT = new AutoInsertOperation();
+
+	private static final DatabaseOperation CLEAN_INSERT = new CompositeOperation(
+			DatabaseOperation.DELETE_ALL, INSERT);
+
+	private final HashGenerator hashGenerator = new HashGenerator();
+	private final AutoNumberGenerator autoNumberGenerator = new AutoNumberGenerator();
+	private final AutoValueGenerator autoValueGenerator = new AutoValueGenerator();
+
 	/**
 	 * Initialize single-instance classes.
 	 */
@@ -157,6 +179,9 @@ public class Factory implements PropertyKeys {
 		timeDifferenceLimit = propertiesProvider.getProperty(null,
 				TIME_DIFFERENCE_LIMIT, 0);
 		tokenReplacingFilter.setDurationParser(durationParser);
+		autoNumberGenerator.setHashGenerator(hashGenerator);
+		autoValueGenerator.setAutoNumberGenerator(autoNumberGenerator);
+		statementFactory.setAutoValueGenerator(autoValueGenerator);
 	}
 
 	private void initDataSources() {
@@ -200,6 +225,7 @@ public class Factory implements PropertyKeys {
 
 	public void initDataSetProcessing() {
 		dataSetProcessingData = new DataSetProcessingData();
+		autoValueGenerator.init();
 	}
 
 	// getters for classes always newly instantiated
@@ -267,7 +293,7 @@ public class Factory implements PropertyKeys {
 	// static method call wrappers
 
 	public DatabaseOperation getCleanInsertDatabaseOperation() {
-		return DatabaseOperation.CLEAN_INSERT;
+		return CLEAN_INSERT;
 	}
 
 	// properties
