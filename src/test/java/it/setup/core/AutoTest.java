@@ -55,7 +55,7 @@ public class AutoTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		assertEquals("Count", new Integer(4),
+		assertEquals("Count", new Integer(5),
 				db.queryForObject("select count(*) from a1", Integer.class));
 		values = db.queryForList("select * from a1");
 
@@ -123,6 +123,27 @@ public class AutoTest extends CommonTestBase {
 				false, 3665300L, new BigDecimal("36610.00"),
 				"CLOB_TYPE 3663900", "QkxPQl9UWVBFIDM2Njc1MDA=",
 				"QklOQVJZX1RZUEUgMzY2MTgwMA==");
+	}
+
+	@Test
+	@Setup("AutoTest2.xml")
+	public void rowIndexStartsFrom0InNewTest() {
+		assertEquals("Count", new Integer(2),
+				db.queryForObject("select count(*) from a1", Integer.class));
+		values = db.queryForList("select * from a1");
+
+		verifyRow(0, 2736700, "CHAR_TYPE 2734500", "VARCHAR_TYPE 2735200",
+				2731500, new DateMidnight(1983, 3, 27), new LocalTime(15, 51,
+						40), new DateTime(2002, 5, 26, 16, 40, 0, 400),
+				27375.0, false, 2735300L, new BigDecimal("27310.00"),
+				"CLOB_TYPE 2733900", "QkxPQl9UWVBFIDI3Mzc1MDA=",
+				"QklOQVJZX1RZUEUgMjczMTgwMA==");
+		verifyRow(1, 2736701, "CHAR_TYPE 2734501", "VARCHAR_TYPE 2735201",
+				2731501, new DateMidnight(1983, 3, 28), new LocalTime(15, 51,
+						41), new DateTime(2002, 5, 27, 16, 40, 1, 401),
+				27375.01, true, 2735301L, new BigDecimal("27310.01"),
+				"CLOB_TYPE 2733901", "QkxPQl9UWVBFIDI3Mzc1MDE=",
+				"QklOQVJZX1RZUEUgMjczMTgwMQ==");
 	}
 
 	protected void verifyRow(int row, int id, String char_type,

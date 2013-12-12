@@ -100,6 +100,10 @@ public class AutoValueGenerator {
 		return currentValue;
 	}
 
+	public void init() {
+		rowIndexes.clear();
+	}
+
 	// bean setters
 
 	public void setAutoNumberGenerator(AutoNumberGenerator autoNumberGenerator) {
