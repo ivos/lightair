@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<a1 id="@auto" char_type="@auto" varchar_type="@auto" integer_type="@auto"
+		date_type="@auto" time_type="@auto" timestamp_type="@auto"
+		double_type="@auto" boolean_type="@auto" bigint_type="@auto"
+		decimal_type="@auto" clob_type="@auto" blob_type="@auto" binary_type="@auto" />
+
+	<a2 id="@auto" char_type="@auto" varchar_type="@auto" integer_type="@auto"
+		date_type="@auto" time_type="@auto" timestamp_type="@auto"
+		double_type="@auto" boolean_type="@auto" bigint_type="@auto"
+		decimal_type="@auto" clob_type="@auto" blob_type="@auto" binary_type="@auto" />
+
+	<a3 id="@auto" char_type="@auto" varchar_type="@auto" integer_type="@auto"
+		date_type="@auto" time_type="@auto" timestamp_type="@auto"
+		double_type="@auto" boolean_type="@auto" bigint_type="@auto"
+		decimal_type="@auto" clob_type="@auto" blob_type="@auto" binary_type="@auto" />
+</dataset>
