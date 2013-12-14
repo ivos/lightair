@@ -6,8 +6,9 @@
 		<author email="ivo.maixner@gmail.com">Ivo Maixner</author>
 	</properties>
 	<body>
-		<release date="2013-11-27" version="2.0.0"
-			description="Configurable properties file location">
+		<release date="2013-12-14" version="2.0.0"
+			description="Token @auto. Profiles. Configurable properties file location">
+			<action type="add">Add token @auto.</action>
 			<action type="add">Add support for profiles - connections to
 				multiple databases.
 			</action>
