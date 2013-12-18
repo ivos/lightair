@@ -32,23 +32,26 @@ public class AutoValueGenerator {
 	 * @param dataType
 	 * @param tableName
 	 * @param columnName
+	 * @param columnLength
 	 * @return
 	 */
 	public String generateAutoValue(DataType dataType, String tableName,
-			String columnName) {
+			String columnName, int columnLength) {
 		final int rowIndex = getNextRowIndex(tableName, columnName);
 		int autoNumber = autoNumberGenerator.generateAutoNumber(tableName,
 				columnName, rowIndex);
-		String value = generate(dataType, columnName, autoNumber);
+		String value = generate(dataType, columnName, autoNumber, columnLength);
 		log.debug("Generated auto value for {}.{} of data type {} as [{}].",
 				tableName, columnName, dataType, value);
 		return value;
 	}
 
-	private String generate(DataType dataType, String columnName, int autoNumber) {
+	private String generate(DataType dataType, String columnName,
+			int autoNumber, int columnLength) {
 		String autoNumberString = StringUtils.leftPad(
 				String.valueOf(autoNumber), 7, '0');
-		String stringValue = columnName + ' ' + autoNumberString;
+		String stringValue = formatStringValue(columnName, autoNumberString,
+				columnLength);
 
 		switch (dataType.getSqlType()) {
 		case Types.INTEGER:
@@ -89,6 +92,20 @@ public class AutoValueGenerator {
 					.toString("yyyy-MM-dd HH:mm:ss.SSS");
 		}
 		throw new UnsupportedDataType(dataType.toString());
+	}
+
+	private String formatStringValue(String columnName,
+			String autoNumberString, int columnLength) {
+		if (autoNumberString.length() > columnLength) {
+			return autoNumberString.substring(autoNumberString.length()
+					- columnLength);
+		}
+		String prefix = columnName + ' ';
+		if (prefix.length() + autoNumberString.length() > columnLength) {
+			prefix = prefix.substring(0,
+					columnLength - autoNumberString.length());
+		}
+		return prefix + autoNumberString;
 	}
 
 	private final Map<String, Integer> rowIndexes = new HashMap<String, Integer>();

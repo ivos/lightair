@@ -43,7 +43,7 @@ public class SQLHelper {
 		}
 
 		String sqlTypeName = resultSet.getString(6);
-		// int columnSize = resultSet.getInt(7);
+		int columnSize = resultSet.getInt(7);
 		int nullable = resultSet.getInt(11);
 		String remarks = resultSet.getString(12);
 		String columnDefaultValue = resultSet.getString(13);
@@ -69,7 +69,7 @@ public class SQLHelper {
 		if (dataType != DataType.UNKNOWN) {
 			Column column = Factory.getInstance().getColumn(columnName,
 					dataType, sqlTypeName, nullable, columnDefaultValue,
-					remarks, isAutoIncrement);
+					remarks, isAutoIncrement, columnSize);
 			return column;
 		} else {
 			if (datatypeWarning)

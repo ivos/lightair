@@ -1,4 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<cut1char char_type="@auto" varchar_type="@auto" />
+
+	<cut1prefix char_type="@auto" varchar_type="@auto" />
+	<leave1prefix char_type="@auto" varchar_type="@auto" />
+	<leave3number char_type="@auto" varchar_type="@auto" />
+
 </dataset>

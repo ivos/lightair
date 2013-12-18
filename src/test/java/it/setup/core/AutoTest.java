@@ -27,6 +27,8 @@ public class AutoTest extends CommonTestBase {
 
 	List<Map<String, Object>> values;
 
+	// TODO add additional sql types (smallint, ...)
+
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a1 (id int primary key, char_type char(20), "
