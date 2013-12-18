@@ -37,12 +37,14 @@ public class AutoValueGenerator {
 	 */
 	public String generateAutoValue(DataType dataType, String tableName,
 			String columnName, int columnLength) {
-		final int rowIndex = getNextRowIndex(tableName, columnName);
+		String lowerColumnName = columnName.toLowerCase();
+		final int rowIndex = getNextRowIndex(tableName, lowerColumnName);
 		int autoNumber = autoNumberGenerator.generateAutoNumber(tableName,
-				columnName, rowIndex);
-		String value = generate(dataType, columnName, autoNumber, columnLength);
+				lowerColumnName, rowIndex);
+		String value = generate(dataType, lowerColumnName, autoNumber,
+				columnLength);
 		log.debug("Generated auto value for {}.{} of data type {} as [{}].",
-				tableName, columnName, dataType, value);
+				tableName, lowerColumnName, dataType, value);
 		return value;
 	}
 

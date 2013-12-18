@@ -36,9 +36,9 @@ public class AutoStringCutTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		perform("cut1prefix", "CHAR_TYPE3354500", "VARCHAR_TYPE3355200");
-		perform("leave1prefix", "C9704500", "V9705200");
-		perform("leave3number", "500", "200");
+		perform("cut1prefix", "char_type3356900", "varchar_type3354100");
+		perform("leave1prefix", "c9706900", "v9704100");
+		perform("leave3number", "900", "100");
 	}
 
 	private void perform(String table, String charValue, String varcharValue) {
