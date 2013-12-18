@@ -13,8 +13,10 @@ import net.sf.lightair.exception.DatabaseAccessException;
 import net.sf.lightair.internal.dbunit.AutoPreparedStatementFactory;
 import net.sf.lightair.internal.dbunit.ConnectionFactory;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
+import net.sf.lightair.internal.dbunit.database.DatabaseConnection;
 import net.sf.lightair.internal.dbunit.dataset.MergingTable;
 import net.sf.lightair.internal.dbunit.dataset.TokenReplacingFilter;
+import net.sf.lightair.internal.dbunit.util.SQLHelper;
 import net.sf.lightair.internal.junit.BaseUrlTestRule;
 import net.sf.lightair.internal.junit.SetupExecutor;
 import net.sf.lightair.internal.junit.SetupListTestRule;
@@ -39,9 +41,12 @@ import net.sf.lightair.internal.util.HashGenerator;
 import net.sf.lightair.internal.util.Profiles;
 
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.CustomDatabaseTableMetaData;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.statement.PreparedStatementFactory;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.operation.AutoInsertOperation;
 import org.dbunit.operation.CompositeOperation;
 import org.dbunit.operation.DatabaseOperation;
@@ -154,6 +159,8 @@ public class Factory implements PropertyKeys {
 	private final HashGenerator hashGenerator = new HashGenerator();
 	private final AutoNumberGenerator autoNumberGenerator = new AutoNumberGenerator();
 	private final AutoValueGenerator autoValueGenerator = new AutoValueGenerator();
+
+	private final SQLHelper sqlHelper = new SQLHelper();
 
 	/**
 	 * Initialize single-instance classes.
@@ -276,6 +283,27 @@ public class Factory implements PropertyKeys {
 		// unitils caching of dbunit connections does not work with multiple
 		// schemas
 		// return new DbUnitDatabaseConnection(dataSource, schemaName);
+	}
+
+	public ITableMetaData getTableMetaData(String tableName,
+			IDatabaseConnection connection, boolean validate,
+			boolean caseSensitiveMetaData) throws DataSetException {
+		final CustomDatabaseTableMetaData tableMetaData = new CustomDatabaseTableMetaData(
+				tableName, connection, true, caseSensitiveMetaData);
+		tableMetaData.setSqlHelper(sqlHelper);
+		return tableMetaData;
+	}
+
+	public net.sf.lightair.internal.dbunit.dataset.Column getColumn(
+			String columnName, DataType dataType, String sqlTypeName,
+			int nullable, String columnDefaultValue, String remarks,
+			String isAutoIncrement) {
+		return new net.sf.lightair.internal.dbunit.dataset.Column(columnName,
+				dataType, sqlTypeName,
+				org.dbunit.dataset.Column.nullableValue(nullable),
+				columnDefaultValue, remarks,
+				org.dbunit.dataset.Column.AutoIncrement
+						.autoIncrementValue(isAutoIncrement));
 	}
 
 	// init methods for produced objects
