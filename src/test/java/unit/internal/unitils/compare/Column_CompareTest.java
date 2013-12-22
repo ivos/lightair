@@ -22,7 +22,7 @@ public class Column_CompareTest extends JMockSupport {
 
 	@Test
 	public void same() {
-		c = new Column(null, null, "value1");
+		c = new Column(null, null, null, 0, "value1");
 		org.unitils.dbunit.dataset.Column other = new org.unitils.dbunit.dataset.Column(
 				null, null, "value1");
 		assertNull(c.compare(other));
@@ -30,7 +30,7 @@ public class Column_CompareTest extends JMockSupport {
 
 	@Test
 	public void nullOtherNotNull() {
-		c = new Column(null, null, null);
+		c = new Column(null, null, null, 0, null);
 		org.unitils.dbunit.dataset.Column other = new org.unitils.dbunit.dataset.Column(
 				null, null, "value1");
 		assertNotNull(c.compare(other));
@@ -38,7 +38,7 @@ public class Column_CompareTest extends JMockSupport {
 
 	@Test
 	public void castedValueEqual() {
-		c = new Column(null, null, "123");
+		c = new Column(null, null, null, 0, "123");
 		c.setVariableResolver(variableResolver);
 		org.unitils.dbunit.dataset.Column other = new org.unitils.dbunit.dataset.Column(
 				null, DataType.INTEGER, 321);
@@ -55,7 +55,7 @@ public class Column_CompareTest extends JMockSupport {
 
 	@Test
 	public void castedValueNotEqual() {
-		c = new Column(null, null, "123");
+		c = new Column(null, null, null, 0, "123");
 		c.setVariableResolver(variableResolver);
 		org.unitils.dbunit.dataset.Column other = new org.unitils.dbunit.dataset.Column(
 				null, DataType.INTEGER, 321);

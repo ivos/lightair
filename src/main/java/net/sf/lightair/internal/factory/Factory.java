@@ -316,6 +316,7 @@ public class Factory implements PropertyKeys {
 	public void initColumn(Column column) {
 		column.setVariableResolver(variableResolver);
 		column.setTimeDifferenceLimit(timeDifferenceLimit);
+		column.setAutoValueGenerator(autoValueGenerator);
 	}
 
 	// static method call wrappers
