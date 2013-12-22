@@ -427,7 +427,7 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	@Test
 	public void double_0() {
 		check(0, 0);
-		assertEquals("0.0", g.generateAutoValue(DataType.DOUBLE, "tableName1",
+		assertEquals("0.00", g.generateAutoValue(DataType.DOUBLE, "tableName1",
 				"columnname1", 0, 2));
 	}
 
@@ -448,7 +448,7 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	@Test
 	public void double_100() {
 		check(0, 100);
-		assertEquals("1.0", g.generateAutoValue(DataType.DOUBLE, "tableName1",
+		assertEquals("1.00", g.generateAutoValue(DataType.DOUBLE, "tableName1",
 				"columnname1", 0, 2));
 	}
 
@@ -532,8 +532,8 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	@Test
 	public void decimal_0() {
 		check(0, 0);
-		assertEquals("0.0", g.generateAutoValue(DataType.DECIMAL, "tableName1",
-				"columnname1", 0, 2));
+		assertEquals("0.00", g.generateAutoValue(DataType.DECIMAL,
+				"tableName1", "columnname1", 0, 2));
 	}
 
 	@Test
@@ -548,6 +548,13 @@ public class AutoValueGeneratorTest extends JMockSupport {
 		check(0, 9999999);
 		assertEquals("99999.99", g.generateAutoValue(DataType.DECIMAL,
 				"tableName1", "columnname1", 0, 2));
+	}
+
+	@Test
+	public void decimal_9999999_3() {
+		check(0, 9999999);
+		assertEquals("99999.990", g.generateAutoValue(DataType.DECIMAL,
+				"tableName1", "columnname1", 0, 3));
 	}
 
 	@Test

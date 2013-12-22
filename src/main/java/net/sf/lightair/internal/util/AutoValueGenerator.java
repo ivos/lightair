@@ -65,7 +65,7 @@ public class AutoValueGenerator {
 		case Types.DOUBLE:
 			String value = String.valueOf(((double) autoNumber) / 100);
 			int decimals = value.length() - value.indexOf('.');
-			if (decimals < columnPrecision) {
+			if (decimals <= columnPrecision) {
 				value = StringUtils.rightPad(value, value.length()
 						+ columnPrecision - decimals + 1, '0');
 			}
