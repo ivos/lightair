@@ -21,7 +21,7 @@ import org.unitils.dbunit.dataset.comparison.ColumnDifference;
 public class Column extends org.unitils.dbunit.dataset.Column {
 
 	private final String tableName;
-	private final int columnLength;
+	private int columnLength;
 	private Object value;
 
 	/**
@@ -55,6 +55,14 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		this.value = value;
 	}
 
+	public int getColumnLength() {
+		return columnLength;
+	}
+
+	public void setColumnLength(int columnLength) {
+		this.columnLength = columnLength;
+	}
+
 	// Extracted to support variables
 
 	/**
@@ -73,6 +81,7 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 			return getDifferenceForAny(actualColumn);
 		}
 		if (isAuto()) {
+			int columnLength = ((Column) actualColumn).getColumnLength();
 			Object value = autoValueGenerator.generateAutoValue(
 					actualColumn.getType(), tableName, actualColumn.getName(),
 					columnLength);
