@@ -297,13 +297,14 @@ public class Factory implements PropertyKeys {
 	public net.sf.lightair.internal.dbunit.dataset.Column getColumn(
 			String columnName, DataType dataType, String sqlTypeName,
 			int nullable, String columnDefaultValue, String remarks,
-			String isAutoIncrement, int columnLength) {
+			String isAutoIncrement, int columnLength, Integer columnPrecision) {
 		return new net.sf.lightair.internal.dbunit.dataset.Column(columnName,
 				dataType, sqlTypeName,
 				org.dbunit.dataset.Column.nullableValue(nullable),
 				columnDefaultValue, remarks,
 				org.dbunit.dataset.Column.AutoIncrement
-						.autoIncrementValue(isAutoIncrement), columnLength);
+						.autoIncrementValue(isAutoIncrement), columnLength,
+				columnPrecision);
 	}
 
 	// init methods for produced objects

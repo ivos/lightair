@@ -33,23 +33,24 @@ public class AutoValueGenerator {
 	 * @param tableName
 	 * @param columnName
 	 * @param columnLength
+	 * @param columnPrecision
 	 * @return
 	 */
 	public String generateAutoValue(DataType dataType, String tableName,
-			String columnName, int columnLength) {
+			String columnName, int columnLength, Integer columnPrecision) {
 		String lowerColumnName = columnName.toLowerCase();
 		final int rowIndex = getNextRowIndex(tableName, lowerColumnName);
 		int autoNumber = autoNumberGenerator.generateAutoNumber(tableName,
 				lowerColumnName, rowIndex);
 		String value = generate(dataType, lowerColumnName, autoNumber,
-				columnLength);
+				columnLength, columnPrecision);
 		log.debug("Generated auto value for {}.{} of data type {} as [{}].",
 				tableName, lowerColumnName, dataType, value);
 		return value;
 	}
 
 	private String generate(DataType dataType, String columnName,
-			int autoNumber, int columnLength) {
+			int autoNumber, int columnLength, Integer columnPrecision) {
 		String autoNumberString = StringUtils.leftPad(
 				String.valueOf(autoNumber), 7, '0');
 		String stringValue = formatStringValue(columnName, autoNumberString,
@@ -61,7 +62,13 @@ public class AutoValueGenerator {
 			return String.valueOf(autoNumber);
 		case Types.DECIMAL:
 		case Types.DOUBLE:
-			return String.valueOf(((double) autoNumber) / 100);
+			String value = String.valueOf(((double) autoNumber) / 100);
+			int decimals = value.length() - value.indexOf('.');
+			if (decimals < columnPrecision) {
+				value = StringUtils.rightPad(value, value.length()
+						+ columnPrecision - decimals + 1, '0');
+			}
+			return value;
 		case Types.BOOLEAN:
 			return String.valueOf(0 != autoNumber % 2);
 		case Types.CHAR:

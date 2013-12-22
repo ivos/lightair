@@ -97,16 +97,20 @@ public class AutoInsertOperation extends InsertOperation {
 								try {
 
 									// Light Air Start >>>>>>
+									net.sf.lightair.internal.dbunit.dataset.Column dbUnitColumn = (net.sf.lightair.internal.dbunit.dataset.Column) column;
 
-									final int columnLength = ((net.sf.lightair.internal.dbunit.dataset.Column) column)
+									int columnLength = dbUnitColumn
 											.getColumnLength();
+									Integer columnPrecision = dbUnitColumn
+											.getColumnPrecision();
+
 									AutoPreparedBatchStatement autoPreparedBatchStatement = (AutoPreparedBatchStatement) statement;
 									autoPreparedBatchStatement.addValue(
 											table.getValue(row,
 													column.getColumnName()),
 											column.getDataType(), tableName,
 											column.getColumnName(),
-											columnLength);
+											columnLength, columnPrecision);
 
 									// statement.addValue(table.getValue(row,column.getColumnName()),column.getDataType());
 

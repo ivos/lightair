@@ -22,6 +22,7 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 
 	private final String tableName;
 	private int columnLength;
+	private Integer columnPrecision;
 	private Object value;
 
 	/**
@@ -35,14 +36,16 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	 *            Column type
 	 * @param columnLength
 	 *            Column length
+	 * @param columnPrecision
 	 * @param value
 	 *            Column value
 	 */
 	public Column(String tableName, String name, DataType type,
-			int columnLength, Object value) {
+			int columnLength, Integer columnPrecision, Object value) {
 		super(name, type, value);
 		this.tableName = tableName;
 		this.columnLength = columnLength;
+		this.columnPrecision = columnPrecision;
 		this.value = value;
 	}
 
@@ -61,6 +64,14 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 
 	public void setColumnLength(int columnLength) {
 		this.columnLength = columnLength;
+	}
+
+	public Integer getColumnPrecision() {
+		return columnPrecision;
+	}
+
+	public void setColumnPrecision(Integer columnPrecision) {
+		this.columnPrecision = columnPrecision;
 	}
 
 	// Extracted to support variables
@@ -82,9 +93,11 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		}
 		if (isAuto()) {
 			int columnLength = ((Column) actualColumn).getColumnLength();
+			Integer columnPrecision = ((Column) actualColumn)
+					.getColumnPrecision();
 			Object value = autoValueGenerator.generateAutoValue(
 					actualColumn.getType(), tableName, actualColumn.getName(),
-					columnLength);
+					columnLength, columnPrecision);
 			setValue(value);
 		}
 		if (valuesSame(actualColumn)) {

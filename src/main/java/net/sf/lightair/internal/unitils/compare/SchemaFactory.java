@@ -71,9 +71,11 @@ public class SchemaFactory extends org.unitils.dbunit.dataset.SchemaFactory {
 				String columnName = dbUnitColumn.getColumnName();
 				DataType columnType = dbUnitColumn.getDataType();
 				int columnLength = 0;
+				Integer columnPrecision = 0;
 				if (dbUnitColumn instanceof net.sf.lightair.internal.dbunit.dataset.Column) {
-					columnLength = ((net.sf.lightair.internal.dbunit.dataset.Column) dbUnitColumn)
-							.getColumnLength();
+					net.sf.lightair.internal.dbunit.dataset.Column customDbUnitColumn = (net.sf.lightair.internal.dbunit.dataset.Column) dbUnitColumn;
+					columnLength = customDbUnitColumn.getColumnLength();
+					columnPrecision = customDbUnitColumn.getColumnPrecision();
 				}
 
 				// Ignore column value when column not expected:
@@ -85,7 +87,8 @@ public class SchemaFactory extends org.unitils.dbunit.dataset.SchemaFactory {
 
 				org.unitils.dbunit.dataset.Column column = createColumn(
 						dbUnitTable.getTableMetaData().getTableName(),
-						columnName, columnType, columnLength, value);
+						columnName, columnType, columnLength, columnPrecision,
+						value);
 				if (primaryKeyColumnNames.contains(columnName)) {
 					row.addPrimaryKeyColumn(column);
 				} else {
@@ -127,15 +130,17 @@ public class SchemaFactory extends org.unitils.dbunit.dataset.SchemaFactory {
 	 *            Name of column
 	 * @param columnType
 	 *            Type of column
+	 * @param columnLength
+	 * @param columnPrecision
 	 * @param value
 	 *            Column value
 	 * @return New Column instance
 	 */
 	protected org.unitils.dbunit.dataset.Column createColumn(String tableName,
 			String columnName, DataType columnType, int columnLength,
-			Object value) {
+			Integer columnPrecision, Object value) {
 		Column column = new Column(tableName, columnName, columnType,
-				columnLength, value);
+				columnLength, columnPrecision, value);
 		Factory.getInstance().initColumn(column);
 		return column;
 	}

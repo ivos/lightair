@@ -26,13 +26,13 @@ public class AutoPreparedBatchStatement implements IPreparedBatchStatement {
 	}
 
 	public void addValue(Object value, DataType dataType, String tableName,
-			String columnName, int columnLength) throws TypeCastException,
-			SQLException {
+			String columnName, int columnLength, Integer columnPrecision)
+			throws TypeCastException, SQLException {
 		log.debug("Adding value {} for data type {} on {}.{}.", value,
 				dataType, tableName, columnName);
 		if ("@auto".equals(value)) {
 			value = autoValueGenerator.generateAutoValue(dataType, tableName,
-					columnName, columnLength);
+					columnName, columnLength, columnPrecision);
 		}
 		addValue(value, dataType);
 	}
