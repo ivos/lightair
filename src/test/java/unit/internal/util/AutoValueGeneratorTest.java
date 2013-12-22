@@ -25,7 +25,7 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	private void check(final int rowIndex, final int autoNumber) {
 		check(new Expectations() {
 			{
-				one(autoNumberGenerator).generateAutoNumber("tableName1",
+				one(autoNumberGenerator).generateAutoNumber("tablename1",
 						"columnname1", rowIndex);
 				will(returnValue(autoNumber));
 			}
@@ -162,14 +162,14 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	public void char_ToLower() {
 		check(new Expectations() {
 			{
-				one(autoNumberGenerator).generateAutoNumber("tableName1",
+				one(autoNumberGenerator).generateAutoNumber("table_name1",
 						"column_name1", 0);
 				will(returnValue(0));
 			}
 		});
 
 		assertEquals("column_name1 0000000", g.generateAutoValue(DataType.CHAR,
-				"tableName1", "COLUMN_NAME1", 100, null));
+				"TABLE_NAME1", "COLUMN_NAME1", 100, null));
 	}
 
 	@Test

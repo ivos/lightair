@@ -39,13 +39,14 @@ public class AutoValueGenerator {
 	public String generateAutoValue(DataType dataType, String tableName,
 			String columnName, int columnLength, Integer columnPrecision) {
 		String lowerColumnName = columnName.toLowerCase();
-		final int rowIndex = getNextRowIndex(tableName, lowerColumnName);
-		int autoNumber = autoNumberGenerator.generateAutoNumber(tableName,
+		String lowerTableName = tableName.toLowerCase();
+		final int rowIndex = getNextRowIndex(lowerTableName, lowerColumnName);
+		int autoNumber = autoNumberGenerator.generateAutoNumber(lowerTableName,
 				lowerColumnName, rowIndex);
 		String value = generate(dataType, lowerColumnName, autoNumber,
 				columnLength, columnPrecision);
 		log.debug("Generated auto value for {}.{} of data type {} as [{}].",
-				tableName, lowerColumnName, dataType, value);
+				lowerTableName, lowerColumnName, dataType, value);
 		return value;
 	}
 
