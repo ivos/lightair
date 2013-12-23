@@ -61,6 +61,34 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	}
 
 	@Test
+	public void smallint_0() {
+		check(0, 0);
+		assertEquals("0", g.generateAutoValue(DataType.SMALLINT, "tableName1",
+				"columnname1", 0, null));
+	}
+
+	@Test
+	public void smallint_1234567() {
+		check(0, 1234567);
+		assertEquals("4567", g.generateAutoValue(DataType.SMALLINT,
+				"tableName1", "columnname1", 0, null));
+	}
+
+	@Test
+	public void tinyint_0() {
+		check(0, 0);
+		assertEquals("0", g.generateAutoValue(DataType.TINYINT, "tableName1",
+				"columnname1", 0, null));
+	}
+
+	@Test
+	public void tinyint_1234567() {
+		check(0, 1234567);
+		assertEquals("67", g.generateAutoValue(DataType.TINYINT, "tableName1",
+				"columnname1", 0, null));
+	}
+
+	@Test
 	public void char_0() {
 		check(0, 0);
 		assertEquals("columnname1 0000000", g.generateAutoValue(DataType.CHAR,
@@ -173,6 +201,20 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	}
 
 	@Test
+	public void nchar_0() {
+		check(0, 0);
+		assertEquals("columnname1 0000000", g.generateAutoValue(DataType.NCHAR,
+				"tableName1", "columnname1", 100, null));
+	}
+
+	@Test
+	public void nchar_1234567() {
+		check(0, 1234567);
+		assertEquals("columnname1 1234567", g.generateAutoValue(DataType.NCHAR,
+				"tableName1", "columnname1", 100, null));
+	}
+
+	@Test
 	public void varchar_1234567() {
 		check(0, 1234567);
 		assertEquals("columnname1 1234567", g.generateAutoValue(
@@ -191,6 +233,20 @@ public class AutoValueGeneratorTest extends JMockSupport {
 		check(0, 1234567);
 		assertEquals("7", g.generateAutoValue(DataType.VARCHAR, "tableName1",
 				"columnname1", 1, null));
+	}
+
+	@Test
+	public void nvarchar_0() {
+		check(0, 0);
+		assertEquals("columnname1 0000000", g.generateAutoValue(
+				DataType.NVARCHAR, "tableName1", "columnname1", 100, null));
+	}
+
+	@Test
+	public void nvarchar_1234567() {
+		check(0, 1234567);
+		assertEquals("columnname1 1234567", g.generateAutoValue(
+				DataType.NVARCHAR, "tableName1", "columnname1", 100, null));
 	}
 
 	@Test
@@ -232,6 +288,27 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	public void blob_Leave1Number() {
 		check(0, 1234567);
 		assertEquals("Nw==", g.generateAutoValue(DataType.BLOB, "tableName1",
+				"columnname1", 1, null));
+	}
+
+	@Test
+	public void binary_1234567() {
+		check(0, 1234567);
+		assertEquals("Y29sdW1ubmFtZTEgMTIzNDU2Nw==", g.generateAutoValue(
+				DataType.BINARY, "tableName1", "columnname1", 100, null));
+	}
+
+	@Test
+	public void binary_Leave1Prefix() {
+		check(0, 1234567);
+		assertEquals("YzEyMzQ1Njc=", g.generateAutoValue(DataType.BINARY,
+				"tableName1", "columnname1", 8, null));
+	}
+
+	@Test
+	public void binary_Leave1Number() {
+		check(0, 1234567);
+		assertEquals("Nw==", g.generateAutoValue(DataType.BINARY, "tableName1",
 				"columnname1", 1, null));
 	}
 
@@ -467,6 +544,34 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	}
 
 	@Test
+	public void float_0() {
+		check(0, 0);
+		assertEquals("0.00", g.generateAutoValue(DataType.FLOAT, "tableName1",
+				"columnname1", 0, 2));
+	}
+
+	@Test
+	public void float_9999999() {
+		check(0, 9999999);
+		assertEquals("99999.99", g.generateAutoValue(DataType.FLOAT,
+				"tableName1", "columnname1", 0, 2));
+	}
+
+	@Test
+	public void real_0() {
+		check(0, 0);
+		assertEquals("0.00", g.generateAutoValue(DataType.REAL, "tableName1",
+				"columnname1", 0, 2));
+	}
+
+	@Test
+	public void real_9999999() {
+		check(0, 9999999);
+		assertEquals("99999.99", g.generateAutoValue(DataType.REAL,
+				"tableName1", "columnname1", 0, 2));
+	}
+
+	@Test
 	public void boolean_0() {
 		check(0, 0);
 		assertEquals("false", g.generateAutoValue(DataType.BOOLEAN,
@@ -561,6 +666,34 @@ public class AutoValueGeneratorTest extends JMockSupport {
 	public void decimal_9999999_5() {
 		check(0, 9999999);
 		assertEquals("99999.99000", g.generateAutoValue(DataType.DECIMAL,
+				"tableName1", "columnname1", 0, 5));
+	}
+
+	@Test
+	public void numeric_0() {
+		check(0, 0);
+		assertEquals("0.00", g.generateAutoValue(DataType.NUMERIC,
+				"tableName1", "columnname1", 0, 2));
+	}
+
+	@Test
+	public void numeric_9999999() {
+		check(0, 9999999);
+		assertEquals("99999.99", g.generateAutoValue(DataType.NUMERIC,
+				"tableName1", "columnname1", 0, 2));
+	}
+
+	@Test
+	public void numeric_9999999_3() {
+		check(0, 9999999);
+		assertEquals("99999.990", g.generateAutoValue(DataType.NUMERIC,
+				"tableName1", "columnname1", 0, 3));
+	}
+
+	@Test
+	public void numeric_9999999_5() {
+		check(0, 9999999);
+		assertEquals("99999.99000", g.generateAutoValue(DataType.NUMERIC,
 				"tableName1", "columnname1", 0, 5));
 	}
 

@@ -61,8 +61,15 @@ public class AutoValueGenerator {
 		case Types.INTEGER:
 		case Types.BIGINT:
 			return String.valueOf(autoNumber);
+		case Types.SMALLINT:
+			return String.valueOf(autoNumber % 10000);
+		case Types.TINYINT:
+			return String.valueOf(autoNumber % 100);
 		case Types.DECIMAL:
+		case Types.NUMERIC:
 		case Types.DOUBLE:
+		case Types.REAL:
+		case Types.FLOAT:
 			String value = String.valueOf(((double) autoNumber) / 100);
 			int decimals = value.length() - value.indexOf('.');
 			if (decimals <= columnPrecision) {
@@ -74,9 +81,12 @@ public class AutoValueGenerator {
 			return String.valueOf(0 != autoNumber % 2);
 		case Types.CHAR:
 		case Types.VARCHAR:
+		case Types.NCHAR:
+		case Types.NVARCHAR:
 		case Types.CLOB:
 			return stringValue;
 		case Types.BLOB:
+		case Types.BINARY:
 		case Types.VARBINARY:
 			return Base64.encodeBase64String(stringValue.getBytes());
 		case Types.DATE:
