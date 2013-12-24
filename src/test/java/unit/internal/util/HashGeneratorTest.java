@@ -63,4 +63,34 @@ public class HashGeneratorTest {
 		}
 	}
 
+	// @Test
+	public void generateTable() {
+		for (char ch1 = 'a'; ch1 < 'z'; ch1++) {
+			for (char ch2 = 'a'; ch2 < 'z'; ch2++) {
+				for (char ch3 = 'a'; ch3 < 'z'; ch3++) {
+					for (char ch4 = 'a'; ch4 < 'z'; ch4++) {
+						final String source = "" + ch1 + ch2 + ch3 + ch4;
+						final int hash = g.generateHash(source, 3);
+						if (hash == 998) {
+							System.out.println(source);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// @Test
+	public void generateColumn() {
+		for (char ch1 = 'a'; ch1 < 'z'; ch1++) {
+			for (char ch2 = 'a'; ch2 < 'z'; ch2++) {
+				final String source = "" + ch1 + ch2;
+				final int hash = g.generateHash(source, 2);
+				if (hash == 98) {
+					System.out.println(source);
+				}
+			}
+		}
+	}
+
 }
