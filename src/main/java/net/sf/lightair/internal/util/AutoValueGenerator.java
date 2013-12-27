@@ -33,25 +33,25 @@ public class AutoValueGenerator {
 	 * @param tableName
 	 * @param columnName
 	 * @param columnLength
-	 * @param columnPrecision
+	 * @param decimalDigits
 	 * @return
 	 */
 	public String generateAutoValue(DataType dataType, String tableName,
-			String columnName, int columnLength, Integer columnPrecision) {
+			String columnName, int columnLength, Integer decimalDigits) {
 		String lowerColumnName = columnName.toLowerCase();
 		String lowerTableName = tableName.toLowerCase();
 		final int rowIndex = getNextRowIndex(lowerTableName, lowerColumnName);
 		int autoNumber = autoNumberGenerator.generateAutoNumber(lowerTableName,
 				lowerColumnName, rowIndex);
 		String value = generate(dataType, lowerColumnName, autoNumber,
-				columnLength, columnPrecision);
+				columnLength, decimalDigits);
 		log.debug("Generated auto value for {}.{} of data type {} as [{}].",
 				lowerTableName, lowerColumnName, dataType, value);
 		return value;
 	}
 
 	private String generate(DataType dataType, String columnName,
-			int autoNumber, int columnLength, Integer columnPrecision) {
+			int autoNumber, int columnLength, Integer decimalDigits) {
 		String autoNumberString = StringUtils.leftPad(
 				String.valueOf(autoNumber), 7, '0');
 		String stringValue = formatStringValue(columnName, autoNumberString,
@@ -65,18 +65,13 @@ public class AutoValueGenerator {
 			return String.valueOf(autoNumber % 10000);
 		case Types.TINYINT:
 			return String.valueOf(autoNumber % 100);
+		case Types.REAL:
+		case Types.DOUBLE:
+		case Types.FLOAT:
+			return String.valueOf(((double) autoNumber) / 100);
 		case Types.DECIMAL:
 		case Types.NUMERIC:
-		case Types.DOUBLE:
-		case Types.REAL:
-		case Types.FLOAT:
-			String value = String.valueOf(((double) autoNumber) / 100);
-			int decimals = value.length() - value.indexOf('.');
-			if (decimals <= columnPrecision) {
-				value = StringUtils.rightPad(value, value.length()
-						+ columnPrecision - decimals + 1, '0');
-			}
-			return value;
+			return formatDecimalValue(autoNumber, columnLength, decimalDigits);
 		case Types.BOOLEAN:
 			return String.valueOf(0 != autoNumber % 2);
 		case Types.CHAR:
@@ -112,6 +107,26 @@ public class AutoValueGenerator {
 					.toString("yyyy-MM-dd HH:mm:ss.SSS");
 		}
 		throw new UnsupportedDataType(dataType.toString());
+	}
+
+	private String formatDecimalValue(int autoNumber, int columnLength,
+			Integer decimalDigits) {
+		// cut precision to column length
+		int cut = autoNumber;
+		if (columnLength > 0) {
+			cut = cut % (int) Math.pow(10, Math.min(columnLength, 7));
+		}
+		// convert to String
+		String decimal = String.valueOf(cut);
+		// pad with zeroes left to decimal digits + 1
+		decimal = StringUtils.leftPad(decimal, decimalDigits + 1, '0');
+		// insert decimal point
+		if (decimalDigits > 0) {
+			int pointIndex = decimal.length() - decimalDigits;
+			decimal = decimal.substring(0, pointIndex) + "."
+					+ decimal.substring(pointIndex);
+		}
+		return decimal;
 	}
 
 	private String formatStringValue(String columnName,

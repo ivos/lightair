@@ -65,25 +65,25 @@ public class AutoTest extends CommonTestBase {
 				2733600, DateMidnight.parse("2004-04-25"),
 				LocalTime.parse("16:13:20"),
 				DateTime.parse("1990-05-09T15:26:40"), 27384.0, false,
-				2735000L, new BigDecimal("27370.000"), "clob_type 2733200",
+				2735000L, new BigDecimal("2737.000"), "clob_type 2733200",
 				"YmxvYl90eXBlIDI3MzU0MDA=", "YmluYXJ5X3R5cGUgMjczMjMwMA==");
 		verifyRow(1, 2734901, "char_type 2736901", "varchar_type 2734101",
 				2733601, DateMidnight.parse("2004-04-26"),
 				LocalTime.parse("16:13:21"),
 				DateTime.parse("1990-05-10T15:26:41.001"), 27384.01, true,
-				2735001L, new BigDecimal("27370.010"), "clob_type 2733201",
+				2735001L, new BigDecimal("2737.001"), "clob_type 2733201",
 				"YmxvYl90eXBlIDI3MzU0MDE=", "YmluYXJ5X3R5cGUgMjczMjMwMQ==");
 		verifyRow(2, 2734902, "char_type 2736902", "varchar_type 2734102",
 				2733602, DateMidnight.parse("2004-04-27"),
 				LocalTime.parse("16:13:22"),
 				DateTime.parse("1990-05-11T15:26:42.002"), 27384.02, false,
-				2735002L, new BigDecimal("27370.020"), "clob_type 2733202",
+				2735002L, new BigDecimal("2737.002"), "clob_type 2733202",
 				"YmxvYl90eXBlIDI3MzU0MDI=", "YmluYXJ5X3R5cGUgMjczMjMwMg==");
 		verifyRow(3, 2734903, "char_type 2736903", "varchar_type 2734103",
 				2733603, DateMidnight.parse("2004-04-28"),
 				LocalTime.parse("16:13:23"),
 				DateTime.parse("1990-05-12T15:26:43.003"), 27384.03, true,
-				2735003L, new BigDecimal("27370.030"), "clob_type 2733203",
+				2735003L, new BigDecimal("2737.003"), "clob_type 2733203",
 				"YmxvYl90eXBlIDI3MzU0MDM=", "YmluYXJ5X3R5cGUgMjczMjMwMw==");
 
 		assertEquals("Count", new Integer(4),
@@ -94,25 +94,25 @@ public class AutoTest extends CommonTestBase {
 				313600, DateMidnight.parse("1974-03-14"),
 				LocalTime.parse("16:00:00"),
 				DateTime.parse("1960-03-27T15:13:20.000"), 3184.0, false,
-				315000L, new BigDecimal("3170.000"), "clob_type 0313200",
+				315000L, new BigDecimal("317.000"), "clob_type 0313200",
 				"YmxvYl90eXBlIDAzMTU0MDA=", "YmluYXJ5X3R5cGUgMDMxMjMwMA==");
 		verifyRow(1, 314901, "char_type 0316901", "varchar_type 0314101",
 				313601, DateMidnight.parse("1974-03-15"),
 				LocalTime.parse("16:00:01"),
 				DateTime.parse("1960-03-28T15:13:21.001"), 3184.01, true,
-				315001L, new BigDecimal("3170.010"), "clob_type 0313201",
+				315001L, new BigDecimal("317.001"), "clob_type 0313201",
 				"YmxvYl90eXBlIDAzMTU0MDE=", "YmluYXJ5X3R5cGUgMDMxMjMwMQ==");
 		verifyRow(2, 314902, "char_type 0316902", "varchar_type 0314102",
 				313602, DateMidnight.parse("1974-03-16"),
 				LocalTime.parse("16:00:02"),
 				DateTime.parse("1960-03-29T15:13:22.002"), 3184.02, false,
-				315002L, new BigDecimal("3170.020"), "clob_type 0313202",
+				315002L, new BigDecimal("317.002"), "clob_type 0313202",
 				"YmxvYl90eXBlIDAzMTU0MDI=", "YmluYXJ5X3R5cGUgMDMxMjMwMg==");
 		verifyRow(3, 314903, "char_type 0316903", "varchar_type 0314103",
 				313603, DateMidnight.parse("1974-03-17"),
 				LocalTime.parse("16:00:03"),
 				DateTime.parse("1960-03-30T15:13:23.003"), 3184.03, true,
-				315003L, new BigDecimal("3170.030"), "clob_type 0313203",
+				315003L, new BigDecimal("317.003"), "clob_type 0313203",
 				"YmxvYl90eXBlIDAzMTU0MDM=", "YmluYXJ5X3R5cGUgMDMxMjMwMw==");
 
 		assertEquals("Count", new Integer(1),
@@ -123,7 +123,7 @@ public class AutoTest extends CommonTestBase {
 				3663600, DateMidnight.parse("1952-04-18"),
 				LocalTime.parse("10:33:20"),
 				DateTime.parse("1938-05-02T09:46:40.000"), 36684.0, false,
-				3665000L, new BigDecimal("36670.000"), "clob_type 3663200",
+				3665000L, new BigDecimal("3667.000"), "clob_type 3663200",
 				"YmxvYl90eXBlIDM2NjU0MDA=", "YmluYXJ5X3R5cGUgMzY2MjMwMA==");
 	}
 
@@ -138,13 +138,13 @@ public class AutoTest extends CommonTestBase {
 				2733600, DateMidnight.parse("2004-04-25"),
 				LocalTime.parse("16:13:20"),
 				DateTime.parse("1990-05-09T15:26:40"), 27384.0, false,
-				2735000L, new BigDecimal("27370.000"), "clob_type 2733200",
+				2735000L, new BigDecimal("2737.000"), "clob_type 2733200",
 				"YmxvYl90eXBlIDI3MzU0MDA=", "YmluYXJ5X3R5cGUgMjczMjMwMA==");
 		verifyRow(1, 2734901, "char_type 2736901", "varchar_type 2734101",
 				2733601, DateMidnight.parse("2004-04-26"),
 				LocalTime.parse("16:13:21"),
 				DateTime.parse("1990-05-10T15:26:41.001"), 27384.01, true,
-				2735001L, new BigDecimal("27370.010"), "clob_type 2733201",
+				2735001L, new BigDecimal("2737.001"), "clob_type 2733201",
 				"YmxvYl90eXBlIDI3MzU0MDE=", "YmluYXJ5X3R5cGUgMjczMjMwMQ==");
 	}
 

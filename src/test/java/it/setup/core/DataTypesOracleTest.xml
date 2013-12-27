@@ -15,4 +15,9 @@
 		timestamp_type="@null" double_type="@null" boolean_type="@null"
 		bigint_type="@null" decimal_type="@null" clob_type="@null" blob_type="@null"
 		binary_type="@null" />
+	<data_types id="3" char_type="@auto" varchar_type="@auto"
+		integer_type="@auto" date_type="@auto" time_type="@auto"
+		timestamp_type="@auto" double_type="@auto" boolean_type="0"
+		bigint_type="@auto" decimal_type="@auto" clob_type="@auto" blob_type="@auto"
+		binary_type="@auto" />
 </dataset>
