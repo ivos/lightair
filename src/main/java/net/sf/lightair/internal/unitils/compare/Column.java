@@ -5,7 +5,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
-import net.sf.lightair.internal.util.AutoValueGenerator;
+import net.sf.lightair.internal.util.StandardAutoValueGenerator;
 
 import org.apache.commons.codec.binary.Base64;
 import org.dbunit.dataset.datatype.DataType;
@@ -272,14 +272,14 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		this.timeDifferenceLimit = timeDifferenceLimit;
 	}
 
-	private AutoValueGenerator autoValueGenerator;
+	private StandardAutoValueGenerator autoValueGenerator;
 
 	/**
 	 * Set autoValueGenerator.
 	 * 
 	 * @param autoValueGenerator
 	 */
-	public void setAutoValueGenerator(AutoValueGenerator autoValueGenerator) {
+	public void setAutoValueGenerator(StandardAutoValueGenerator autoValueGenerator) {
 		this.autoValueGenerator = autoValueGenerator;
 	}
 

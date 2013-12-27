@@ -2,7 +2,7 @@ package unit.internal.util;
 
 import static org.junit.Assert.*;
 import net.sf.lightair.internal.util.AutoNumberGenerator;
-import net.sf.lightair.internal.util.AutoValueGenerator;
+import net.sf.lightair.internal.util.StandardAutoValueGenerator;
 import net.sf.seaf.test.jmock.JMockSupport;
 
 import org.dbunit.dataset.datatype.DataType;
@@ -10,14 +10,14 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AutoValueGeneratorTest extends JMockSupport {
+public class StandardAutoValueGeneratorTest extends JMockSupport {
 
-	AutoValueGenerator g;
+	StandardAutoValueGenerator g;
 	AutoNumberGenerator autoNumberGenerator;
 
 	@Before
 	public void setup() {
-		g = new AutoValueGenerator();
+		g = new StandardAutoValueGenerator();
 		autoNumberGenerator = mock(AutoNumberGenerator.class);
 		g.setAutoNumberGenerator(autoNumberGenerator);
 	}

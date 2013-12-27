@@ -2,7 +2,7 @@ package net.sf.lightair.internal.dbunit;
 
 import java.sql.SQLException;
 
-import net.sf.lightair.internal.util.AutoValueGenerator;
+import net.sf.lightair.internal.util.StandardAutoValueGenerator;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.statement.IPreparedBatchStatement;
@@ -15,7 +15,7 @@ public class AutoPreparedStatementFactory extends PreparedStatementFactory {
 	private final Logger log = LoggerFactory
 			.getLogger(AutoPreparedStatementFactory.class);
 
-	private AutoValueGenerator autoValueGenerator;
+	private StandardAutoValueGenerator autoValueGenerator;
 
 	@Override
 	public IPreparedBatchStatement createPreparedBatchStatement(String sql,
@@ -30,7 +30,7 @@ public class AutoPreparedStatementFactory extends PreparedStatementFactory {
 		return autoPreparedBatchStatement;
 	}
 
-	public void setAutoValueGenerator(AutoValueGenerator autoValueGenerator) {
+	public void setAutoValueGenerator(StandardAutoValueGenerator autoValueGenerator) {
 		this.autoValueGenerator = autoValueGenerator;
 	}
 

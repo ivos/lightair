@@ -18,10 +18,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Generate <code>@auto</code> value.
  */
-public class AutoValueGenerator {
+public class StandardAutoValueGenerator {
 
 	private final Logger log = LoggerFactory
-			.getLogger(AutoValueGenerator.class);
+			.getLogger(StandardAutoValueGenerator.class);
 
 	private AutoNumberGenerator autoNumberGenerator;
 

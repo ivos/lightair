@@ -33,12 +33,12 @@ import net.sf.lightair.internal.unitils.compare.Column;
 import net.sf.lightair.internal.unitils.compare.DataSetAssert;
 import net.sf.lightair.internal.unitils.compare.VariableResolver;
 import net.sf.lightair.internal.util.AutoNumberGenerator;
-import net.sf.lightair.internal.util.AutoValueGenerator;
 import net.sf.lightair.internal.util.DataSetProcessingData;
 import net.sf.lightair.internal.util.DataSetResolver;
 import net.sf.lightair.internal.util.DurationParser;
 import net.sf.lightair.internal.util.HashGenerator;
 import net.sf.lightair.internal.util.Profiles;
+import net.sf.lightair.internal.util.StandardAutoValueGenerator;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.CustomDatabaseTableMetaData;
@@ -158,7 +158,7 @@ public class Factory implements PropertyKeys {
 
 	private final HashGenerator hashGenerator = new HashGenerator();
 	private final AutoNumberGenerator autoNumberGenerator = new AutoNumberGenerator();
-	private final AutoValueGenerator autoValueGenerator = new AutoValueGenerator();
+	private final StandardAutoValueGenerator standardAutoValueGenerator = new StandardAutoValueGenerator();
 
 	private final SQLHelper sqlHelper = new SQLHelper();
 
@@ -187,8 +187,8 @@ public class Factory implements PropertyKeys {
 				TIME_DIFFERENCE_LIMIT, 0);
 		tokenReplacingFilter.setDurationParser(durationParser);
 		autoNumberGenerator.setHashGenerator(hashGenerator);
-		autoValueGenerator.setAutoNumberGenerator(autoNumberGenerator);
-		statementFactory.setAutoValueGenerator(autoValueGenerator);
+		standardAutoValueGenerator.setAutoNumberGenerator(autoNumberGenerator);
+		statementFactory.setAutoValueGenerator(standardAutoValueGenerator);
 	}
 
 	private void initDataSources() {
@@ -232,7 +232,7 @@ public class Factory implements PropertyKeys {
 
 	public void initDataSetProcessing() {
 		dataSetProcessingData = new DataSetProcessingData();
-		autoValueGenerator.init();
+		standardAutoValueGenerator.init();
 	}
 
 	// getters for classes always newly instantiated
@@ -317,7 +317,7 @@ public class Factory implements PropertyKeys {
 	public void initColumn(Column column) {
 		column.setVariableResolver(variableResolver);
 		column.setTimeDifferenceLimit(timeDifferenceLimit);
-		column.setAutoValueGenerator(autoValueGenerator);
+		column.setAutoValueGenerator(standardAutoValueGenerator);
 	}
 
 	// static method call wrappers
