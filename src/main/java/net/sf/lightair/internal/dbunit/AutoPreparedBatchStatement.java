@@ -2,7 +2,7 @@ package net.sf.lightair.internal.dbunit;
 
 import java.sql.SQLException;
 
-import net.sf.lightair.internal.util.StandardAutoValueGenerator;
+import net.sf.lightair.internal.util.AutoValueGenerator;
 
 import org.dbunit.database.statement.IPreparedBatchStatement;
 import org.dbunit.dataset.datatype.DataType;
@@ -17,10 +17,10 @@ public class AutoPreparedBatchStatement implements IPreparedBatchStatement {
 
 	private final IPreparedBatchStatement delegate;
 
-	private final StandardAutoValueGenerator autoValueGenerator;
+	private final AutoValueGenerator autoValueGenerator;
 
 	public AutoPreparedBatchStatement(IPreparedBatchStatement delegate,
-			StandardAutoValueGenerator autoValueGenerator) {
+			AutoValueGenerator autoValueGenerator) {
 		this.delegate = delegate;
 		this.autoValueGenerator = autoValueGenerator;
 	}

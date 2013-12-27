@@ -18,24 +18,13 @@ import org.slf4j.LoggerFactory;
 /**
  * Generate <code>@auto</code> value.
  */
-public class StandardAutoValueGenerator {
+public class StandardAutoValueGenerator implements AutoValueGenerator {
 
 	private final Logger log = LoggerFactory
 			.getLogger(StandardAutoValueGenerator.class);
 
 	private AutoNumberGenerator autoNumberGenerator;
 
-	/**
-	 * Generate <code>@auto</code> value for table column, based on the column
-	 * data type.
-	 * 
-	 * @param dataType
-	 * @param tableName
-	 * @param columnName
-	 * @param columnLength
-	 * @param decimalDigits
-	 * @return
-	 */
 	public String generateAutoValue(DataType dataType, String tableName,
 			String columnName, int columnLength, Integer decimalDigits) {
 		String lowerColumnName = columnName.toLowerCase();
