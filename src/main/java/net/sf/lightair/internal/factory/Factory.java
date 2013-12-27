@@ -39,6 +39,7 @@ import net.sf.lightair.internal.util.DurationParser;
 import net.sf.lightair.internal.util.HashGenerator;
 import net.sf.lightair.internal.util.Profiles;
 import net.sf.lightair.internal.util.StandardAutoValueGenerator;
+import net.sf.lightair.internal.util.UniqueAutoValueGenerator;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.CustomDatabaseTableMetaData;
@@ -159,6 +160,7 @@ public class Factory implements PropertyKeys {
 	private final HashGenerator hashGenerator = new HashGenerator();
 	private final AutoNumberGenerator autoNumberGenerator = new AutoNumberGenerator();
 	private final StandardAutoValueGenerator standardAutoValueGenerator = new StandardAutoValueGenerator();
+	private final UniqueAutoValueGenerator uniqueAutoValueGenerator = new UniqueAutoValueGenerator();
 
 	private final SQLHelper sqlHelper = new SQLHelper();
 
@@ -188,7 +190,8 @@ public class Factory implements PropertyKeys {
 		tokenReplacingFilter.setDurationParser(durationParser);
 		autoNumberGenerator.setHashGenerator(hashGenerator);
 		standardAutoValueGenerator.setAutoNumberGenerator(autoNumberGenerator);
-		statementFactory.setAutoValueGenerator(standardAutoValueGenerator);
+		uniqueAutoValueGenerator.setDelegate(standardAutoValueGenerator);
+		statementFactory.setAutoValueGenerator(uniqueAutoValueGenerator);
 	}
 
 	private void initDataSources() {
@@ -233,6 +236,7 @@ public class Factory implements PropertyKeys {
 	public void initDataSetProcessing() {
 		dataSetProcessingData = new DataSetProcessingData();
 		standardAutoValueGenerator.init();
+		uniqueAutoValueGenerator.init();
 	}
 
 	// getters for classes always newly instantiated
@@ -317,7 +321,7 @@ public class Factory implements PropertyKeys {
 	public void initColumn(Column column) {
 		column.setVariableResolver(variableResolver);
 		column.setTimeDifferenceLimit(timeDifferenceLimit);
-		column.setAutoValueGenerator(standardAutoValueGenerator);
+		column.setAutoValueGenerator(uniqueAutoValueGenerator);
 	}
 
 	// static method call wrappers
