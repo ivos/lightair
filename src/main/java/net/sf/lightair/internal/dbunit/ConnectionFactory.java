@@ -52,6 +52,7 @@ public class ConnectionFactory implements PropertyKeys {
 		DatabaseConfig config = connection.getConfig();
 		setDatabaseDialect(profile, config);
 		setStatementFactory(config);
+		setSupportTablesViews(config);
 		setFeaturesAndProperties(profile, config);
 
 		stopWatch.stop();
@@ -75,6 +76,11 @@ public class ConnectionFactory implements PropertyKeys {
 	private void setStatementFactory(DatabaseConfig config) {
 		config.setProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY, Factory
 				.getInstance().getStatementFactory());
+	}
+
+	private void setSupportTablesViews(DatabaseConfig config) {
+		config.setProperty(DatabaseConfig.PROPERTY_TABLE_TYPE, new String[] {
+				"TABLE", "VIEW" });
 	}
 
 	private static final Map<String, String> DATATYPE_FACTORIES = new HashMap<String, String>();

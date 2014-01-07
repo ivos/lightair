@@ -89,6 +89,10 @@ public class ConnectionFactoryTest extends JMockSupport implements PropertyKeys 
 						.setProperty(
 								with(equal("http://www.dbunit.org/properties/statementFactory")),
 								with(any(AutoPreparedStatementFactory.class)));
+
+				one(config).setProperty(
+						"http://www.dbunit.org/properties/tableType",
+						new String[] { "TABLE", "VIEW" });
 			}
 		});
 	}
