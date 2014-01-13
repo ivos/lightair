@@ -70,6 +70,13 @@ public class SchemaFactory extends org.unitils.dbunit.dataset.SchemaFactory {
 			for (org.dbunit.dataset.Column dbUnitColumn : columns) {
 				String columnName = dbUnitColumn.getColumnName();
 				DataType columnType = dbUnitColumn.getDataType();
+				int columnLength = 0;
+				Integer columnPrecision = 0;
+				if (dbUnitColumn instanceof net.sf.lightair.internal.dbunit.dataset.Column) {
+					net.sf.lightair.internal.dbunit.dataset.Column customDbUnitColumn = (net.sf.lightair.internal.dbunit.dataset.Column) dbUnitColumn;
+					columnLength = customDbUnitColumn.getColumnLength();
+					columnPrecision = customDbUnitColumn.getColumnPrecision();
+				}
 
 				// Ignore column value when column not expected:
 				if (isColumnNotExpected(dbUnitTable, rowIndex, columnName)) {
@@ -79,7 +86,9 @@ public class SchemaFactory extends org.unitils.dbunit.dataset.SchemaFactory {
 				Object value = dbUnitTable.getValue(rowIndex, columnName);
 
 				org.unitils.dbunit.dataset.Column column = createColumn(
-						columnName, columnType, value);
+						dbUnitTable.getTableMetaData().getTableName(),
+						columnName, columnType, columnLength, columnPrecision,
+						value);
 				if (primaryKeyColumnNames.contains(columnName)) {
 					row.addPrimaryKeyColumn(column);
 				} else {
@@ -115,17 +124,23 @@ public class SchemaFactory extends org.unitils.dbunit.dataset.SchemaFactory {
 	/**
 	 * Instantiate Column.
 	 * 
+	 * @param tableName
+	 *            Table name
 	 * @param columnName
 	 *            Name of column
 	 * @param columnType
 	 *            Type of column
+	 * @param columnLength
+	 * @param columnPrecision
 	 * @param value
 	 *            Column value
 	 * @return New Column instance
 	 */
-	protected org.unitils.dbunit.dataset.Column createColumn(String columnName,
-			DataType columnType, Object value) {
-		Column column = new Column(columnName, columnType, value);
+	protected org.unitils.dbunit.dataset.Column createColumn(String tableName,
+			String columnName, DataType columnType, int columnLength,
+			Integer columnPrecision, Object value) {
+		Column column = new Column(tableName, columnName, columnType,
+				columnLength, columnPrecision, value);
 		Factory.getInstance().initColumn(column);
 		return column;
 	}

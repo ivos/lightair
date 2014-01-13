@@ -3,14 +3,10 @@ package it.setup.core;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
 
-import org.joda.time.DateMidnight;
-import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,25 +47,28 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 
 	@Override
 	protected void verify() {
-		verifyRow(0, "efghijklmnopqrs     ", "abcdefghijklmnopqrstuvxyz",
-				12345678, new DateMidnight(2999, 12, 31), new LocalTime(23, 59,
-						58), new DateTime(2998, 11, 30, 22, 57, 56, 789),
-				8765.4321, true, 9223372036854770000L, new BigDecimal(
-						"12345678901234.56"), "text1", "EjRWeJCrzeI=",
-				"/ty6CYdlQyI=");
-		verifyRow(1, null, null, 0, new DateMidnight(2000, 1, 2),
-				new LocalTime(0, 0, 0), new DateTime(2000, 1, 2, 3, 4, 5, 678),
-				0., false, 0L, new BigDecimal("0"), null, null, null);
-		verifyRow(2, null, null, null, null, null, null, null, null, null,
-				null, null, null, null);
+		verifyRowOracle(0, "efghijklmnopqrs     ", "abcdefghijklmnopqrstuvxyz",
+				12345678, "2999-12-31 00:00:00.0", "1970-01-01 23:59:58.0",
+				"2998-11-30 22:57:56.789", 8765.4321, true,
+				9223372036854770000L, new BigDecimal("12345678901234.56"),
+				"text1", "EjRWeJCrzeI=", "/ty6CYdlQyI=");
+		verifyRowOracle(1, null, null, 0, "2000-01-02 00:00:00.0",
+				"1970-01-01 00:00:00.0", "2000-01-02 03:04:05.678", 0., false,
+				0L, new BigDecimal("0"), null, null, null);
+		verifyRowOracle(2, null, null, null, null, null, null, null, null,
+				null, null, null, null, null);
+		verifyRowOracle(3, "char_type 8466900   ", "varchar_type 8464100",
+				8463600, "1903-01-06 00:31:40.0", "2096-07-31 23:53:20.8",
+				"2088-11-30 23:06:40.0", 84684.0, false, 8464900L,
+				new BigDecimal("84670"), "clob_type 8463200",
+				"YmxvYl90eXBlIDg0NjU0MDA=", "Yjg0NjIzMDA=");
 	}
 
-	@Override
-	protected void verifyRow(int id, String char_type, String varchar_type,
-			Integer integer_type, DateMidnight date_type, LocalTime time_type,
-			DateTime timestamp_type, Double double_type, Boolean boolean_type,
-			Long bigint_type, BigDecimal decimal_type, String clob_type,
-			String blob_type, String binary_type) {
+	protected void verifyRowOracle(int id, String char_type,
+			String varchar_type, Integer integer_type, String date_type,
+			String time_type, String timestamp_type, Double double_type,
+			Boolean boolean_type, Long bigint_type, BigDecimal decimal_type,
+			String clob_type, String blob_type, String binary_type) {
 		assertEquals("id " + id, id,
 				((BigDecimal) values.get(id).get("id")).intValue());
 		assertEquals("char_type " + id, char_type,
@@ -86,24 +85,21 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 		if (null == date_type) {
 			assertNull("date_type " + id, values.get(id).get("date_type"));
 		} else {
-			assertEquals("date_type " + id, date_type.toDate(), values.get(id)
-					.get("date_type"));
+			assertEquals("date_type " + id, date_type,
+					values.get(id).get("date_type").toString());
 		}
 		if (null == time_type) {
 			assertNull("time_type " + id, values.get(id).get("time_type"));
 		} else {
-			assertEquals(
-					"time_type " + id,
-					time_type,
-					LocalTime.fromDateFields((Date) values.get(id).get(
-							"time_type")));
+			assertEquals("time_type " + id, time_type,
+					values.get(id).get("time_type").toString());
 		}
 		if (null == timestamp_type) {
 			assertNull("timestamp_type " + id,
 					values.get(id).get("timestamp_type"));
 		} else {
-			assertEquals("timestamp_type " + id, timestamp_type.toDate(),
-					values.get(id).get("timestamp_type"));
+			assertEquals("timestamp_type " + id, timestamp_type, values.get(id)
+					.get("timestamp_type").toString());
 		}
 		assertEquals("double_type type " + id, double_type,
 				values.get(id).get("double_type"));

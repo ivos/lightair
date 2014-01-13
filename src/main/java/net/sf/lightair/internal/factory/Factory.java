@@ -13,8 +13,10 @@ import net.sf.lightair.exception.DatabaseAccessException;
 import net.sf.lightair.internal.dbunit.AutoPreparedStatementFactory;
 import net.sf.lightair.internal.dbunit.ConnectionFactory;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
+import net.sf.lightair.internal.dbunit.database.DatabaseConnection;
 import net.sf.lightair.internal.dbunit.dataset.MergingTable;
 import net.sf.lightair.internal.dbunit.dataset.TokenReplacingFilter;
+import net.sf.lightair.internal.dbunit.util.SQLHelper;
 import net.sf.lightair.internal.junit.BaseUrlTestRule;
 import net.sf.lightair.internal.junit.SetupExecutor;
 import net.sf.lightair.internal.junit.SetupListTestRule;
@@ -31,17 +33,21 @@ import net.sf.lightair.internal.unitils.compare.Column;
 import net.sf.lightair.internal.unitils.compare.DataSetAssert;
 import net.sf.lightair.internal.unitils.compare.VariableResolver;
 import net.sf.lightair.internal.util.AutoNumberGenerator;
-import net.sf.lightair.internal.util.AutoValueGenerator;
 import net.sf.lightair.internal.util.DataSetProcessingData;
 import net.sf.lightair.internal.util.DataSetResolver;
 import net.sf.lightair.internal.util.DurationParser;
 import net.sf.lightair.internal.util.HashGenerator;
 import net.sf.lightair.internal.util.Profiles;
+import net.sf.lightair.internal.util.StandardAutoValueGenerator;
+import net.sf.lightair.internal.util.UniqueAutoValueGenerator;
 
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.CustomDatabaseTableMetaData;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.statement.PreparedStatementFactory;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.operation.AutoInsertOperation;
 import org.dbunit.operation.CompositeOperation;
 import org.dbunit.operation.DatabaseOperation;
@@ -153,7 +159,10 @@ public class Factory implements PropertyKeys {
 
 	private final HashGenerator hashGenerator = new HashGenerator();
 	private final AutoNumberGenerator autoNumberGenerator = new AutoNumberGenerator();
-	private final AutoValueGenerator autoValueGenerator = new AutoValueGenerator();
+	private final StandardAutoValueGenerator standardAutoValueGenerator = new StandardAutoValueGenerator();
+	private final UniqueAutoValueGenerator uniqueAutoValueGenerator = new UniqueAutoValueGenerator();
+
+	private final SQLHelper sqlHelper = new SQLHelper();
 
 	/**
 	 * Initialize single-instance classes.
@@ -180,8 +189,9 @@ public class Factory implements PropertyKeys {
 				TIME_DIFFERENCE_LIMIT, 0);
 		tokenReplacingFilter.setDurationParser(durationParser);
 		autoNumberGenerator.setHashGenerator(hashGenerator);
-		autoValueGenerator.setAutoNumberGenerator(autoNumberGenerator);
-		statementFactory.setAutoValueGenerator(autoValueGenerator);
+		standardAutoValueGenerator.setAutoNumberGenerator(autoNumberGenerator);
+		uniqueAutoValueGenerator.setDelegate(standardAutoValueGenerator);
+		statementFactory.setAutoValueGenerator(uniqueAutoValueGenerator);
 	}
 
 	private void initDataSources() {
@@ -225,7 +235,8 @@ public class Factory implements PropertyKeys {
 
 	public void initDataSetProcessing() {
 		dataSetProcessingData = new DataSetProcessingData();
-		autoValueGenerator.init();
+		standardAutoValueGenerator.init();
+		uniqueAutoValueGenerator.init();
 	}
 
 	// getters for classes always newly instantiated
@@ -278,6 +289,28 @@ public class Factory implements PropertyKeys {
 		// return new DbUnitDatabaseConnection(dataSource, schemaName);
 	}
 
+	public ITableMetaData getTableMetaData(String tableName,
+			IDatabaseConnection connection, boolean validate,
+			boolean caseSensitiveMetaData) throws DataSetException {
+		final CustomDatabaseTableMetaData tableMetaData = new CustomDatabaseTableMetaData(
+				tableName, connection, true, caseSensitiveMetaData);
+		tableMetaData.setSqlHelper(sqlHelper);
+		return tableMetaData;
+	}
+
+	public net.sf.lightair.internal.dbunit.dataset.Column getColumn(
+			String columnName, DataType dataType, String sqlTypeName,
+			int nullable, String columnDefaultValue, String remarks,
+			String isAutoIncrement, int columnLength, Integer columnPrecision) {
+		return new net.sf.lightair.internal.dbunit.dataset.Column(columnName,
+				dataType, sqlTypeName,
+				org.dbunit.dataset.Column.nullableValue(nullable),
+				columnDefaultValue, remarks,
+				org.dbunit.dataset.Column.AutoIncrement
+						.autoIncrementValue(isAutoIncrement), columnLength,
+				columnPrecision);
+	}
+
 	// init methods for produced objects
 
 	public void initMergingTable(MergingTable mergingTable) {
@@ -288,6 +321,7 @@ public class Factory implements PropertyKeys {
 	public void initColumn(Column column) {
 		column.setVariableResolver(variableResolver);
 		column.setTimeDifferenceLimit(timeDifferenceLimit);
+		column.setAutoValueGenerator(uniqueAutoValueGenerator);
 	}
 
 	// static method call wrappers

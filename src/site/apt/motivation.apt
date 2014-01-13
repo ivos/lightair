@@ -106,6 +106,35 @@ Motivation, or Is Light Air for me?
  On any subsequent occurrence (in this case in both the line_item.order_id column values)
  it verifies that the actual database value is equal to the already defined value of the variable.
 
+ When writing tests I frequently want to use <<unique values>>, 
+ for example to verify proper mapping of attributes from user to DB and vice versa.
+ I do not care what particular values are used, I just want to have them unique,
+ so that I can tell from the destination values that the mapping works correctly.\
+ I want to be able to use <<@auto token>> to have the test tool <<generate a unique 
+ value for the column automatically>>.
+
+ This will:
+ 
+ [[1]] Save me the painstaking work of specifying all the values manually
+ and taking care that they really are unique.
+ 
+ [[2]] Help me distinguish columns that drive the functionality from columns
+ that just need to be unique but whose particular value is irrelevant for the test.
+ 
+ []
+ 
+ So, for example, I can write a dataset like this:
+
++---+
+<dataset>
+	<user id="11" email="@auto" name="@auto" password="@auto" version="@auto" />
+	<user_session id="21" user_id="11" started="@auto" version="@auto" />
+
+	<user id="12" email="@auto" name="@auto" password="@auto" version="@auto" />
+	<user_session id="22" user_id="12" started="@auto" version="@auto" />
+</dataset>
++---+
+
 * Working with the application
 
  I want to write my test in Java by hand.

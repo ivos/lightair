@@ -11,29 +11,16 @@ import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
-public class DataTypesSetupTestBase extends DataTypesTestBase {
+public abstract class DataTypesSetupTestBase extends DataTypesTestBase {
 
 	public void perform() {
-		assertEquals("Count", new Integer(3), db.queryForObject(
+		assertEquals("Count", new Integer(4), db.queryForObject(
 				"select count(*) from data_types", Integer.class));
 		values = db.queryForList("select * from data_types");
 		verify();
 	}
 
-	protected void verify() {
-		verifyRow(0, "efghijklmnopqrs     ", "abcdefghijklmnopqrstuvxyz",
-				12345678, new DateMidnight(2999, 12, 31), new LocalTime(23, 59,
-						58), new DateTime(2998, 11, 30, 22, 57, 56, 789),
-				8765.4321, true, 9223372036854770000L, new BigDecimal(
-						"12345678901234.56"), "text1", "EjRWeJCrzeI=",
-				"/ty6CYdlQyI=");
-		verifyRow(1, "                    ", "", 0,
-				new DateMidnight(2000, 1, 2), new LocalTime(0, 0, 0),
-				new DateTime(2000, 1, 2, 3, 4, 5, 678), 0., false, 0L,
-				new BigDecimal("0.00"), "", "", "");
-		verifyRow(2, null, null, null, null, null, null, null, null, null,
-				null, null, null, null);
-	}
+	protected abstract void verify();
 
 	protected void verifyRow(int id, String char_type, String varchar_type,
 			Integer integer_type, DateMidnight date_type, LocalTime time_type,

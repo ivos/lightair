@@ -5,6 +5,8 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
+import net.sf.lightair.internal.util.AutoValueGenerator;
+
 import org.apache.commons.codec.binary.Base64;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
@@ -18,18 +20,58 @@ import org.unitils.dbunit.dataset.comparison.ColumnDifference;
  */
 public class Column extends org.unitils.dbunit.dataset.Column {
 
+	private final String tableName;
+	private int columnLength;
+	private Integer columnPrecision;
+	private Object value;
+
 	/**
 	 * Constructor.
 	 * 
+	 * @param tableName
+	 *            Table name
 	 * @param name
 	 *            Column name
 	 * @param type
 	 *            Column type
+	 * @param columnLength
+	 *            Column length
+	 * @param columnPrecision
 	 * @param value
 	 *            Column value
 	 */
-	public Column(String name, DataType type, Object value) {
+	public Column(String tableName, String name, DataType type,
+			int columnLength, Integer columnPrecision, Object value) {
 		super(name, type, value);
+		this.tableName = tableName;
+		this.columnLength = columnLength;
+		this.columnPrecision = columnPrecision;
+		this.value = value;
+	}
+
+	@Override
+	public Object getValue() {
+		return value;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
+	public int getColumnLength() {
+		return columnLength;
+	}
+
+	public void setColumnLength(int columnLength) {
+		this.columnLength = columnLength;
+	}
+
+	public Integer getColumnPrecision() {
+		return columnPrecision;
+	}
+
+	public void setColumnPrecision(Integer columnPrecision) {
+		this.columnPrecision = columnPrecision;
 	}
 
 	// Extracted to support variables
@@ -48,6 +90,15 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 			org.unitils.dbunit.dataset.Column actualColumn) {
 		if (isAny()) {
 			return getDifferenceForAny(actualColumn);
+		}
+		if (isAuto()) {
+			int columnLength = ((Column) actualColumn).getColumnLength();
+			Integer columnPrecision = ((Column) actualColumn)
+					.getColumnPrecision();
+			Object value = autoValueGenerator.generateAutoValue(
+					actualColumn.getType(), tableName, actualColumn.getName(),
+					columnLength, columnPrecision);
+			setValue(value);
 		}
 		if (valuesSame(actualColumn)) {
 			return null;
@@ -96,6 +147,10 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 
 	private boolean isAny() {
 		return "@any".equals(getValue());
+	}
+
+	private boolean isAuto() {
+		return "@auto".equals(getValue());
 	}
 
 	private ColumnDifference getDifferenceForAny(
@@ -215,6 +270,17 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	 */
 	public void setTimeDifferenceLimit(long timeDifferenceLimit) {
 		this.timeDifferenceLimit = timeDifferenceLimit;
+	}
+
+	private AutoValueGenerator autoValueGenerator;
+
+	/**
+	 * Set autoValueGenerator.
+	 * 
+	 * @param autoValueGenerator
+	 */
+	public void setAutoValueGenerator(AutoValueGenerator autoValueGenerator) {
+		this.autoValueGenerator = autoValueGenerator;
 	}
 
 }

@@ -217,7 +217,21 @@ public class MyTest {
   * This <<<@timestamp-P2Y3M4DT5H6M7S>>> represents 
   2 years, 3 months, 4 days, 5 hours, 6 minutes and 7 seconds in the past.
 
- [[22]] <<Specify database schema of a table row using XML namespace>>\
+ [[22]] <<Generate column value automatically with @auto>>\
+ Use <<<@auto>>> as a column value to have the actual value <<generated automatically>>.\
+ The value is guaranteed to be <<unique>>, with the obvious exception of boolean columns.
+
+ <Examples:>
+
++---+
+<dataset>
+	<user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
+	<user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
+	<user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
+</dataset>
++---+
+
+ [[23]] <<Specify database schema of a table row using XML namespace>>\
  Specify row <<schema>> using XML namespace:
 
 +---+

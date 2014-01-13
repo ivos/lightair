@@ -8,6 +8,7 @@
 	<body>
 		<release date="2013-12-14" version="2.0.0"
 			description="Token @auto. Profiles. Configurable properties file location">
+			<action type="add">Add support for DB views.</action>
 			<action type="add">Add token @auto.</action>
 			<action type="add">Add support for profiles - connections to
 				multiple databases.
