@@ -235,7 +235,6 @@ public class Factory implements PropertyKeys {
 
 	public void initDataSetProcessing() {
 		dataSetProcessingData = new DataSetProcessingData();
-		standardAutoValueGenerator.init();
 		uniqueAutoValueGenerator.init();
 	}
 

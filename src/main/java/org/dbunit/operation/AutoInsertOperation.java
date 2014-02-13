@@ -110,7 +110,7 @@ public class AutoInsertOperation extends InsertOperation {
 													column.getColumnName()),
 											column.getDataType(), tableName,
 											column.getColumnName(),
-											columnLength, columnPrecision);
+											columnLength, columnPrecision, row);
 
 									// statement.addValue(table.getValue(row,column.getColumnName()),column.getDataType());
 

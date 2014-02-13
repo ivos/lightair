@@ -15,6 +15,7 @@ public class RowComparison {
 	private final int actualRowIndex;
 	private final List<org.unitils.dbunit.dataset.Column> missingColumns = new ArrayList<org.unitils.dbunit.dataset.Column>();
 	private final List<ColumnDifference> columnDifferences = new ArrayList<ColumnDifference>();
+	private final int rowId;
 
 	/**
 	 * Constructor.
@@ -25,11 +26,15 @@ public class RowComparison {
 	 *            Actual row
 	 * @param actualRowIndex
 	 *            Zero-based index of actual row in database table
+	 * @param rowId
+	 *            expected row index
 	 */
-	public RowComparison(Row expectedRow, Row actualRow, int actualRowIndex) {
+	public RowComparison(Row expectedRow, Row actualRow, int actualRowIndex,
+			int rowId) {
 		this.expectedRow = expectedRow;
 		this.actualRow = actualRow;
 		this.actualRowIndex = actualRowIndex;
+		this.rowId = rowId;
 		compare();
 	}
 
@@ -56,7 +61,7 @@ public class RowComparison {
 				missingColumns.add(expectedColumn);
 			} else {
 				ColumnDifference columnDifference = ((Column) expectedColumn)
-						.preCompare(actualColumn);
+						.preCompare(actualColumn, rowId);
 				if (columnDifference != null) {
 					columnDifferences.add(columnDifference);
 				}

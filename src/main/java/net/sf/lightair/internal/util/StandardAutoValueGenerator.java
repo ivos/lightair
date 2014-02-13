@@ -1,8 +1,6 @@
 package net.sf.lightair.internal.util;
 
 import java.sql.Types;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.sf.lightair.exception.UnsupportedDataType;
 
@@ -26,12 +24,12 @@ public class StandardAutoValueGenerator implements AutoValueGenerator {
 	private AutoNumberGenerator autoNumberGenerator;
 
 	public String generateAutoValue(DataType dataType, String tableName,
-			String columnName, int columnLength, Integer decimalDigits) {
+			String columnName, int columnLength, Integer decimalDigits,
+			int rowId) {
 		String lowerColumnName = columnName.toLowerCase();
 		String lowerTableName = tableName.toLowerCase();
-		final int rowIndex = getNextRowIndex(lowerTableName, lowerColumnName);
 		int autoNumber = autoNumberGenerator.generateAutoNumber(lowerTableName,
-				lowerColumnName, rowIndex);
+				lowerColumnName, rowId);
 		String value = generate(dataType, lowerColumnName, autoNumber,
 				columnLength, decimalDigits);
 		log.debug("Generated auto value for {}.{} of data type {} as [{}].",
@@ -130,33 +128,6 @@ public class StandardAutoValueGenerator implements AutoValueGenerator {
 					columnLength - autoNumberString.length());
 		}
 		return prefix + autoNumberString;
-	}
-
-	private final Map<String, Integer> rowIndexes = new HashMap<String, Integer>();
-
-	private int getNextRowIndex(String tableName, String columnName) {
-		StringBuffer sb = new StringBuffer();
-		sb.append('"');
-		sb.append(tableName);
-		sb.append("\".\"");
-		sb.append(columnName);
-		sb.append('"');
-		String key = sb.toString();
-		Integer currentValue = rowIndexes.get(key);
-		if (null == currentValue) {
-			currentValue = 0;
-		} else {
-			currentValue++;
-		}
-		rowIndexes.put(key, currentValue);
-		return currentValue;
-	}
-
-	/**
-	 * Reset cache of row indexes.
-	 */
-	public void init() {
-		rowIndexes.clear();
 	}
 
 	// bean setters

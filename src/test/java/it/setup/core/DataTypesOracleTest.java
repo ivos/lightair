@@ -57,11 +57,11 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 				0L, new BigDecimal("0"), null, null, null);
 		verifyRowOracle(2, null, null, null, null, null, null, null, null,
 				null, null, null, null, null);
-		verifyRowOracle(3, "char_type 8466900   ", "varchar_type 8464100",
-				8463600, "1903-01-06 00:31:40.0", "2096-07-31 23:53:20.8",
-				"2088-11-30 23:06:40.0", 84684.0, false, 8464900L,
-				new BigDecimal("84670"), "clob_type 8463200",
-				"YmxvYl90eXBlIDg0NjU0MDA=", "Yjg0NjIzMDA=");
+		verifyRowOracle(3, "char_type 8466903   ", "varchar_type 8464103",
+				8463603, "1903-01-09 00:31:43.0", "2096-08-03 23:53:23.803",
+				"2088-12-03 23:06:43.003", 84684.03, false, 8464903L,
+				new BigDecimal("84670.03"), "clob_type 8463203",
+				"YmxvYl90eXBlIDg0NjU0MDM=", "Yjg0NjIzMDM=");
 	}
 
 	protected void verifyRowOracle(int id, String char_type,

@@ -25,7 +25,7 @@ public class Column_PreCompareTest extends JMockSupport {
 		c = new Column(null, null, null, 0, null, "value1");
 		org.unitils.dbunit.dataset.Column other = new org.unitils.dbunit.dataset.Column(
 				null, null, "value1");
-		assertNull(c.preCompare(other));
+		assertNull(c.preCompare(other, 0));
 	}
 
 	@Test
@@ -33,7 +33,7 @@ public class Column_PreCompareTest extends JMockSupport {
 		c = new Column(null, null, null, 0, null, null);
 		org.unitils.dbunit.dataset.Column other = new org.unitils.dbunit.dataset.Column(
 				null, null, "value1");
-		assertNotNull(c.preCompare(other));
+		assertNotNull(c.preCompare(other, 0));
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class Column_PreCompareTest extends JMockSupport {
 			}
 		});
 
-		assertNotNull(c.preCompare(other));
+		assertNotNull(c.preCompare(other, 0));
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class Column_PreCompareTest extends JMockSupport {
 			}
 		});
 
-		assertNull(c.preCompare(other));
+		assertNull(c.preCompare(other, 0));
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public class Column_PreCompareTest extends JMockSupport {
 			}
 		});
 
-		assertNotNull(c.preCompare(other));
+		assertNotNull(c.preCompare(other, 0));
 	}
 
 }

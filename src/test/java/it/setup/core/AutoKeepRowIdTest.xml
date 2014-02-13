@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<a id="1" startsAuto="@auto" startsManual="sm1" />
+	<b id="1" startsAuto="@auto" startsManual="sm1" />
+
+	<a id="2" startsAuto="sa2" startsManual="@auto" />
+	<b id="2" startsAuto="sa2" startsManual="@auto" />
+
+	<a id="3" startsAuto="sa3" startsManual="sm3" />
+	<b id="3" startsAuto="sa3" startsManual="sm3" />
+
+	<a id="4" startsAuto="@auto" startsManual="@auto" />
+	<b id="4" startsAuto="@auto" startsManual="@auto" />
+</dataset>

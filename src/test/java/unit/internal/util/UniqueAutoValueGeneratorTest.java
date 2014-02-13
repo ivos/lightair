@@ -28,7 +28,7 @@ public class UniqueAutoValueGeneratorTest extends JMockSupport {
 		check(new Expectations() {
 			{
 				one(delegate).generateAutoValue(dataType, "tableName1",
-						columnName, 123, 456);
+						columnName, 123, 456, 789);
 				will(returnValue(result));
 			}
 		});
@@ -39,7 +39,7 @@ public class UniqueAutoValueGeneratorTest extends JMockSupport {
 		check("columnName1", DataType.INTEGER, "result1");
 
 		assertEquals("result1", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName1", 123, 456));
+				"tableName1", "columnName1", 123, 456, 789));
 	}
 
 	@Test
@@ -49,11 +49,11 @@ public class UniqueAutoValueGeneratorTest extends JMockSupport {
 		check("columnName3", DataType.INTEGER, "result3");
 
 		assertEquals("result1", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName1", 123, 456));
+				"tableName1", "columnName1", 123, 456, 789));
 		assertEquals("result2", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName2", 123, 456));
+				"tableName1", "columnName2", 123, 456, 789));
 		assertEquals("result3", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName3", 123, 456));
+				"tableName1", "columnName3", 123, 456, 789));
 	}
 
 	@Test
@@ -64,14 +64,14 @@ public class UniqueAutoValueGeneratorTest extends JMockSupport {
 		check("columnName4", DataType.INTEGER, "result2");
 
 		assertEquals("result1", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName1", 123, 456));
+				"tableName1", "columnName1", 123, 456, 789));
 		assertEquals("result2", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName2", 123, 456));
+				"tableName1", "columnName2", 123, 456, 789));
 		assertEquals("result3", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName3", 123, 456));
+				"tableName1", "columnName3", 123, 456, 789));
 		try {
 			g.generateAutoValue(DataType.INTEGER, "tableName1", "columnName4",
-					123, 456);
+					123, 456, 789);
 			fail("Should throw");
 		} catch (DuplicateAutoValueException e) {
 			assertEquals(
@@ -90,13 +90,13 @@ public class UniqueAutoValueGeneratorTest extends JMockSupport {
 		check("columnName4", DataType.BOOLEAN, "false");
 
 		assertEquals("true", g.generateAutoValue(DataType.BOOLEAN,
-				"tableName1", "columnName1", 123, 456));
+				"tableName1", "columnName1", 123, 456, 789));
 		assertEquals("false", g.generateAutoValue(DataType.BOOLEAN,
-				"tableName1", "columnName2", 123, 456));
+				"tableName1", "columnName2", 123, 456, 789));
 		assertEquals("true", g.generateAutoValue(DataType.BOOLEAN,
-				"tableName1", "columnName3", 123, 456));
+				"tableName1", "columnName3", 123, 456, 789));
 		assertEquals("false", g.generateAutoValue(DataType.BOOLEAN,
-				"tableName1", "columnName4", 123, 456));
+				"tableName1", "columnName4", 123, 456, 789));
 	}
 
 	@Test
@@ -109,18 +109,18 @@ public class UniqueAutoValueGeneratorTest extends JMockSupport {
 		check("columnName6", DataType.INTEGER, "result3");
 
 		assertEquals("result1", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName1", 123, 456));
+				"tableName1", "columnName1", 123, 456, 789));
 		assertEquals("result2", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName2", 123, 456));
+				"tableName1", "columnName2", 123, 456, 789));
 		assertEquals("result3", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName3", 123, 456));
+				"tableName1", "columnName3", 123, 456, 789));
 		g.init();
 		assertEquals("result2", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName4", 123, 456));
+				"tableName1", "columnName4", 123, 456, 789));
 		assertEquals("result1", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName5", 123, 456));
+				"tableName1", "columnName5", 123, 456, 789));
 		assertEquals("result3", g.generateAutoValue(DataType.INTEGER,
-				"tableName1", "columnName6", 123, 456));
+				"tableName1", "columnName6", 123, 456, 789));
 	}
 
 }

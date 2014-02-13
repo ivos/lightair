@@ -97,9 +97,11 @@ public class Table extends org.unitils.dbunit.dataset.Table {
 	private RowComparison findBestRowComparison(Row actualRow,
 			int actualRowIndex, List<Row> expectedRows) {
 		RowComparison bestRowComparison = null;
+		int rowId = -1;
 		for (Row expectedRow : expectedRows) {
+			rowId++;
 			RowComparison rowComparison = new RowComparison(expectedRow,
-					actualRow, actualRowIndex);
+					actualRow, actualRowIndex, rowId);
 			if (null == bestRowComparison
 					|| bestRowComparison.isBetterMatch(rowComparison)) {
 				bestRowComparison = rowComparison;

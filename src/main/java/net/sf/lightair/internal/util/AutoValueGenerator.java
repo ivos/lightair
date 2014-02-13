@@ -16,9 +16,11 @@ public interface AutoValueGenerator {
 	 * @param columnName
 	 * @param columnLength
 	 * @param decimalDigits
+	 * @param rowId
 	 * @return
 	 */
 	String generateAutoValue(DataType dataType, String tableName,
-			String columnName, int columnLength, Integer decimalDigits);
+			String columnName, int columnLength, Integer decimalDigits,
+			int rowId);
 
 }

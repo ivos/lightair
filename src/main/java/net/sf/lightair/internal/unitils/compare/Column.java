@@ -87,7 +87,7 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	 *         otherwise
 	 */
 	public ColumnDifference preCompare(
-			org.unitils.dbunit.dataset.Column actualColumn) {
+			org.unitils.dbunit.dataset.Column actualColumn, int rowId) {
 		if (isAny()) {
 			return getDifferenceForAny(actualColumn);
 		}
@@ -97,7 +97,7 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 					.getColumnPrecision();
 			Object value = autoValueGenerator.generateAutoValue(
 					actualColumn.getType(), tableName, actualColumn.getName(),
-					columnLength, columnPrecision);
+					columnLength, columnPrecision, rowId);
 			setValue(value);
 		}
 		if (valuesSame(actualColumn)) {

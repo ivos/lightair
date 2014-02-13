@@ -42,11 +42,11 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 				new BigDecimal("0.00"), "", "", "");
 		verifyRow(2, null, null, null, null, null, null, null, null, null,
 				null, null, null, null);
-		verifyRow(3, "char_type 8466900", "varchar_type 8464100", 8463600,
-				DateMidnight.parse("1903-01-06"), LocalTime.parse("23:53:20"),
-				DateTime.parse("2088-11-30T23:06:40"), 84684.0, false,
-				8464900L, new BigDecimal("84670.00"), "clob_type 8463200",
-				"YmxvYl90eXBlIDg0NjU0MDA=", "Yjg0NjIzMDA=");
+		verifyRow(3, "char_type 8466903", "varchar_type 8464103", 8463603,
+				DateMidnight.parse("1903-01-09"), LocalTime.parse("23:53:23"),
+				DateTime.parse("2088-12-03T23:06:43.003"), 84684.03, true,
+				8464903L, new BigDecimal("84670.03"), "clob_type 8463203",
+				"YmxvYl90eXBlIDg0NjU0MDM=", "Yjg0NjIzMDM=");
 	}
 
 }
