@@ -35,6 +35,20 @@ Project setup
 </dependency>
 +---+
 
+ Have an slf4j runtime compatible with slf4j used by Light Air.
+ Logback is recommended.
+
++---+
+<dependency>
+ <groupId>ch.qos.logback</groupId>
+ <artifactId>logback-classic</artifactId>
+ <version>1.0.0</version>
+ <scope>test</scope>
+</dependency>
++---+
+
+*** Optional: for web applications
+
  Add JWebUnit plugin dependency of your choice: either HtmlUnit or Selenium.
  HtmlUnit plugin is recommended.
  Use a version compatible with jwebunit-core pulled in by Light Air itself.
@@ -44,18 +58,6 @@ Project setup
  <groupId>net.sourceforge.jwebunit</groupId>
  <artifactId>jwebunit-htmlunit-plugin</artifactId>
  <version>${jwebunit-version}</version>
- <scope>test</scope>
-</dependency>
-+---+
-
- Have an slf4j runtime compatible with slf4j used by Light Air.
- Logback is recommended.
-
-+---+
-<dependency>
- <groupId>ch.qos.logback</groupId>
- <artifactId>logback-classic</artifactId>
- <version>1.0.0</version>
  <scope>test</scope>
 </dependency>
 +---+

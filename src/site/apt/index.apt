@@ -6,10 +6,10 @@
  2011-09-26
  ---
 
-Testing web applications with common sense
+Test database applications with common sense
  
  Light Air is a tool to support 
- <<black-box system (integration) tests of web applications>> for developers.
+ <<black-box system (integration) tests>> of database applications for developers.
  
  It strives for <<intuitive>>, simple usage and <<common-sense behavior>>. 
  
@@ -23,7 +23,7 @@ Testing web applications with common sense
  
  \ 
 
- Please proceed to {{{./motivation.html}motivation}} 
+ Proceed to {{{./motivation.html}motivation}} 
  to find out whether Light Air is suitable for you.
  
  \ 
