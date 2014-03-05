@@ -10,7 +10,7 @@
 			description="Fix generate @auto with correct row index.">
 			<action type="fix">Fix generate @auto with correct row index.</action>
 		</release>
-		<release date="2013-12-14" version="2.0.0"
+		<release date="2014-01-13" version="2.0.0"
 			description="Token @auto. Profiles. Configurable properties file location">
 			<action type="add">Add support for DB views.</action>
 			<action type="add">Add token @auto.</action>
