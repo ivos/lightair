@@ -6,6 +6,10 @@
 		<author email="ivo.maixner@gmail.com">Ivo Maixner</author>
 	</properties>
 	<body>
+		<release date="2014-03-05" version="2.1.0"
+			description="Fix generate @auto with correct row index.">
+			<action type="fix">Fix generate @auto with correct row index.</action>
+		</release>
 		<release date="2013-12-14" version="2.0.0"
 			description="Token @auto. Profiles. Configurable properties file location">
 			<action type="add">Add support for DB views.</action>
