@@ -12,6 +12,14 @@ import org.junit.runner.RunWith;
 import test.support.ConfigSupport;
 
 @Ignore
+/**
+ * Requires:
+ * <ul>
+ * <li>Running Oracle XE 11.2.0</li>
+ * <li>User with credentials: SYSTEM / password.</li>
+ * <li>Driver ojdbc6_g.jar copied into jre/lib/ext directory in the JDK.</li>
+ * </ul>
+ */
 @RunWith(LightAir.class)
 @Verify
 public class DataTypesOracleTest extends DataTypesTestBase {

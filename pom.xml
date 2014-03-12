@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.sf.lightair</groupId>
@@ -42,7 +43,6 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<jwebunit-version>3.1</jwebunit-version>
 		<junit-version>4.11</junit-version>
-		<oracle.install>/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6_g.jar</oracle.install>
 	</properties>
 	<scm>
 		<connection>scm:git:git://git.code.sf.net/p/lightair/code</connection>
@@ -254,14 +254,8 @@
 			<version>10.10.1.1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc6</artifactId>
-			<version>11.2.0.2.0</version>
-			<scope>system</scope>
-			<optional>true</optional>
-			<systemPath>${oracle.install}</systemPath>
-		</dependency>
+		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the 
+			JDK. -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
