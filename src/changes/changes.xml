@@ -6,9 +6,15 @@
 		<author email="ivo.maixner@gmail.com">Ivo Maixner</author>
 	</properties>
 	<body>
+		<release date="2014-03-17" version="2.1.1"
+			description="Fix remove absolute system path from pom.">
+			<action type="fix">Fix remove absolute system path from pom. Caused
+				problems on Windows.</action>
+		</release>
 		<release date="2014-03-05" version="2.1.0"
 			description="Fix generate @auto with correct row index.">
-			<action type="fix">Fix generate @auto with correct row index.</action>
+			<action type="fix">Fix generate @auto with correct row index.
+			</action>
 		</release>
 		<release date="2014-01-13" version="2.0.0"
 			description="Token @auto. Profiles. Configurable properties file location">
