@@ -6,10 +6,16 @@ import java.util.Map;
 import net.sf.lightair.exception.AutoValueColumnOverflowException;
 import net.sf.lightair.exception.AutoValueTableOverflowException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Generates <code>@auto</code> number.
  */
 public class AutoNumberGenerator {
+
+	private final Logger log = LoggerFactory
+			.getLogger(AutoNumberGenerator.class);
 
 	private HashGenerator hashGenerator;
 
@@ -49,12 +55,16 @@ public class AutoNumberGenerator {
 			throw new AutoValueTableOverflowException(tableName);
 		}
 		int tableHash = hashGenerator.generateHash(tableName, 3);
+		log.trace("Generated table hash {} for table {}.", tableHash, tableName);
 		String storedTableName = tables.get(tableHash);
 		while (null != storedTableName && !tableName.equals(storedTableName)) {
 			tableHash++;
 			if (tableHash > 999) {
 				tableHash -= 1000;
 			}
+			log.trace(
+					"Table hash conflicted with table {}, incrementing to {}.",
+					storedTableName, tableHash);
 			storedTableName = tables.get(tableHash);
 		}
 		if (!tableName.equals(storedTableName)) {
@@ -65,6 +75,8 @@ public class AutoNumberGenerator {
 
 	private int getColumnHash(String tableName, String columnName) {
 		int columnHash = hashGenerator.generateHash(columnName, 2);
+		log.trace("Generated column hash {} for column {}.{}.", columnHash,
+				tableName, columnName);
 		Map<Integer, String> tableColumns = columns.get(tableName);
 		if (null == tableColumns) {
 			tableColumns = new HashMap<Integer, String>();
@@ -79,6 +91,9 @@ public class AutoNumberGenerator {
 			if (columnHash > 99) {
 				columnHash -= 100;
 			}
+			log.trace(
+					"Column hash conflicted with column {}, incrementing to {}.",
+					storedColumnName, columnHash);
 			storedColumnName = tableColumns.get(columnHash);
 		}
 		if (!columnName.equals(storedColumnName)) {

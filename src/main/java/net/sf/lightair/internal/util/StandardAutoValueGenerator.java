@@ -43,6 +43,10 @@ public class StandardAutoValueGenerator implements AutoValueGenerator {
 				String.valueOf(autoNumber), 7, '0');
 		String stringValue = formatStringValue(columnName, autoNumberString,
 				columnLength);
+		log.trace(
+				"Generating auto value for data type {}, column name {}, "
+						+ "auto number {}, column length {}, decimal digits {}, string value {}.",
+				dataType, columnName, autoNumber, columnLength, decimalDigits);
 
 		switch (dataType.getSqlType()) {
 		case Types.INTEGER:
