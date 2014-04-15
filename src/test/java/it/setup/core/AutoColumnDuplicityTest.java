@@ -31,13 +31,23 @@ public class AutoColumnDuplicityTest extends CommonTestBase {
 	}
 
 	@Test
-	public void test() {
+	public void aduplicity() {
+		// method name must start with "a" to run first
 		values = db.queryForList("select * from a");
 
 		perform("Standard", "ao", "98");
 		perform("Same hash", "gs", "99");
 		perform("Increment to 00", "hm", "00");
 		perform("Increment to 01", "kg", "01");
+	}
+
+	@Test
+	@Setup("AutoColumnClearCacheTest.xml")
+	public void clearCache_SingleDataset() {
+		values = db.queryForList("select * from a");
+
+		perform("First", "hm", "98");
+		perform("Second", "kg", "99");
 	}
 
 	private void perform(String test, String column, String columnHash) {

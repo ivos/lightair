@@ -102,6 +102,14 @@ public class AutoNumberGenerator {
 		return columnHash;
 	}
 
+	/**
+	 * Reset cache of values.
+	 */
+	public void init() {
+		tables.clear();
+		columns.clear();
+	}
+
 	// bean setters
 
 	public void setHashGenerator(HashGenerator hashGenerator) {
