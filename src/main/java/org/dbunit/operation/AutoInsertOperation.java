@@ -11,6 +11,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.statement.IPreparedBatchStatement;
 import org.dbunit.database.statement.IStatementFactory;
 import org.dbunit.dataset.Column;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
@@ -68,25 +69,20 @@ public class AutoInsertOperation extends InsertOperation {
 					for (int i = start;; i = i + increment) {
 						int row = i;
 
-						// If current row have a different ignore value mapping
-						// than
-						// previous one, we generate a new statement
-						if (ignoreMapping == null
-								|| !equalsIgnoreMapping(ignoreMapping, table,
-										row)) {
-							// Execute and close previous statement
-							if (statement != null) {
-								statement.executeBatch();
-								statement.clearBatch();
-								statement.close();
-							}
+						// Light Air Start >>>>>>
 
-							ignoreMapping = getIgnoreMapping(table, row);
-							operationData = getOperationData(metaData,
-									ignoreMapping, connection);
-							statement = factory.createPreparedBatchStatement(
-									operationData.getSql(), connection);
+						// Execute and close previous statement
+						if (statement != null) {
+							statement.executeBatch();
+							statement.clearBatch();
+							statement.close();
 						}
+
+						ignoreMapping = getIgnoreMapping(table, row);
+						operationData = getOperationData(metaData,
+								ignoreMapping, connection, table, row);
+						statement = factory.createPreparedBatchStatement(
+								operationData.getSql(), connection);
 
 						// for each column
 						Column[] columns = operationData.getColumns();
@@ -94,41 +90,40 @@ public class AutoInsertOperation extends InsertOperation {
 							// Bind value only if not in ignore mapping
 							if (!ignoreMapping.get(j)) {
 								Column column = columns[j];
-								try {
+								final Object value = table.getValue(row,
+										column.getColumnName());
+								if (null != value) {
+									try {
 
-									// Light Air Start >>>>>>
-									net.sf.lightair.internal.dbunit.dataset.Column dbUnitColumn = (net.sf.lightair.internal.dbunit.dataset.Column) column;
+										net.sf.lightair.internal.dbunit.dataset.Column dbUnitColumn = (net.sf.lightair.internal.dbunit.dataset.Column) column;
 
-									int columnLength = dbUnitColumn
-											.getColumnLength();
-									Integer columnPrecision = dbUnitColumn
-											.getColumnPrecision();
+										int columnLength = dbUnitColumn
+												.getColumnLength();
+										Integer columnPrecision = dbUnitColumn
+												.getColumnPrecision();
 
-									AutoPreparedBatchStatement autoPreparedBatchStatement = (AutoPreparedBatchStatement) statement;
-									autoPreparedBatchStatement.addValue(
-											table.getValue(row,
-													column.getColumnName()),
-											column.getDataType(), tableName,
-											column.getColumnName(),
-											columnLength, columnPrecision, row);
-
-									// statement.addValue(table.getValue(row,column.getColumnName()),column.getDataType());
-
-									// Light Air End <<<<<<
-
-								} catch (TypeCastException e) {
-									throw new TypeCastException(
-											"Error casting value for table '"
-													+ table.getTableMetaData()
-															.getTableName()
-													+ "' and column '"
-													+ column.getColumnName()
-													+ "'", e);
+										AutoPreparedBatchStatement autoPreparedBatchStatement = (AutoPreparedBatchStatement) statement;
+										autoPreparedBatchStatement.addValue(
+												value, column.getDataType(),
+												tableName,
+												column.getColumnName(),
+												columnLength, columnPrecision,
+												row);
+									} catch (TypeCastException e) {
+										throw new TypeCastException(
+												"Error casting value for table '"
+														+ table.getTableMetaData()
+																.getTableName()
+														+ "' and column '"
+														+ column.getColumnName()
+														+ "'", e);
+									}
 								}
 							}
 						}
 						statement.addBatch();
 					}
+					// Light Air End <<<<<<
 				} catch (RowOutOfBoundsException e) {
 					// This exception occurs when records are exhausted
 					// and we reach the end of the table. Ignore this error
@@ -150,4 +145,63 @@ public class AutoInsertOperation extends InsertOperation {
 		}
 	}
 
+	// copy & paste from InsertOperation:
+
+	public OperationData getOperationData(ITableMetaData metaData,
+			BitSet ignoreMapping, IDatabaseConnection connection, ITable table,
+			int row) throws DataSetException {
+		if (logger.isDebugEnabled()) {
+			logger.debug(
+					"getOperationData(metaData={}, ignoreMapping={}, connection={}) - start",
+					new Object[] { metaData, ignoreMapping, connection });
+		}
+
+		Column[] columns = metaData.getColumns();
+
+		// insert
+		StringBuffer sqlBuffer = new StringBuffer(128);
+		sqlBuffer.append("insert into ");
+		sqlBuffer.append(getQualifiedName(connection.getSchema(),
+				metaData.getTableName(), connection));
+
+		// columns
+		sqlBuffer.append(" (");
+		String columnSeparator = "";
+		for (int i = 0; i < columns.length; i++) {
+			// Light Air Start >>>>>>
+			final Object value = table
+					.getValue(row, columns[i].getColumnName());
+			if (null != value) {
+				// Light Air End <<<<<<
+				if (!ignoreMapping.get(i)) {
+					// escape column name
+					String columnName = getQualifiedName(null,
+							columns[i].getColumnName(), connection);
+					sqlBuffer.append(columnSeparator);
+					sqlBuffer.append(columnName);
+					columnSeparator = ", ";
+				}
+			}
+		}
+
+		// values
+		sqlBuffer.append(") values (");
+		String valueSeparator = "";
+		for (int i = 0; i < columns.length; i++) {
+			// Light Air Start >>>>>>
+			final Object value = table
+					.getValue(row, columns[i].getColumnName());
+			if (null != value) {
+				// Light Air End <<<<<<
+				if (!ignoreMapping.get(i)) {
+					sqlBuffer.append(valueSeparator);
+					sqlBuffer.append("?");
+					valueSeparator = ", ";
+				}
+			}
+		}
+		sqlBuffer.append(")");
+
+		return new OperationData(sqlBuffer.toString(), columns);
+	}
 }

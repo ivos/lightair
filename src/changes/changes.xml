@@ -6,10 +6,18 @@
 		<author email="ivo.maixner@gmail.com">Ivo Maixner</author>
 	</properties>
 	<body>
+		<release date="2014-04-16" version="2.1.2"
+			description="Fix @auto on wide tables. Support DB default values.">
+			<action type="fix">Fix clear cache of auto values between test runs.
+			</action>
+			<action type="add">Add proper support for DB default values.
+			</action>
+		</release>
 		<release date="2014-03-17" version="2.1.1"
 			description="Fix remove absolute system path from pom.">
 			<action type="fix">Fix remove absolute system path from pom. Caused
-				problems on Windows.</action>
+				problems on Windows.
+			</action>
 		</release>
 		<release date="2014-03-05" version="2.1.0"
 			description="Fix generate @auto with correct row index.">
