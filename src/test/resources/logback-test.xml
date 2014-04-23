@@ -9,6 +9,8 @@
 	<logger name="net.sf.lightair" level="debug" />
 	<logger name="net.sf.lightair" level="trace" />
 
+	<logger name="net.sf.lightair.sql" level="debug" />
+
 	<logger name="net.sf.lightair.internal.dbunit" level="debug" />
 	-->
 	<root level="off">
