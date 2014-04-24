@@ -21,7 +21,7 @@ public class BaseUrlTestRule extends AbstractTestRule<BaseUrl> {
 	 *            JUnit framework method on which the test rule is being applied
 	 */
 	public BaseUrlTestRule(FrameworkMethod frameworkMethod) {
-		super(frameworkMethod, BaseUrl.class);
+		super(frameworkMethod, BaseUrl.class, null);
 	}
 
 	/**

@@ -15,7 +15,7 @@ public class CustomSetupTest extends SetupTestBase {
 
 	@Test
 	public void classNameXml() {
-		verifyPersons(4);
+		verifyPersons("Joe", "Jane", "Sue", "Jake");
 	}
 
 }

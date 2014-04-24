@@ -8,6 +8,8 @@
 	<body>
 		<release date="2014-04-16" version="2.1.2"
 			description="Fix @auto on wide tables. Support DB default values.">
+			<action type="fix">Fix method annotation overrides class annotation
+				even when one is List and the other is not.</action>
 			<action type="fix">Fix clear cache of auto values between test runs.
 			</action>
 			<action type="add">Add proper support for DB default values.

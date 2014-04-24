@@ -17,7 +17,7 @@ public class VerifyListTestRule extends AbstractTestRule<Verify.List> {
 	 *            JUnit framework method on which the test rule is being applied
 	 */
 	public VerifyListTestRule(FrameworkMethod frameworkMethod) {
-		super(frameworkMethod, Verify.List.class);
+		super(frameworkMethod, Verify.List.class, Verify.class);
 	}
 
 	/**

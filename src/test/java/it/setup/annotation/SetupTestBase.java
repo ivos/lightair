@@ -21,18 +21,14 @@ public class SetupTestBase extends CommonTestBase {
 		db.execute("drop table person");
 	}
 
-	protected void verifyPersons(Integer size) {
-		assertEquals("Count", size,
-				db.queryForObject("select count(*) from person", Integer.class));
+	protected void verifyPersons(String... names) {
+		assertEquals("Count", names.length,
+				db.queryForObject("select count(*) from person", Integer.class)
+						.intValue());
 		List<Map<String, Object>> values = db
 				.queryForList("select * from person");
-		assertEquals("1. name", "Joe", values.get(0).get("name"));
-		assertEquals("2. name", "Jane", values.get(1).get("name"));
-		if (size > 2) {
-			assertEquals("3. name", "Sue", values.get(2).get("name"));
-		}
-		if (size > 3) {
-			assertEquals("4. name", "Jake", values.get(3).get("name"));
+		for (int i = 0; i < names.length; i++) {
+			assertEquals("" + i + ". name", names[i], values.get(i).get("name"));
 		}
 	}
 

@@ -18,7 +18,7 @@ public class DefaultClassSetupTest extends SetupTestBase {
 	 */
 	@Test
 	public void classNameXml() {
-		verifyPersons(2);
+		verifyPersons("Joe", "Jane");
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class DefaultClassSetupTest extends SetupTestBase {
 	 */
 	@Test
 	public void classNameMethodNameXml() {
-		verifyPersons(3);
+		verifyPersons("Joe", "Jane", "Sue");
 	}
 
 }

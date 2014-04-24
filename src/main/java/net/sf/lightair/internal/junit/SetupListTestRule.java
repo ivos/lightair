@@ -17,7 +17,7 @@ public class SetupListTestRule extends AbstractTestRule<Setup.List> {
 	 *            JUnit framework method on which the test rule is being applied
 	 */
 	public SetupListTestRule(FrameworkMethod frameworkMethod) {
-		super(frameworkMethod, Setup.List.class);
+		super(frameworkMethod, Setup.List.class, Setup.class);
 	}
 
 	/**

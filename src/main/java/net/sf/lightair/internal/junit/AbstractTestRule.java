@@ -27,13 +27,23 @@ public abstract class AbstractTestRule<T extends Annotation> implements
 	 *            JUnit framework method on which the test rule is being applied
 	 * @param annotationType
 	 *            Type of annotation that configures the test rule
+	 * @param alternativeAnnotationType
 	 */
-	public AbstractTestRule(FrameworkMethod frameworkMethod,
-			Class<T> annotationType) {
-		this.testMethod = frameworkMethod.getMethod();
+	public <A extends Annotation> AbstractTestRule(
+			FrameworkMethod frameworkMethod, Class<T> annotationType,
+			Class<A> alternativeAnnotationType) {
+		testMethod = frameworkMethod.getMethod();
 		T methodAnnotation = testMethod.getAnnotation(annotationType);
-		annotation = (null != methodAnnotation) ? methodAnnotation : testMethod
-				.getDeclaringClass().getAnnotation(annotationType);
+		final boolean hasAlternativeAnnotation = (null != alternativeAnnotationType)
+				&& (null != testMethod.getAnnotation(alternativeAnnotationType));
+		if (hasAlternativeAnnotation) {
+			annotation = null;
+		} else if (null != methodAnnotation) {
+			annotation = methodAnnotation;
+		} else {
+			annotation = testMethod.getDeclaringClass().getAnnotation(
+					annotationType);
+		}
 	}
 
 	// TestRule contract:
