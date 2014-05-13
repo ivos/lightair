@@ -6,7 +6,7 @@
 		<author email="ivo.maixner@gmail.com">Ivo Maixner</author>
 	</properties>
 	<body>
-		<release date="2014-04-16" version="2.1.2"
+		<release date="2014-05-13" version="2.1.2"
 			description="Fix @auto on wide tables. Support DB default values.">
 			<action type="fix">Fix method annotation overrides class annotation
 				even when one is List and the other is not.</action>
