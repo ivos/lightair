@@ -1,13 +1,14 @@
 package test.support;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import net.sf.lightair.LightAir;
 
+import org.junit.rules.RunRules;
 import org.junit.rules.TestRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.Statement;
 
 public class ExceptionVerifyingJUnitRunner extends LightAir {
 
@@ -29,15 +30,11 @@ public class ExceptionVerifyingJUnitRunner extends LightAir {
 	private Object testObject;
 
 	// add test rule to verify exception
-
-	@Override
-	protected List<TestRule> createTestRules(FrameworkMethod method) {
-		List<TestRule> superTestRules = super.createTestRules(method);
-		List<TestRule> testRules = new ArrayList<TestRule>();
-		testRules.addAll(superTestRules);
-		testRules.add(new ExceptionVerifyingTestRule(method.getMethod(),
-				testObject));
-		return testRules;
-	}
+    @Override
+    protected Statement methodInvoker(FrameworkMethod method, Object test) {
+        Statement statement = super.methodInvoker(method, test);
+        return new RunRules(statement, Collections.<TestRule>singleton(new ExceptionVerifyingTestRule(method.getMethod(),
+                testObject)), describeChild(method));
+    }
 
 }
