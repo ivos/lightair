@@ -84,19 +84,23 @@ public class DataSetLoader {
 	private String[] addDefaultFile(Method testMethod, String suffix,
 			List<File> files) {
 		Class<?> testClass = testMethod.getDeclaringClass();
-		String dataSetName = getDefaultTestMethodFileName(testMethod,
+		String dataSetName = getDefaultClassMethodFileName(testMethod,
 				testClass, suffix);
 		File file = dataSetResolver.resolveIfExists(testMethod, dataSetName);
 		if (null == file) {
-			dataSetName = getDefaultTestClassFileName(testClass, suffix);
-			file = dataSetResolver.resolve(testMethod, dataSetName);
+			dataSetName = getDefaultMethodFileName(testMethod, suffix);
+			file = dataSetResolver.resolveIfExists(testMethod, dataSetName);
+			if (null == file) {
+				dataSetName = getDefaultClassFileName(testClass, suffix);
+				file = dataSetResolver.resolve(testMethod, dataSetName);
+			}
 		}
 		files.add(file);
 		return new String[] { dataSetName };
 	}
 
 	/**
-	 * Get default test method file name of the form
+	 * Get default test class and test method file name of the form
 	 * <code>[TestClassName].[testMethodName][suffix].xml</code>.
 	 * 
 	 * @param testMethod
@@ -107,10 +111,24 @@ public class DataSetLoader {
 	 *            Suffix
 	 * @return Default test method file name
 	 */
-	private String getDefaultTestMethodFileName(Method testMethod,
+	private String getDefaultClassMethodFileName(Method testMethod,
 			Class<?> testClass, String suffix) {
 		return testClass.getSimpleName() + '.' + testMethod.getName() + suffix
 				+ DATA_SET_FILE_EXTENSION;
+	}
+
+	/**
+	 * Get default test method file name of the form
+	 * <code>[TestClassName].[testMethodName][suffix].xml</code>.
+	 * 
+	 * @param testMethod
+	 *            Test method
+	 * @param suffix
+	 *            Suffix
+	 * @return Default test method file name
+	 */
+	private String getDefaultMethodFileName(Method testMethod, String suffix) {
+		return testMethod.getName() + suffix + DATA_SET_FILE_EXTENSION;
 	}
 
 	/**
@@ -123,7 +141,7 @@ public class DataSetLoader {
 	 *            Suffix
 	 * @return Default test class file name
 	 */
-	private String getDefaultTestClassFileName(Class<?> testClass, String suffix) {
+	private String getDefaultClassFileName(Class<?> testClass, String suffix) {
 		return testClass.getSimpleName() + suffix + DATA_SET_FILE_EXTENSION;
 	}
 

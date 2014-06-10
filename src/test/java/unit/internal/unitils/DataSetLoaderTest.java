@@ -96,6 +96,10 @@ public class DataSetLoaderTest extends JMockSupport {
 						"DataSetLoaderTest.aMethodsuffix.xml");
 				will(returnValue(null));
 
+				one(dataSetResolver).resolveIfExists(testMethod,
+						"aMethodsuffix.xml");
+				will(returnValue(null));
+
 				one(dataSetResolver).resolve(testMethod,
 						"DataSetLoaderTestsuffix.xml");
 				will(returnValue(file1));
@@ -155,6 +159,10 @@ public class DataSetLoaderTest extends JMockSupport {
 			{
 				one(dataSetResolver).resolveIfExists(testMethod,
 						"DataSetLoaderTest.aMethodsuffix.xml");
+				will(returnValue(null));
+
+				one(dataSetResolver).resolveIfExists(testMethod,
+						"aMethodsuffix.xml");
 				will(returnValue(null));
 
 				one(dataSetResolver).resolve(testMethod,

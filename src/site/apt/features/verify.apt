@@ -9,12 +9,16 @@
 Verify database
 
  [[1]] <<Default @Verify annotation>>\
- When test method or test class is annotated with <<<@Verify>>>, system locates dataset named\
- <<<\<test class name\>.\<test method name\>-verify.xml>>>\
- in the package of the test class, 
- or if it does not exists, locates dataset named\
- <<<\<test class name\>-verify.xml>>>\
- and <<verifies>> the dataset against the database. 
+ When test method or test class is annotated with <<<@Verify>>>, system
+ locates sequentially the following files in the package of the class, the first file found wins:
+
+  * <<<\<test class name\>.\<test method name\>-verify.xml>>>
+
+  * <<<\<test method name\>-verify.xml>>>
+
+  * <<<\<test class name\>-verify.xml>>>
+
+ Then <<verifies>> the dataset against the database. 
  If no such dataset exists, system throws exception.
 
  <Examples:>

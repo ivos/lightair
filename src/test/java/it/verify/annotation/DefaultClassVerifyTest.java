@@ -29,4 +29,12 @@ public class DefaultClassVerifyTest extends VerifyTestBase {
 		fillPersons(3);
 	}
 
+	/**
+	 * Verifies '&lt;test method name>-verify.xml'.
+	 */
+	@Test
+	public void methodNameXml() {
+		fillPersons(4);
+	}
+
 }

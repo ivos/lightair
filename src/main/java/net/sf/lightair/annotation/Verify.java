@@ -20,10 +20,13 @@ import java.lang.annotation.Target;
  * }
  * </pre>
  * <p>
- * By default, system locates a file named &lt;test class name>.&lt;test method
- * name>-verify.xml in the package of the class. If no such file is found,
- * system locates file named &lt;test class name>-verify.xml in the package of
- * the class.
+ * By default, system locates sequentially the following files in the package of
+ * the class, the first file found wins:
+ * <ol>
+ * <li>&lt;test class name>.&lt;test method name>-verify.xml</li>
+ * <li>&lt;test method name>-verify.xml</li>
+ * <li>&lt;test class name>-verify.xml</li>
+ * </ol>
  * <p>
  * Specify the names of files explicitly in the annotation to override the
  * default file name convention. Multiple files may be specified, system uses

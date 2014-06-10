@@ -9,12 +9,16 @@
 Setup database
 
  [[1]] <<Default @Setup annotation>>\
- When test method or test class is annotated with <<<@Setup>>>, system locates dataset named\
- <<<\<test class name\>.\<test method name\>.xml>>>\
- in the package of the test class, or if it does 
- not exists, locates dataset named\
- <<<\<test class name\>.xml>>>\
- and performs <<"clean insert">> database operation with the dataset located. 
+ When test method or test class is annotated with <<<@Setup>>>, system 
+ locates sequentially the following files in the package of the class, the first file found wins:
+
+  * <<<\<test class name\>.\<test method name\>.xml>>>
+
+  * <<<\<test method name\>.xml>>>
+
+  * <<<\<test class name\>.xml>>>
+ 
+ Then performs <<"clean insert">> database operation with the dataset located. 
  If no such dataset exists, system throws exception.
 
  <Examples:>

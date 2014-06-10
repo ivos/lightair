@@ -29,4 +29,12 @@ public class DefaultClassSetupTest extends SetupTestBase {
 		verifyPersons("Joe", "Jane", "Sue");
 	}
 
+	/**
+	 * Loads setup '&lt;test method name>.xml'.
+	 */
+	@Test
+	public void methodNameXml() {
+		verifyPersons("Method", "Name", "Only");
+	}
+
 }
