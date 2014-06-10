@@ -2,7 +2,9 @@ package net.sf.lightair.internal.factory;
 
 import java.beans.PropertyVetoException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -51,6 +53,7 @@ import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.operation.AutoInsertOperation;
 import org.dbunit.operation.CompositeOperation;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.rules.TestRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -272,6 +275,15 @@ public class Factory implements PropertyKeys {
 	public BaseUrlTestRule getBaseUrlTestRule(FrameworkMethod frameworkMethod) {
 		return new BaseUrlTestRule(frameworkMethod);
 	}
+
+    public List<TestRule> getAllTestRules(FrameworkMethod method) {
+        return Arrays.asList(
+                (TestRule) getSetupTestRule(method),
+                (TestRule) getSetupListTestRule(method),
+                (TestRule) getVerifyTestRule(method),
+                (TestRule) getVerifyListTestRule(method),
+                (TestRule) getBaseUrlTestRule(method));
+    }
 
 	public IDatabaseConnection createDatabaseConnection(String profile,
 			String schemaName) throws DatabaseAccessException,
