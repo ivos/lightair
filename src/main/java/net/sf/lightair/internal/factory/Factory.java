@@ -276,14 +276,11 @@ public class Factory implements PropertyKeys {
 		return new BaseUrlTestRule(frameworkMethod);
 	}
 
-    public List<TestRule> getAllTestRules(FrameworkMethod method) {
-        return Arrays.asList(
-                (TestRule) getSetupTestRule(method),
-                (TestRule) getSetupListTestRule(method),
-                (TestRule) getVerifyTestRule(method),
-                (TestRule) getVerifyListTestRule(method),
-                (TestRule) getBaseUrlTestRule(method));
-    }
+	public List<TestRule> getAllTestRules(FrameworkMethod method) {
+		return Arrays.asList((TestRule) getSetupTestRule(method), (TestRule) getSetupListTestRule(method),
+				(TestRule) getVerifyTestRule(method), (TestRule) getVerifyListTestRule(method),
+				(TestRule) getBaseUrlTestRule(method));
+	}
 
 	public IDatabaseConnection createDatabaseConnection(String profile,
 			String schemaName) throws DatabaseAccessException,

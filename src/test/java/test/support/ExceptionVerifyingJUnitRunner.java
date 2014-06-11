@@ -12,8 +12,7 @@ import org.junit.runners.model.Statement;
 
 public class ExceptionVerifyingJUnitRunner extends LightAir {
 
-	public ExceptionVerifyingJUnitRunner(Class<?> clazz)
-			throws InitializationError {
+	public ExceptionVerifyingJUnitRunner(Class<?> clazz) throws InitializationError {
 		super(clazz);
 	}
 
@@ -30,11 +29,11 @@ public class ExceptionVerifyingJUnitRunner extends LightAir {
 	private Object testObject;
 
 	// add test rule to verify exception
-    @Override
-    protected Statement methodInvoker(FrameworkMethod method, Object test) {
-        Statement statement = super.methodInvoker(method, test);
-        return new RunRules(statement, Collections.<TestRule>singleton(new ExceptionVerifyingTestRule(method.getMethod(),
-                testObject)), describeChild(method));
-    }
+	@Override
+	protected Statement methodInvoker(FrameworkMethod method, Object test) {
+		Statement statement = super.methodInvoker(method, test);
+		return new RunRules(statement, Collections.<TestRule> singleton(new ExceptionVerifyingTestRule(method
+                .getMethod(), testObject)), describeChild(method));
+	}
 
 }
