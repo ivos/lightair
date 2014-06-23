@@ -253,6 +253,12 @@
 			<version>10.10.1.1</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>3.2.3.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
 		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the 
 			JDK. -->
 		<dependency>
@@ -261,6 +267,14 @@
 			<version>1.0.13</version>
 			<scope>test</scope>
 		</dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>3.2.3.RELEASE</version>
+            <!--<scope>compile</scope>-->
+            <optional>true</optional>
+        </dependency>
 	</dependencies>
 
 	<build>
