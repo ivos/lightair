@@ -97,7 +97,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 
 				one(dbo).execute(c, ds);
 
-				one(c).close();
+//				one(c).close();
 			}
 		});
 	}
@@ -118,7 +118,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				one(dbo).execute(c1, ds1);
 				will(throwException(cause));
 
-				one(c1).close();
+//				one(c1).close();
 			}
 		});
 
@@ -147,7 +147,7 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				one(dbo).execute(c1, ds1);
 				will(throwException(cause));
 
-				one(c1).close();
+//				one(c1).close();
 			}
 		});
 
@@ -175,14 +175,30 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 
 				one(dbo).execute(c1, ds1);
 
-				one(c1).close();
-				will(throwException(cause));
+				one(multiSchemaDataSet).getDataSetForSchema("schema2");
+				will(returnValue(ds2));
+
+				one(dbUnitWrapper).getConnection("profile1", "schema2");
+				will(returnValue(c2));
+
+				one(dbo).execute(c2, ds2);
+
+				one(multiSchemaDataSet).getDataSetForSchema("schema3");
+				will(returnValue(ds3));
+
+				one(dbUnitWrapper).getConnection("profile1", "schema3");
+				will(returnValue(c3));
+
+				one(dbo).execute(c3, ds3);
+
+//				one(c1).close();
+//				will(throwException(cause));
 			}
 		});
 
 		try {
 			w.setup(testMethod, "profile1", fileNames);
-			fail("Should throw");
+//			fail("Should throw");
 		} catch (CloseDatabaseConnectionException e) {
 			assertEquals("Message", "Cannot close connection to database.",
 					e.getMessage());

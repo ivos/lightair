@@ -101,8 +101,6 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 
 				one(dataSetAssert).assertEqualDbUnitDataSets(schemaName, dsE,
 						dsA);
-
-				one(c).close();
 			}
 		});
 	}
@@ -121,8 +119,6 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 
 				one(c1).createDataSet();
 				will(throwException(cause));
-
-				one(c1).close();
 			}
 		});
 
@@ -153,14 +149,34 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 				one(dataSetAssert).assertEqualDbUnitDataSets("schema1", dsE1,
 						dsA1);
 
-				one(c1).close();
-				will(throwException(cause));
+				one(multiSchemaDataSet).getDataSetForSchema("schema2");
+				will(returnValue(dsE2));
+
+				one(dbUnitWrapper).getConnection("profile1", "schema2");
+				will(returnValue(c2));
+
+				one(c2).createDataSet();
+				will(returnValue(dsA2));
+
+				one(dataSetAssert).assertEqualDbUnitDataSets("schema2", dsE2,
+						dsA2);
+
+				one(multiSchemaDataSet).getDataSetForSchema("schema3");
+				will(returnValue(dsE3));
+
+				one(dbUnitWrapper).getConnection("profile1", "schema3");
+				will(returnValue(c3));
+
+				one(c3).createDataSet();
+				will(returnValue(dsA3));
+
+				one(dataSetAssert).assertEqualDbUnitDataSets("schema3", dsE3,
+						dsA3);
 			}
 		});
 
 		try {
 			w.verify(testMethod, "profile1", fileNames);
-			fail("Should throw");
 		} catch (CloseDatabaseConnectionException e) {
 			assertEquals("Message", "Cannot close connection to database.",
 					e.getMessage());

@@ -3,7 +3,6 @@ package net.sf.lightair.internal.unitils;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-import net.sf.lightair.exception.CloseDatabaseConnectionException;
 import net.sf.lightair.exception.DatabaseAccessException;
 import net.sf.lightair.exception.TokenAnyInSetupException;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
@@ -99,8 +98,7 @@ public class UnitilsWrapper {
 	private static final String VERIFY_FILE_NAME_SUFFIX = "-verify";
 
 	/**
-	 * Database operation template. Closes database connection and translates
-	 * exceptions.
+	 * Database operation template. Translates exceptions.
 	 */
 	private abstract class Template {
 		abstract void databaseOperation() throws DatabaseUnitException,
@@ -115,14 +113,10 @@ public class UnitilsWrapper {
 				} catch (SQLException e) {
 					throw new DatabaseAccessException(e);
 				} finally {
-					// unitils caching of dbunit connections does not work with
-					// multiple schemas
-					// ((DbUnitDatabaseConnection) connection)
-					// .closeJdbcConnection();
-					connection.close();
+					// db connection closing moved to after all tests
 				}
-			} catch (SQLException e) {
-				throw new CloseDatabaseConnectionException(e);
+			} finally {
+				// nothing
 			}
 		}
 	}
@@ -133,6 +127,10 @@ public class UnitilsWrapper {
 
 	public void setDbUnitWrapper(DbUnitWrapper dbUnitWrapper) {
 		this.dbUnitWrapper = dbUnitWrapper;
+	}
+
+	public DbUnitWrapper getDbUnitWrapper() {
+		return dbUnitWrapper;
 	}
 
 	private DataSetLoader dataSetLoader;
