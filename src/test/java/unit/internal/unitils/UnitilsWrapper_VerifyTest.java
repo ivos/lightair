@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
-import net.sf.lightair.exception.CloseDatabaseConnectionException;
 import net.sf.lightair.exception.DatabaseAccessException;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.factory.Factory;
@@ -131,56 +130,4 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 		}
 	}
 
-	@Test
-	public void fail_SQLException_InClose() throws SQLException {
-		final SQLException cause = new SQLException();
-		checkCommons();
-		check(new Expectations() {
-			{
-				one(multiSchemaDataSet).getDataSetForSchema("schema1");
-				will(returnValue(dsE1));
-
-				one(dbUnitWrapper).getConnection("profile1", "schema1");
-				will(returnValue(c1));
-
-				one(c1).createDataSet();
-				will(returnValue(dsA1));
-
-				one(dataSetAssert).assertEqualDbUnitDataSets("schema1", dsE1,
-						dsA1);
-
-				one(multiSchemaDataSet).getDataSetForSchema("schema2");
-				will(returnValue(dsE2));
-
-				one(dbUnitWrapper).getConnection("profile1", "schema2");
-				will(returnValue(c2));
-
-				one(c2).createDataSet();
-				will(returnValue(dsA2));
-
-				one(dataSetAssert).assertEqualDbUnitDataSets("schema2", dsE2,
-						dsA2);
-
-				one(multiSchemaDataSet).getDataSetForSchema("schema3");
-				will(returnValue(dsE3));
-
-				one(dbUnitWrapper).getConnection("profile1", "schema3");
-				will(returnValue(c3));
-
-				one(c3).createDataSet();
-				will(returnValue(dsA3));
-
-				one(dataSetAssert).assertEqualDbUnitDataSets("schema3", dsE3,
-						dsA3);
-			}
-		});
-
-		try {
-			w.verify(testMethod, "profile1", fileNames);
-		} catch (CloseDatabaseConnectionException e) {
-			assertEquals("Message", "Cannot close connection to database.",
-					e.getMessage());
-			assertSame("Cause", cause, e.getCause());
-		}
-	}
 }

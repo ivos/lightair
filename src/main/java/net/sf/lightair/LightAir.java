@@ -33,13 +33,15 @@ public class LightAir extends BlockJUnit4ClassRunner {
 		super(clazz);
 	}
 
-    /**
-     * Overriding methodInvoker in order to place LightAir's test rules as the leading ones.
-     * */
+	/**
+	 * Overriding methodInvoker in order to place LightAir's test rules as the
+	 * leading ones.
+	 * */
 	@Override
 	protected Statement methodInvoker(FrameworkMethod method, Object test) {
 		Statement statement = super.methodInvoker(method, test);
-		return new RunRules(statement, Factory.getInstance().getAllTestRules(method), describeChild(method));
+		return new RunRules(statement, Factory.getInstance().getAllTestRules(
+				method), describeChild(method));
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class LightAir extends BlockJUnit4ClassRunner {
 			@Override
 			public void testRunFinished(Result result) throws Exception {
 				// close and clean all db connections
-				Factory.getInstance().getDbUnitWrapper().resetConnectionCache();
+				Factory.getInstance().resetConnectionCache();
 			}
 		});
 		return super.classBlock(notifier);

@@ -106,17 +106,11 @@ public class UnitilsWrapper {
 
 		void execute(IDatabaseConnection connection) {
 			try {
-				try {
-					databaseOperation();
-				} catch (DatabaseUnitException e) {
-					throw new DatabaseAccessException(e);
-				} catch (SQLException e) {
-					throw new DatabaseAccessException(e);
-				} finally {
-					// db connection closing moved to after all tests
-				}
-			} finally {
-				// nothing
+				databaseOperation();
+			} catch (DatabaseUnitException e) {
+				throw new DatabaseAccessException(e);
+			} catch (SQLException e) {
+				throw new DatabaseAccessException(e);
 			}
 		}
 	}
@@ -127,10 +121,6 @@ public class UnitilsWrapper {
 
 	public void setDbUnitWrapper(DbUnitWrapper dbUnitWrapper) {
 		this.dbUnitWrapper = dbUnitWrapper;
-	}
-
-	public DbUnitWrapper getDbUnitWrapper() {
-		return dbUnitWrapper;
 	}
 
 	private DataSetLoader dataSetLoader;

@@ -22,11 +22,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * }
  * </pre>
  * 
- * You can use standard spring @{@link org.springframework.test.context.ContextConfiguration} to setup test environment.
- * Then use annotations @{@link net.sf.lightair.annotation.Setup}, @{@link net.sf.lightair.annotation.Verify} to define
- * actions Light air should take on the test.
+ * You can use standard spring @
+ * {@link org.springframework.test.context.ContextConfiguration} to setup test
+ * environment. Then use annotations @{@link net.sf.lightair.annotation.Setup}, @
+ * {@link net.sf.lightair.annotation.Verify} to define actions Light air should
+ * take on the test.
  * 
- * Requires dependency org.springframework:spring-test version 2.5 or higher in order to work.
+ * Requires dependency org.springframework:spring-test version 2.5 or higher in
+ * order to work.
  * 
  */
 public class LightAirSpringRunner extends SpringJUnit4ClassRunner {
@@ -36,12 +39,14 @@ public class LightAirSpringRunner extends SpringJUnit4ClassRunner {
 	}
 
 	/**
-	 * Overriding methodInvoker in order to place LightAir's test rules as the leading ones.
+	 * Overriding methodInvoker in order to place LightAir's test rules as the
+	 * leading ones.
 	 * */
 	@Override
 	protected Statement methodInvoker(FrameworkMethod method, Object test) {
 		Statement statement = super.methodInvoker(method, test);
-		return new RunRules(statement, Factory.getInstance().getAllTestRules(method), describeChild(method));
+		return new RunRules(statement, Factory.getInstance().getAllTestRules(
+				method), describeChild(method));
 	}
 
 	/**
@@ -53,7 +58,7 @@ public class LightAirSpringRunner extends SpringJUnit4ClassRunner {
 			@Override
 			public void testRunFinished(Result result) throws Exception {
 				// close and clean all db connections
-				Factory.getInstance().getDbUnitWrapper().resetConnectionCache();
+				Factory.getInstance().resetConnectionCache();
 			}
 		});
 		return super.classBlock(notifier);
