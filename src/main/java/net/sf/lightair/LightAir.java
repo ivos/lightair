@@ -5,6 +5,9 @@ import net.sf.lightair.annotation.Verify;
 import net.sf.lightair.internal.factory.Factory;
 
 import org.junit.rules.RunRules;
+import org.junit.runner.Result;
+import org.junit.runner.notification.RunListener;
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
@@ -30,13 +33,29 @@ public class LightAir extends BlockJUnit4ClassRunner {
 		super(clazz);
 	}
 
-    /**
-     * Overriding methodInvoker in order to place LightAir's test rules as the leading ones.
-     * */
+	/**
+	 * Overriding methodInvoker in order to place LightAir's test rules as the
+	 * leading ones.
+	 * */
 	@Override
 	protected Statement methodInvoker(FrameworkMethod method, Object test) {
 		Statement statement = super.methodInvoker(method, test);
-		return new RunRules(statement, Factory.getInstance().getAllTestRules(method), describeChild(method));
+		return new RunRules(statement, Factory.getInstance().getAllTestRules(
+				method), describeChild(method));
 	}
 
+	/**
+	 * Overriding classBlock in order to add connection closing listener.
+	 * */
+	@Override
+	protected Statement classBlock(final RunNotifier notifier) {
+		notifier.addListener(new RunListener() {
+			@Override
+			public void testRunFinished(Result result) throws Exception {
+				// close and clean all db connections
+				Factory.getInstance().resetConnectionCache();
+			}
+		});
+		return super.classBlock(notifier);
+	}
 }

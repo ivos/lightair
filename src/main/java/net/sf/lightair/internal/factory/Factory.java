@@ -242,6 +242,10 @@ public class Factory implements PropertyKeys {
 		autoNumberGenerator.init();
 	}
 
+	public void resetConnectionCache() {
+		getDbUnitWrapper().resetConnectionCache();
+	}
+
 	// getters for classes always newly instantiated
 
 	public SetupTestRule getSetupTestRule(FrameworkMethod frameworkMethod) {
@@ -277,8 +281,10 @@ public class Factory implements PropertyKeys {
 	}
 
 	public List<TestRule> getAllTestRules(FrameworkMethod method) {
-		return Arrays.asList((TestRule) getSetupTestRule(method), (TestRule) getSetupListTestRule(method),
-				(TestRule) getVerifyTestRule(method), (TestRule) getVerifyListTestRule(method),
+		return Arrays.asList((TestRule) getSetupTestRule(method),
+				(TestRule) getSetupListTestRule(method),
+				(TestRule) getVerifyTestRule(method),
+				(TestRule) getVerifyListTestRule(method),
 				(TestRule) getBaseUrlTestRule(method));
 	}
 

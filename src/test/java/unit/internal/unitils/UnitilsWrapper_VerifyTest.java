@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
-import net.sf.lightair.exception.CloseDatabaseConnectionException;
 import net.sf.lightair.exception.DatabaseAccessException;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.factory.Factory;
@@ -101,8 +100,6 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 
 				one(dataSetAssert).assertEqualDbUnitDataSets(schemaName, dsE,
 						dsA);
-
-				one(c).close();
 			}
 		});
 	}
@@ -121,8 +118,6 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 
 				one(c1).createDataSet();
 				will(throwException(cause));
-
-				one(c1).close();
 			}
 		});
 
@@ -135,36 +130,4 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 		}
 	}
 
-	@Test
-	public void fail_SQLException_InClose() throws SQLException {
-		final SQLException cause = new SQLException();
-		checkCommons();
-		check(new Expectations() {
-			{
-				one(multiSchemaDataSet).getDataSetForSchema("schema1");
-				will(returnValue(dsE1));
-
-				one(dbUnitWrapper).getConnection("profile1", "schema1");
-				will(returnValue(c1));
-
-				one(c1).createDataSet();
-				will(returnValue(dsA1));
-
-				one(dataSetAssert).assertEqualDbUnitDataSets("schema1", dsE1,
-						dsA1);
-
-				one(c1).close();
-				will(throwException(cause));
-			}
-		});
-
-		try {
-			w.verify(testMethod, "profile1", fileNames);
-			fail("Should throw");
-		} catch (CloseDatabaseConnectionException e) {
-			assertEquals("Message", "Cannot close connection to database.",
-					e.getMessage());
-			assertSame("Cause", cause, e.getCause());
-		}
-	}
 }

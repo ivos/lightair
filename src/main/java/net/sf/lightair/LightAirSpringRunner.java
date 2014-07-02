@@ -3,6 +3,9 @@ package net.sf.lightair;
 import net.sf.lightair.internal.factory.Factory;
 
 import org.junit.rules.RunRules;
+import org.junit.runner.Result;
+import org.junit.runner.notification.RunListener;
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
@@ -19,11 +22,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * }
  * </pre>
  * 
- * You can use standard spring @{@link org.springframework.test.context.ContextConfiguration} to setup test environment.
- * Then use annotations @{@link net.sf.lightair.annotation.Setup}, @{@link net.sf.lightair.annotation.Verify} to define
- * actions Light air should take on the test.
+ * You can use standard spring @
+ * {@link org.springframework.test.context.ContextConfiguration} to setup test
+ * environment. Then use annotations @{@link net.sf.lightair.annotation.Setup}, @
+ * {@link net.sf.lightair.annotation.Verify} to define actions Light air should
+ * take on the test.
  * 
- * Requires dependency org.springframework:spring-test version 2.5 or higher in order to work.
+ * Requires dependency org.springframework:spring-test version 2.5 or higher in
+ * order to work.
  * 
  */
 public class LightAirSpringRunner extends SpringJUnit4ClassRunner {
@@ -33,12 +39,28 @@ public class LightAirSpringRunner extends SpringJUnit4ClassRunner {
 	}
 
 	/**
-	 * Overriding methodInvoker in order to place LightAir's test rules as the leading ones.
+	 * Overriding methodInvoker in order to place LightAir's test rules as the
+	 * leading ones.
 	 * */
 	@Override
 	protected Statement methodInvoker(FrameworkMethod method, Object test) {
 		Statement statement = super.methodInvoker(method, test);
-		return new RunRules(statement, Factory.getInstance().getAllTestRules(method), describeChild(method));
+		return new RunRules(statement, Factory.getInstance().getAllTestRules(
+				method), describeChild(method));
 	}
 
+	/**
+	 * Overriding classBlock in order to add connection closing listener.
+	 * */
+	@Override
+	protected Statement classBlock(final RunNotifier notifier) {
+		notifier.addListener(new RunListener() {
+			@Override
+			public void testRunFinished(Result result) throws Exception {
+				// close and clean all db connections
+				Factory.getInstance().resetConnectionCache();
+			}
+		});
+		return super.classBlock(notifier);
+	}
 }

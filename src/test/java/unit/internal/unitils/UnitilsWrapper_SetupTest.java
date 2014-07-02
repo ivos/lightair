@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
-import net.sf.lightair.exception.CloseDatabaseConnectionException;
 import net.sf.lightair.exception.DatabaseAccessException;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.factory.Factory;
@@ -96,14 +95,12 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 				will(returnValue(c));
 
 				one(dbo).execute(c, ds);
-
-				one(c).close();
 			}
 		});
 	}
 
 	@Test
-	public void fail_DatabaseUnitException() throws SQLException,
+	public void fail_DatabaseUnitException_InExecute() throws SQLException,
 			DatabaseUnitException {
 		final DatabaseUnitException cause = new DatabaseUnitException();
 		checkCommons();
@@ -117,8 +114,6 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 
 				one(dbo).execute(c1, ds1);
 				will(throwException(cause));
-
-				one(c1).close();
 			}
 		});
 
@@ -146,8 +141,6 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 
 				one(dbo).execute(c1, ds1);
 				will(throwException(cause));
-
-				one(c1).close();
 			}
 		});
 
@@ -160,33 +153,4 @@ public class UnitilsWrapper_SetupTest extends JMockSupport {
 		}
 	}
 
-	@Test
-	public void fail_SQLException_InClose() throws SQLException,
-			DatabaseUnitException {
-		final SQLException cause = new SQLException();
-		checkCommons();
-		check(new Expectations() {
-			{
-				one(multiSchemaDataSet).getDataSetForSchema("schema1");
-				will(returnValue(ds1));
-
-				one(dbUnitWrapper).getConnection("profile1", "schema1");
-				will(returnValue(c1));
-
-				one(dbo).execute(c1, ds1);
-
-				one(c1).close();
-				will(throwException(cause));
-			}
-		});
-
-		try {
-			w.setup(testMethod, "profile1", fileNames);
-			fail("Should throw");
-		} catch (CloseDatabaseConnectionException e) {
-			assertEquals("Message", "Cannot close connection to database.",
-					e.getMessage());
-			assertSame("Cause", cause, e.getCause());
-		}
-	}
 }

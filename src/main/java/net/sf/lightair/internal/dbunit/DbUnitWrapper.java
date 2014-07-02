@@ -1,5 +1,10 @@
 package net.sf.lightair.internal.dbunit;
 
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.sf.lightair.exception.CloseDatabaseConnectionException;
 import net.sf.lightair.internal.properties.PropertiesProvider;
 import net.sf.lightair.internal.properties.PropertyKeys;
 
@@ -14,11 +19,7 @@ public class DbUnitWrapper implements PropertyKeys {
 
 	private final Logger log = LoggerFactory.getLogger(DbUnitWrapper.class);
 
-	// private final Map<String, IDatabaseConnection> connectionCache = new
-	// HashMap<String, IDatabaseConnection>();
-
-	// unitils caching of dbunit connections does not work with multiple
-	// schemas, why?
+	private final Map<String, IDatabaseConnection> connectionCache = new HashMap<String, IDatabaseConnection>();
 
 	/**
 	 * Retrieve a DbUnit connection for a given schema.
@@ -33,7 +34,8 @@ public class DbUnitWrapper implements PropertyKeys {
 	 * @return DbUnit connection
 	 */
 	public IDatabaseConnection getConnection(String profile, String schemaName) {
-		log.debug("Retrieving connection for schema {}.", schemaName);
+		log.debug("Retrieving connection for profile {}, schema {}.", profile,
+				schemaName);
 
 		if (null == schemaName) {
 			schemaName = propertiesProvider
@@ -41,20 +43,41 @@ public class DbUnitWrapper implements PropertyKeys {
 			log.debug("Resolved unspecified schema as default {}.", schemaName);
 		}
 
-		IDatabaseConnection connection;// = connectionCache.get(schemaName);
-		// if (null == connection) {
-		log.debug("Creating new connection for schema {}.", schemaName);
-		connection = connectionFactory.createConnection(profile, schemaName);
-		// connectionCache.put(schemaName, connection);
-		// } else {
-		// log.debug("Retrieved connection from cache for schema {}.",
-		// schemaName);
-		// }
+		if (null == profile) {
+			profile = "";
+		}
+		String cacheKey = profile + "-" + schemaName;
+
+		IDatabaseConnection connection = connectionCache.get(cacheKey);
+		if (null == connection) {
+			log.debug("Creating new connection for schema {}.", schemaName);
+			connection = connectionFactory
+					.createConnection(profile, schemaName);
+			connectionCache.put(cacheKey, connection);
+		} else {
+			log.debug(
+					"Retrieved connection from cache for profile {}, schema {}.",
+					profile, schemaName);
+		}
 		return connection;
 	}
 
+	/**
+	 * Closes all db connections stored in cache, clears the cache afterwards.
+	 */
 	public void resetConnectionCache() {
-		// connectionCache.clear();
+		for (IDatabaseConnection databaseConnection : connectionCache.values()) {
+			try {
+				log.debug("Closing connection for schema {}.",
+						databaseConnection.getSchema());
+				databaseConnection.close();
+			} catch (SQLException e) {
+				log.error("Can't close connection for schema {}.",
+						databaseConnection.getSchema());
+				throw new CloseDatabaseConnectionException(e);
+			}
+		}
+		connectionCache.clear();
 	}
 
 	// beans and their setters;
