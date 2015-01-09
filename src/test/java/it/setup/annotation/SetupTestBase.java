@@ -12,11 +12,13 @@ import org.junit.BeforeClass;
 public class SetupTestBase extends CommonTestBase {
 
 	@BeforeClass
+	@org.testng.annotations.BeforeClass
 	public static void beforeClass() {
 		db.execute("create table person(name varchar(255))");
 	}
 
 	@AfterClass
+	@org.testng.annotations.AfterClass
 	public static void afterClass() {
 		db.execute("drop table person");
 	}

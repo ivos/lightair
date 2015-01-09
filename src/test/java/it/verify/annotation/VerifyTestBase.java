@@ -8,11 +8,13 @@ import org.junit.BeforeClass;
 public class VerifyTestBase extends CommonTestBase {
 
 	@BeforeClass
+	@org.testng.annotations.BeforeClass
 	public static void beforeClass() {
 		db.execute("create table person(id int primary key, name varchar(255))");
 	}
 
 	@AfterClass
+	@org.testng.annotations.AfterClass
 	public static void afterClass() {
 		db.execute("drop table person");
 	}

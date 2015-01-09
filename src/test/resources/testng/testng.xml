@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Sample_TestNG_Suite" verbose="4">
+	<test name="DefaultTestPackage">
+		<packages>
+			<package name="it.setup.annotation"/>
+			<package name="it.verify.annotation"/>
+		</packages>
+	</test>
+</suite>
+
