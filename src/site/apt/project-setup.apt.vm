@@ -24,6 +24,17 @@ Project setup
 </dependency>
 +---+
 
+ Alternatively, you can use TestNG instead of JUnit:
+
++---+
+<dependency>
+ <groupId>org.testng</groupId>
+ <artifactId>testng</artifactId>
+ <version>${testng-version}</version>
+ <scope>test</scope>
+</dependency>
++---+
+
  Add Light Air dependency to your POM:
 
 +---+

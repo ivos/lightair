@@ -47,6 +47,17 @@ public class ProfileUpdateIT {
 }
 +---+
 
+ With TestNG, use the Listeners annotation instead of the RunWith annotation:
+ 
++---+
+@Listeners(LightAirNGListener.class)
+@Setup
+@Verify
+@BaseUrl("http://localhost:8080/my-application")
+public class ProfileUpdateIT {
+	...
++---+
+
  Next to the class (in the same package), create <<<ProfileUpdateIT.xml>>> file
  to setup database before the test:
  
