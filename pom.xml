@@ -22,6 +22,12 @@
 			<email>ivo (.) maixner (at) gmail (.) com</email>
 			<timezone>+1</timezone>
 		</developer>
+		<developer>
+			<id>effy</id>
+			<name>Petr Effenberger</name>
+			<email>petr (at) effy (.) cz</email>
+			<timezone>+1</timezone>
+		</developer>
 	</developers>
 	<licenses>
 		<license>
