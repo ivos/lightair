@@ -5,7 +5,7 @@
 		<title>Changes</title>
 	</properties>
 	<body>
-		<release date="2015-01-18" version="2.3.0" description="TestNG support.">
+		<release date="2015-02-04" version="2.3.0" description="TestNG support.">
 			<action type="add" dev="effy">Add support for TestNG.
 			</action>
 		</release>
