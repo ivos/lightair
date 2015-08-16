@@ -1,6 +1,6 @@
 package net.sf.lightair.internal.unitils;
 
-import java.io.File;
+import java.net.URL;
 
 import net.sf.lightair.internal.properties.PropertiesProvider;
 import net.sf.lightair.internal.properties.PropertyKeys;
@@ -21,8 +21,7 @@ public class DataSetFactory implements PropertyKeys {
 	 *            Dataset files
 	 * @return Multi-schema dataset
 	 */
-	public MultiSchemaDataSet createDataSet(String profile,
-			File... dataSetFiles) {
+	public MultiSchemaDataSet createDataSet(String profile, URL... dataSetFiles) {
 		MultiSchemaXmlDataSetReader multiSchemaXmlDataSetReader = createMultiSchemaXmlDataSetReader();
 		return multiSchemaXmlDataSetReader.readDataSetXml(
 				propertiesProvider.getProperty(profile, DEFAULT_SCHEMA),

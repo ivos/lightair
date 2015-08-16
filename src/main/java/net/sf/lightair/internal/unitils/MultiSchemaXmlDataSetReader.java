@@ -1,9 +1,8 @@
 package net.sf.lightair.internal.unitils;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.xml.parsers.SAXParserFactory;
 
@@ -34,7 +33,7 @@ public class MultiSchemaXmlDataSetReader {
 	 * 
 	 * @param defaultSchemaName
 	 *            Default database schema name
-	 * @param dataSetFiles
+	 * @param dataSetResources
 	 *            Files with datasets
 	 * @return Multi-schema dataset
 	 * @throws DataSetNotFoundException
@@ -43,25 +42,25 @@ public class MultiSchemaXmlDataSetReader {
 	 *             When a dataset file cannot be parsed
 	 */
 	public MultiSchemaDataSet readDataSetXml(String defaultSchemaName,
-			File... dataSetFiles) throws DataSetNotFoundException,
+			URL... dataSetResources) throws DataSetNotFoundException,
 			IllegalDataSetContentException {
 		log.debug("Reading dataset with default schema {} and files {}.",
-				defaultSchemaName, dataSetFiles);
+				defaultSchemaName, dataSetResources);
 		DataSetContentHandler dataSetContentHandler = createDataSetContentHandler(defaultSchemaName);
 		XMLReader xmlReader = createXMLReader();
 		xmlReader.setContentHandler(dataSetContentHandler);
 		xmlReader.setErrorHandler(dataSetContentHandler);
-		for (File dataSetFile : dataSetFiles) {
-			log.debug("Reading XML dataset file {}.", dataSetFile);
+		for (URL dataSetResource : dataSetResources) {
+			log.debug("Reading XML dataset file {}.", dataSetResource);
 			InputStream dataSetInputStream = null;
 			try {
-				dataSetInputStream = new FileInputStream(dataSetFile);
+				dataSetInputStream = dataSetResource.openStream();
 				xmlReader.parse(new InputSource(dataSetInputStream));
 			} catch (IOException e) {
-				throw new DataSetNotFoundException(e, dataSetFile.getPath());
+				throw new DataSetNotFoundException(e, dataSetResource.getPath());
 			} catch (SAXException e) {
 				throw new IllegalDataSetContentException(e,
-						dataSetFile.getPath());
+						dataSetResource.getPath());
 			} finally {
 				IOUtils.closeQuietly(dataSetInputStream);
 			}

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.net.URL;
 
 import net.sf.lightair.exception.IllegalDataSetContentException;
 import net.sf.lightair.internal.unitils.DataSetFactory;
@@ -21,7 +22,7 @@ public class DataSetLoaderTest extends JMockSupport {
 	DataSetLoader l;
 	Method testMethod;
 	DataSetResolver dataSetResolver;
-	File file1, file2, file3;
+	URL resource1, resource2, resource3;
 	DataSetFactory dataSetFactory;
 	IllegalDataSetContentException cause;
 	MultiSchemaDataSet msds;
@@ -38,9 +39,10 @@ public class DataSetLoaderTest extends JMockSupport {
 		l.setDataSetFactory(dataSetFactory);
 		testMethod = DataSetLoaderTest.class.getDeclaredMethod("aMethod",
 				(Class<?>[]) null);
-		file1 = mock(File.class, "file1");
-		file2 = mock(File.class, "file2");
-		file3 = mock(File.class, "file3");
+
+		resource1 = new File("fileName1").toURI().toURL();
+		resource2 = new File("fileName2").toURI().toURL();
+		resource3 = new File("fileName3").toURI().toURL();
 		cause = new IllegalDataSetContentException(null, "Message.");
 		msds = mock(MultiSchemaDataSet.class);
 	}
@@ -50,16 +52,16 @@ public class DataSetLoaderTest extends JMockSupport {
 		check(new Expectations() {
 			{
 				one(dataSetResolver).resolve(testMethod, "fileName1");
-				will(returnValue(file1));
+				will(returnValue(resource1));
 
 				one(dataSetResolver).resolve(testMethod, "fileName2");
-				will(returnValue(file2));
+				will(returnValue(resource2));
 
 				one(dataSetResolver).resolve(testMethod, "fileName3");
-				will(returnValue(file3));
+				will(returnValue(resource3));
 
-				one(dataSetFactory).createDataSet("profile1", file1, file2,
-						file3);
+				one(dataSetFactory).createDataSet("profile1", resource1,
+						resource2, resource3);
 				will(returnValue(msds));
 			}
 		});
@@ -76,9 +78,9 @@ public class DataSetLoaderTest extends JMockSupport {
 			{
 				one(dataSetResolver).resolveIfExists(testMethod,
 						"DataSetLoaderTest.aMethodsuffix.xml");
-				will(returnValue(file1));
+				will(returnValue(resource1));
 
-				one(dataSetFactory).createDataSet("profile1", file1);
+				one(dataSetFactory).createDataSet("profile1", resource1);
 				will(returnValue(msds));
 			}
 		});
@@ -102,9 +104,9 @@ public class DataSetLoaderTest extends JMockSupport {
 
 				one(dataSetResolver).resolve(testMethod,
 						"DataSetLoaderTestsuffix.xml");
-				will(returnValue(file1));
+				will(returnValue(resource1));
 
-				one(dataSetFactory).createDataSet("profile1", file1);
+				one(dataSetFactory).createDataSet("profile1", resource1);
 				will(returnValue(msds));
 			}
 		});
@@ -119,16 +121,16 @@ public class DataSetLoaderTest extends JMockSupport {
 		check(new Expectations() {
 			{
 				one(dataSetResolver).resolve(testMethod, "fileName1");
-				will(returnValue(file1));
+				will(returnValue(resource1));
 
 				one(dataSetResolver).resolve(testMethod, "fileName2");
-				will(returnValue(file2));
+				will(returnValue(resource2));
 
 				one(dataSetResolver).resolve(testMethod, "fileName3");
-				will(returnValue(file3));
+				will(returnValue(resource3));
 
-				one(dataSetFactory).createDataSet("profile1", file1, file2,
-						file3);
+				one(dataSetFactory).createDataSet("profile1", resource1,
+						resource2, resource3);
 				will(throwException(cause));
 			}
 		});
@@ -143,9 +145,9 @@ public class DataSetLoaderTest extends JMockSupport {
 			{
 				one(dataSetResolver).resolveIfExists(testMethod,
 						"DataSetLoaderTest.aMethodsuffix.xml");
-				will(returnValue(file1));
+				will(returnValue(resource1));
 
-				one(dataSetFactory).createDataSet("profile1", file1);
+				one(dataSetFactory).createDataSet("profile1", resource1);
 				will(throwException(cause));
 			}
 		});
@@ -167,9 +169,9 @@ public class DataSetLoaderTest extends JMockSupport {
 
 				one(dataSetResolver).resolve(testMethod,
 						"DataSetLoaderTestsuffix.xml");
-				will(returnValue(file1));
+				will(returnValue(resource1));
 
-				one(dataSetFactory).createDataSet("profile1", file1);
+				one(dataSetFactory).createDataSet("profile1", resource1);
 				will(throwException(cause));
 			}
 		});

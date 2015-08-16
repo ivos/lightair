@@ -5,6 +5,10 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="2015-08-16" version="2.4.0" description="Load files from dependency jars.">
+			<action type="add" dev="katox">Load files from dependency jars.
+			</action>
+		</release>
 		<release date="2015-02-04" version="2.3.0" description="TestNG support.">
 			<action type="add" dev="effy">Add support for TestNG.
 			</action>

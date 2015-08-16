@@ -2,6 +2,7 @@ package unit.internal.util;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
 import net.sf.lightair.exception.DataSetNotFoundException;
@@ -27,7 +28,8 @@ public class DataSetResolverTest {
 
 	@Test
 	public void resolveIfExists_Exists() {
-		assertEquals(fileName, r.resolveIfExists(testMethod, fileName).getName());
+		assertEquals(fileName, new File(r.resolveIfExists(testMethod, fileName)
+				.getPath()).getName());
 	}
 
 	@Test
@@ -37,7 +39,8 @@ public class DataSetResolverTest {
 
 	@Test
 	public void resolve_Exists() {
-		assertEquals(fileName, r.resolve(testMethod, fileName).getName());
+		assertEquals(fileName, new File(r.resolve(testMethod, fileName)
+				.getPath()).getName());
 	}
 
 	@Test

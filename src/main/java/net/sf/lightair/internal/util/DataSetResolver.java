@@ -1,6 +1,5 @@
 package net.sf.lightair.internal.util;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
 
@@ -23,13 +22,13 @@ public class DataSetResolver {
 	 * @throws DataSetNotFoundException
 	 *             when no such file exists
 	 */
-	public File resolve(Method testMethod, String fileName)
+	public URL resolve(Method testMethod, String fileName)
 			throws DataSetNotFoundException {
-		File file = resolveIfExists(testMethod, fileName);
-		if (null == file) {
+		URL url = resolveIfExists(testMethod, fileName);
+		if (null == url) {
 			throw new DataSetNotFoundException(fileName);
 		}
-		return file;
+		return url;
 	}
 
 	/**
@@ -41,14 +40,14 @@ public class DataSetResolver {
 	 *            File name to resolve
 	 * @return Resolved file or null if no such file exists
 	 */
-	public File resolveIfExists(Method testMethod, String fileName) {
+	public URL resolveIfExists(Method testMethod, String fileName) {
 		Class<?> testClass = testMethod.getDeclaringClass();
 		URL url = testClass.getResource(fileName);
 
 		if (null == url) {
 			return null;
 		}
-		return new File(url.getFile());
+		return url;
 	}
 
 }

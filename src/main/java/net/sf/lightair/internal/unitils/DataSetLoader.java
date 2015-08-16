@@ -1,7 +1,7 @@
 package net.sf.lightair.internal.unitils;
 
-import java.io.File;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,15 +51,15 @@ public class DataSetLoader {
 				+ "and configured file names {}.", new Object[] { testMethod,
 				suffix, fileNames });
 		try {
-			List<File> files = new ArrayList<File>();
+			List<URL> resources = new ArrayList<URL>();
 			if (fileNames.length == 0) {
-				fileNames = addDefaultFile(testMethod, suffix, files);
+				fileNames = addDefaultFile(testMethod, suffix, resources);
 			} else {
-				addExplicitFiles(testMethod, fileNames, files);
+				addExplicitFiles(testMethod, fileNames, resources);
 			}
-			log.debug("Creating dataset for resolved files {}.", files);
+			log.debug("Creating dataset for resolved resources {}.", resources);
 			return dataSetFactory.createDataSet(profile,
-					files.toArray(new File[] {}));
+					resources.toArray(new URL[] {}));
 		} catch (IllegalDataSetContentException e) {
 			throw new IllegalDataSetContentException(e, fileNames);
 		} catch (DataSetNotFoundException e) {
@@ -68,7 +68,7 @@ public class DataSetLoader {
 	}
 
 	/**
-	 * Add resolved default test method file to files list.
+	 * Add resolved default test method file to resources list.
 	 * <p>
 	 * Resolve default test method dataset file, if it exists. If it does not
 	 * exist, resolve default class dataset file.
@@ -77,25 +77,25 @@ public class DataSetLoader {
 	 *            Test method
 	 * @param suffix
 	 *            File name suffix
-	 * @param files
+	 * @param resources
 	 *            Default file is added to this list
 	 * @return Default dataset file name as a 1-sized array
 	 */
 	private String[] addDefaultFile(Method testMethod, String suffix,
-			List<File> files) {
+			List<URL> resources) {
 		Class<?> testClass = testMethod.getDeclaringClass();
 		String dataSetName = getDefaultClassMethodFileName(testMethod,
 				testClass, suffix);
-		File file = dataSetResolver.resolveIfExists(testMethod, dataSetName);
-		if (null == file) {
+		URL url = dataSetResolver.resolveIfExists(testMethod, dataSetName);
+		if (null == url) {
 			dataSetName = getDefaultMethodFileName(testMethod, suffix);
-			file = dataSetResolver.resolveIfExists(testMethod, dataSetName);
-			if (null == file) {
+			url = dataSetResolver.resolveIfExists(testMethod, dataSetName);
+			if (null == url) {
 				dataSetName = getDefaultClassFileName(testClass, suffix);
-				file = dataSetResolver.resolve(testMethod, dataSetName);
+				url = dataSetResolver.resolve(testMethod, dataSetName);
 			}
 		}
-		files.add(file);
+		resources.add(url);
 		return new String[] { dataSetName };
 	}
 
@@ -156,10 +156,10 @@ public class DataSetLoader {
 	 *            Resolved explicit files are added to this list
 	 */
 	private void addExplicitFiles(Method testMethod, String[] fileNames,
-			List<File> files) {
+			List<URL> files) {
 		for (String fileName : fileNames) {
-			File file = dataSetResolver.resolve(testMethod, fileName);
-			files.add(file);
+			URL resource = dataSetResolver.resolve(testMethod, fileName);
+			files.add(resource);
 		}
 	}
 
