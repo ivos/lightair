@@ -104,7 +104,7 @@ public class ConnectionFactory implements PropertyKeys {
 		DATATYPE_FACTORIES.put("mssql",
 				"org.dbunit.ext.mssql.MsSqlDataTypeFactory");
 		DATATYPE_FACTORIES.put("informix",
-				"org.dbunit.dataset.datatype.DefaultDataTypeFactory");
+				"net.sf.lightair.internal.dbunit.dataset.datatype.InformixDataTypeFactory");
 	}
 
 	private void setFeaturesAndProperties(String profile, DatabaseConfig config) {
