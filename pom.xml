@@ -3,7 +3,7 @@
 
 	<groupId>net.sf.lightair</groupId>
 	<artifactId>light-air</artifactId>
-	<version>2.4.1-SNAPSHOT</version>
+	<version>2.5.0</version>
 	<packaging>jar</packaging>
 
 	<name>Light Air</name>
@@ -60,7 +60,8 @@
 		<connection>scm:git:git://git.code.sf.net/p/lightair/code</connection>
 		<developerConnection>scm:git:ssh://imaixner@git.code.sf.net/p/lightair/code</developerConnection>
 		<url>http://sourceforge.net/p/lightair/code</url>
-	</scm>
+	  <tag>light-air-2.5.0</tag>
+  </scm>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>sonatype-nexus-snapshots</id>
