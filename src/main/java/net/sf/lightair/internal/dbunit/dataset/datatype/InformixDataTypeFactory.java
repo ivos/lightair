@@ -24,7 +24,7 @@ public class InformixDataTypeFactory extends DefaultDataTypeFactory {
 	/**
 	 * Database product names supported.
 	 */
-	private static final Collection DATABASE_PRODUCTS = Arrays.asList(new String[]{"Informix"});
+	private static final Collection<?> DATABASE_PRODUCTS = Arrays.asList(new String[] { "Informix" });
 
 	protected static final DataType CLOB_AS_STRING = new StringDataType("CLOB", Types.CLOB);
 	protected static final DataType BLOB_AS_STREAM = new BinaryStreamDataType("BLOB", Types.BLOB);
@@ -32,12 +32,14 @@ public class InformixDataTypeFactory extends DefaultDataTypeFactory {
 	/**
 	 * @see org.dbunit.dataset.datatype.IDbProductRelatable#getValidDbProducts()
 	 */
-	public Collection getValidDbProducts() {
+	@Override
+	public Collection<?> getValidDbProducts() {
 		return DATABASE_PRODUCTS;
 	}
 
+	@Override
 	public DataType createDataType(int sqlType, String sqlTypeName) throws DataTypeException {
-		if(logger.isDebugEnabled()) {
+		if (logger.isDebugEnabled()) {
 			logger.debug("createDataType(sqlType={}, sqlTypeName={}) - start", String.valueOf(sqlType), sqlTypeName);
 		}
 		// BLOB
