@@ -19,6 +19,7 @@ public class CommonTestBase {
 	}
 
 	@BeforeClass
+	@org.testng.annotations.BeforeClass
 	public static void initCommonTestBase() {
 		DateTimeUtils.setCurrentMillisFixed(new DateTime(2009, 8, 28, 19, 49,
 				59, 987).getMillis());
