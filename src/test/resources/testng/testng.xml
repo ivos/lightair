@@ -3,6 +3,7 @@
 <suite name="Sample_TestNG_Suite" verbose="4">
 	<test name="DefaultTestPackage">
 		<packages>
+			<package name="it.baseurl"/>
 			<package name="it.setup.annotation"/>
 			<package name="it.verify.annotation"/>
 		</packages>
