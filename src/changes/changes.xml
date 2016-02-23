@@ -5,6 +5,16 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="2016-02-23" version="2.7.0" description="Fix TestNG.">
+			<action type="update">Switch git repo to github.</action>
+			<action type="add" dev="effy">Fix TestNG support.</action>
+		</release>
+		<release date="2015-10-04" version="2.6.0" description="Minor fixes.">
+			<action type="add">Minor fixes.</action>
+		</release>
+		<release date="2015-10-04" version="2.5.0" description="Add Informix support.">
+			<action type="add">Add Informix support.</action>
+		</release>
 		<release date="2015-08-16" version="2.4.0" description="Load files from dependency jars.">
 			<action type="add" dev="katox">Load files from dependency jars.
 			</action>
