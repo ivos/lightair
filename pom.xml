@@ -57,9 +57,9 @@
 		<testng-version>6.8.13</testng-version>
 	</properties>
 	<scm>
-		<connection>scm:git:git://git.code.sf.net/p/lightair/code</connection>
-		<developerConnection>scm:git:ssh://imaixner@git.code.sf.net/p/lightair/code</developerConnection>
-		<url>http://sourceforge.net/p/lightair/code</url>
+		<connection>scm:git:git@github.com:ivos/lightair.git</connection>
+		<developerConnection>scm:git:git@github.com:ivos/lightair.git</developerConnection>
+		<url>https://github.com/ivos/lightair</url>
 	  <tag>HEAD</tag>
   </scm>
 	<distributionManagement>
