@@ -15,7 +15,9 @@ and wraps [DbUnit](http://dbunit.sourceforge.net/),
 [JWebUnit](http://jwebunit.sourceforge.net/)
 in a common, **modern usage pattern**.
 
-Proceed to [motivation](./motivation.html) 
+Go to [Light Air website](http://lightair.sourceforge.net/).
+
+Proceed to [motivation](http://lightair.sourceforge.net/motivation.html) 
 to find out whether Light Air is suitable for you.
 
 Light Air project is hosted by Sourceforge.net at
