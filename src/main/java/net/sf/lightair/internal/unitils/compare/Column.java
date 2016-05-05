@@ -1,5 +1,6 @@
 package net.sf.lightair.internal.unitils.compare;
 
+import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -238,6 +239,14 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 			return new Time(new DateTime(expectedValue).withDate(1970, 1, 1)
 					.withMillisOfSecond(0).getMillis());
 		}
+    // parse integer number from encoded string (HEX, OCT, BIN, DEC)
+    if (expectedValue instanceof String && DataType.INTEGER == castType) {
+        return Integer.decode(expectedValue.toString());
+    }
+    if(expectedValue instanceof String && DataType.BIGINT == castType) {
+        return decodeBigInt(expectedValue.toString());
+    }
+
 		try {
 			return castType.typeCast(expectedValue);
 		} catch (TypeCastException e) {
@@ -282,5 +291,38 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	public void setAutoValueGenerator(AutoValueGenerator autoValueGenerator) {
 		this.autoValueGenerator = autoValueGenerator;
 	}
+
+/**
+ * Decodes a {@code String} into an {@code BigInteger}.
+ * Accepts UNSIGNED decimal, hexadecimal, binary and octal numbers given
+ * by the following grammar:
+ *
+ * <blockquote>
+ * <dl>
+ * <dt><i>DecodableString:</i>
+ * <dd><i> DecimalNumeral</i>
+ * <dd> {@code 0x} <i>HexDigits</i>
+ * <dd> {@code 0X} <i>HexDigits</i>
+ * <dd> {@code #} <i>HexDigits</i>
+ * <dd> {@code 0} <i>OctalDigits</i>
+ * </dl>
+ * </blockquote>
+ **/
+  private BigInteger decodeBigInt(String encodedInt) {
+    //TODO: accept signed - negative numbers
+    if (encodedInt.equals("0")){
+      return BigInteger.ZERO;
+    } else if (encodedInt.startsWith("0X") || encodedInt.startsWith("0x")) {
+      return new BigInteger(encodedInt.substring(2), 16);
+    } else if (encodedInt.startsWith("#")) {
+      return new BigInteger(encodedInt.substring(1), 16);
+    } else if (encodedInt.startsWith("0b") || encodedInt.startsWith("0B")) {
+      return new BigInteger(encodedInt.substring(2), 2);
+    } else if(encodedInt.startsWith("0")) {
+      return new BigInteger(encodedInt.substring(1), 8);
+    } else {
+      return new BigInteger(encodedInt);
+    }
+  }
 
 }
