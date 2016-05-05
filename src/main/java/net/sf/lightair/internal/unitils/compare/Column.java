@@ -1,5 +1,6 @@
 package net.sf.lightair.internal.unitils.compare;
 
+import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -238,6 +239,15 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 			return new Time(new DateTime(expectedValue).withDate(1970, 1, 1)
 					.withMillisOfSecond(0).getMillis());
 		}
+    // parse integer number from HEX
+    if (expectedValue instanceof String && ((String) expectedValue).startsWith("0x")) {
+      String expectedNumberHex = (String) expectedValue;
+      if (DataType.INTEGER == castType) {
+        return Integer.valueOf(expectedNumberHex, 16);
+      } else if(DataType.BIGINT == castType) {
+        return new BigInteger(expectedNumberHex, 16);
+      }
+    }
 		try {
 			return castType.typeCast(expectedValue);
 		} catch (TypeCastException e) {
