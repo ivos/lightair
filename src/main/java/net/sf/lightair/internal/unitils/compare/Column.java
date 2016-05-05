@@ -241,9 +241,9 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		}
     // parse integer number from HEX
     if (expectedValue instanceof String && ((String) expectedValue).startsWith("0x")) {
-      String expectedNumberHex = (String) expectedValue;
+      String expectedNumberHex = ((String) expectedValue).substring(2);
       if (DataType.INTEGER == castType) {
-        return Integer.valueOf(expectedNumberHex, 16);
+        return Integer.parseInt(expectedNumberHex, 16);
       } else if(DataType.BIGINT == castType) {
         return new BigInteger(expectedNumberHex, 16);
       }
