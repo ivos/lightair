@@ -33,6 +33,11 @@
 			<email>kamil (.) toman (at) leafclick (.) com</email>
 			<timezone>+1</timezone>
 		</developer>
+		<developer>
+			<id>hadasj</id>
+			<name>Jan Hadaš</name>
+			<timezone>+1</timezone>
+		</developer>
 	</developers>
 	<licenses>
 		<license>
