@@ -5,6 +5,9 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="2016-05-06" version="2.8.0" description="Enable verify integers in hexa format.">
+			<action type="add" dev="hadasj">Enable verify integers in hexa format.</action>
+		</release>
 		<release date="2016-02-23" version="2.7.0" description="Fix TestNG.">
 			<action type="update">Switch git repo to github.</action>
 			<action type="add" dev="effy">Fix TestNG support.</action>

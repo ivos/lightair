@@ -11,23 +11,22 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.lang3.time.StopWatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.lightair.exception.MissingPropertyException;
 import net.sf.lightair.exception.ProfileNotDefinedException;
 import net.sf.lightair.exception.PropertiesNotFoundException;
 import net.sf.lightair.exception.PropertiesUnreadableException;
 import net.sf.lightair.internal.util.Profiles;
 
-import org.apache.commons.lang.time.StopWatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Provides Light air properties.
  */
 public class PropertiesProvider {
 
-	private final Logger log = LoggerFactory
-			.getLogger(PropertiesProvider.class);
+	private final Logger log = LoggerFactory.getLogger(PropertiesProvider.class);
 
 	protected final Map<String, Properties> properties = new HashMap<String, Properties>();
 
@@ -42,24 +41,20 @@ public class PropertiesProvider {
 	 */
 	public void init() {
 		final String resolvedPropertiesFileName = getPropertiesFileName();
-		log.debug("Initializing properties from {}.",
-				resolvedPropertiesFileName);
+		log.debug("Initializing properties from {}.", resolvedPropertiesFileName);
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 
-		loadPropertiesForProfile(Profiles.DEFAULT_PROFILE,
-				resolvedPropertiesFileName);
+		loadPropertiesForProfile(Profiles.DEFAULT_PROFILE, resolvedPropertiesFileName);
 		loadPropertiesForProfiles();
 
 		stopWatch.stop();
 		log.debug("Initialized properties in {} ms.", stopWatch.getTime());
 	}
 
-	protected void loadPropertiesForProfile(String profile,
-			String propertiesFileName) {
+	protected void loadPropertiesForProfile(String profile, String propertiesFileName) {
 		try {
-			URL resource = getClass().getClassLoader().getResource(
-					propertiesFileName);
+			URL resource = getClass().getClassLoader().getResource(propertiesFileName);
 			if (null == resource) {
 				throw new PropertiesNotFoundException(propertiesFileName);
 			}
@@ -78,12 +73,10 @@ public class PropertiesProvider {
 
 	protected void loadPropertiesForProfiles() {
 		final String profilePrefix = "profile.";
-		final Set<String> profiles = getPropertyKeysWithPrefix(
-				Profiles.DEFAULT_PROFILE, profilePrefix);
+		final Set<String> profiles = getPropertyKeysWithPrefix(Profiles.DEFAULT_PROFILE, profilePrefix);
 		for (String key : profiles) {
 			String profileName = key.substring(profilePrefix.length());
-			String profilePropertiesFileName = getProperty(
-					Profiles.DEFAULT_PROFILE, key);
+			String profilePropertiesFileName = getProperty(Profiles.DEFAULT_PROFILE, key);
 			properties.put(profileName, new Properties());
 			loadPropertiesForProfile(profileName, profilePropertiesFileName);
 		}
@@ -107,8 +100,7 @@ public class PropertiesProvider {
 	 * @return
 	 */
 	public String getPropertiesFileName() {
-		final String propertiesOverride = System
-				.getProperty(PROPERTIES_PROPERTY_NAME);
+		final String propertiesOverride = System.getProperty(PROPERTIES_PROPERTY_NAME);
 		if (null != propertiesOverride) {
 			return propertiesOverride;
 		}
@@ -118,8 +110,7 @@ public class PropertiesProvider {
 	public static final String PROPERTIES_PROPERTY_NAME = "light.air.properties";
 
 	protected Properties getProfileProperties(String profile) {
-		final Properties profileProperties = properties.get(Profiles
-				.getProfile(profile));
+		final Properties profileProperties = properties.get(Profiles.getProfile(profile));
 		if (null == profileProperties) {
 			throw new ProfileNotDefinedException(profile);
 		}
@@ -198,8 +189,7 @@ public class PropertiesProvider {
 		return getPropertyKeysWithPrefix(profile, "dbunit.properties.");
 	}
 
-	protected Set<String> getPropertyKeysWithPrefix(String profile,
-			String prefix) {
+	protected Set<String> getPropertyKeysWithPrefix(String profile, String prefix) {
 		Set<String> names = new HashSet<String>();
 		Enumeration<Object> keys = getProfileProperties(profile).keys();
 		for (String key; keys.hasMoreElements();) {
