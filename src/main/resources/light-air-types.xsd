@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://lightair.sourceforge.net/">
+	<xsd:simpleType name="ColumnType">
+		<xsd:union>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="@auto" />
+					<xsd:enumeration value="@date" />
+					<xsd:enumeration value="@time" />
+					<xsd:enumeration value="@datetime" />
+					<xsd:enumeration value="@timestamp" />
+					<xsd:enumeration value="@any" />
+					<xsd:enumeration value="@null" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern
+						value="@date([\+\-]P(\d*Y)?(\d*M)?(\d*D)?(T(\d*H)?(\d*M)?(\d*S)?)?)?" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern
+						value="@time([\+\-]P(\d*Y)?(\d*M)?(\d*D)?(T(\d*H)?(\d*M)?(\d*S)?)?)?" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern
+						value="@datetime([\+\-]P(\d*Y)?(\d*M)?(\d*D)?(T(\d*H)?(\d*M)?(\d*S)?)?)?" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern
+						value="@timestamp([\+\-]P(\d*Y)?(\d*M)?(\d*D)?(T(\d*H)?(\d*M)?(\d*S)?)?)?" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="$.+" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="[^$@].*" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:length value="0" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType>
+</xsd:schema>
