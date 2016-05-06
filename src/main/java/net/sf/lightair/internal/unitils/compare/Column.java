@@ -6,8 +6,6 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
-import net.sf.lightair.internal.util.AutoValueGenerator;
-
 import org.apache.commons.codec.binary.Base64;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
@@ -15,6 +13,8 @@ import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.unitils.core.UnitilsException;
 import org.unitils.dbunit.dataset.comparison.ColumnDifference;
+
+import net.sf.lightair.internal.util.AutoValueGenerator;
 
 /**
  * Fork of Unitils Column to allow for customization.
@@ -41,8 +41,8 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	 * @param value
 	 *            Column value
 	 */
-	public Column(String tableName, String name, DataType type,
-			int columnLength, Integer columnPrecision, Object value) {
+	public Column(String tableName, String name, DataType type, int columnLength, Integer columnPrecision,
+			Object value) {
 		super(name, type, value);
 		this.tableName = tableName;
 		this.columnLength = columnLength;
@@ -87,18 +87,15 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	 * @return <code>null</code> if values match, {@link ColumnDifference}
 	 *         otherwise
 	 */
-	public ColumnDifference preCompare(
-			org.unitils.dbunit.dataset.Column actualColumn, int rowId) {
+	public ColumnDifference preCompare(org.unitils.dbunit.dataset.Column actualColumn, int rowId) {
 		if (isAny()) {
 			return getDifferenceForAny(actualColumn);
 		}
 		if (isAuto()) {
 			int columnLength = ((Column) actualColumn).getColumnLength();
-			Integer columnPrecision = ((Column) actualColumn)
-					.getColumnPrecision();
-			Object value = autoValueGenerator.generateAutoValue(
-					actualColumn.getType(), tableName, actualColumn.getName(),
-					columnLength, columnPrecision, rowId);
+			Integer columnPrecision = ((Column) actualColumn).getColumnPrecision();
+			Object value = autoValueGenerator.generateAutoValue(actualColumn.getType(), tableName,
+					actualColumn.getName(), columnLength, columnPrecision, rowId);
 			setValue(value);
 		}
 		if (valuesSame(actualColumn)) {
@@ -127,8 +124,7 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 	 *         otherwise
 	 */
 	@Override
-	public ColumnDifference compare(
-			org.unitils.dbunit.dataset.Column actualColumn) {
+	public ColumnDifference compare(org.unitils.dbunit.dataset.Column actualColumn) {
 		if (isAny()) {
 			return getDifferenceForAny(actualColumn);
 		}
@@ -138,8 +134,7 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		if (valueNullAndActualNotNull(actualColumn)) {
 			return new ColumnDifference(this, actualColumn);
 		}
-		Object value = variableResolver.resolveValue(getValue(),
-				actualColumn.getValue());
+		Object value = variableResolver.resolveValue(getValue(), actualColumn.getValue());
 		if (!isCastedValueEqual(value, actualColumn)) {
 			return createDifferenceForCasted(value, actualColumn);
 		}
@@ -154,8 +149,7 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		return "@auto".equals(getValue());
 	}
 
-	private ColumnDifference getDifferenceForAny(
-			org.unitils.dbunit.dataset.Column actualColumn) {
+	private ColumnDifference getDifferenceForAny(org.unitils.dbunit.dataset.Column actualColumn) {
 		if (null == actualColumn.getValue()) {
 			return new ColumnDifference(this, actualColumn);
 		}
@@ -166,43 +160,34 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		return (getValue() == actualColumn.getValue());
 	}
 
-	private boolean valueNullAndActualNotNull(
-			org.unitils.dbunit.dataset.Column actualColumn) {
+	private boolean valueNullAndActualNotNull(org.unitils.dbunit.dataset.Column actualColumn) {
 		return (getValue() == null && actualColumn.getValue() != null);
 	}
 
-	private boolean isCastedValueEqual(Object expectedValue,
-			org.unitils.dbunit.dataset.Column actualColumn) {
-		Object castedExpectedValue = getCastedValue(expectedValue,
-				actualColumn.getType());
+	private boolean isCastedValueEqual(Object expectedValue, org.unitils.dbunit.dataset.Column actualColumn) {
+		Object castedExpectedValue = getCastedValue(expectedValue, actualColumn.getType());
 		Object actualValue = actualColumn.getValue();
 
 		if (castedExpectedValue instanceof java.util.Date) {
 			return isTemporalWithinLimit(castedExpectedValue, actualValue);
 		}
 		if (castedExpectedValue instanceof byte[]) {
-			return Arrays.equals((byte[]) castedExpectedValue,
-					(byte[]) actualValue);
+			return Arrays.equals((byte[]) castedExpectedValue, (byte[]) actualValue);
 		}
 		return castedExpectedValue.equals(actualValue);
 	}
 
 	private ColumnDifference createDifferenceForCasted(Object expectedValue,
 			org.unitils.dbunit.dataset.Column actualColumn) {
-		Object castedExpectedValue = getCastedValue(expectedValue,
-				actualColumn.getType());
+		Object castedExpectedValue = getCastedValue(expectedValue, actualColumn.getType());
 		if (castedExpectedValue instanceof byte[]) {
-			return new ColumnDifference(this,
-					new org.unitils.dbunit.dataset.Column(
-							actualColumn.getName(), actualColumn.getType(),
-							Base64.encodeBase64String((byte[]) actualColumn
-									.getValue())));
+			return new ColumnDifference(this, new org.unitils.dbunit.dataset.Column(actualColumn.getName(),
+					actualColumn.getType(), Base64.encodeBase64String((byte[]) actualColumn.getValue())));
 		}
 		return new ColumnDifference(this, actualColumn);
 	}
 
-	private boolean isTemporalWithinLimit(Object castedExpectedValue,
-			Object actualValue) {
+	private boolean isTemporalWithinLimit(Object castedExpectedValue, Object actualValue) {
 
 		// Fix NPE
 		if (null == actualValue) {
@@ -229,30 +214,27 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		// convert java.sql.Timestamp to SQL DATE
 		// wipe out time info, only leaving date, yyyy-MM-dd
 		if (expectedValue instanceof Timestamp && DataType.DATE == castType) {
-			return new Date(new DateTime(expectedValue).toDateMidnight()
-					.getMillis());
+			return new Date(new DateTime(expectedValue).toDateMidnight().getMillis());
 		}
 		// convert java.sql.Timestamp to SQL TIME
 		// set date to starting date of java.sql.Time, wipe out milliseconds,
 		// only leaving time, HH:mm:ss
 		if (expectedValue instanceof Timestamp && DataType.TIME == castType) {
-			return new Time(new DateTime(expectedValue).withDate(1970, 1, 1)
-					.withMillisOfSecond(0).getMillis());
+			return new Time(new DateTime(expectedValue).withDate(1970, 1, 1).withMillisOfSecond(0).getMillis());
 		}
-    // parse integer number from encoded string (HEX, OCT, BIN, DEC)
-    if (expectedValue instanceof String && DataType.INTEGER == castType) {
-        return Integer.decode(expectedValue.toString());
-    }
-    if(expectedValue instanceof String && DataType.BIGINT == castType) {
-        return decodeBigInt(expectedValue.toString());
-    }
+		// parse integer number from encoded string (HEX, OCT, BIN, DEC)
+		if (expectedValue instanceof String && DataType.INTEGER == castType) {
+			return Integer.decode(expectedValue.toString());
+		}
+		if (expectedValue instanceof String && DataType.BIGINT == castType) {
+			return decodeBigInt(expectedValue.toString());
+		}
 
 		try {
 			return castType.typeCast(expectedValue);
 		} catch (TypeCastException e) {
-			throw new UnitilsException("Unable to convert \"" + expectedValue
-					+ "\" to " + castType.toString() + ". Column name: "
-					+ getName() + ", current type: " + getType().toString(), e);
+			throw new UnitilsException("Unable to convert \"" + expectedValue + "\" to " + castType.toString()
+					+ ". Column name: " + getName() + ", current type: " + getType().toString(), e);
 		}
 	}
 
@@ -292,37 +274,37 @@ public class Column extends org.unitils.dbunit.dataset.Column {
 		this.autoValueGenerator = autoValueGenerator;
 	}
 
-/**
- * Decodes a {@code String} into an {@code BigInteger}.
- * Accepts UNSIGNED decimal, hexadecimal, binary and octal numbers given
- * by the following grammar:
- *
- * <blockquote>
- * <dl>
- * <dt><i>DecodableString:</i>
- * <dd><i> DecimalNumeral</i>
- * <dd> {@code 0x} <i>HexDigits</i>
- * <dd> {@code 0X} <i>HexDigits</i>
- * <dd> {@code #} <i>HexDigits</i>
- * <dd> {@code 0} <i>OctalDigits</i>
- * </dl>
- * </blockquote>
- **/
-  private BigInteger decodeBigInt(String encodedInt) {
-    //TODO: accept signed - negative numbers
-    if (encodedInt.equals("0")){
-      return BigInteger.ZERO;
-    } else if (encodedInt.startsWith("0X") || encodedInt.startsWith("0x")) {
-      return new BigInteger(encodedInt.substring(2), 16);
-    } else if (encodedInt.startsWith("#")) {
-      return new BigInteger(encodedInt.substring(1), 16);
-    } else if (encodedInt.startsWith("0b") || encodedInt.startsWith("0B")) {
-      return new BigInteger(encodedInt.substring(2), 2);
-    } else if(encodedInt.startsWith("0")) {
-      return new BigInteger(encodedInt.substring(1), 8);
-    } else {
-      return new BigInteger(encodedInt);
-    }
-  }
+	/**
+	 * Decodes a {@code String} into an {@code BigInteger}. Accepts UNSIGNED
+	 * decimal, hexadecimal, binary and octal numbers given by the following
+	 * grammar:
+	 *
+	 * <blockquote>
+	 * <dl>
+	 * <dt><i>DecodableString:</i>
+	 * <dd><i> DecimalNumeral</i>
+	 * <dd>{@code 0x} <i>HexDigits</i>
+	 * <dd>{@code 0X} <i>HexDigits</i>
+	 * <dd>{@code #} <i>HexDigits</i>
+	 * <dd>{@code 0} <i>OctalDigits</i>
+	 * </dl>
+	 * </blockquote>
+	 **/
+	private BigInteger decodeBigInt(String encodedInt) {
+		// TODO: accept signed - negative numbers
+		if (encodedInt.equals("0")) {
+			return BigInteger.ZERO;
+		} else if (encodedInt.startsWith("0X") || encodedInt.startsWith("0x")) {
+			return new BigInteger(encodedInt.substring(2), 16);
+		} else if (encodedInt.startsWith("#")) {
+			return new BigInteger(encodedInt.substring(1), 16);
+		} else if (encodedInt.startsWith("0b") || encodedInt.startsWith("0B")) {
+			return new BigInteger(encodedInt.substring(2), 2);
+		} else if (encodedInt.startsWith("0")) {
+			return new BigInteger(encodedInt.substring(1), 8);
+		} else {
+			return new BigInteger(encodedInt);
+		}
+	}
 
 }

@@ -3,10 +3,7 @@ package net.sf.lightair.internal.unitils;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.lightair.internal.dbunit.dataset.FlatXmlDataSet;
-import net.sf.lightair.internal.dbunit.dataset.MutableTableMetaData;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.datatype.DataType;
 import org.slf4j.Logger;
@@ -15,13 +12,15 @@ import org.unitils.dbunit.util.MultiSchemaDataSet;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
+import net.sf.lightair.internal.dbunit.dataset.FlatXmlDataSet;
+import net.sf.lightair.internal.dbunit.dataset.MutableTableMetaData;
+
 /**
  * SAX handler to parse {@link FlatXmlDataSet}.
  */
 public class DataSetContentHandler extends DefaultHandler {
 
-	private final Logger log = LoggerFactory
-			.getLogger(DataSetContentHandler.class);
+	private final Logger log = LoggerFactory.getLogger(DataSetContentHandler.class);
 
 	private String defaultSchemaName;
 	private final Map<String, FlatXmlDataSet> dataSets = new HashMap<String, FlatXmlDataSet>();
@@ -37,8 +36,7 @@ public class DataSetContentHandler extends DefaultHandler {
 	}
 
 	@Override
-	public void startElement(String namespace, String localName, String qName,
-			Attributes attributes) {
+	public void startElement(String namespace, String localName, String qName, Attributes attributes) {
 		log.debug("Processing XML element {}:{}.", namespace, localName);
 		if (processDatasetElement(namespace, localName)) {
 			return;
@@ -156,14 +154,12 @@ public class DataSetContentHandler extends DefaultHandler {
 	 *            Element attributes
 	 * @return Created table metadata
 	 */
-	private MutableTableMetaData startRow(FlatXmlDataSet dataSet,
-			String tableName, Attributes attributes) {
+	private MutableTableMetaData startRow(FlatXmlDataSet dataSet, String tableName, Attributes attributes) {
 		Column[] columns = new Column[attributes.getLength()];
 		for (int i = 0; i < attributes.getLength(); i++) {
 			columns[i] = new Column(attributes.getQName(i), DataType.UNKNOWN);
 		}
-		MutableTableMetaData tableMetaData = createMutableTableMetaData(
-				tableName, columns);
+		MutableTableMetaData tableMetaData = createMutableTableMetaData(tableName, columns);
 		dataSet.startRow(tableMetaData);
 		return tableMetaData;
 	}
@@ -176,8 +172,7 @@ public class DataSetContentHandler extends DefaultHandler {
 	 * @param columns
 	 * @return New {@link MutableTableMetaData}
 	 */
-	protected MutableTableMetaData createMutableTableMetaData(String tableName,
-			Column[] columns) {
+	protected MutableTableMetaData createMutableTableMetaData(String tableName, Column[] columns) {
 		return new MutableTableMetaData(tableName, columns);
 	}
 
@@ -194,8 +189,7 @@ public class DataSetContentHandler extends DefaultHandler {
 	 * @param attributes
 	 *            Element attributes
 	 */
-	private void setRowValues(FlatXmlDataSet dataSet,
-			MutableTableMetaData metaData, Attributes attributes) {
+	private void setRowValues(FlatXmlDataSet dataSet, MutableTableMetaData metaData, Attributes attributes) {
 		Column[] columns = metaData.getColumns();
 		if (isEmptyTableRow(columns, attributes)) {
 			return;
@@ -204,8 +198,7 @@ public class DataSetContentHandler extends DefaultHandler {
 		for (int i = 0; i < columns.length; i++) {
 			Column column = columns[i];
 			rowValues[i] = attributes.getValue(column.getColumnName());
-			log.debug("Parsed XML column {} with value [{}].",
-					column.getColumnName(), rowValues[i]);
+			log.debug("Parsed XML column {} with value [{}].", column.getColumnName(), rowValues[i]);
 		}
 		dataSet.setRowValues(rowValues);
 	}
