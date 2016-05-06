@@ -310,7 +310,9 @@ public class Column extends org.unitils.dbunit.dataset.Column {
  **/
   private BigInteger decodeBigInt(String encodedInt) {
     //TODO: accept signed - negative numbers
-    if (encodedInt.startsWith("0X") || encodedInt.startsWith("0x")) {
+    if (encodedInt.equals("0")){
+      return BigInteger.ZERO;
+    } else if (encodedInt.startsWith("0X") || encodedInt.startsWith("0x")) {
       return new BigInteger(encodedInt.substring(2), 16);
     } else if (encodedInt.startsWith("#")) {
       return new BigInteger(encodedInt.substring(1), 16);
