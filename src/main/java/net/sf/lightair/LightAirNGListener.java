@@ -38,6 +38,10 @@ public class LightAirNGListener implements IInvokedMethodListener, ITestListener
 	 * Method executed before every test method handling db setup and base url for JWebUnit
 	 */
 	public void beforeInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
+		// light-air is for test methods only
+		if (!iInvokedMethod.isTestMethod()) {
+			return;
+		}
 		ConstructorOrMethod constructorOrMethod = iInvokedMethod.getTestMethod().getConstructorOrMethod();
 		Method method = constructorOrMethod.getMethod();
 		if (method != null) {
@@ -59,6 +63,10 @@ public class LightAirNGListener implements IInvokedMethodListener, ITestListener
 	 * Method executed after every test method handling db verification
 	 */
 	public void afterInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
+		// light-air is for test methods only
+		if (!iInvokedMethod.isTestMethod()) {
+			return;
+		}
 		ConstructorOrMethod constructorOrMethod = iInvokedMethod.getTestMethod().getConstructorOrMethod();
 		Method method = constructorOrMethod.getMethod();
 		if (method != null) {
