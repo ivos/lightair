@@ -5,6 +5,9 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="2016-06-03" version="2.9.0" description="Fix TestNG support.">
+			<action type="add" dev="effy">Fix setup and verify is executed for test methods only.</action>
+		</release>
 		<release date="2016-05-06" version="2.8.0" description="Enable verify integers in hexa format.">
 			<action type="add" dev="hadasj">Enable verify integers in hexa format.</action>
 		</release>
