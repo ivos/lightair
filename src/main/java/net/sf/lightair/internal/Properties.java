@@ -12,52 +12,52 @@ import java.util.Map;
 
 public class Properties implements Keywords {
 
-    private static final Logger log = LoggerFactory.getLogger(Properties.class);
+	private static final Logger log = LoggerFactory.getLogger(Properties.class);
 
-    public static Map<String, Map<String, String>> load() {
-        return load(DEFAULT_PROPERTIES_FILE_NAME);
-    }
+	public static Map<String, Map<String, String>> load() {
+		return load(DEFAULT_PROPERTIES_FILE_NAME);
+	}
 
-    public static Map<String, Map<String, String>> load(String fileName) {
-        log.debug("Loading properties.");
-        Map<String, Map<String, String>> properties = new HashMap<>();
+	public static Map<String, Map<String, String>> load(String fileName) {
+		log.debug("Loading properties.");
+		Map<String, Map<String, String>> properties = new HashMap<>();
 
-        Map<String, String> defaultProperties = loadPropertiesForProfile(DEFAULT_PROFILE, fileName);
-        properties.put(DEFAULT_PROFILE, defaultProperties);
+		Map<String, String> defaultProperties = loadPropertiesForProfile(DEFAULT_PROFILE, fileName);
+		properties.put(DEFAULT_PROFILE, defaultProperties);
 
-        defaultProperties.keySet().stream()
-                .filter(property -> property.startsWith(PROFILE_PREFIX))
-                .forEach(property -> {
-                    String profile = property.substring(PROFILE_PREFIX.length());
-                    Map<String, String> profileProperties =
-                            loadPropertiesForProfile(profile, defaultProperties.get(property));
-                    properties.put(profile, profileProperties);
-                });
+		defaultProperties.keySet().stream()
+				.filter(property -> property.startsWith(PROFILE_PREFIX))
+				.forEach(property -> {
+					String profile = property.substring(PROFILE_PREFIX.length());
+					Map<String, String> profileProperties =
+							loadPropertiesForProfile(profile, defaultProperties.get(property));
+					properties.put(profile, profileProperties);
+				});
 
-        return properties;
-    }
+		return properties;
+	}
 
-    private static Map<String, String> loadPropertiesForProfile(String profile, String fileName) {
-        try {
-            URL resource = Properties.class.getClassLoader().getResource(fileName);
-            if (null == resource) {
-                throw new RuntimeException("Properties not found: " + fileName);
-            }
-            URLConnection urlConnection = resource.openConnection();
-            urlConnection.setUseCaches(false);
-            InputStream is = urlConnection.getInputStream();
-            try {
-                java.util.Properties properties = new java.util.Properties();
-                properties.load(is);
-                @SuppressWarnings("unchecked")
-                Map<String, String> map = (Map) properties;
-                log.debug("For profile [{}] loaded properties file {}.", profile, fileName);
-                return map;
-            } finally {
-                is.close();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Properties file unreadable: " + fileName);
-        }
-    }
+	private static Map<String, String> loadPropertiesForProfile(String profile, String fileName) {
+		try {
+			URL resource = Properties.class.getClassLoader().getResource(fileName);
+			if (null == resource) {
+				throw new RuntimeException("Properties not found: " + fileName);
+			}
+			URLConnection urlConnection = resource.openConnection();
+			urlConnection.setUseCaches(false);
+			InputStream is = urlConnection.getInputStream();
+			try {
+				java.util.Properties properties = new java.util.Properties();
+				properties.load(is);
+				@SuppressWarnings("unchecked")
+				Map<String, String> map = (Map) properties;
+				log.debug("For profile [{}] loaded properties file {}.", profile, fileName);
+				return map;
+			} finally {
+				is.close();
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Properties file unreadable: " + fileName);
+		}
+	}
 }
