@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -18,7 +19,21 @@ public class Connections {
     public static final String DATABASE_USER_NAME = "database.userName";
     public static final String DATABASE_PASSWORD = "database.password";
 
-    public static Connection open(String profile, Map<String, String> profileProperties) {
+    public static Map<String, Connection> open(Map<String, Map<String, String>> properties) {
+        Map<String, Connection> connections = new HashMap<>();
+        properties.keySet().stream()
+                .forEach(profile -> {
+                    connections.put(profile, openConnection(profile, properties.get(profile)));
+                });
+        return connections;
+    }
+
+    public static void close(Map<String, Connection> connections) {
+        connections.entrySet().stream()
+                .forEach(entry -> closeConnection(entry.getKey(), entry.getValue()));
+    }
+
+    private static Connection openConnection(String profile, Map<String, String> profileProperties) {
         String driverClassName = profileProperties.get(DATABASE_DRIVER_CLASS_NAME);
         String url = profileProperties.get(DATABASE_CONNECTION_URL);
         String userName = profileProperties.get(DATABASE_USER_NAME);
@@ -42,7 +57,7 @@ public class Connections {
         }
     }
 
-    public static void close(String profile, Connection connection) {
+    private static void closeConnection(String profile, Connection connection) {
         if (null != connection) {
             try {
                 connection.close();
