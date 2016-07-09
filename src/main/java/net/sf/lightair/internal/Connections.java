@@ -10,14 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Connections {
+public class Connections implements Keywords {
 
     private static final Logger log = LoggerFactory.getLogger(Connections.class);
-
-    public static final String DATABASE_DRIVER_CLASS_NAME = "database.driverClassName";
-    public static final String DATABASE_CONNECTION_URL = "database.connectionUrl";
-    public static final String DATABASE_USER_NAME = "database.userName";
-    public static final String DATABASE_PASSWORD = "database.password";
 
     public static Map<String, Connection> open(Map<String, Map<String, String>> properties) {
         Map<String, Connection> connections = new HashMap<>();

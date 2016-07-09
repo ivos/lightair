@@ -1,6 +1,7 @@
 package unit.internal;
 
 import net.sf.lightair.internal.Connections;
+import net.sf.lightair.internal.Keywords;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -12,15 +13,15 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class ConnectionsTest {
+public class ConnectionsTest implements Keywords {
 
     private Map<String, String> createProperties(
             String driverClassName, String url, String userName, String password) {
         Map<String, String> properties = new HashMap<>();
-        properties.put(Connections.DATABASE_DRIVER_CLASS_NAME, driverClassName);
-        properties.put(Connections.DATABASE_CONNECTION_URL, url);
-        properties.put(Connections.DATABASE_USER_NAME, userName);
-        properties.put(Connections.DATABASE_PASSWORD, password);
+        properties.put(DATABASE_DRIVER_CLASS_NAME, driverClassName);
+        properties.put(DATABASE_CONNECTION_URL, url);
+        properties.put(DATABASE_USER_NAME, userName);
+        properties.put(DATABASE_PASSWORD, password);
         return properties;
     }
 
