@@ -20,63 +20,63 @@ import java.util.Map;
 
 public class Xml implements Keywords {
 
-    public static List<Map<String, Object>> readFile(File file) {
-        List<Map<String, Object>> data = new ArrayList<>();
+	public static List<Map<String, Object>> readFile(File file) {
+		List<Map<String, Object>> data = new ArrayList<>();
 
-        Document doc = readDocument(file);
-        Element dataset = doc.getDocumentElement();
-        NodeList rows = dataset.getChildNodes();
-        for (int rowIndex = 0; rowIndex < rows.getLength(); rowIndex++) {
-            Node row = rows.item(rowIndex);
-            if (Node.ELEMENT_NODE != row.getNodeType()) {
-                continue; // only process elements
-            }
-            Map<String, Object> rowData = getRowData(row);
-            rowData.put(COLUMNS, getAttributeData(row));
-            data.add(rowData);
-        }
+		Document doc = readDocument(file);
+		Element dataset = doc.getDocumentElement();
+		NodeList rows = dataset.getChildNodes();
+		for (int rowIndex = 0; rowIndex < rows.getLength(); rowIndex++) {
+			Node row = rows.item(rowIndex);
+			if (Node.ELEMENT_NODE != row.getNodeType()) {
+				continue; // only process elements
+			}
+			Map<String, Object> rowData = getRowData(row);
+			rowData.put(COLUMNS, getAttributeData(row));
+			data.add(rowData);
+		}
 
-        return data;
-    }
+		return data;
+	}
 
-    private static Document readDocument(File file) {
-        Document doc;
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            doc = builder.parse(file);
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException("Cannot initialize XML reader.");
-        } catch (SAXException e) {
-            throw new RuntimeException("Cannot parse XML in file " + file + ". Is the XML content well-formed?");
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot read file " + file + ". Does the file exist?");
-        }
-        doc.getDocumentElement().normalize();
-        return doc;
-    }
+	private static Document readDocument(File file) {
+		Document doc;
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			doc = builder.parse(file);
+		} catch (ParserConfigurationException e) {
+			throw new RuntimeException("Cannot initialize XML reader.");
+		} catch (SAXException e) {
+			throw new RuntimeException("Cannot parse XML in file " + file + ". Is the XML content well-formed?");
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot read file " + file + ". Does the file exist?");
+		}
+		doc.getDocumentElement().normalize();
+		return doc;
+	}
 
-    private static Map<String, Object> getRowData(Node row) {
-        Map<String, Object> rowData = new HashMap<>();
-        String nodeName = row.getNodeName();
-        if (nodeName.contains(":")) {
-            String[] parts = nodeName.split(":");
-            rowData.put(PROFILE, parts[0]);
-            rowData.put(TABLE, parts[1]);
-        } else {
-            rowData.put(PROFILE, Properties.DEFAULT_PROFILE);
-            rowData.put(TABLE, nodeName);
-        }
-        return rowData;
-    }
+	private static Map<String, Object> getRowData(Node row) {
+		Map<String, Object> rowData = new HashMap<>();
+		String nodeName = row.getNodeName();
+		if (nodeName.contains(":")) {
+			String[] parts = nodeName.split(":");
+			rowData.put(PROFILE, parts[0]);
+			rowData.put(TABLE, parts[1]);
+		} else {
+			rowData.put(PROFILE, Properties.DEFAULT_PROFILE);
+			rowData.put(TABLE, nodeName);
+		}
+		return rowData;
+	}
 
-    private static HashMap<String, String> getAttributeData(Node row) {
-        HashMap<String, String> attributeData = new LinkedHashMap<>();
-        NamedNodeMap attributes = row.getAttributes();
-        for (int attrIndex = 0; attrIndex < attributes.getLength(); attrIndex++) {
-            Node attribute = attributes.item(attrIndex);
-            attributeData.put(attribute.getNodeName(), attribute.getNodeValue());
-        }
-        return attributeData;
-    }
+	private static HashMap<String, String> getAttributeData(Node row) {
+		HashMap<String, String> attributeData = new LinkedHashMap<>();
+		NamedNodeMap attributes = row.getAttributes();
+		for (int attrIndex = 0; attrIndex < attributes.getLength(); attrIndex++) {
+			Node attribute = attributes.item(attrIndex);
+			attributeData.put(attribute.getNodeName(), attribute.getNodeValue());
+		}
+		return attributeData;
+	}
 }
