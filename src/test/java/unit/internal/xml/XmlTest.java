@@ -1,5 +1,6 @@
 package unit.internal.xml;
 
+import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.Xml;
 import org.junit.Test;
 
@@ -11,16 +12,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class XmlTest {
+public class XmlTest implements Keywords {
 
     private final String DIR = "target/test-classes/" + getClass().getPackage().getName().replace('.', '/') + '/';
 
     private void verifyRow(int i, List<Map<String, Object>> data,
                            String profile, String table, String... values) {
         assertNotNull("Row exists " + i, data.get(i));
-        assertEquals("Row profile " + i, profile, data.get(i).get(Xml.PROFILE));
-        assertEquals("Row table " + i, table, data.get(i).get(Xml.TABLE));
-        Map columns = (Map) data.get(i).get(Xml.COLUMNS);
+        assertEquals("Row profile " + i, profile, data.get(i).get(PROFILE));
+        assertEquals("Row table " + i, table, data.get(i).get(TABLE));
+        Map columns = (Map) data.get(i).get(COLUMNS);
         for (int j = 0; j < values.length - 1; j = j + 2) {
             String column = values[j];
             assertTrue("Row " + i + " has column " + column, columns.containsKey(column));

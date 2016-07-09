@@ -18,11 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Xml {
-
-    public static final String PROFILE = "PROFILE";
-    public static final String TABLE = "TABLE";
-    public static final String COLUMNS = "COLUMNS";
+public class Xml implements Keywords {
 
     public static List<Map<String, Object>> readFile(File file) {
         List<Map<String, Object>> data = new ArrayList<>();
