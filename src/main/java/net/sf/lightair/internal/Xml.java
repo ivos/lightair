@@ -57,7 +57,7 @@ public class Xml implements Keywords {
 	}
 
 	private static Map<String, Object> getRowData(Node row) {
-		Map<String, Object> rowData = new HashMap<>();
+		Map<String, Object> rowData = new LinkedHashMap<>();
 		String nodeName = row.getNodeName();
 		if (nodeName.contains(":")) {
 			String[] parts = nodeName.split(":");
@@ -70,8 +70,8 @@ public class Xml implements Keywords {
 		return rowData;
 	}
 
-	private static HashMap<String, String> getAttributeData(Node row) {
-		HashMap<String, String> attributeData = new LinkedHashMap<>();
+	private static Map<String, String> getAttributeData(Node row) {
+		Map<String, String> attributeData = new HashMap<>(); // attributes order in DOM is not preserved
 		NamedNodeMap attributes = row.getAttributes();
 		for (int attrIndex = 0; attrIndex < attributes.getLength(); attrIndex++) {
 			Node attribute = attributes.item(attrIndex);
