@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ConnectionsTest implements Keywords {
 
-	private Map<String, String> createProperties(
+	public static Map<String, String> createProperties(
 			String driverClassName, String url, String userName, String password) {
 		Map<String, String> properties = new HashMap<>();
 		properties.put(DATABASE_DRIVER_CLASS_NAME, driverClassName);
