@@ -16,10 +16,6 @@ public class Properties implements Keywords {
 
 	public static final String PROFILE_PREFIX = "profile.";
 
-	public static Map<String, Map<String, String>> load() {
-		return load(DEFAULT_PROPERTIES_FILE_NAME);
-	}
-
 	public static Map<String, Map<String, String>> load(String fileName) {
 		log.debug("Loading properties.");
 		Map<String, Map<String, String>> properties = new HashMap<>();
