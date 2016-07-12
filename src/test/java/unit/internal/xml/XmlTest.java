@@ -16,10 +16,8 @@ public class XmlTest implements Keywords {
 
 	private final String DIR = "target/test-classes/" + getClass().getPackage().getName().replace('.', '/') + '/';
 
-	private void verifyRow(int i, List<Map<String, Object>> data,
-	                       String profile, String table, String... values) {
+	private void verifyRow(int i, List<Map<String, Object>> data, String table, String... values) {
 		assertNotNull("Row exists " + i, data.get(i));
-		assertEquals("Row profile " + i, profile, data.get(i).get(PROFILE));
 		assertEquals("Row table " + i, table, data.get(i).get(TABLE));
 		Map columns = (Map) data.get(i).get(COLUMNS);
 		for (int j = 0; j < values.length - 1; j = j + 2) {
@@ -33,19 +31,9 @@ public class XmlTest implements Keywords {
 	@Test
 	public void test() {
 		List<Map<String, Object>> data = Xml.readFile(new File(DIR + "test.xml"));
-		verifyRow(0, data, "", "ta", "ca", "cav1", "cb", "cbv1", "cc", "ccv1");
-		verifyRow(1, data, "", "ta", "cb", "cbv2", "cc", "ccv2", "cd", "cdv2");
-		verifyRow(2, data, "", "tb", "cc", "ccv3", "cd", "cdv3", "ce", "cev3");
+		verifyRow(0, data, "ta", "ca", "cav1", "cb", "cbv1", "cc", "ccv1");
+		verifyRow(1, data, "ta", "cb", "cbv2", "cc", "ccv2", "cd", "cdv2");
+		verifyRow(2, data, "tb", "cc", "ccv3", "cd", "cdv3", "ce", "cev3");
 		assertEquals("No more rows", 3, data.size());
-	}
-
-	@Test
-	public void multipleSchemas() {
-		List<Map<String, Object>> data = Xml.readFile(new File(DIR + "multiple-schemas.xml"));
-		verifyRow(0, data, "s1", "ts1", "id", "1", "a", "a10");
-		verifyRow(1, data, "s2", "ts2", "id", "2", "a", "a20");
-		verifyRow(2, data, "s3", "ts3", "id", "3", "a", "a30");
-		verifyRow(3, data, "", "tds", "id", "4", "a", "ad0");
-		assertEquals("No more rows", 4, data.size());
 	}
 }

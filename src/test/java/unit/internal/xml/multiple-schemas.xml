@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset xmlns:s1="s1" xmlns:s2="s2" xmlns:s3="s3">
-    <s1:ts1 id="1" a="a10"/>
-    <s2:ts2 id="2" a="a20"/>
-    <s3:ts3 id="3" a="a30"/>
-    <tds id="4" a="ad0"/>
-</dataset>

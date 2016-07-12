@@ -13,7 +13,6 @@ public interface Keywords {
 	String DEFAULT_PROPERTIES_FILE_NAME = "light-air.properties";
 	String DEFAULT_PROFILE = "";
 
-	String PROFILE = "PROFILE";
 	String TABLE = "TABLE";
 	String COLUMNS = "COLUMNS";
 	String DATA_TYPE = "DATA_TYPE";
