@@ -8,7 +8,6 @@ import net.sf.lightair.exception.TokenAnyInSetupException;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.factory.Factory;
 import net.sf.lightair.internal.unitils.compare.DataSetAssert;
-
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -87,9 +86,11 @@ public class UnitilsWrapper {
 				@Override
 				void databaseOperation() throws DatabaseUnitException,
 						SQLException {
-					IDataSet dataSetActual = connection.createDataSet();
-					dataSetAssert.assertEqualDbUnitDataSets(schemaName,
-							dataSetExpected, dataSetActual);
+                    String[] tableNames = dataSetExpected.getTableNames();
+                    IDataSet dataSetActual = connection.createDataSet(tableNames);
+                    dataSetAssert.assertEqualDbUnitDataSets(schemaName,
+                                dataSetExpected, dataSetActual);
+
 				}
 			}.execute(connection);
 		}
