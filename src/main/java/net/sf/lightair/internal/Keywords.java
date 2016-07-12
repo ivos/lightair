@@ -2,9 +2,6 @@ package net.sf.lightair.internal;
 
 public interface Keywords {
 
-	String PROFILE_PREFIX = "profile.";
-//	String PROVIDER_CLASS_NAME_SUFFIX = "Provider";
-
 	String DATABASE_DRIVER_CLASS_NAME = "database.driverClassName";
 	String DATABASE_CONNECTION_URL = "database.connectionUrl";
 	String DATABASE_USER_NAME = "database.userName";
