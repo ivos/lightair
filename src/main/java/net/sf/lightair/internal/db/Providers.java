@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Providers implements Keywords {
 
+	public static final String PROVIDER_CLASS_NAME_SUFFIX = "Provider";
+
 	public static Provider createProvider(String profile, String dialect) {
 		String providerClassName = Provider.class.getPackage().getName() + "." +
 				StringUtils.capitalize(dialect) + PROVIDER_CLASS_NAME_SUFFIX;

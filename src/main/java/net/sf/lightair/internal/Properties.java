@@ -14,6 +14,8 @@ public class Properties implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Properties.class);
 
+	public static final String PROFILE_PREFIX = "profile.";
+
 	public static Map<String, Map<String, String>> load() {
 		return load(DEFAULT_PROPERTIES_FILE_NAME);
 	}
