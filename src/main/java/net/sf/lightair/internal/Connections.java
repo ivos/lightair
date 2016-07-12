@@ -6,7 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -15,12 +16,12 @@ public class Connections implements Keywords {
 	private static final Logger log = LoggerFactory.getLogger(Connections.class);
 
 	public static Map<String, Connection> open(Map<String, Map<String, String>> properties) {
-		Map<String, Connection> connections = new HashMap<>();
+		Map<String, Connection> connections = new LinkedHashMap<>();
 		properties.keySet().stream()
 				.forEach(profile -> {
 					connections.put(profile, openConnection(profile, properties.get(profile)));
 				});
-		return connections;
+		return Collections.unmodifiableMap(connections);
 	}
 
 	public static void close(Map<String, Connection> connections) {

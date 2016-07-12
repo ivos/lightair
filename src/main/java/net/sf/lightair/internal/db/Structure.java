@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class Structure implements Keywords {
 			structures.put(profile,
 					loadProfile(profile, properties.get(profile), connections.get(profile)));
 		}
-		return structures;
+		return Collections.unmodifiableMap(structures);
 	}
 
 	private static Map<String, Map<String, Map<String, Object>>> loadProfile(
@@ -45,7 +46,7 @@ public class Structure implements Keywords {
 			Map<String, Map<String, Object>> columns = loadTableColumns(connection, schema, table);
 			data.put(table, columns);
 		}
-		return data;
+		return Collections.unmodifiableMap(data);
 	}
 
 	private static List<String> loadTables(Connection connection, String schema) {
@@ -59,7 +60,7 @@ public class Structure implements Keywords {
 		} catch (SQLException e) {
 			throw new RuntimeException("Cannot load database metadata.", e);
 		}
-		return data;
+		return Collections.unmodifiableList(data);
 	}
 
 	private static Map<String, Map<String, Object>> loadTableColumns(
@@ -80,7 +81,7 @@ public class Structure implements Keywords {
 		} catch (SQLException e) {
 			throw new RuntimeException("Cannot load database metadata.", e);
 		}
-		return data;
+		return Collections.unmodifiableMap(data);
 	}
 
 	private static String selectDataType(int sqlDataType, String sqlTypeName) {

@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Properties implements Keywords {
@@ -18,7 +19,7 @@ public class Properties implements Keywords {
 
 	public static Map<String, Map<String, String>> load(String fileName) {
 		log.debug("Loading properties.");
-		Map<String, Map<String, String>> properties = new HashMap<>();
+		Map<String, Map<String, String>> properties = new LinkedHashMap<>();
 
 		Map<String, String> defaultProperties = loadPropertiesForProfile(DEFAULT_PROFILE, fileName);
 		properties.put(DEFAULT_PROFILE, defaultProperties);
@@ -32,7 +33,7 @@ public class Properties implements Keywords {
 					properties.put(profile, profileProperties);
 				});
 
-		return properties;
+		return Collections.unmodifiableMap(properties);
 	}
 
 	private static Map<String, String> loadPropertiesForProfile(String profile, String fileName) {
@@ -50,7 +51,7 @@ public class Properties implements Keywords {
 				@SuppressWarnings("unchecked")
 				Map<String, String> map = (Map) properties;
 				log.debug("For profile [{}] loaded properties file {}.", profile, fileName);
-				return map;
+				return Collections.unmodifiableMap(map);
 			} finally {
 				is.close();
 			}
