@@ -23,11 +23,10 @@ public class XsdTest extends TemplatingTestBase implements Keywords {
 	}
 
 	private static void addColumn(
-			Map<String, Map<String, Object>> table, String name, String dataType, boolean notNull, int size) {
+			Map<String, Map<String, Object>> table, String name, String dataType, boolean notNull) {
 		Map<String, Object> data = new LinkedHashMap<>();
 		data.put("DATA_TYPE", dataType);
-		data.put("NOT_NULL", Boolean.toString(notNull));
-		data.put("SIZE", Integer.toString(size));
+		data.put("NOT_NULL", notNull);
 		table.put(name, data);
 	}
 
@@ -41,18 +40,55 @@ public class XsdTest extends TemplatingTestBase implements Keywords {
 		profile = new LinkedHashMap<>();
 
 		columns = new LinkedHashMap<>();
-		addColumn(columns, "CA", "STRING", false, 10);
-		addColumn(columns, "CB", "STRING", false, 20);
-		addColumn(columns, "CC", "STRING", false, 30);
-		addColumn(columns, "CD", "STRING", false, 40);
+		addColumn(columns, "CA", "STRING", false);
+		addColumn(columns, "CB", "STRING", false);
+		addColumn(columns, "CC", "STRING", false);
+		addColumn(columns, "CD", "STRING", false);
 		profile.put("TA", columns);
 
 		columns = new LinkedHashMap<>();
-		addColumn(columns, "CC", "STRING", false, 10);
-		addColumn(columns, "CD", "STRING", false, 20);
-		addColumn(columns, "CE", "STRING", false, 30);
-		addColumn(columns, "CF", "STRING", false, 40);
+		addColumn(columns, "CC", "STRING", false);
+		addColumn(columns, "CD", "STRING", false);
+		addColumn(columns, "CE", "STRING", false);
+		addColumn(columns, "CF", "STRING", false);
 		profile.put("TB", columns);
+
+		columns = new LinkedHashMap<>();
+		addColumn(columns, "BOOLEAN_NULLABLE_TYPE", "BOOLEAN", false);
+		addColumn(columns, "BOOLEAN_TYPE", "BOOLEAN", true);
+		addColumn(columns, "BYTE_NULLABLE_TYPE", "BYTE", false);
+		addColumn(columns, "BYTE_TYPE", "BYTE", true);
+		addColumn(columns, "SHORT_NULLABLE_TYPE", "SHORT", false);
+		addColumn(columns, "SHORT_TYPE", "SHORT", true);
+		addColumn(columns, "INTEGER_NULLABLE_TYPE", "INTEGER", false);
+		addColumn(columns, "INTEGER_TYPE", "INTEGER", true);
+		addColumn(columns, "LONG_NULLABLE_TYPE", "LONG", false);
+		addColumn(columns, "LONG_TYPE", "LONG", true);
+		addColumn(columns, "FLOAT_NULLABLE_TYPE", "FLOAT", false);
+		addColumn(columns, "FLOAT_TYPE", "FLOAT", true);
+		addColumn(columns, "DOUBLE_NULLABLE_TYPE", "DOUBLE", false);
+		addColumn(columns, "DOUBLE_TYPE", "DOUBLE", true);
+		addColumn(columns, "BIGDECIMAL_NULLABLE_TYPE", "BIGDECIMAL", false);
+		addColumn(columns, "BIGDECIMAL_TYPE", "BIGDECIMAL", true);
+		addColumn(columns, "DATE_NULLABLE_TYPE", "DATE", false);
+		addColumn(columns, "DATE_TYPE", "DATE", true);
+		addColumn(columns, "TIME_NULLABLE_TYPE", "TIME", false);
+		addColumn(columns, "TIME_TYPE", "TIME", true);
+		addColumn(columns, "TIMESTAMP_NULLABLE_TYPE", "TIMESTAMP", false);
+		addColumn(columns, "TIMESTAMP_TYPE", "TIMESTAMP", true);
+		addColumn(columns, "STRING_NULLABLE_TYPE", "STRING", false);
+		addColumn(columns, "STRING_TYPE", "STRING", true);
+		addColumn(columns, "NSTRING_NULLABLE_TYPE", "NSTRING", false);
+		addColumn(columns, "NSTRING_TYPE", "NSTRING", true);
+		addColumn(columns, "BYTES_NULLABLE_TYPE", "BYTES", false);
+		addColumn(columns, "BYTES_TYPE", "BYTES", true);
+		addColumn(columns, "CLOB_NULLABLE_TYPE", "CLOB", false);
+		addColumn(columns, "CLOB_TYPE", "CLOB", true);
+		addColumn(columns, "NCLOB_NULLABLE_TYPE", "NCLOB", false);
+		addColumn(columns, "NCLOB_TYPE", "NCLOB", true);
+		addColumn(columns, "BLOB_NULLABLE_TYPE", "BLOB", false);
+		addColumn(columns, "BLOB_TYPE", "BLOB", true);
+		profile.put("DATA_TYPES", columns);
 
 		structure.put(DEFAULT_PROFILE, profile);
 
@@ -60,9 +96,9 @@ public class XsdTest extends TemplatingTestBase implements Keywords {
 		profile = new LinkedHashMap<>();
 
 		columns = new LinkedHashMap<>();
-		addColumn(columns, "CA", "STRING", false, 10);
-		addColumn(columns, "CB", "STRING", false, 20);
-		addColumn(columns, "CC", "STRING", false, 30);
+		addColumn(columns, "CA", "STRING", false);
+		addColumn(columns, "CB", "STRING", false);
+		addColumn(columns, "CC", "STRING", false);
 		profile.put("TOTHER", columns);
 
 		structure.put("profile1", profile);
@@ -76,6 +112,7 @@ public class XsdTest extends TemplatingTestBase implements Keywords {
 
 		Xsd.generate(properties, structure);
 
+		performTest("../../../../../main/resources/light-air-types.xsd", "light-air-types.xsd");
 		performTest("dataset.xsd", "dataset.xsd");
 		performTest("dataset-profile1.xsd", "dataset-profile1.xsd");
 	}

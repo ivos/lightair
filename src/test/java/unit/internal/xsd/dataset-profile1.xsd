@@ -1,16 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:la="http://lightair.sourceforge.net/">
+	<xsd:import namespace="http://lightair.sourceforge.net/" schemaLocation="light-air-types.xsd"/>
+
 	<xsd:element name="dataset">
 		<xsd:complexType>
 			<xsd:choice minOccurs="0" maxOccurs="unbounded">
-				<xsd:element name="tother" type="tother__type"/>
+				<xsd:element name="tother" type="tother__Type"/>
 			</xsd:choice>
 		</xsd:complexType>
 	</xsd:element>
 
-	<xsd:complexType name="tother__type">
-		<xsd:attribute name="ca" use="optional" type="xsd:string"/>
-		<xsd:attribute name="cb" use="optional" type="xsd:string"/>
-		<xsd:attribute name="cc" use="optional" type="xsd:string"/>
+	<xsd:complexType name="tother__Type">
+		<xsd:attribute name="ca" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="cb" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="cc" use="optional" type="la:StringNullableType"/>
 	</xsd:complexType>
 </xsd:schema>

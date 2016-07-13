@@ -3,4 +3,22 @@
 	<ta ca="cav1" cb="cbv1" cc="ccv1"/>
 	<ta cb="cbv2" cc="ccv2" cd="cdv2"/>
 	<tb cc="ccv3" cd="cdv3" ce="cev3"/>
+	<data_types boolean_nullable_type="@null" boolean_type="true"
+	            byte_nullable_type="255" byte_type="-128"
+	            short_nullable_type="@auto" short_type="65000"
+	            integer_nullable_type="-2000000000" integer_type="4000000000"
+	            long_nullable_type="@null" long_type="18446744073709551615"
+	            float_nullable_type="123456.78901" float_type="123456.78901"
+	            double_nullable_type="123456.78901" double_type="123456.78901"
+	            bigdecimal_nullable_type="@null" bigdecimal_type="123456.78901"
+	            date_nullable_type="2015-12-31" date_type="@date+P1D"
+	            time_nullable_type="12:59:58" time_type="@time-PT1H"
+	            timestamp_nullable_type="2015-12-31T12:59:58.123" timestamp_type="@timestamp"
+	            string_nullable_type="some string" string_type=""
+	            nstring_nullable_type="some string" nstring_type="some string"
+	            bytes_nullable_type="@null" bytes_type="some bytes"
+	            blob_nullable_type="some bytes" blob_type="some bytes"
+	            clob_nullable_type="some string" clob_type="some string"
+	            nclob_nullable_type="some string" nclob_type="some string"
+	/>
 </dataset>
