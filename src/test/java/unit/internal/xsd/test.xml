@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dataset>
+<dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="dataset.xsd">
 	<ta ca="cav1" cb="cbv1" cc="ccv1"/>
 	<ta cb="cbv2" cc="ccv2" cd="cdv2"/>
 	<tb cc="ccv3" cd="cdv3" ce="cev3"/>

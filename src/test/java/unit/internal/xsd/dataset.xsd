@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="dataset">
+		<xsd:complexType>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="ta" type="ta__type"/>
+				<xsd:element name="tb" type="tb__type"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="ta__type">
+		<xsd:attribute name="ca" use="optional" type="xsd:string"/>
+		<xsd:attribute name="cb" use="optional" type="xsd:string"/>
+		<xsd:attribute name="cc" use="optional" type="xsd:string"/>
+		<xsd:attribute name="cd" use="optional" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:complexType name="tb__type">
+		<xsd:attribute name="cc" use="optional" type="xsd:string"/>
+		<xsd:attribute name="cd" use="optional" type="xsd:string"/>
+		<xsd:attribute name="ce" use="optional" type="xsd:string"/>
+		<xsd:attribute name="cf" use="optional" type="xsd:string"/>
+	</xsd:complexType>
+</xsd:schema>

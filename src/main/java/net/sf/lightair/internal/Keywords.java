@@ -10,7 +10,11 @@ public interface Keywords {
 	String DATABASE_DIALECT = "database.dialect";
 	String DATABASE_SCHEMA = "database.schema";
 
+	String XSD_DIRECTORY = "xsd.directory";
+
 	String DEFAULT_PROPERTIES_FILE_NAME = "light-air.properties";
+	String DEFAULT_XSD_DIRECTORY = "src/test/java";
+
 	String DEFAULT_PROFILE = "";
 
 	String TABLE = "TABLE";
