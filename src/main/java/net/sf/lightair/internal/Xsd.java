@@ -1,8 +1,11 @@
 package net.sf.lightair.internal;
 
+import net.sf.lightair.internal.db.Structure;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +14,8 @@ import java.util.Map;
 
 public class Xsd implements Keywords {
 
+	private static final Logger log = LoggerFactory.getLogger(Structure.class);
+
 	private static final String FILE_NAME_PREFIX = "dataset";
 	private static final String FILE_NAME_SUFFIX = ".xsd";
 	private static final String BASE_TYPES_FILE_NAME = "light-air-types.xsd";
@@ -18,6 +23,7 @@ public class Xsd implements Keywords {
 	public static void generate(
 			Map<String, Map<String, String>> properties,
 			Map<String, Map<String, Map<String, Map<String, Object>>>> structure) {
+		log.info("Generating XSD files.");
 		String xsdDirectory = properties.get(DEFAULT_PROFILE).get(XSD_DIRECTORY);
 		if (null == xsdDirectory) {
 			xsdDirectory = DEFAULT_XSD_DIRECTORY;
@@ -26,9 +32,12 @@ public class Xsd implements Keywords {
 
 		copyBaseTypes(directory);
 		for (String profile : structure.keySet()) {
+			log.debug("Reading DB structure for profile [{}].", profile);
 			String content = createContent(structure.get(profile));
+			log.debug("Writing XSD file for profile [{}].", profile);
 			writeProfileXsd(directory, profile, content);
 		}
+		log.info("Generated XSD files.");
 	}
 
 	private static String convert(String sqlName) {
