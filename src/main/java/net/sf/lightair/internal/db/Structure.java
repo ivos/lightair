@@ -71,8 +71,9 @@ public class Structure implements Keywords {
 			ResultSet rs = meta.getColumns(connection.getCatalog(), schema, table, null);
 			while (rs.next()) {
 				Map<String, Object> props = new LinkedHashMap<>();
-				String dataType = selectDataType(rs.getInt(5), rs.getString(6));
+				String dataType = resolveDataType(rs.getInt(5), rs.getString(6));
 				props.put(DATA_TYPE, dataType);
+				props.put(JDBC_DATA_TYPE, rs.getInt(5));
 				props.put(NOT_NULL, 0 == rs.getInt(11));
 				props.put(SIZE, rs.getInt(7));
 				props.put(DECIMAL_DIGITS, rs.getInt(9));
@@ -84,7 +85,7 @@ public class Structure implements Keywords {
 		return Collections.unmodifiableMap(data);
 	}
 
-	private static String selectDataType(int sqlDataType, String sqlTypeName) {
+	private static String resolveDataType(int sqlDataType, String sqlTypeName) {
 		switch (sqlDataType) {
 			case Types.BIT:
 			case Types.BOOLEAN:
@@ -132,6 +133,7 @@ public class Structure implements Keywords {
 			case Types.BLOB:
 				return BLOB;
 		}
+		log.error("Unknown type {} (with name {}), trying to resolve it as STRING.", sqlDataType, sqlTypeName);
 		return STRING;
 	}
 }

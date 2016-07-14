@@ -20,9 +20,11 @@ public interface Keywords {
 	String TABLE = "TABLE";
 	String COLUMNS = "COLUMNS";
 	String DATA_TYPE = "DATA_TYPE";
+	String JDBC_DATA_TYPE = "JDBC_DATA_TYPE";
 	String NOT_NULL = "NOT_NULL";
 	String SIZE = "SIZE";
 	String DECIMAL_DIGITS = "DECIMAL_DIGITS";
+	String VALUE = "VALUE";
 
 	String BOOLEAN = "BOOLEAN";
 	String BYTE = "BYTE";
