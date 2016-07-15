@@ -40,26 +40,6 @@ public class ExecuteUpdateTest implements Keywords {
 		return statements;
 	}
 
-	@Test
-	public void delete() {
-		DbTemplate h2 = new DbTemplate("jdbc:h2:mem:test", "sa", "");
-		h2.db.execute("create table t1 (t1a int, t1b varchar2(10) not null, t1c varchar2(20))");
-		h2.db.execute("insert into t1 (t1a, t1b, t1c) values (1,'b1','c1')");
-		h2.db.execute("insert into t1 (t1a, t1b, t1c) values (2,'b2',null)");
-		h2.db.execute("insert into t1 (t1a, t1b, t1c) values (3,'b3','c3')");
-
-		int count;
-		count = h2.db.queryForList("select * from t1").size();
-		assertEquals("Before", 3, count);
-
-		Execute.update(h2.getConnection(), createStatements("delete from t1", Collections.emptyList()));
-
-		count = h2.db.queryForList("select * from t1").size();
-		assertEquals("After", 0, count);
-
-		h2.db.execute("drop table t1");
-	}
-
 	private List<Map<String, Object>> createParameters(Object... data) {
 		List<Map<String, Object>> parameters = new ArrayList<>();
 		assertTrue("Data in triples", data.length % 3 == 0);
@@ -71,6 +51,28 @@ public class ExecuteUpdateTest implements Keywords {
 			parameters.add(parameter);
 		}
 		return parameters;
+	}
+
+	@Test
+	public void delete() {
+		DbTemplate h2 = new DbTemplate("jdbc:h2:mem:test", "sa", "");
+		h2.db.execute("create schema s1 authorization sa");
+		h2.db.execute("create table s1.t1 (t1a int, t1b varchar2(10) not null, t1c varchar2(20))");
+		h2.db.execute("insert into s1.t1 (t1a, t1b, t1c) values (1,'b1','c1')");
+		h2.db.execute("insert into s1.t1 (t1a, t1b, t1c) values (2,'b2',null)");
+		h2.db.execute("insert into s1.t1 (t1a, t1b, t1c) values (3,'b3','c3')");
+
+		int count;
+		count = h2.db.queryForList("select * from s1.t1").size();
+		assertEquals("Before", 3, count);
+
+		Execute.update(h2.getConnection(), createStatements("delete from s1.t1", Collections.emptyList()));
+
+		count = h2.db.queryForList("select * from s1.t1").size();
+		assertEquals("After", 0, count);
+
+		h2.db.execute("drop table s1.t1");
+		h2.db.execute("drop schema s1");
 	}
 
 	@Test
