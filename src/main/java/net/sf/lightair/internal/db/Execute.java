@@ -20,7 +20,16 @@ public class Execute implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Structure.class);
 
-	public static void update(Connection connection, String sql, List<Map<String, Object>> parameters) {
+	public static void update(Connection connection, List<Map<String, Object>> statements) {
+		for (Map<String, Object> statement : statements) {
+			String sql = (String) statement.get(SQL);
+			@SuppressWarnings("unchecked")
+			List<Map<String, Object>> parameters = (List<Map<String, Object>>) statement.get(PARAMETERS);
+			updateStatement(connection, sql, parameters);
+		}
+	}
+
+	private static void updateStatement(Connection connection, String sql, List<Map<String, Object>> parameters) {
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
 			for (int index = 0; index < parameters.size(); index++) {

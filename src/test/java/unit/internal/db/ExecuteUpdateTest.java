@@ -28,6 +28,18 @@ import static org.junit.Assert.assertTrue;
 
 public class ExecuteUpdateTest implements Keywords {
 
+	private List<Map<String, Object>> createStatements(Object... data) {
+		assertTrue("Data in pairs", data.length % 2 == 0);
+		List<Map<String, Object>> statements = new ArrayList<>();
+		for (int i = 0; i < data.length; i = i + 2) {
+			Map<String, Object> statement = new LinkedHashMap<>();
+			statement.put(SQL, data[i]);
+			statement.put(PARAMETERS, data[i + 1]);
+			statements.add(statement);
+		}
+		return statements;
+	}
+
 	@Test
 	public void delete() {
 		DbTemplate h2 = new DbTemplate("jdbc:h2:mem:test", "sa", "");
@@ -40,7 +52,7 @@ public class ExecuteUpdateTest implements Keywords {
 		count = h2.db.queryForList("select * from t1").size();
 		assertEquals("Before", 3, count);
 
-		Execute.update(h2.getConnection(), "delete from t1", Collections.emptyList());
+		Execute.update(h2.getConnection(), createStatements("delete from t1", Collections.emptyList()));
 
 		count = h2.db.queryForList("select * from t1").size();
 		assertEquals("After", 0, count);
@@ -71,18 +83,55 @@ public class ExecuteUpdateTest implements Keywords {
 		data = h2.db.queryForList("select * from t1");
 		assertEquals("Before", "[{T1A=1, T1B=b1, T1C=c1}]", data.toString());
 
-		Execute.update(h2.getConnection(), "insert into t1 (t1a, t1b, t1c) values (?,?,?)",
-				createParameters(INTEGER, Types.INTEGER, 2,
-						STRING, Types.VARCHAR, "b2",
-						STRING, Types.VARCHAR, null));
-		Execute.update(h2.getConnection(), "insert into t1 (t1a, t1b, t1c) values (?,?,?)",
-				createParameters(INTEGER, Types.INTEGER, 3,
-						STRING, Types.VARCHAR, "b3",
-						STRING, Types.VARCHAR, "c3"));
+		Execute.update(h2.getConnection(),
+				createStatements(
+						"insert into t1 (t1a, t1b, t1c) values (?,?,?)",
+						createParameters(INTEGER, Types.INTEGER, 2,
+								STRING, Types.VARCHAR, "b2",
+								STRING, Types.VARCHAR, null),
+						"insert into t1 (t1a, t1b, t1c) values (?,?,?)",
+						createParameters(INTEGER, Types.INTEGER, 3,
+								STRING, Types.VARCHAR, "b3",
+								STRING, Types.VARCHAR, "c3")
+				));
 
 		data = h2.db.queryForList("select * from t1");
 		assertEquals("After", "[{T1A=1, T1B=b1, T1C=c1}, {T1A=2, T1B=b2, T1C=null}, {T1A=3, T1B=b3, T1C=c3}]",
 				data.toString());
+
+		h2.db.execute("drop table t1");
+	}
+
+	@Test
+	public void cleanInsert() {
+		DbTemplate h2 = new DbTemplate("jdbc:h2:mem:test", "sa", "");
+		h2.db.execute("create table t1 (t1a int, t1b varchar2(10) not null, t1c varchar2(20))");
+		h2.db.execute("insert into t1 (t1a, t1b, t1c) values (1,'b1','c1')");
+		h2.db.execute("insert into t1 (t1a, t1b, t1c) values (2,'b2',null)");
+		h2.db.execute("insert into t1 (t1a, t1b, t1c) values (3,'b3','c3')");
+
+		List<Map<String, Object>> data;
+		data = h2.db.queryForList("select * from t1");
+		assertEquals("Before",
+				"[{T1A=1, T1B=b1, T1C=c1}, {T1A=2, T1B=b2, T1C=null}, {T1A=3, T1B=b3, T1C=c3}]",
+				data.toString());
+
+		Execute.update(h2.getConnection(),
+				createStatements(
+						"delete from t1",
+						Collections.emptyList(),
+						"insert into t1 (t1a, t1b, t1c) values (?,?,?)",
+						createParameters(INTEGER, Types.INTEGER, 2,
+								STRING, Types.VARCHAR, "b2",
+								STRING, Types.VARCHAR, null),
+						"insert into t1 (t1a, t1b, t1c) values (?,?,?)",
+						createParameters(INTEGER, Types.INTEGER, 3,
+								STRING, Types.VARCHAR, "b3",
+								STRING, Types.VARCHAR, "c3")
+				));
+
+		data = h2.db.queryForList("select * from t1");
+		assertEquals("After", "[{T1A=2, T1B=b2, T1C=null}, {T1A=3, T1B=b3, T1C=c3}]", data.toString());
 
 		h2.db.execute("drop table t1");
 	}
@@ -131,63 +180,66 @@ public class ExecuteUpdateTest implements Keywords {
 				"nchar_type,nvarchar_type,longnvarchar_type,binary_type,varbinary_type,longvarbinary_type," +
 				"clob_type,nclob_type,blob_type)" +
 				" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		Execute.update(h2.getConnection(), sql,
-				createParameters(INTEGER, Types.INTEGER, 1,
-						BOOLEAN, Types.BIT, false,
-						BOOLEAN, Types.BOOLEAN, true,
-						BYTE, Types.TINYINT, (byte) 123,
-						SHORT, Types.SMALLINT, (short) 12345,
-						INTEGER, Types.INTEGER, 1234567890,
-						LONG, Types.BIGINT, 10_000_000_000L,
-						FLOAT, Types.REAL, (float) 123456.7890123,
-						FLOAT, Types.REAL, (float) 123456.7890123,
-						DOUBLE, Types.DOUBLE, 123456.7890123,
-						BIGDECIMAL, Types.NUMERIC, new BigDecimal("123456.7890123"),
-						BIGDECIMAL, Types.DECIMAL, new BigDecimal("234567.8901234"),
-						DATE, Types.DATE, getDate("2015-12-31"),
-						TIME, Types.TIME, getTime("12:34:56"),
-						TIMESTAMP, Types.TIMESTAMP, getTimestamp("2015-12-31T12:34:56"),
-						STRING, Types.CHAR, "char1",
-						STRING, Types.VARCHAR, "varchar1",
-						STRING, Types.LONGVARCHAR, "longvarchar1",
-						STRING, Types.NCHAR, "nchar1",
-						STRING, Types.NVARCHAR, "nvarchar1",
-						STRING, Types.LONGNVARCHAR, "longnvarchar1",
-						BYTES, Types.BINARY, "binary1".getBytes("UTF-8"),
-						BYTES, Types.VARBINARY, "varbin1".getBytes("UTF-8"),
-						BYTES, Types.LONGVARBINARY, "longvarbinary1".getBytes("UTF-8"),
-						CLOB, Types.CLOB, new StringReader("clob1"),
-						NCLOB, Types.NCLOB, new StringReader("nclob1"),
-						BLOB, Types.BLOB, new ByteArrayInputStream("blob1".getBytes())
-				));
-		Execute.update(h2.getConnection(), sql,
-				createParameters(INTEGER, Types.INTEGER, 2,
-						BOOLEAN, Types.BIT, null,
-						BOOLEAN, Types.BOOLEAN, null,
-						BYTE, Types.TINYINT, null,
-						SHORT, Types.SMALLINT, null,
-						INTEGER, Types.INTEGER, null,
-						LONG, Types.BIGINT, null,
-						FLOAT, Types.REAL, null,
-						FLOAT, Types.REAL, null,
-						DOUBLE, Types.DOUBLE, null,
-						BIGDECIMAL, Types.NUMERIC, null,
-						BIGDECIMAL, Types.DECIMAL, null,
-						DATE, Types.DATE, null,
-						TIME, Types.TIME, null,
-						TIMESTAMP, Types.TIMESTAMP, null,
-						STRING, Types.CHAR, null,
-						STRING, Types.VARCHAR, null,
-						STRING, Types.LONGVARCHAR, null,
-						STRING, Types.NCHAR, null,
-						STRING, Types.NVARCHAR, null,
-						STRING, Types.LONGNVARCHAR, null,
-						BYTES, Types.BINARY, null,
-						BYTES, Types.VARBINARY, null,
-						BYTES, Types.LONGVARBINARY, null,
-						CLOB, Types.CLOB, null,
-						NCLOB, Types.NCLOB, null,
-						BLOB, Types.BLOB, null
+		Execute.update(h2.getConnection(),
+				createStatements(
+						sql,
+						createParameters(INTEGER, Types.INTEGER, 1,
+								BOOLEAN, Types.BIT, false,
+								BOOLEAN, Types.BOOLEAN, true,
+								BYTE, Types.TINYINT, (byte) 123,
+								SHORT, Types.SMALLINT, (short) 12345,
+								INTEGER, Types.INTEGER, 1234567890,
+								LONG, Types.BIGINT, 10_000_000_000L,
+								FLOAT, Types.REAL, (float) 123456.7890123,
+								FLOAT, Types.REAL, (float) 123456.7890123,
+								DOUBLE, Types.DOUBLE, 123456.7890123,
+								BIGDECIMAL, Types.NUMERIC, new BigDecimal("123456.7890123"),
+								BIGDECIMAL, Types.DECIMAL, new BigDecimal("234567.8901234"),
+								DATE, Types.DATE, getDate("2015-12-31"),
+								TIME, Types.TIME, getTime("12:34:56"),
+								TIMESTAMP, Types.TIMESTAMP, getTimestamp("2015-12-31T12:34:56"),
+								STRING, Types.CHAR, "char1",
+								STRING, Types.VARCHAR, "varchar1",
+								STRING, Types.LONGVARCHAR, "longvarchar1",
+								STRING, Types.NCHAR, "nchar1",
+								STRING, Types.NVARCHAR, "nvarchar1",
+								STRING, Types.LONGNVARCHAR, "longnvarchar1",
+								BYTES, Types.BINARY, "binary1".getBytes("UTF-8"),
+								BYTES, Types.VARBINARY, "varbin1".getBytes("UTF-8"),
+								BYTES, Types.LONGVARBINARY, "longvarbinary1".getBytes("UTF-8"),
+								CLOB, Types.CLOB, new StringReader("clob1"),
+								NCLOB, Types.NCLOB, new StringReader("nclob1"),
+								BLOB, Types.BLOB, new ByteArrayInputStream("blob1".getBytes())
+						),
+						sql,
+						createParameters(INTEGER, Types.INTEGER, 2,
+								BOOLEAN, Types.BIT, null,
+								BOOLEAN, Types.BOOLEAN, null,
+								BYTE, Types.TINYINT, null,
+								SHORT, Types.SMALLINT, null,
+								INTEGER, Types.INTEGER, null,
+								LONG, Types.BIGINT, null,
+								FLOAT, Types.REAL, null,
+								FLOAT, Types.REAL, null,
+								DOUBLE, Types.DOUBLE, null,
+								BIGDECIMAL, Types.NUMERIC, null,
+								BIGDECIMAL, Types.DECIMAL, null,
+								DATE, Types.DATE, null,
+								TIME, Types.TIME, null,
+								TIMESTAMP, Types.TIMESTAMP, null,
+								STRING, Types.CHAR, null,
+								STRING, Types.VARCHAR, null,
+								STRING, Types.LONGVARCHAR, null,
+								STRING, Types.NCHAR, null,
+								STRING, Types.NVARCHAR, null,
+								STRING, Types.LONGNVARCHAR, null,
+								BYTES, Types.BINARY, null,
+								BYTES, Types.VARBINARY, null,
+								BYTES, Types.LONGVARBINARY, null,
+								CLOB, Types.CLOB, null,
+								NCLOB, Types.NCLOB, null,
+								BLOB, Types.BLOB, null
+						)
 				));
 
 		data = h2.db.queryForList("select * from data_types");
@@ -238,55 +290,58 @@ public class ExecuteUpdateTest implements Keywords {
 				"binary_type,varbinary_type,longvarbinary_type," +
 				"clob_type,blob_type)" +
 				" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		Execute.update(h2.getConnection(), sql,
-				createParameters(INTEGER, Types.INTEGER, 1,
-						BOOLEAN, Types.BIT, false,
-						BOOLEAN, Types.BOOLEAN, true,
-						BYTE, Types.TINYINT, (byte) 123,
-						SHORT, Types.SMALLINT, (short) 12345,
-						INTEGER, Types.INTEGER, 1234567890,
-						LONG, Types.BIGINT, 10_000_000_000L,
-						FLOAT, Types.REAL, (float) 123456.7890123,
-						FLOAT, Types.REAL, (float) 123456.7890123,
-						DOUBLE, Types.DOUBLE, 123456.7890123,
-						BIGDECIMAL, Types.NUMERIC, new BigDecimal("123456.7890123"),
-						BIGDECIMAL, Types.DECIMAL, new BigDecimal("234567.8901234"),
-						DATE, Types.DATE, getDate("2015-12-31"),
-						TIME, Types.TIME, getTime("12:34:56"),
-						TIMESTAMP, Types.TIMESTAMP, getTimestamp("2015-12-31T12:34:56"),
-						STRING, Types.CHAR, "char1",
-						STRING, Types.VARCHAR, "varchar1",
-						STRING, Types.LONGVARCHAR, "longvarchar1",
-						BYTES, Types.BINARY, "binary1".getBytes("UTF-8"),
-						BYTES, Types.VARBINARY, "varbin1".getBytes("UTF-8"),
-						BYTES, Types.LONGVARBINARY, "longvarbinary1".getBytes("UTF-8"),
-						CLOB, Types.CLOB, new StringReader("clob1"),
-						BLOB, Types.BLOB, new ByteArrayInputStream("blob1".getBytes())
-				));
-		Execute.update(h2.getConnection(), sql,
-				createParameters(INTEGER, Types.INTEGER, 2,
-						BOOLEAN, Types.BIT, null,
-						BOOLEAN, Types.BOOLEAN, null,
-						BYTE, Types.TINYINT, null,
-						SHORT, Types.SMALLINT, null,
-						INTEGER, Types.INTEGER, null,
-						LONG, Types.BIGINT, null,
-						FLOAT, Types.REAL, null,
-						FLOAT, Types.REAL, null,
-						DOUBLE, Types.DOUBLE, null,
-						BIGDECIMAL, Types.NUMERIC, null,
-						BIGDECIMAL, Types.DECIMAL, null,
-						DATE, Types.DATE, null,
-						TIME, Types.TIME, null,
-						TIMESTAMP, Types.TIMESTAMP, null,
-						STRING, Types.CHAR, null,
-						STRING, Types.VARCHAR, null,
-						STRING, Types.LONGVARCHAR, null,
-						BYTES, Types.BINARY, null,
-						BYTES, Types.VARBINARY, null,
-						BYTES, Types.LONGVARBINARY, null,
-						CLOB, Types.CLOB, null,
-						BLOB, Types.BLOB, null
+		Execute.update(h2.getConnection(),
+				createStatements(
+						sql,
+						createParameters(INTEGER, Types.INTEGER, 1,
+								BOOLEAN, Types.BIT, false,
+								BOOLEAN, Types.BOOLEAN, true,
+								BYTE, Types.TINYINT, (byte) 123,
+								SHORT, Types.SMALLINT, (short) 12345,
+								INTEGER, Types.INTEGER, 1234567890,
+								LONG, Types.BIGINT, 10_000_000_000L,
+								FLOAT, Types.REAL, (float) 123456.7890123,
+								FLOAT, Types.REAL, (float) 123456.7890123,
+								DOUBLE, Types.DOUBLE, 123456.7890123,
+								BIGDECIMAL, Types.NUMERIC, new BigDecimal("123456.7890123"),
+								BIGDECIMAL, Types.DECIMAL, new BigDecimal("234567.8901234"),
+								DATE, Types.DATE, getDate("2015-12-31"),
+								TIME, Types.TIME, getTime("12:34:56"),
+								TIMESTAMP, Types.TIMESTAMP, getTimestamp("2015-12-31T12:34:56"),
+								STRING, Types.CHAR, "char1",
+								STRING, Types.VARCHAR, "varchar1",
+								STRING, Types.LONGVARCHAR, "longvarchar1",
+								BYTES, Types.BINARY, "binary1".getBytes("UTF-8"),
+								BYTES, Types.VARBINARY, "varbin1".getBytes("UTF-8"),
+								BYTES, Types.LONGVARBINARY, "longvarbinary1".getBytes("UTF-8"),
+								CLOB, Types.CLOB, new StringReader("clob1"),
+								BLOB, Types.BLOB, new ByteArrayInputStream("blob1".getBytes())
+						),
+						sql,
+						createParameters(INTEGER, Types.INTEGER, 2,
+								BOOLEAN, Types.BIT, null,
+								BOOLEAN, Types.BOOLEAN, null,
+								BYTE, Types.TINYINT, null,
+								SHORT, Types.SMALLINT, null,
+								INTEGER, Types.INTEGER, null,
+								LONG, Types.BIGINT, null,
+								FLOAT, Types.REAL, null,
+								FLOAT, Types.REAL, null,
+								DOUBLE, Types.DOUBLE, null,
+								BIGDECIMAL, Types.NUMERIC, null,
+								BIGDECIMAL, Types.DECIMAL, null,
+								DATE, Types.DATE, null,
+								TIME, Types.TIME, null,
+								TIMESTAMP, Types.TIMESTAMP, null,
+								STRING, Types.CHAR, null,
+								STRING, Types.VARCHAR, null,
+								STRING, Types.LONGVARCHAR, null,
+								BYTES, Types.BINARY, null,
+								BYTES, Types.VARBINARY, null,
+								BYTES, Types.LONGVARBINARY, null,
+								CLOB, Types.CLOB, null,
+								BLOB, Types.BLOB, null
+						)
 				));
 
 		data = h2.db.queryForList("select * from data_types");

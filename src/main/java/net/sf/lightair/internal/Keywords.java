@@ -25,6 +25,8 @@ public interface Keywords {
 	String SIZE = "SIZE";
 	String DECIMAL_DIGITS = "DECIMAL_DIGITS";
 	String VALUE = "VALUE";
+	String SQL = "SQL";
+	String PARAMETERS = "PARAMETERS";
 
 	String BOOLEAN = "BOOLEAN";
 	String BYTE = "BYTE";
