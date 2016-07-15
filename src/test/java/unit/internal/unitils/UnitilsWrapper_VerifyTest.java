@@ -16,6 +16,7 @@ import net.sf.lightair.internal.unitils.compare.DataSetAssert;
 import net.sf.seaf.test.jmock.JMockSupport;
 
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -61,7 +62,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 	}
 
 	@Test
-	public void ok() throws SQLException, ClassNotFoundException {
+	public void ok() throws SQLException, ClassNotFoundException, DataSetException {
 		checkCommons();
 		checkExecuteForSchema("schema1", dsE1, dsA1, c1);
 		checkExecuteForSchema("schema2", dsE2, dsA2, c2);
@@ -86,7 +87,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 
 	private void checkExecuteForSchema(final String schemaName,
 			final IDataSet dsE, final IDataSet dsA, final IDatabaseConnection c)
-			throws SQLException {
+            throws SQLException, DataSetException {
 		check(new Expectations() {
 			{
 				one(multiSchemaDataSet).getDataSetForSchema(schemaName);
@@ -95,7 +96,10 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 				one(dbUnitWrapper).getConnection("profile1", schemaName);
 				will(returnValue(c));
 
-				one(c).createDataSet();
+                one(dsE).getTableNames();
+                will(returnValue(new String[]{ "s1", "s2", "s3" }));
+
+				one(c).createDataSet(new String[]{ "s1", "s2", "s3" });
 				will(returnValue(dsA));
 
 				one(dataSetAssert).assertEqualDbUnitDataSets(schemaName, dsE,
@@ -105,7 +109,7 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 	}
 
 	@Test
-	public void fail_SQLException_InCreateDataSet() throws SQLException {
+	public void fail_SQLException_InCreateDataSet() throws SQLException, DataSetException {
 		final SQLException cause = new SQLException();
 		checkCommons();
 		check(new Expectations() {
@@ -116,7 +120,10 @@ public class UnitilsWrapper_VerifyTest extends JMockSupport {
 				one(dbUnitWrapper).getConnection("profile1", "schema1");
 				will(returnValue(c1));
 
-				one(c1).createDataSet();
+                one(dsE1).getTableNames();
+                will(returnValue(new String[]{ "s1", "s2", "s3" }));
+
+                one(c1).createDataSet(new String[]{ "s1", "s2", "s3" });
 				will(throwException(cause));
 			}
 		});
