@@ -5,6 +5,9 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="2016-07-15" version="2.10.0" description="Performance optimization.">
+			<action type="add" dev="premeks">Read metadata only for tables in verify data set.</action>
+		</release>
 		<release date="2016-06-03" version="2.9.0" description="Fix TestNG support.">
 			<action type="add" dev="effy">Fix setup and verify is executed for test methods only.</action>
 		</release>

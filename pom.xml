@@ -38,6 +38,11 @@
 			<name>Jan Hadaš</name>
 			<timezone>+1</timezone>
 		</developer>
+		<developer>
+			<id>premeks</id>
+			<name>Přemek Špička</name>
+			<timezone>+1</timezone>
+		</developer>
 	</developers>
 	<licenses>
 		<license>
