@@ -31,6 +31,10 @@ public class Structure implements Keywords {
 		return Collections.unmodifiableMap(structures);
 	}
 
+	private static String convert(String name) {
+		return name.toLowerCase();
+	}
+
 	private static Map<String, Map<String, Map<String, Object>>> loadProfile(
 			String profile, Map<String, String> profileProperties, Connection connection) {
 		String dialect = profileProperties.get(DATABASE_DIALECT);
@@ -44,7 +48,7 @@ public class Structure implements Keywords {
 		List<String> tables = loadTables(connection, schema);
 		for (String table : tables) {
 			Map<String, Map<String, Object>> columns = loadTableColumns(connection, schema, table);
-			data.put(table, columns);
+			data.put(convert(table), columns);
 		}
 		return Collections.unmodifiableMap(data);
 	}
@@ -77,7 +81,7 @@ public class Structure implements Keywords {
 				props.put(NOT_NULL, 0 == rs.getInt(11));
 				props.put(SIZE, rs.getInt(7));
 				props.put(DECIMAL_DIGITS, rs.getInt(9));
-				data.put(rs.getString(4), props);
+				data.put(convert(rs.getString(4)), props);
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException("Cannot load database metadata.", e);
