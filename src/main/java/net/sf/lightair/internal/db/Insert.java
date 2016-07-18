@@ -4,7 +4,6 @@ import net.sf.lightair.internal.Keywords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -12,9 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static java.util.stream.Collectors.toCollection;
-
-public class CleanInsert implements Keywords {
+public class Insert implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Structure.class);
 
@@ -27,16 +24,8 @@ public class CleanInsert implements Keywords {
 		Objects.requireNonNull(schema, "Database schema is required.");
 
 		List<Map<String, Object>> statements = new ArrayList<>();
-		dataset.stream()
-				.map(row -> row.get(TABLE))
-				.distinct() // only delete each table once
-				.collect(toCollection(ArrayDeque::new))
-				.descendingIterator() // delete tables in reverse order
-				.forEachRemaining(tableName -> {
-					statements.add(createDeleteStatement(schema, (String) tableName));
-				});
 		for (Map<String, Object> row : dataset) {
-			Map<String, Object> insert = createInsertStatement(schema, profileStructure, row);
+			Map<String, Object> insert = createStatement(schema, profileStructure, row);
 			if (null != insert) {
 				statements.add(insert);
 			}
@@ -44,26 +33,13 @@ public class CleanInsert implements Keywords {
 		return Collections.unmodifiableList(statements);
 	}
 
-	private static String buildDeleteSql(String schema, String table) {
-		return "delete from " + schema + "." + table;
-	}
-
-	private static String buildInsertSql(String schema, String tableName, Map<String, String> columns) {
+	private static String buildSql(String schema, String tableName, Map<String, String> columns) {
 		return "insert into " + schema + "." + tableName +
 				"(" + String.join(",", columns.keySet()) + ")" +
 				" values (" + String.join(",", Collections.nCopies(columns.size(), "?")) + ")";
 	}
 
-	private static Map<String, Object> createDeleteStatement(String schema, String tableName) {
-		log.debug("Creating delete statement for {}.{}.", schema, tableName);
-
-		Map<String, Object> statement = new LinkedHashMap<>();
-		statement.put(SQL, buildDeleteSql(schema, tableName));
-		statement.put(PARAMETERS, Collections.emptyList());
-		return Collections.unmodifiableMap(statement);
-	}
-
-	private static Map<String, Object> createInsertStatement(
+	private static Map<String, Object> createStatement(
 			String schema,
 			Map<String, Map<String, Map<String, Object>>> profileStructure,
 			Map<String, Object> row) {
@@ -77,7 +53,7 @@ public class CleanInsert implements Keywords {
 		log.debug("Creating insert statement for {}.{}.", schema, tableName);
 
 		Map<String, Object> statement = new LinkedHashMap<>();
-		statement.put(SQL, buildInsertSql(schema, tableName, columns));
+		statement.put(SQL, buildSql(schema, tableName, columns));
 		statement.put(PARAMETERS, createParameters(schema, tableName, profileStructure, columns));
 		return Collections.unmodifiableMap(statement);
 	}

@@ -1,7 +1,7 @@
 package unit.internal.db;
 
 import net.sf.lightair.internal.Keywords;
-import net.sf.lightair.internal.db.CleanInsert;
+import net.sf.lightair.internal.db.Insert;
 import org.junit.Test;
 
 import java.sql.Types;
@@ -14,7 +14,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CleanInsertTest implements Keywords {
+public class InsertTest implements Keywords {
 
 	private Map<String, Object> createRow(String table, String... data) {
 		assertTrue("Data in pairs", data.length % 2 == 0);
@@ -66,23 +66,20 @@ public class CleanInsertTest implements Keywords {
 		List<Map<String, Object>> dataset = Arrays.asList(
 				createRow("t1", "ta", "1", "tb", "bv1", "tc", "cv1"),
 				createRow("t2", "ta", "2", "tc", "cv2", "td", "dv2"),
-				createRow("t3"), // delete only
-				createRow("t2", "ta", "4", "td", "dv4", "te", "ce4", "tf", "cf4")
+				createRow("t2", "ta", "3", "td", "dv3", "te", "ce3", "tf", "cf3")
 		);
-		List<Map<String, Object>> data = CleanInsert.create(profileProperties, profileStructure, dataset);
-		String expected = "[{SQL=delete from s1.t3, PARAMETERS=[]},\n" +
-				" {SQL=delete from s1.t2, PARAMETERS=[]},\n" +
-				" {SQL=delete from s1.t1, PARAMETERS=[]},\n" +
-				" {SQL=insert into s1.t1(ta,tb,tc) values (?,?,?), PARAMETERS=[{DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, VALUE=1},\n" +
+		List<Map<String, Object>> data = Insert.create(profileProperties, profileStructure, dataset);
+		String expected = "[" +
+				"{SQL=insert into s1.t1(ta,tb,tc) values (?,?,?), PARAMETERS=[{DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, VALUE=1},\n" +
 				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=bv1},\n" +
 				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=cv1}]},\n" +
 				" {SQL=insert into s1.t2(ta,tc,td) values (?,?,?), PARAMETERS=[{DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, VALUE=2},\n" +
 				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=cv2},\n" +
 				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=dv2}]},\n" +
-				" {SQL=insert into s1.t2(ta,td,te,tf) values (?,?,?,?), PARAMETERS=[{DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, VALUE=4},\n" +
-				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=dv4},\n" +
-				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=ce4},\n" +
-				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=cf4}]}]";
+				" {SQL=insert into s1.t2(ta,td,te,tf) values (?,?,?,?), PARAMETERS=[{DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, VALUE=3},\n" +
+				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=dv3},\n" +
+				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=ce3},\n" +
+				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=cf3}]}]";
 		assertEquals(expected, data.toString().replace("}, ", "},\n "));
 	}
 }
