@@ -21,7 +21,21 @@ import java.util.Map;
 
 public class Xml implements Keywords {
 
-	public static List<Map<String, Object>> readFile(File file) {
+	public static Map<String, List<Map<String, Object>>> read(Map<String, List<String>> fileNames) {
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		for (String profile : fileNames.keySet()) {
+			List<Map<String, Object>> profileDataset = new ArrayList<>();
+			List<String> profileFileNames = fileNames.get(profile);
+			for (String fileName : profileFileNames) {
+				List<Map<String, Object>> fileDataset = readFile(new File(fileName));
+				profileDataset.addAll(fileDataset);
+			}
+			datasets.put(profile, profileDataset);
+		}
+		return datasets;
+	}
+
+	private static List<Map<String, Object>> readFile(File file) {
 		List<Map<String, Object>> data = new ArrayList<>();
 		Document doc = readDocument(file);
 		Element dataset = doc.getDocumentElement();
