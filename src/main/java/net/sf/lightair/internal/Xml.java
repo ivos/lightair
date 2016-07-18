@@ -30,9 +30,9 @@ public class Xml implements Keywords {
 				List<Map<String, Object>> fileDataset = readFile(new File(fileName));
 				profileDataset.addAll(fileDataset);
 			}
-			datasets.put(profile, profileDataset);
+			datasets.put(profile, Collections.unmodifiableList(profileDataset));
 		}
-		return datasets;
+		return Collections.unmodifiableMap(datasets);
 	}
 
 	private static List<Map<String, Object>> readFile(File file) {
