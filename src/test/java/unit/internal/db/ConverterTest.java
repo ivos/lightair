@@ -91,6 +91,25 @@ public class ConverterTest implements Keywords {
 						"clob_type", "clob value",
 						"nclob_type", "nclob value",
 						"blob_type", "blob value"
+				),
+				InsertTest.createRow("data_types",
+						"boolean_type", "@null",
+						"byte_type", "@null",
+						"short_type", "@null",
+						"integer_type", "@null",
+						"long_type", "@null",
+						"float_type", "@null",
+						"double_type", "@null",
+						"bigdecimal_type", "@null",
+						"date_type", "@null",
+						"time_type", "@null",
+						"timestamp_type", "@null",
+						"string_type", "@null",
+						"nstring_type", "@null",
+						"bytes_type", "@null",
+						"clob_type", "@null",
+						"nclob_type", "@null",
+						"blob_type", "@null"
 				)
 		));
 
@@ -132,7 +151,25 @@ public class ConverterTest implements Keywords {
 				" bytes_type=REPLACED,\n" +
 				" clob_type=REPLACED,\n" +
 				" nclob_type=REPLACED,\n" +
-				" blob_type=REPLACED}}],\n" +
+				" blob_type=REPLACED}},\n" +
+				" {TABLE=data_types,\n" +
+				" COLUMNS={boolean_type=null,\n" +
+				" byte_type=null,\n" +
+				" short_type=null,\n" +
+				" integer_type=null,\n" +
+				" long_type=null,\n" +
+				" float_type=null,\n" +
+				" double_type=null,\n" +
+				" bigdecimal_type=null,\n" +
+				" date_type=null,\n" +
+				" time_type=null,\n" +
+				" timestamp_type=null,\n" +
+				" string_type=null,\n" +
+				" nstring_type=null,\n" +
+				" bytes_type=null,\n" +
+				" clob_type=null,\n" +
+				" nclob_type=null,\n" +
+				" blob_type=null}}],\n" +
 				" profile2=[{TABLE=t2,\n" +
 				" COLUMNS={t2a=1230201,\n" +
 				" t2b=v2b01}},\n" +

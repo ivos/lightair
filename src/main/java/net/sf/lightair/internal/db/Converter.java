@@ -24,6 +24,8 @@ public class Converter implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Converter.class);
 
+	private static final String NULL = "@null";
+
 	public static Map<String, List<Map<String, Object>>> convert(
 			Map<String, Map<String, Map<String, Map<String, Object>>>> structures,
 			Map<String, List<Map<String, Object>>> datasets) {
@@ -70,7 +72,12 @@ public class Converter implements Keywords {
 
 	private static Object convertValue(
 			String profile, String tableName, String columnName, String dataType, int jdbcDataType, String value) {
-		Object result = convertDataType(profile, tableName, columnName, dataType, jdbcDataType, value);
+		Object result;
+		if (NULL.equals(value)) {
+			result = null;
+		} else {
+			result = convertDataType(profile, tableName, columnName, dataType, jdbcDataType, value);
+		}
 		log.trace("Converted [{}] {}.{} value {} of type {} ({}) to {}.",
 				profile, tableName, columnName, value, dataType, jdbcDataType, result);
 		return result;
