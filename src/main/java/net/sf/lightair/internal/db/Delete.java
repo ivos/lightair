@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.toCollection;
 
 public class Delete implements Keywords {
 
-	private static final Logger log = LoggerFactory.getLogger(Structure.class);
+	private static final Logger log = LoggerFactory.getLogger(Delete.class);
 
 	public static List<Map<String, Object>> create(
 			Map<String, String> profileProperties,

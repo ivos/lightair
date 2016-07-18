@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class Execute implements Keywords {
 
-	private static final Logger log = LoggerFactory.getLogger(Structure.class);
+	private static final Logger log = LoggerFactory.getLogger(Execute.class);
 
 	public static void update(Connection connection, List<Map<String, Object>> statements) {
 		for (Map<String, Object> statement : statements) {

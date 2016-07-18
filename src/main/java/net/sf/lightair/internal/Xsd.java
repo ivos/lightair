@@ -1,6 +1,5 @@
 package net.sf.lightair.internal;
 
-import net.sf.lightair.internal.db.Structure;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +13,7 @@ import java.util.Map;
 
 public class Xsd implements Keywords {
 
-	private static final Logger log = LoggerFactory.getLogger(Structure.class);
+	private static final Logger log = LoggerFactory.getLogger(Xsd.class);
 
 	private static final String FILE_NAME_PREFIX = "dataset";
 	private static final String FILE_NAME_SUFFIX = ".xsd";

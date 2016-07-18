@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class Insert implements Keywords {
 
-	private static final Logger log = LoggerFactory.getLogger(Structure.class);
+	private static final Logger log = LoggerFactory.getLogger(Insert.class);
 
 	public static List<Map<String, Object>> create(
 			Map<String, String> profileProperties,
