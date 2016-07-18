@@ -16,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 public class InsertTest implements Keywords {
 
-	private Map<String, Object> createRow(String table, String... data) {
+	public static Map<String, Object> createRow(String table, String... data) {
 		assertTrue("Data in pairs", data.length % 2 == 0);
 		Map<String, Object> row = new LinkedHashMap<>();
 		row.put(TABLE, table);
@@ -28,7 +28,7 @@ public class InsertTest implements Keywords {
 		return row;
 	}
 
-	private Map<String, Map<String, Object>> createTableStructure(Object... data) {
+	public static Map<String, Map<String, Object>> createTableStructure(Object... data) {
 		assertTrue("Data in triples", data.length % 3 == 0);
 		Map<String, Map<String, Object>> table = new HashMap<>();
 		for (int i = 0; i < data.length; i = i + 3) {
