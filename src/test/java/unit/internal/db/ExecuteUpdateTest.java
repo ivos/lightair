@@ -139,22 +139,16 @@ public class ExecuteUpdateTest implements Keywords {
 	}
 
 	private Date getDate(String data) {
-		return new Date(java.util.Date.from(
-				LocalDate.parse(data).atStartOfDay(ZoneId.systemDefault()).toInstant()
-		).getTime());
+		return new Date(LocalDate.parse(data).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
 	}
 
 	private Time getTime(String data) {
-		return new Time(java.util.Date.from(
-				LocalTime.parse(data).atDate(LocalDate.of(1970, 1, 1)).
-						atZone(ZoneId.systemDefault()).toInstant()
-		).getTime());
+		return new Time(LocalTime.parse(data).atDate(LocalDate.of(1970, 1, 1)).
+				atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 	}
 
 	private Timestamp getTimestamp(String data) {
-		return new Timestamp(java.util.Date.from(
-				LocalDateTime.parse(data).atZone(ZoneId.systemDefault()).toInstant()
-		).getTime());
+		return new Timestamp(LocalDateTime.parse(data).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 	}
 
 	@Test
