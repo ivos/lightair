@@ -1,13 +1,12 @@
 package net.sf.lightair.internal.junit;
 
-import java.lang.reflect.Method;
-
+import net.sf.lightair.annotation.Setup;
+import net.sf.lightair.internal.unitils.UnitilsWrapper;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.lightair.annotation.Setup;
-import net.sf.lightair.internal.unitils.UnitilsWrapper;
+import java.lang.reflect.Method;
 
 public class SetupExecutor {
 
@@ -18,11 +17,16 @@ public class SetupExecutor {
 		String profile = setup.profile();
 		log.info("Setting up database for test method {} " + "and profile {} with configured file names {}.",
 				testMethod, profile, fileNames);
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
+		StopWatch stopWatch = null;
+		if (log.isDebugEnabled()) {
+			stopWatch = new StopWatch();
+			stopWatch.start();
+		}
 		unitilsWrapper.setup(testMethod, profile, fileNames);
-		stopWatch.stop();
-		log.debug("Database set up in {} ms.", stopWatch.getTime());
+		if (null != stopWatch) {
+			stopWatch.stop();
+			log.debug("Database set up in {} ms.", stopWatch.getTime());
+		}
 	}
 
 	// beans and their setters:
@@ -31,9 +35,8 @@ public class SetupExecutor {
 
 	/**
 	 * Set Unitils wrapper.
-	 * 
-	 * @param unitilsWrapper
-	 *            Unitils wrapper
+	 *
+	 * @param unitilsWrapper Unitils wrapper
 	 */
 	public void setUnitilsWrapper(UnitilsWrapper unitilsWrapper) {
 		this.unitilsWrapper = unitilsWrapper;
