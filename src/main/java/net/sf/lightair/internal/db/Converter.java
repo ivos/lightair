@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Converter implements Keywords {
 
@@ -36,6 +37,7 @@ public class Converter implements Keywords {
 		for (String profile : datasets.keySet()) {
 			log.debug("Converting values for profile [{}].", profile);
 			Map<String, Map<String, Map<String, Object>>> profileStructure = structures.get(profile);
+			Objects.requireNonNull(profileStructure, "Structure for profile [" + profile + "] is missing.");
 			result.put(profile, convertDataset(profile, profileStructure, datasets));
 		}
 		return Collections.unmodifiableMap(result);
@@ -62,9 +64,12 @@ public class Converter implements Keywords {
 			String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
 			String tableName, Map<String, String> columns) {
 		Map<String, Map<String, Object>> table = profileStructure.get(tableName);
+		Objects.requireNonNull(table, "Structure for table [" + profile + "]." + tableName + " is missing.");
 		Map<String, Object> convertedColumns = new LinkedHashMap<>();
 		for (String columnName : columns.keySet()) {
 			Map<String, Object> column = table.get(columnName);
+			Objects.requireNonNull(column,
+					"Structure for column [" + profile + "]." + tableName + "." + columnName + " is missing.");
 			Object convertedValue = convertValue(profile, tableName, columnName,
 					(String) column.get(DATA_TYPE), (Integer) column.get(JDBC_DATA_TYPE),
 					columns.get(columnName));
