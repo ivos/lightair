@@ -1,6 +1,10 @@
 package net.sf.lightair.internal.db;
 
 import net.sf.lightair.internal.Keywords;
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,10 +14,6 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -24,7 +24,10 @@ public class Converter implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Converter.class);
 
-	private static final String NULL = "@null";
+	private static final String NULL_TOKEN = "@null";
+	private static final String DATE_TOKEN = "@date";
+	private static final String TIME_TOKEN = "@time";
+	private static final String TIMESTAMP_TOKEN = "@timestamp";
 
 	public static Map<String, List<Map<String, Object>>> convert(
 			Map<String, Map<String, Map<String, Map<String, Object>>>> structures,
@@ -73,14 +76,50 @@ public class Converter implements Keywords {
 	private static Object convertValue(
 			String profile, String tableName, String columnName, String dataType, int jdbcDataType, String value) {
 		Object result;
-		if (NULL.equals(value)) {
+		if (NULL_TOKEN.equals(value)) {
 			result = null;
+		} else if (DATE_TOKEN.equals(value)) {
+			result = getTokenDate(dataType);
+		} else if (TIME_TOKEN.equals(value)) {
+			result = getTokenTime(dataType);
+		} else if (TIMESTAMP_TOKEN.equals(value)) {
+			result = getTokenTimestamp(dataType);
 		} else {
 			result = convertDataType(profile, tableName, columnName, dataType, jdbcDataType, value);
 		}
 		log.trace("Converted [{}] {}.{} value {} of type {} ({}) to {}.",
 				profile, tableName, columnName, value, dataType, jdbcDataType, result);
 		return result;
+	}
+
+	private static Object getTokenDate(String dataType) {
+		DateTime value = DateMidnight.now().toDateTime();
+		if (TIME.equals(dataType)) {
+			return new Time(value.withDate(1970, 1, 1).withMillisOfSecond(0).getMillis());
+		} else if (TIMESTAMP.equals(dataType)) {
+			return new Timestamp(value.getMillis());
+		}
+		return new Date(value.getMillis());
+	}
+
+	private static Object getTokenTime(String dataType) {
+		DateTime value = DateTime.now().withDate(1970, 1, 1).withMillisOfSecond(0);
+		if (DATE.equals(dataType)) {
+			return new Date(value.getMillis());
+		} else if (TIMESTAMP.equals(dataType)) {
+			return new Timestamp(value.getMillis());
+		}
+		return new Time(value.getMillis());
+	}
+
+	private static Object getTokenTimestamp(String dataType) {
+		DateTime value = new DateTime();
+		if (DATE.equals(dataType)) {
+			return new Date(value.getMillis());
+		} else if (TIMESTAMP.equals(dataType)) {
+			return new Timestamp(value.getMillis());
+		}
+		return new Time(value.getMillis());
 	}
 
 	private static Object convertDataType(
@@ -103,12 +142,12 @@ public class Converter implements Keywords {
 			case BIGDECIMAL:
 				return new BigDecimal(value);
 			case DATE:
-				return new Date(LocalDate.parse(value).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
+				return new Date(LocalDate.parse(value).toDateMidnight().getMillis());
 			case TIME:
-				return new Time(LocalTime.parse(value).atDate(LocalDate.of(1970, 1, 1)).
-						atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+				return new Time(LocalTime.parse(value).toDateTimeToday().withDate(1970, 1, 1)
+						.withMillisOfSecond(0).getMillis());
 			case TIMESTAMP:
-				return new Timestamp(LocalDateTime.parse(value).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+				return new Timestamp(DateTime.parse(value).getMillis());
 			case STRING:
 			case NSTRING:
 				return value;

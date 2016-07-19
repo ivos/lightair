@@ -3,6 +3,10 @@ package unit.internal.db;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.db.Converter;
 import org.apache.commons.io.IOUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -23,18 +27,82 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ConverterTest implements Keywords {
 
-	private Map<String, Map<String, Map<String, Map<String, Object>>>> createStructures() {
+	@Before
+	public void setUp() {
+		DateTimeUtils.setCurrentMillisFixed(DateTime.parse("2015-12-31T12:34:56.123").getMillis());
+	}
+
+	@After
+	public void tearDown() {
+		DateTimeUtils.setCurrentMillisSystem();
+	}
+
+	@Test
+	public void profiles() throws IOException {
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> profileStructure;
-
+		// profile 1 structure
 		profileStructure = new HashMap<>();
-		profileStructure.put("t1", InsertTest.createTableStructure(
-				"t1a", INTEGER, Types.INTEGER,
-				"t1b", STRING, Types.VARCHAR
+		profileStructure.put("t11", InsertTest.createTableStructure(
+				"t11a", INTEGER, Types.INTEGER,
+				"t11b", STRING, Types.VARCHAR
 		));
+		profileStructure.put("t12", InsertTest.createTableStructure(
+				"t12a", INTEGER, Types.INTEGER,
+				"t12b", STRING, Types.VARCHAR
+		));
+		structures.put("profile1", profileStructure);
+		// profile 2 structure
+		profileStructure = new HashMap<>();
+		profileStructure.put("t21", InsertTest.createTableStructure(
+				"t21a", INTEGER, Types.INTEGER,
+				"t21b", STRING, Types.VARCHAR
+		));
+		profileStructure.put("t22", InsertTest.createTableStructure(
+				"t22a", INTEGER, Types.INTEGER,
+				"t22b", STRING, Types.VARCHAR
+		));
+		structures.put("profile2", profileStructure);
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put("profile1", Arrays.asList(
+				InsertTest.createRow("t11", "t11a", "1231101", "t11b", "v11b01"),
+				InsertTest.createRow("t11", "t11a", "1231102", "t11b", "v11b02"),
+				InsertTest.createRow("t12", "t12a", "1231201", "t12b", "v12b01")
+		));
+		datasets.put("profile2", Arrays.asList(
+				InsertTest.createRow("t21", "t21a", "1232101", "t21b", "v21b01"),
+				InsertTest.createRow("t21", "t21a", "1232102", "t21b", "v21b02")
+		));
+
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+
+		String expected = "{profile1=[{TABLE=t11,\n" +
+				" COLUMNS={t11a=1231101,\n" +
+				" t11b=v11b01}},\n" +
+				" {TABLE=t11,\n" +
+				" COLUMNS={t11a=1231102,\n" +
+				" t11b=v11b02}},\n" +
+				" {TABLE=t12,\n" +
+				" COLUMNS={t12a=1231201,\n" +
+				" t12b=v12b01}}],\n" +
+				" profile2=[{TABLE=t21,\n" +
+				" COLUMNS={t21a=1232101,\n" +
+				" t21b=v21b01}},\n" +
+				" {TABLE=t21,\n" +
+				" COLUMNS={t21a=1232102,\n" +
+				" t21b=v21b02}}]}";
+		assertEquals(expected, result.toString().replace(", ", ",\n "));
+	}
+
+	@Test
+	public void dataTypes() throws IOException {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
 		profileStructure.put("data_types", InsertTest.createTableStructure(
 				"boolean_type", BOOLEAN, Types.BOOLEAN,
 				"byte_type", BYTE, Types.TINYINT,
@@ -54,25 +122,10 @@ public class ConverterTest implements Keywords {
 				"nclob_type", NCLOB, Types.NCLOB,
 				"blob_type", BLOB, Types.BLOB
 		));
-		structures.put("profile1", profileStructure);
+		structures.put(DEFAULT_PROFILE, profileStructure);
 
-		profileStructure = new HashMap<>();
-		profileStructure.put("t2", InsertTest.createTableStructure(
-				"t2a", INTEGER, Types.INTEGER,
-				"t2b", STRING, Types.VARCHAR
-		));
-		structures.put("profile2", profileStructure);
-
-		return structures;
-	}
-
-	private Map<String, List<Map<String, Object>>> createDatasets() {
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
-		List<Map<String, Object>> dataset;
-
-		datasets.put("profile1", Arrays.asList(
-				InsertTest.createRow("t1", "t1a", "1230101", "t1b", "v1b01"),
-				InsertTest.createRow("t1", "t1a", "1230102", "t1b", "v1b02"),
+		datasets.put(DEFAULT_PROFILE, Arrays.asList(
 				InsertTest.createRow("data_types",
 						"boolean_type", "true",
 						"byte_type", "123",
@@ -82,59 +135,21 @@ public class ConverterTest implements Keywords {
 						"float_type", "1234.56",
 						"double_type", "123456.789123",
 						"bigdecimal_type", "1234567890123456789.123456789",
-						"date_type", "2015-12-31",
-						"time_type", "12:34:56",
-						"timestamp_type", "2015-12-31T12:34:56",
+						"date_type", "2016-08-09",
+						"time_type", "21:43:59",
+						"timestamp_type", "2016-08-09T21:43:59.321",
 						"string_type", "string value",
 						"nstring_type", "nstring value",
 						"bytes_type", "bytes value",
 						"clob_type", "clob value",
 						"nclob_type", "nclob value",
 						"blob_type", "blob value"
-				),
-				InsertTest.createRow("data_types",
-						"boolean_type", "@null",
-						"byte_type", "@null",
-						"short_type", "@null",
-						"integer_type", "@null",
-						"long_type", "@null",
-						"float_type", "@null",
-						"double_type", "@null",
-						"bigdecimal_type", "@null",
-						"date_type", "@null",
-						"time_type", "@null",
-						"timestamp_type", "@null",
-						"string_type", "@null",
-						"nstring_type", "@null",
-						"bytes_type", "@null",
-						"clob_type", "@null",
-						"nclob_type", "@null",
-						"blob_type", "@null"
 				)
 		));
 
-		datasets.put("profile2", Arrays.asList(
-				InsertTest.createRow("t2", "t2a", "1230201", "t2b", "v2b01"),
-				InsertTest.createRow("t2", "t2a", "1230202", "t2b", "v2b02")
-		));
-
-		return datasets;
-	}
-
-	@Test
-	public void test() throws IOException {
-		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = createStructures();
-		Map<String, List<Map<String, Object>>> datasets = createDatasets();
-
 		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
 
-		String expected = "{profile1=[{TABLE=t1,\n" +
-				" COLUMNS={t1a=1230101,\n" +
-				" t1b=v1b01}},\n" +
-				" {TABLE=t1,\n" +
-				" COLUMNS={t1a=1230102,\n" +
-				" t1b=v1b02}},\n" +
-				" {TABLE=data_types,\n" +
+		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={boolean_type=true,\n" +
 				" byte_type=123,\n" +
 				" short_type=12345,\n" +
@@ -143,39 +158,15 @@ public class ConverterTest implements Keywords {
 				" float_type=1234.56,\n" +
 				" double_type=123456.789123,\n" +
 				" bigdecimal_type=1234567890123456789.123456789,\n" +
-				" date_type=2015-12-31,\n" +
-				" time_type=12:34:56,\n" +
-				" timestamp_type=2015-12-31 12:34:56.0,\n" +
+				" date_type=2016-08-09,\n" +
+				" time_type=21:43:59,\n" +
+				" timestamp_type=2016-08-09 21:43:59.321,\n" +
 				" string_type=string value,\n" +
 				" nstring_type=nstring value,\n" +
 				" bytes_type=REPLACED,\n" +
 				" clob_type=REPLACED,\n" +
 				" nclob_type=REPLACED,\n" +
-				" blob_type=REPLACED}},\n" +
-				" {TABLE=data_types,\n" +
-				" COLUMNS={boolean_type=null,\n" +
-				" byte_type=null,\n" +
-				" short_type=null,\n" +
-				" integer_type=null,\n" +
-				" long_type=null,\n" +
-				" float_type=null,\n" +
-				" double_type=null,\n" +
-				" bigdecimal_type=null,\n" +
-				" date_type=null,\n" +
-				" time_type=null,\n" +
-				" timestamp_type=null,\n" +
-				" string_type=null,\n" +
-				" nstring_type=null,\n" +
-				" bytes_type=null,\n" +
-				" clob_type=null,\n" +
-				" nclob_type=null,\n" +
-				" blob_type=null}}],\n" +
-				" profile2=[{TABLE=t2,\n" +
-				" COLUMNS={t2a=1230201,\n" +
-				" t2b=v2b01}},\n" +
-				" {TABLE=t2,\n" +
-				" COLUMNS={t2a=1230202,\n" +
-				" t2b=v2b02}}]}";
+				" blob_type=REPLACED}}]}";
 		assertEquals(expected, result.toString()
 				.replace(", ", ",\n ")
 				.replaceAll("\\[B@[^,}]+", "REPLACED")
@@ -183,7 +174,7 @@ public class ConverterTest implements Keywords {
 				.replaceAll("java.io.ByteArrayInputStream@[^,}]+", "REPLACED"));
 
 		@SuppressWarnings("unchecked")
-		Map<String, Object> dataTypes = (Map) result.get("profile1").get(2).get(COLUMNS);
+		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
 		assertEquals(Boolean.class, dataTypes.get("boolean_type").getClass());
 		assertEquals(Byte.class, dataTypes.get("byte_type").getClass());
 		assertEquals(Short.class, dataTypes.get("short_type").getClass());
@@ -206,5 +197,141 @@ public class ConverterTest implements Keywords {
 		assertEquals("clob value", IOUtils.toString((Reader) dataTypes.get("clob_type")));
 		assertEquals("nclob value", IOUtils.toString((Reader) dataTypes.get("nclob_type")));
 		assertEquals("blob value", IOUtils.toString((InputStream) dataTypes.get("blob_type")));
+	}
+
+	@Test
+	public void tokenNull() throws IOException {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
+		profileStructure.put("data_types", InsertTest.createTableStructure(
+				"integer_type", INTEGER, Types.INTEGER,
+				"string_type", STRING, Types.VARCHAR
+		));
+		structures.put(DEFAULT_PROFILE, profileStructure);
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+				InsertTest.createRow("data_types",
+						"integer_type", "@null",
+						"string_type", "@null"
+				)
+		));
+
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+
+		String expected = "{=[{TABLE=data_types,\n" +
+				" COLUMNS={integer_type=null,\n" +
+				" string_type=null}}]}";
+		assertEquals(expected, result.toString().replace(", ", ",\n "));
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
+		assertNull("integer value", dataTypes.get("integer_type"));
+		assertNull("string value", dataTypes.get("string value"));
+	}
+
+	@Test
+	public void tokenDate() throws IOException {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
+		profileStructure.put("data_types", InsertTest.createTableStructure(
+				"date_type", DATE, Types.DATE,
+				"time_type", TIME, Types.TIME,
+				"timestamp_type", TIMESTAMP, Types.TIMESTAMP
+		));
+		structures.put(DEFAULT_PROFILE, profileStructure);
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+				InsertTest.createRow("data_types",
+						"date_type", "@date",
+						"time_type", "@date",
+						"timestamp_type", "@date"
+				)
+		));
+
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+
+		String expected = "{=[{TABLE=data_types,\n" +
+				" COLUMNS={date_type=2015-12-31,\n" +
+				" time_type=00:00:00,\n" +
+				" timestamp_type=2015-12-31 00:00:00.0}}]}";
+		assertEquals(expected, result.toString().replace(", ", ",\n "));
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
+		assertEquals(Date.class, dataTypes.get("date_type").getClass());
+		assertEquals(Time.class, dataTypes.get("time_type").getClass());
+		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
+	}
+
+	@Test
+	public void tokenTime() throws IOException {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
+		profileStructure.put("data_types", InsertTest.createTableStructure(
+				"date_type", DATE, Types.DATE,
+				"time_type", TIME, Types.TIME,
+				"timestamp_type", TIMESTAMP, Types.TIMESTAMP
+		));
+		structures.put(DEFAULT_PROFILE, profileStructure);
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+				InsertTest.createRow("data_types",
+						"date_type", "@time",
+						"time_type", "@time",
+						"timestamp_type", "@time"
+				)
+		));
+
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+
+		String expected = "{=[{TABLE=data_types,\n" +
+				" COLUMNS={date_type=1970-01-01,\n" +
+				" time_type=12:34:56,\n" +
+				" timestamp_type=1970-01-01 12:34:56.0}}]}";
+		assertEquals(expected, result.toString().replace(", ", ",\n "));
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
+		assertEquals(Date.class, dataTypes.get("date_type").getClass());
+		assertEquals(Time.class, dataTypes.get("time_type").getClass());
+		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
+	}
+
+	@Test
+	public void tokenTimestamp() throws IOException {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
+		profileStructure.put("data_types", InsertTest.createTableStructure(
+				"date_type", DATE, Types.DATE,
+				"time_type", TIME, Types.TIME,
+				"timestamp_type", TIMESTAMP, Types.TIMESTAMP
+		));
+		structures.put(DEFAULT_PROFILE, profileStructure);
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+				InsertTest.createRow("data_types",
+						"date_type", "@timestamp",
+						"time_type", "@timestamp",
+						"timestamp_type", "@timestamp"
+				)
+		));
+
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+
+		String expected = "{=[{TABLE=data_types,\n" +
+				" COLUMNS={date_type=2015-12-31,\n" +
+				" time_type=12:34:56,\n" +
+				" timestamp_type=2015-12-31 12:34:56.123}}]}";
+		assertEquals(expected, result.toString().replace(", ", ",\n "));
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
+		assertEquals(Date.class, dataTypes.get("date_type").getClass());
+		assertEquals(Time.class, dataTypes.get("time_type").getClass());
+		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
 	}
 }
