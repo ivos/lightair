@@ -1,18 +1,18 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
+import net.sf.lightair.internal.Api;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
 @Setup
@@ -26,6 +26,7 @@ public class ForeignKeysTest extends CommonTestBase {
 		db.execute("create table detail (id int primary key, master_id int, d1 varchar(50))");
 		db.execute("alter table detail add constraint fk_detail_master "
 				+ "foreign key (master_id) references master (id)");
+		Api.reInitialize();
 	}
 
 	@AfterClass

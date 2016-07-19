@@ -1,18 +1,18 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
+import net.sf.lightair.internal.Api;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
 @Setup
@@ -25,6 +25,7 @@ public class AutoStringCutTest extends CommonTestBase {
 		db.execute("create table cut1prefix (char_type char(16), varchar_type varchar(19))");
 		db.execute("create table leave1prefix (char_type char(8), varchar_type varchar(8))");
 		db.execute("create table leave3number (char_type char(3), varchar_type varchar(3))");
+		Api.reInitialize();
 	}
 
 	@AfterClass

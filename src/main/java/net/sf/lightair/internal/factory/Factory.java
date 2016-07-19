@@ -1,14 +1,6 @@
 package net.sf.lightair.internal.factory;
 
-import java.beans.PropertyVetoException;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import net.sf.lightair.exception.CreateDatabaseConnectionException;
 import net.sf.lightair.exception.DataSourceSetupException;
 import net.sf.lightair.exception.DatabaseAccessException;
@@ -42,7 +34,6 @@ import net.sf.lightair.internal.util.HashGenerator;
 import net.sf.lightair.internal.util.Profiles;
 import net.sf.lightair.internal.util.StandardAutoValueGenerator;
 import net.sf.lightair.internal.util.UniqueAutoValueGenerator;
-
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.CustomDatabaseTableMetaData;
 import org.dbunit.database.IDatabaseConnection;
@@ -58,7 +49,13 @@ import org.junit.runners.model.FrameworkMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Factory class.
@@ -184,6 +181,7 @@ public class Factory implements PropertyKeys {
 		unitilsWrapper.setDataSetAssert(dataSetAssert);
 		unitilsWrapper.setFactory(this);
 		setupExecutor.setUnitilsWrapper(unitilsWrapper);
+		setupExecutor.setDataSetResolver(dataSetResolver);
 		verifyExecutor.setUnitilsWrapper(unitilsWrapper);
 		dataSetLoader.setDataSetResolver(dataSetResolver);
 		dataSetLoader.setDataSetFactory(dataSetFactory);

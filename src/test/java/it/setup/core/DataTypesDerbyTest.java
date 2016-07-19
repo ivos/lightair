@@ -1,18 +1,17 @@
 package it.setup.core;
 
-import java.math.BigDecimal;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
+import net.sf.lightair.internal.Api;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import test.support.ConfigSupport;
+
+import java.math.BigDecimal;
 
 @RunWith(LightAir.class)
 @Setup("DataTypesTest.xml")
@@ -35,6 +34,7 @@ public class DataTypesDerbyTest extends DataTypesSetupTestBase {
 				+ "date_type date, time_type time, timestamp_type timestamp, "
 				+ "double_type double, boolean_type boolean, bigint_type bigint, "
 				+ "decimal_type decimal(20,2), clob_type varchar(20), blob_type varchar(20), binary_type varchar(20))");
+		Api.reInitialize();
 	}
 
 	@Test

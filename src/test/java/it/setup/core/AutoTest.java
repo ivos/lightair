@@ -1,17 +1,9 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
+import net.sf.lightair.internal.Api;
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
@@ -20,6 +12,15 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(LightAir.class)
 @Setup({ "AutoTest.xml", "AutoTest2.xml" })
@@ -46,6 +47,7 @@ public class AutoTest extends CommonTestBase {
 				+ "date_type date, time_type time, timestamp_type timestamp, "
 				+ "double_type double, boolean_type boolean, bigint_type bigint, "
 				+ "decimal_type decimal(20,3), clob_type clob, blob_type blob, binary_type binary(20))");
+		Api.reInitialize();
 	}
 
 	@AfterClass

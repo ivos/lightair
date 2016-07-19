@@ -5,6 +5,8 @@ import net.sf.lightair.internal.db.Delete;
 import net.sf.lightair.internal.db.Execute;
 import net.sf.lightair.internal.db.Insert;
 import net.sf.lightair.internal.db.Structure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -13,22 +15,48 @@ import java.util.Map;
 
 public class Api {
 
-	public static void generateXsd(String propertiesFileName) {
-		Map<String, Map<String, String>> properties = Properties.load(propertiesFileName);
-		Map<String, Connection> connections = Connections.open(properties);
-		Map<String, Map<String, Map<String, Map<String, Object>>>> structures =
-				Structure.loadAll(properties, connections);
-		Xsd.generate(properties, structures);
-		Connections.close(connections);
+	private static final Logger log = LoggerFactory.getLogger(Api.class);
+
+	private static String propertiesFileName;
+	private static Map<String, Map<String, String>> properties;
+	private static Map<String, Connection> connections;
+	private static Map<String, Map<String, Map<String, Map<String, Object>>>> structures;
+
+	public static void initialize(String propertiesFileName) {
+		log.info("Initializing Light Air.");
+		Api.propertiesFileName = propertiesFileName;
+		performInitialization();
+		log.debug("Light Air has initialized.");
 	}
 
-	public static void setup(String propertiesFileName, Map<String, List<String>> fileNames) {
-		Map<String, Map<String, String>> properties = Properties.load(propertiesFileName);
-		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
+	public static void shutdown() {
+		log.debug("Shutting down Light Air.");
+		Connections.close(connections);
+		structures = null;
+		connections = null;
+		properties = null;
+		log.info("Light Air has shut down.");
+	}
 
-		Map<String, Connection> connections = Connections.open(properties);
-		Map<String, Map<String, Map<String, Map<String, Object>>>> structures =
-				Structure.loadAll(properties, connections);
+	public static void reInitialize() {
+		log.info("Re-initializing Light Air.");
+		performInitialization();
+		log.debug("Light Air has re-initialized.");
+	}
+
+	private static void performInitialization() {
+		properties = Properties.load(propertiesFileName);
+		connections = Connections.open(properties);
+		structures = Structure.loadAll(properties, connections);
+	}
+
+	public static void generateXsd(String propertiesFileName) {
+		Xsd.generate(properties, structures);
+	}
+
+	public static void setup(Map<String, List<String>> fileNames) {
+		log.info("Performing setup for files {}.", fileNames);
+		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
 		Map<String, List<Map<String, Object>>> datasets = Converter.convert(structures, xmlDatasets);
 
 		for (String profile : datasets.keySet()) {
@@ -43,6 +71,6 @@ public class Api {
 
 			Execute.update(connection, statements);
 		}
-		Connections.close(connections);
+		log.debug("Finished setup for files {}.", fileNames);
 	}
 }

@@ -1,18 +1,18 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
+import net.sf.lightair.internal.Api;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
 @Setup
@@ -23,6 +23,7 @@ public class AutoColumnDuplicityTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a (ao char(20),gs char(20),hm char(20),kg char(20))");
+		Api.reInitialize();
 	}
 
 	@AfterClass

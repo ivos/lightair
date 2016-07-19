@@ -34,7 +34,7 @@ public class DataSetLoader {
 	 * <p>
 	 * Wrap datasets in loaded multi-schema dataset with replacement wrapper
 	 * replacing common replacements, see {@link ReplacementDataSetWrapper}.
-	 * 
+	 *
 	 * @param profile
 	 *            Profile
 	 * @param testMethod
@@ -45,26 +45,10 @@ public class DataSetLoader {
 	 *            Explicit file names
 	 * @return Multi-schema dataset
 	 */
-	public MultiSchemaDataSet load(String profile, Method testMethod,
-			String suffix, String... fileNames) {
-		log.debug("Resolving dataset for method {} with suffix [{}] "
-				+ "and configured file names {}.", new Object[] { testMethod,
-				suffix, fileNames });
-		try {
-			List<URL> resources = new ArrayList<URL>();
-			if (fileNames.length == 0) {
-				fileNames = addDefaultFile(testMethod, suffix, resources);
-			} else {
-				addExplicitFiles(testMethod, fileNames, resources);
-			}
-			log.debug("Creating dataset for resolved resources {}.", resources);
-			return dataSetFactory.createDataSet(profile,
-					resources.toArray(new URL[] {}));
-		} catch (IllegalDataSetContentException e) {
-			throw new IllegalDataSetContentException(e, fileNames);
-		} catch (DataSetNotFoundException e) {
-			throw new DataSetNotFoundException(e, fileNames);
-		}
+	public MultiSchemaDataSet load(String profile, Method testMethod, String suffix, String... fileNames) {
+		List<URL> resources = dataSetResolver.resolve(profile, testMethod, suffix, fileNames);
+		log.debug("Creating dataset for resolved resources {}.", resources);
+		return dataSetFactory.createDataSet(profile, resources.toArray(new URL[] {}));
 	}
 
 	/**
@@ -72,7 +56,7 @@ public class DataSetLoader {
 	 * <p>
 	 * Resolve default test method dataset file, if it exists. If it does not
 	 * exist, resolve default class dataset file.
-	 * 
+	 *
 	 * @param testMethod
 	 *            Test method
 	 * @param suffix
@@ -102,7 +86,7 @@ public class DataSetLoader {
 	/**
 	 * Get default test class and test method file name of the form
 	 * <code>[TestClassName].[testMethodName][suffix].xml</code>.
-	 * 
+	 *
 	 * @param testMethod
 	 *            Test method
 	 * @param testClass
@@ -120,7 +104,7 @@ public class DataSetLoader {
 	/**
 	 * Get default test method file name of the form
 	 * <code>[TestClassName].[testMethodName][suffix].xml</code>.
-	 * 
+	 *
 	 * @param testMethod
 	 *            Test method
 	 * @param suffix
@@ -134,7 +118,7 @@ public class DataSetLoader {
 	/**
 	 * Get default test class file name of the form
 	 * <code>[TestClassName][suffix].xml</code>.
-	 * 
+	 *
 	 * @param testClass
 	 *            Test class
 	 * @param suffix
@@ -147,7 +131,7 @@ public class DataSetLoader {
 
 	/**
 	 * Add resolved explicit files to files list.
-	 * 
+	 *
 	 * @param testMethod
 	 *            Test method
 	 * @param fileNames
@@ -169,7 +153,7 @@ public class DataSetLoader {
 
 	/**
 	 * Set dataset resolver
-	 * 
+	 *
 	 * @param dataSetResolver
 	 */
 	public void setDataSetResolver(DataSetResolver dataSetResolver) {
@@ -180,7 +164,7 @@ public class DataSetLoader {
 
 	/**
 	 * Set dataset factory.
-	 * 
+	 *
 	 * @param dataSetFactory
 	 */
 	public void setDataSetFactory(DataSetFactory dataSetFactory) {

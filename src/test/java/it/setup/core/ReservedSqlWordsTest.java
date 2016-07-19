@@ -1,19 +1,19 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
+import net.sf.lightair.internal.Api;
 import org.joda.time.DateMidnight;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
 @Setup
@@ -26,6 +26,7 @@ public class ReservedSqlWordsTest extends CommonTestBase {
 		db.execute("create table \"SELECT\" (id int primary key, "
 				+ "\"VARCHAR\" varchar(50), \"INTEGER\" integer, "
 				+ "\"DATE\" date, \"ORDER\" varchar(50))");
+		Api.reInitialize();
 	}
 
 	@AfterClass

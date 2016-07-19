@@ -1,18 +1,18 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
+import net.sf.lightair.internal.Api;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
 @Setup
@@ -25,6 +25,7 @@ public class DefaultTest extends CommonTestBase {
 		db.execute("create table a (id int primary key,"
 				+ " fixedm char(20) default 'D' not null, autom char(20) default 'D' not null,"
 				+ " fixedo char(20) default 'D', autoo char(20) default 'D')");
+		Api.reInitialize();
 	}
 
 	@AfterClass
