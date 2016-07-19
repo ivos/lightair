@@ -1,5 +1,6 @@
 package test.support;
 
+import net.sf.lightair.internal.Api;
 import net.sf.lightair.internal.factory.Factory;
 import net.sf.lightair.internal.properties.PropertiesProvider;
 
@@ -12,15 +13,16 @@ public class ConfigSupport {
 	}
 
 	public static void replaceConfig(String dbName) {
-		propertiesProvider.setPropertiesFileName("light-air-" + dbName
-				+ ".properties");
+		String propertiesFileName = "light-air-" + dbName + ".properties";
+		propertiesProvider.setPropertiesFileName(propertiesFileName);
 		Factory.getInstance().init();
+		Api.initialize(propertiesFileName);
 	}
 
 	public static void restoreConfig() {
-		propertiesProvider
-				.setPropertiesFileName(PropertiesProvider.DEFAULT_PROPERTIES_FILE_NAME);
+		propertiesProvider.setPropertiesFileName(PropertiesProvider.DEFAULT_PROPERTIES_FILE_NAME);
 		Factory.getInstance().init();
+		Api.initialize(PropertiesProvider.DEFAULT_PROPERTIES_FILE_NAME);
 	}
 
 }

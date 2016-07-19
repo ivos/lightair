@@ -1,18 +1,17 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
-
-import java.math.BigDecimal;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import test.support.ConfigSupport;
+
+import java.math.BigDecimal;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @Ignore
 /**

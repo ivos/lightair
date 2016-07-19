@@ -29,8 +29,15 @@ import org.junit.runners.model.Statement;
  */
 public class LightAir extends BlockJUnit4ClassRunner {
 
+	public static final String DEFAULT_PROPERTIES_FILE_NAME = "light-air.properties";
+	public static final String PROPERTIES_PROPERTY_NAME = "light.air.properties";
+
 	static {
-		Api.initialize("light-air.properties");
+		String properties = System.getProperty(PROPERTIES_PROPERTY_NAME);
+		if (null == properties) {
+			properties = DEFAULT_PROPERTIES_FILE_NAME;
+		}
+		Api.initialize(properties);
 		Runtime.getRuntime().addShutdownHook(new Thread(Api::shutdown));
 	}
 

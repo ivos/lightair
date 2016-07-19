@@ -1,15 +1,9 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
+import net.sf.lightair.internal.Api;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -17,6 +11,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
 @Setup
@@ -28,6 +28,7 @@ public class DurationTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table a (id int primary key, "
 				+ "date1 date, time1 time, timestamp1 timestamp)");
+		Api.reInitialize();
 	}
 
 	@AfterClass

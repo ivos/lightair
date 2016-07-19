@@ -1,16 +1,15 @@
 package it.setup.core;
 
-import java.math.BigDecimal;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.math.BigDecimal;
 
 @RunWith(LightAir.class)
 @Setup("DataTypesTest.xml")
