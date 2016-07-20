@@ -2,7 +2,9 @@ package net.sf.lightair.internal.junit;
 
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.exception.DataSetNotFoundException;
+import net.sf.lightair.exception.TokenAnyInSetupException;
 import net.sf.lightair.internal.Api;
+import net.sf.lightair.internal.factory.Factory;
 import net.sf.lightair.internal.unitils.UnitilsWrapper;
 import net.sf.lightair.internal.util.DataSetResolver;
 import org.apache.commons.lang3.time.StopWatch;
@@ -32,6 +34,7 @@ public class SetupExecutor {
 			stopWatch = new StopWatch();
 			stopWatch.start();
 		}
+		Factory.getInstance().initDataSetProcessing();
 
 		Map<String, List<String>> apiFileNames = new LinkedHashMap<>();
 		List<URL> urls = dataSetResolver.resolve(profile, testMethod, "", fileNames);
@@ -47,6 +50,9 @@ public class SetupExecutor {
 		apiFileNames.put(profile, filePaths);
 		Api.setup(apiFileNames);
 
+		if (Factory.getInstance().getDataSetProcessingData().isTokenAnyPresent()) {
+			throw new TokenAnyInSetupException();
+		}
 		if (null != stopWatch) {
 			stopWatch.stop();
 			log.debug("Database set up in {} ms.", stopWatch.getTime());
