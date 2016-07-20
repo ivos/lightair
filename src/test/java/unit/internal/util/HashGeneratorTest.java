@@ -1,9 +1,17 @@
 package unit.internal.util;
 
-import static org.junit.Assert.*;
 import net.sf.lightair.internal.util.HashGenerator;
-
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class HashGeneratorTest {
 
@@ -61,6 +69,33 @@ public class HashGeneratorTest {
 			assertEquals("Digits must be from 2 to 3, but was 4",
 					e.getMessage());
 		}
+	}
+
+	@Test
+	public void distribution() {
+		Map<Integer, Integer> counts = new HashMap<>();
+		for (char ch1 = 'a'; ch1 < 'z'; ch1++) {
+			for (char ch2 = 'a'; ch2 < 'z'; ch2++) {
+				for (char ch3 = 'a'; ch3 < 'z'; ch3++) {
+					for (char ch4 = 'a'; ch4 < 'z'; ch4++) {
+						String source = "" + ch1 + ch2 + ch3 + ch4;
+						final int hash = g.generateHash(source, 3);
+						Integer count = counts.get(hash);
+						if (null == count) {
+							count = 1;
+						} else {
+							count++;
+						}
+						counts.put(hash, count);
+					}
+				}
+			}
+		}
+		List<Integer> distribution = new ArrayList<>(counts.values());
+		Integer max = Collections.max(distribution);
+		Integer min = Collections.min(distribution);
+		assertTrue("Max should be < 500, but was " + max, max < 500);
+		assertTrue("Min should be > 250, but was " + min, min > 250);
 	}
 
 	// @Test
