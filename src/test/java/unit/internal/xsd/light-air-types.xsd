@@ -56,9 +56,6 @@
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:byte"/>
 			</xsd:simpleType>
-			<xsd:simpleType>
-				<xsd:restriction base="xsd:unsignedByte"/>
-			</xsd:simpleType>
 		</xsd:union>
 	</xsd:simpleType>
 	<xsd:simpleType name="ByteNullableType">
@@ -78,9 +75,6 @@
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:byte"/>
 			</xsd:simpleType>
-			<xsd:simpleType>
-				<xsd:restriction base="xsd:unsignedByte"/>
-			</xsd:simpleType>
 		</xsd:union>
 	</xsd:simpleType>
 	<xsd:simpleType name="ShortType">
@@ -98,9 +92,6 @@
 			</xsd:simpleType>
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:short"/>
-			</xsd:simpleType>
-			<xsd:simpleType>
-				<xsd:restriction base="xsd:unsignedShort"/>
 			</xsd:simpleType>
 		</xsd:union>
 	</xsd:simpleType>
@@ -121,9 +112,6 @@
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:short"/>
 			</xsd:simpleType>
-			<xsd:simpleType>
-				<xsd:restriction base="xsd:unsignedShort"/>
-			</xsd:simpleType>
 		</xsd:union>
 	</xsd:simpleType>
 	<xsd:simpleType name="IntegerType">
@@ -141,9 +129,6 @@
 			</xsd:simpleType>
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:int"/>
-			</xsd:simpleType>
-			<xsd:simpleType>
-				<xsd:restriction base="xsd:unsignedInt"/>
 			</xsd:simpleType>
 		</xsd:union>
 	</xsd:simpleType>
@@ -164,9 +149,6 @@
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:int"/>
 			</xsd:simpleType>
-			<xsd:simpleType>
-				<xsd:restriction base="xsd:unsignedInt"/>
-			</xsd:simpleType>
 		</xsd:union>
 	</xsd:simpleType>
 	<xsd:simpleType name="LongType">
@@ -184,9 +166,6 @@
 			</xsd:simpleType>
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:long"/>
-			</xsd:simpleType>
-			<xsd:simpleType>
-				<xsd:restriction base="xsd:unsignedLong"/>
 			</xsd:simpleType>
 		</xsd:union>
 	</xsd:simpleType>
@@ -206,9 +185,6 @@
 			</xsd:simpleType>
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:long"/>
-			</xsd:simpleType>
-			<xsd:simpleType>
-				<xsd:restriction base="xsd:unsignedLong"/>
 			</xsd:simpleType>
 		</xsd:union>
 	</xsd:simpleType>
