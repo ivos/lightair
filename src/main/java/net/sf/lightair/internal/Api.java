@@ -31,15 +31,13 @@ public class Api {
 
 	public static void shutdown() {
 		log.debug("Shutting down Light Air.");
-		Connections.close(connections);
-		structures = null;
-		connections = null;
-		properties = null;
+		performShutdown();
 		log.info("Light Air has shut down.");
 	}
 
 	public static void reInitialize() {
 		log.info("Re-initializing Light Air.");
+		performShutdown();
 		performInitialization();
 		log.debug("Light Air has re-initialized.");
 	}
@@ -48,6 +46,13 @@ public class Api {
 		properties = Properties.load(propertiesFileName);
 		connections = Connections.open(properties);
 		structures = Structure.loadAll(properties, connections);
+	}
+
+	private static void performShutdown() {
+		Connections.close(connections);
+		structures = null;
+		connections = null;
+		properties = null;
 	}
 
 	public static void generateXsd(String propertiesFileName) {
