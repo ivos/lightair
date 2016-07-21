@@ -4,9 +4,8 @@ import net.sf.lightair.internal.auto.Hash;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -77,10 +76,15 @@ public class HashTest {
 				}
 			}
 		}
-		List<Integer> distribution = new ArrayList<>(counts.values());
-		Integer max = Collections.max(distribution);
-		Integer min = Collections.min(distribution);
-		assertTrue("Max should be < 500, but was " + max, max < 500);
-		assertTrue("Min should be > 250, but was " + min, min > 250);
+		Map<Integer, Integer> sorted = new LinkedHashMap<>();
+		counts.entrySet().stream()
+				.sorted(Map.Entry.comparingByValue())
+				.forEachOrdered(entry -> sorted.put(entry.getKey(), entry.getValue()));
+//		System.out.println(sorted);
+		ArrayList<Integer> values = new ArrayList<>(sorted.values());
+		Integer min = values.get(0);
+		Integer max = values.get(values.size() - 1);
+		assertTrue("Max should be between 300 and 500, but was " + max, max > 300 && max < 500);
+		assertTrue("Min should be between 250 and 400, but was " + min, min > 250 && min < 400);
 	}
 }
