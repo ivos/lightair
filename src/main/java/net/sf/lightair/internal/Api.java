@@ -1,5 +1,6 @@
 package net.sf.lightair.internal;
 
+import net.sf.lightair.internal.auto.Index;
 import net.sf.lightair.internal.db.Converter;
 import net.sf.lightair.internal.db.Delete;
 import net.sf.lightair.internal.db.Execute;
@@ -57,10 +58,12 @@ public class Api {
 
 	public static void generateXsd(String propertiesFileName) {
 		Xsd.generate(properties, structures);
+		Index.readAndUpdate(properties, structures);
 	}
 
 	public static void setup(Map<String, List<String>> fileNames) {
 		log.info("Performing setup for files {}.", fileNames);
+		Map<String, String> index = Index.readAndUpdate(properties, structures);
 		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
 		Map<String, List<Map<String, Object>>> datasets = Converter.convert(structures, xmlDatasets);
 
