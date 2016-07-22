@@ -92,7 +92,7 @@ public class Converter implements Keywords {
 		} else {
 			result = convertDataType(profile, tableName, columnName, dataType, jdbcDataType, value);
 		}
-		log.trace("Converted [{}] {}.{} value {} of type {} ({}) to {}.",
+		log.trace("Converted [{}]/{}.{} value {} of type {} ({}) to {}.",
 				profile, tableName, columnName, value, dataType, jdbcDataType, result);
 		return result;
 	}
@@ -164,7 +164,7 @@ public class Converter implements Keywords {
 			case BLOB:
 				return new ByteArrayInputStream(value.getBytes());
 		}
-		log.error("Unknown type {} ({}) on [{}] {}.{}, passing value {} through as String.",
+		log.error("Unknown type {} ({}) on [{}]/{}.{}, passing value {} through as String.",
 				dataType, jdbcDataType, profile, tableName, columnName, value);
 		return value;
 	}
