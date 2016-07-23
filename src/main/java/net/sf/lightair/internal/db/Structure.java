@@ -74,14 +74,15 @@ public class Structure implements Keywords {
 			DatabaseMetaData meta = connection.getMetaData();
 			ResultSet rs = meta.getColumns(connection.getCatalog(), schema, table, null);
 			while (rs.next()) {
-				Map<String, Object> props = new LinkedHashMap<>();
+				String columnName = convert(rs.getString(4));
+				Map<String, Object> column = new LinkedHashMap<>();
 				String dataType = resolveDataType(rs.getInt(5), rs.getString(6));
-				props.put(DATA_TYPE, dataType);
-				props.put(JDBC_DATA_TYPE, rs.getInt(5));
-				props.put(NOT_NULL, 0 == rs.getInt(11));
-				props.put(SIZE, rs.getInt(7));
-				props.put(DECIMAL_DIGITS, rs.getInt(9));
-				data.put(convert(rs.getString(4)), props);
+				column.put(DATA_TYPE, dataType);
+				column.put(JDBC_DATA_TYPE, rs.getInt(5));
+				column.put(NOT_NULL, 0 == rs.getInt(11));
+				column.put(SIZE, rs.getInt(7));
+				column.put(DECIMAL_DIGITS, rs.getInt(9));
+				data.put(columnName, column);
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException("Cannot load database metadata.", e);

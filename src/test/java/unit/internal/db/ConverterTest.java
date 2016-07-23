@@ -1,6 +1,7 @@
 package unit.internal.db;
 
 import net.sf.lightair.internal.Keywords;
+import net.sf.lightair.internal.auto.Index;
 import net.sf.lightair.internal.db.Converter;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class ConverterTest implements Keywords {
 
@@ -79,7 +81,7 @@ public class ConverterTest implements Keywords {
 				InsertTest.createRow("t21", "t21a", "1232102", "t21b", "v21b02")
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
 
 		String expected = "{profile1=[{TABLE=t11,\n" +
 				" COLUMNS={t11a=1231101,\n" +
@@ -147,7 +149,7 @@ public class ConverterTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={boolean_type=true,\n" +
@@ -217,7 +219,7 @@ public class ConverterTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={integer_type=null,\n" +
@@ -250,7 +252,7 @@ public class ConverterTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={date_type=2015-12-31,\n" +
@@ -285,7 +287,7 @@ public class ConverterTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={date_type=1970-01-01,\n" +
@@ -320,7 +322,7 @@ public class ConverterTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, datasets);
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={date_type=2015-12-31,\n" +
@@ -333,5 +335,98 @@ public class ConverterTest implements Keywords {
 		assertEquals(Date.class, dataTypes.get("date_type").getClass());
 		assertEquals(Time.class, dataTypes.get("time_type").getClass());
 		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
+	}
+
+	public static Map<String, Map<String, Object>> createTableStructure(Object... data) {
+		assertTrue("Data by fours", data.length % 4 == 0);
+		Map<String, Map<String, Object>> table = new HashMap<>();
+		for (int i = 0; i < data.length; i = i + 4) {
+			Map<String, Object> column = new HashMap<>();
+			Object dataType = data[i + 1];
+			Object jdbcDataType = data[i + 2];
+			Object size = data[i + 3];
+			column.put(DATA_TYPE, dataType);
+			column.put(JDBC_DATA_TYPE, jdbcDataType);
+			column.put(SIZE, size);
+			table.put((String) data[i], column);
+		}
+		return table;
+	}
+
+	@Test
+	public void tokenAuto() throws IOException {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure;
+		// profile 1
+		profileStructure = new HashMap<>();
+		profileStructure.put("t1", createTableStructure(
+				"t1i", INTEGER, Types.INTEGER, 0,
+				"t1s", STRING, Types.VARCHAR, 20
+		));
+		profileStructure.put("t2", createTableStructure(
+				"t2i", INTEGER, Types.INTEGER, 0,
+				"t2s", STRING, Types.VARCHAR, 20
+		));
+		structures.put("p1", profileStructure);
+		// profile 2
+		profileStructure = new HashMap<>();
+		profileStructure.put("t1", createTableStructure( // same names in other profile
+				"t1i", INTEGER, Types.INTEGER, 0,
+				"t1s", STRING, Types.VARCHAR, 12
+		));
+		structures.put("p2", profileStructure);
+
+		Map<String, String> index = new HashMap<>();
+		index.put(Index.formatTableKey("p1", "t1"), "1001");
+		index.put(Index.formatColumnKey("p1", "t1", "t1i"), "101");
+		index.put(Index.formatColumnKey("p1", "t1", "t1s"), "102");
+		index.put(Index.formatTableKey("p1", "t2"), "1002");
+		index.put(Index.formatColumnKey("p1", "t2", "t2i"), "201");
+		index.put(Index.formatColumnKey("p1", "t2", "t2s"), "202");
+		index.put(Index.formatTableKey("p2", "t1"), "2001");
+		index.put(Index.formatColumnKey("p2", "t1", "t1i"), "501");
+		index.put(Index.formatColumnKey("p2", "t1", "t1s"), "502");
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put("p1", Arrays.asList(
+				InsertTest.createRow("t1", "t1i", "@auto", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1i", "@auto", "t1s", "fixed 11"), // partial auto
+				InsertTest.createRow("t1", "t1i", "123", "t1s", "fixed 12"), // row id incremented
+				InsertTest.createRow("t1", "t1i", "@auto", "t1s", "@auto"),
+				InsertTest.createRow("t1"), // row id not incremented
+				InsertTest.createRow("t1", "t1i", "@auto", "t1s", "@auto"),
+				InsertTest.createRow("t2", "t2i", "987", "t2s", "fixed 21"),
+				InsertTest.createRow("t1", "t1i", "@auto", "t1s", "@auto"),
+				InsertTest.createRow("t2", "t2i", "@auto", "t2s", "@auto"),
+				InsertTest.createRow("t2", "t2i", "@auto", "t2s", "@auto")
+		));
+		datasets.put("p2", Arrays.asList(
+				InsertTest.createRow("t1", "t1i", "@auto", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1i", "@auto", "t1s", "@auto")
+		));
+
+		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, index, datasets);
+
+		String expected = "{p1=[\n" +
+				" {TABLE=t1, COLUMNS={t1i=1100110101, t1s=t1s 1100110201}}, \n" +
+				" {TABLE=t1, COLUMNS={t1i=1100110102, t1s=fixed 11}}, \n" +
+				" {TABLE=t1, COLUMNS={t1i=123, t1s=fixed 12}}, \n" +
+				" {TABLE=t1, COLUMNS={t1i=1100110104, t1s=t1s 1100110204}}, \n" +
+				" {TABLE=t1}, \n" +
+				" {TABLE=t1, COLUMNS={t1i=1100110105, t1s=t1s 1100110205}}, \n" +
+				" {TABLE=t2, COLUMNS={t2i=987, t2s=fixed 21}}, \n" +
+				" {TABLE=t1, COLUMNS={t1i=1100110106, t1s=t1s 1100110206}}, \n" +
+				" {TABLE=t2, COLUMNS={t2i=1100220102, t2s=t2s 1100220202}}, \n" +
+				" {TABLE=t2, COLUMNS={t2i=1100220103, t2s=t2s 1100220203}}],\n" +
+				" p2=[\n" +
+				" {TABLE=t1, COLUMNS={t1i=1200150101, t1s=t11200150201}}, \n" +
+				" {TABLE=t1, COLUMNS={t1i=1200150102, t1s=t11200150202}}]}";
+		assertEquals(expected, result.toString()
+				.replace("{TABLE=", "\n {TABLE=").replace("], p", "],\n p"));
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> row = (Map) result.get("p1").get(0).get(COLUMNS);
+		assertEquals(Integer.class, row.get("t1i").getClass());
+		assertEquals(String.class, row.get("t1s").getClass());
 	}
 }

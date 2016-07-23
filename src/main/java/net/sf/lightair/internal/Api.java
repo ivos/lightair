@@ -22,6 +22,7 @@ public class Api {
 	private static Map<String, Map<String, String>> properties;
 	private static Map<String, Connection> connections;
 	private static Map<String, Map<String, Map<String, Map<String, Object>>>> structures;
+	private static Map<String, String> index;
 
 	public static void initialize(String propertiesFileName) {
 		log.info("Initializing Light Air.");
@@ -47,10 +48,12 @@ public class Api {
 		properties = Properties.load(propertiesFileName);
 		connections = Connections.open(properties);
 		structures = Structure.loadAll(properties, connections);
+		index = Index.readAndUpdate(properties, structures);
 	}
 
 	private static void performShutdown() {
 		Connections.close(connections);
+		index = null;
 		structures = null;
 		connections = null;
 		properties = null;
@@ -58,14 +61,12 @@ public class Api {
 
 	public static void generateXsd(String propertiesFileName) {
 		Xsd.generate(properties, structures);
-		Index.readAndUpdate(properties, structures);
 	}
 
 	public static void setup(Map<String, List<String>> fileNames) {
 		log.info("Performing setup for files {}.", fileNames);
-		Map<String, String> index = Index.readAndUpdate(properties, structures);
 		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
-		Map<String, List<Map<String, Object>>> datasets = Converter.convert(structures, xmlDatasets);
+		Map<String, List<Map<String, Object>>> datasets = Converter.convert(structures, index, xmlDatasets);
 
 		for (String profile : datasets.keySet()) {
 			Map<String, String> profileProperties = properties.get(profile);

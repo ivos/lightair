@@ -21,7 +21,12 @@ public class Auto implements Keywords {
 	public static String generate(
 			Map<String, String> index,
 			String profile, String tableName, String columnName, int rowId,
-			String dataType, int columnLength, Integer decimalDigits) {
+			String dataType, Integer columnLength, Integer decimalDigits) {
+		Objects.requireNonNull(index, "Index is required.");
+		if (null == columnLength) {
+			throw new NullPointerException("Column length missing for column " +
+					Index.formatColumnKey(profile, tableName, columnName) + ".");
+		}
 		String autoNumber = formatAutoNumber(index, profile, tableName, columnName, rowId);
 		String value = convert(autoNumber, columnName, dataType, columnLength, decimalDigits);
 

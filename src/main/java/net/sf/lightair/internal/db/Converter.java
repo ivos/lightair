@@ -1,6 +1,7 @@
 package net.sf.lightair.internal.db;
 
 import net.sf.lightair.internal.Keywords;
+import net.sf.lightair.internal.auto.Auto;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -16,6 +17,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,23 +31,27 @@ public class Converter implements Keywords {
 	private static final String DATE_TOKEN = "@date";
 	private static final String TIME_TOKEN = "@time";
 	private static final String TIMESTAMP_TOKEN = "@timestamp";
+	private static final String AUTO_TOKEN = "@auto";
 
 	public static Map<String, List<Map<String, Object>>> convert(
 			Map<String, Map<String, Map<String, Map<String, Object>>>> structures,
+			Map<String, String> index,
 			Map<String, List<Map<String, Object>>> datasets) {
 		Map<String, List<Map<String, Object>>> result = new LinkedHashMap<>();
 		for (String profile : datasets.keySet()) {
 			log.debug("Converting values for profile [{}].", profile);
 			Map<String, Map<String, Map<String, Object>>> profileStructure = structures.get(profile);
 			Objects.requireNonNull(profileStructure, "Structure for profile [" + profile + "] is missing.");
-			result.put(profile, convertDataset(profile, profileStructure, datasets));
+			result.put(profile, convertDataset(index, profile, profileStructure, datasets));
 		}
 		return Collections.unmodifiableMap(result);
 	}
 
 	private static List<Map<String, Object>> convertDataset(
+			Map<String, String> index,
 			String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
 			Map<String, List<Map<String, Object>>> datasets) {
+		Map<String, Integer> rowIds = new HashMap<>();
 		List<Map<String, Object>> dataset = datasets.get(profile);
 		List<Map<String, Object>> convertedDataset = new ArrayList<>();
 		for (Map<String, Object> row : dataset) {
@@ -54,15 +60,21 @@ public class Converter implements Keywords {
 			Map<String, String> columns = (Map) row.get(COLUMNS);
 			Map<String, Object> convertedRow = new LinkedHashMap<>();
 			convertedRow.put(TABLE, tableName);
-			convertedRow.put(COLUMNS, convertColumns(profile, profileStructure, tableName, columns));
+			if (!columns.isEmpty()) { // do not increment rowId on empty rows
+				Integer rowId = rowIds.get(tableName);
+				rowId = (null == rowId) ? 1 : rowId + 1;
+				rowIds.put(tableName, rowId);
+				convertedRow.put(COLUMNS, convertColumns(index, profile, profileStructure, tableName, columns, rowId));
+			}
 			convertedDataset.add(Collections.unmodifiableMap(convertedRow));
 		}
 		return Collections.unmodifiableList(convertedDataset);
 	}
 
 	private static Map<String, Object> convertColumns(
+			Map<String, String> index,
 			String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
-			String tableName, Map<String, String> columns) {
+			String tableName, Map<String, String> columns, int rowId) {
 		Map<String, Map<String, Object>> table = profileStructure.get(tableName);
 		Objects.requireNonNull(table, "Structure for table [" + profile + "]." + tableName + " is missing.");
 		Map<String, Object> convertedColumns = new LinkedHashMap<>();
@@ -70,8 +82,10 @@ public class Converter implements Keywords {
 			Map<String, Object> column = table.get(columnName);
 			Objects.requireNonNull(column,
 					"Structure for column [" + profile + "]." + tableName + "." + columnName + " is missing.");
-			Object convertedValue = convertValue(profile, tableName, columnName,
+			Object convertedValue = convertValue(index,
+					profile, tableName, columnName, rowId,
 					(String) column.get(DATA_TYPE), (Integer) column.get(JDBC_DATA_TYPE),
+					(Integer) column.get(SIZE), (Integer) column.get(DECIMAL_DIGITS),
 					columns.get(columnName));
 			convertedColumns.put(columnName, convertedValue);
 		}
@@ -79,7 +93,9 @@ public class Converter implements Keywords {
 	}
 
 	private static Object convertValue(
-			String profile, String tableName, String columnName, String dataType, int jdbcDataType, String value) {
+			Map<String, String> index,
+			String profile, String tableName, String columnName, int rowId,
+			String dataType, int jdbcDataType, Integer columnLength, Integer decimalDigits, String value) {
 		Object result;
 		if (NULL_TOKEN.equals(value)) {
 			result = null;
@@ -90,6 +106,10 @@ public class Converter implements Keywords {
 		} else if (TIMESTAMP_TOKEN.equals(value)) {
 			result = getTokenTimestamp(dataType);
 		} else {
+			if (AUTO_TOKEN.equals(value)) {
+				value = Auto.generate(index, profile, tableName, columnName, rowId,
+						dataType, columnLength, decimalDigits);
+			}
 			result = convertDataType(profile, tableName, columnName, dataType, jdbcDataType, value);
 		}
 		log.trace("Converted [{}]/{}.{} value {} of type {} ({}) to {}.",
