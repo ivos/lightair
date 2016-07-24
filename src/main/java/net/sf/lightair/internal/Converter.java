@@ -1,6 +1,5 @@
-package net.sf.lightair.internal.db;
+package net.sf.lightair.internal;
 
-import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Auto;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;

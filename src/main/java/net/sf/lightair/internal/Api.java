@@ -1,7 +1,6 @@
 package net.sf.lightair.internal;
 
 import net.sf.lightair.internal.auto.Index;
-import net.sf.lightair.internal.db.Converter;
 import net.sf.lightair.internal.db.Delete;
 import net.sf.lightair.internal.db.Execute;
 import net.sf.lightair.internal.db.Insert;

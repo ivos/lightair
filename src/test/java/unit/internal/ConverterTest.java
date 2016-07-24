@@ -1,14 +1,15 @@
-package unit.internal.db;
+package unit.internal;
 
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Index;
-import net.sf.lightair.internal.db.Converter;
+import net.sf.lightair.internal.Converter;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import unit.internal.db.InsertTest;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
