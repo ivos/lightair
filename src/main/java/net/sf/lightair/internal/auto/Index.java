@@ -124,7 +124,8 @@ public class Index implements Keywords {
 			}
 		}
 		indexFile.keySet().stream()
-				.filter(Index::isColumnKey)
+				.filter(Index::isColumnKey) // only process columns from index file
+				.filter(key -> columnIndex.containsKey(getTableKeyFromColumnKey(key))) // skip columns deleted from DB
 				.forEachOrdered(key ->
 						columnIndex.get(getTableKeyFromColumnKey(key))
 								.add(Integer.valueOf(indexFile.get(key))));

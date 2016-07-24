@@ -81,16 +81,24 @@ public class IndexTest implements Keywords {
 	public void updateFile() throws IOException {
 		String existing = "[profile1]/t12=4522\n" +
 				"[profile1]/t12.t12a=494\n" +
+				"[profile1]/t12.deleted_column=991\n" +
+				"[profile1]/deleted_table=9992\n" +
 				"[profile2]/t21=6577\n" +
-				"[profile2]/t21.t21b=958\n";
+				"[profile2]/t21.t21b=958\n"+
+				"[deleted_profile]/some_table=9993\n" +
+				"[deleted_profile]/some_table.some_column=994\n";
 		FileUtils.writeStringToFile(new File(FILE), existing, StandardCharsets.ISO_8859_1);
 
 		Map<String, String> index = Index.readAndUpdate(createProperties(), createStructures());
 
 		String expected = "{[profile1]/t12=4522,\n" +
 				" [profile1]/t12.t12a=494,\n" +
+				" [profile1]/t12.deleted_column=991,\n" +
+				" [profile1]/deleted_table=9992,\n" +
 				" [profile2]/t21=6577,\n" +
 				" [profile2]/t21.t21b=958,\n" +
+				" [deleted_profile]/some_table=9993,\n" +
+				" [deleted_profile]/some_table.some_column=994,\n" +
 				" [profile1]/t11=2078,\n" +
 				" [profile1]/t11.t11a=169,\n" +
 				" [profile1]/t11.t11b=985,\n" +
