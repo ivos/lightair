@@ -1,8 +1,8 @@
 package unit.internal;
 
+import net.sf.lightair.internal.Converter;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Index;
-import net.sf.lightair.internal.Converter;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
@@ -31,6 +31,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class ConverterTest implements Keywords {
 
@@ -45,7 +46,7 @@ public class ConverterTest implements Keywords {
 	}
 
 	@Test
-	public void profiles() throws IOException {
+	public void profiles() {
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> profileStructure;
 		// profile 1 structure
@@ -203,7 +204,7 @@ public class ConverterTest implements Keywords {
 	}
 
 	@Test
-	public void tokenNull() throws IOException {
+	public void tokenNull() {
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
 		profileStructure.put("data_types", InsertTest.createTableStructure(
@@ -234,7 +235,7 @@ public class ConverterTest implements Keywords {
 	}
 
 	@Test
-	public void tokenDate() throws IOException {
+	public void tokenDate() {
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
 		profileStructure.put("data_types", InsertTest.createTableStructure(
@@ -269,7 +270,7 @@ public class ConverterTest implements Keywords {
 	}
 
 	@Test
-	public void tokenTime() throws IOException {
+	public void tokenTime() {
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
 		profileStructure.put("data_types", InsertTest.createTableStructure(
@@ -304,7 +305,7 @@ public class ConverterTest implements Keywords {
 	}
 
 	@Test
-	public void tokenTimestamp() throws IOException {
+	public void tokenTimestamp() {
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
 		profileStructure.put("data_types", InsertTest.createTableStructure(
@@ -355,7 +356,7 @@ public class ConverterTest implements Keywords {
 	}
 
 	@Test
-	public void tokenAuto() throws IOException {
+	public void tokenAuto() {
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> profileStructure;
 		// profile 1
@@ -429,5 +430,112 @@ public class ConverterTest implements Keywords {
 		Map<String, Object> row = (Map) result.get("p1").get(0).get(COLUMNS);
 		assertEquals(Integer.class, row.get("t1i").getClass());
 		assertEquals(String.class, row.get("t1s").getClass());
+	}
+
+	@Test
+	public void duplicateAutoValue_SameTable() {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
+		profileStructure.put("t1", createTableStructure(
+				"t1s", STRING, Types.VARCHAR, 1
+		));
+		structures.put("p1", profileStructure);
+
+		Map<String, String> index = new HashMap<>();
+		index.put(Index.formatTableKey("p1", "t1"), "1001");
+		index.put(Index.formatColumnKey("p1", "t1", "t1s"), "101");
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put("p1", Arrays.asList(
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t1", "t1s", "@auto")
+		));
+
+		try {
+			Converter.convert(structures, index, datasets);
+			fail("Should throw.");
+		} catch (IllegalStateException e) {
+			assertEquals("Duplicate auto value [1] in [p1]/t1.t1s.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void duplicateAutoValue_OtherTable() {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
+		profileStructure.put("t1", createTableStructure(
+				"t1s", STRING, Types.VARCHAR, 1
+		));
+		profileStructure.put("t2", createTableStructure(
+				"t2s", STRING, Types.VARCHAR, 1
+		));
+		structures.put("p1", profileStructure);
+
+		Map<String, String> index = new HashMap<>();
+		index.put(Index.formatTableKey("p1", "t1"), "1001");
+		index.put(Index.formatColumnKey("p1", "t1", "t1s"), "101");
+		index.put(Index.formatTableKey("p1", "t2"), "1002");
+		index.put(Index.formatColumnKey("p1", "t2", "t2s"), "201");
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put("p1", Arrays.asList(
+				InsertTest.createRow("t1", "t1s", "@auto"),
+				InsertTest.createRow("t2", "t2s", "@auto")
+		));
+
+		try {
+			Converter.convert(structures, index, datasets);
+			fail("Should throw.");
+		} catch (IllegalStateException e) {
+			assertEquals("Duplicate auto value [1] in [p1]/t2.t2s.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void duplicateAutoValue_OtherProfile() {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure;
+		// profile 1
+		profileStructure = new HashMap<>();
+		profileStructure.put("t1", createTableStructure(
+				"t1s", STRING, Types.VARCHAR, 1
+		));
+		structures.put("p1", profileStructure);
+		// profile 2
+		profileStructure = new HashMap<>();
+		profileStructure.put("t1", createTableStructure(
+				"t1s", STRING, Types.VARCHAR, 1
+		));
+		structures.put("p2", profileStructure);
+
+		Map<String, String> index = new HashMap<>();
+		index.put(Index.formatTableKey("p1", "t1"), "1001");
+		index.put(Index.formatColumnKey("p1", "t1", "t1s"), "101");
+		index.put(Index.formatTableKey("p2", "t1"), "2001");
+		index.put(Index.formatColumnKey("p2", "t1", "t1s"), "501");
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put("p1", Arrays.asList(
+				InsertTest.createRow("t1", "t1s", "@auto")
+		));
+		datasets.put("p2", Arrays.asList(
+				InsertTest.createRow("t1", "t1s", "@auto")
+		));
+
+		try {
+			Converter.convert(structures, index, datasets);
+			fail("Should throw.");
+		} catch (IllegalStateException e) {
+			assertEquals("Duplicate auto value [1] in [p2]/t1.t1s.", e.getMessage());
+		}
 	}
 }

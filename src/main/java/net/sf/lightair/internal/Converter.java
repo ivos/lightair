@@ -1,6 +1,7 @@
 package net.sf.lightair.internal;
 
 import net.sf.lightair.internal.auto.Auto;
+import net.sf.lightair.internal.auto.Index;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -17,10 +18,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class Converter implements Keywords {
 
@@ -37,17 +40,18 @@ public class Converter implements Keywords {
 			Map<String, String> index,
 			Map<String, List<Map<String, Object>>> datasets) {
 		Map<String, List<Map<String, Object>>> result = new LinkedHashMap<>();
+		Set<String> autoValues = new HashSet<>();
 		for (String profile : datasets.keySet()) {
 			log.debug("Converting values for profile [{}].", profile);
 			Map<String, Map<String, Map<String, Object>>> profileStructure = structures.get(profile);
 			Objects.requireNonNull(profileStructure, "Structure for profile [" + profile + "] is missing.");
-			result.put(profile, convertDataset(index, profile, profileStructure, datasets));
+			result.put(profile, convertDataset(index, autoValues, profile, profileStructure, datasets));
 		}
 		return Collections.unmodifiableMap(result);
 	}
 
 	private static List<Map<String, Object>> convertDataset(
-			Map<String, String> index,
+			Map<String, String> index, Set<String> autoValues,
 			String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
 			Map<String, List<Map<String, Object>>> datasets) {
 		Map<String, Integer> rowIds = new HashMap<>();
@@ -63,7 +67,8 @@ public class Converter implements Keywords {
 				Integer rowId = rowIds.get(tableName);
 				rowId = (null == rowId) ? 1 : rowId + 1;
 				rowIds.put(tableName, rowId);
-				convertedRow.put(COLUMNS, convertColumns(index, profile, profileStructure, tableName, columns, rowId));
+				convertedRow.put(COLUMNS, convertColumns(
+						index, autoValues, profile, profileStructure, tableName, columns, rowId));
 			}
 			convertedDataset.add(Collections.unmodifiableMap(convertedRow));
 		}
@@ -71,7 +76,7 @@ public class Converter implements Keywords {
 	}
 
 	private static Map<String, Object> convertColumns(
-			Map<String, String> index,
+			Map<String, String> index, Set<String> autoValues,
 			String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
 			String tableName, Map<String, String> columns, int rowId) {
 		Map<String, Map<String, Object>> table = profileStructure.get(tableName);
@@ -81,7 +86,7 @@ public class Converter implements Keywords {
 			Map<String, Object> column = table.get(columnName);
 			Objects.requireNonNull(column,
 					"Structure for column [" + profile + "]." + tableName + "." + columnName + " is missing.");
-			Object convertedValue = convertValue(index,
+			Object convertedValue = convertValue(index, autoValues,
 					profile, tableName, columnName, rowId,
 					(String) column.get(DATA_TYPE), (Integer) column.get(JDBC_DATA_TYPE),
 					(Integer) column.get(SIZE), (Integer) column.get(DECIMAL_DIGITS),
@@ -92,7 +97,7 @@ public class Converter implements Keywords {
 	}
 
 	private static Object convertValue(
-			Map<String, String> index,
+			Map<String, String> index, Set<String> autoValues,
 			String profile, String tableName, String columnName, int rowId,
 			String dataType, int jdbcDataType, Integer columnLength, Integer decimalDigits, String value) {
 		Object result;
@@ -108,6 +113,11 @@ public class Converter implements Keywords {
 			if (AUTO_TOKEN.equals(value)) {
 				value = Auto.generate(index, profile, tableName, columnName, rowId,
 						dataType, columnLength, decimalDigits);
+				if (autoValues.contains(value)) {
+					throw new IllegalStateException("Duplicate auto value [" + value + "] in "
+							+ Index.formatColumnKey(profile, tableName, columnName) + ".");
+				}
+				autoValues.add(value);
 			}
 			result = convertDataType(profile, tableName, columnName, dataType, jdbcDataType, value);
 		}
