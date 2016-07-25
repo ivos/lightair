@@ -1,6 +1,7 @@
 package net.sf.lightair.internal.db;
 
 import net.sf.lightair.internal.Keywords;
+import net.sf.lightair.internal.auto.Index;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,8 +64,10 @@ public class Insert implements Keywords {
 			Map<String, Map<String, Map<String, Object>>> profileStructure, Map<String, String> columns) {
 		Map<String, Map<String, Object>> table = profileStructure.get(tableName);
 
-		Objects.requireNonNull(table, "Table " + schema + "." + tableName +
-				" not found in loaded database structure.");
+		if (null == table) {
+			throw new NullPointerException("Table " + Index.formatTableKey(schema, tableName) +
+					" not found in loaded database structure.");
+		}
 
 		List<Map<String, Object>> parameters = new ArrayList<>();
 		for (String columnName : columns.keySet()) {
@@ -78,8 +81,10 @@ public class Insert implements Keywords {
 			Map<String, Map<String, Object>> table, Map<String, String> columns, String columnName) {
 		Map<String, Object> column = table.get(columnName);
 
-		Objects.requireNonNull(column, "Column " + schema + "." + tableName + "." + columnName +
-				" not found in loaded database structure.");
+		if (null == column) {
+			throw new NullPointerException("Column " + Index.formatColumnKey(schema, tableName, columnName) +
+					" not found in loaded database structure.");
+		}
 
 		log.debug("Creating insert parameter for {}.{}.{}.", schema, tableName, columnName);
 		Map<String, Object> parameter = new LinkedHashMap<>();

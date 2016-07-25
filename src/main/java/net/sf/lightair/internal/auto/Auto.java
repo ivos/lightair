@@ -43,8 +43,14 @@ public class Auto implements Keywords {
 		String tableHash = index.get(tableKey);
 		String columnHash = index.get(columnKey);
 
-		Objects.requireNonNull(tableHash, "Table " + tableKey + " is missing in index.");
-		Objects.requireNonNull(columnHash, "Column " + columnKey + " is missing in index.");
+		if (null == tableHash) {
+			throw new NullPointerException("Table " +
+					Index.formatTableKey(profile, tableName) + " is missing in index.");
+		}
+		if (null == columnHash) {
+			throw new NullPointerException("Column " +
+					Index.formatColumnKey(profile, tableName, columnName) + " is missing in index.");
+		}
 
 		String rowHash = StringUtils.leftPad(String.valueOf(rowId), 2, '0');
 		return AUTO_NUMBER_PREFIX + tableHash + columnHash + rowHash;
