@@ -8,6 +8,7 @@ import org.joda.time.LocalTime;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ConfigSupport;
 
 import java.math.BigDecimal;
 
@@ -17,6 +18,7 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 
 	static {
 		connect("jdbc:h2:mem:test", "sa", "");
+		ConfigSupport.restoreConfig();
 	}
 
 	@BeforeClass
@@ -41,11 +43,11 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 				new BigDecimal("0.00"), "", "", "");
 		verifyRow(2, null, null, null, null, null, null, null, null, null,
 				null, null, null, null);
-		verifyRow(3, "char_type 8466903", "varchar_type 8464103", 8463603,
-				DateMidnight.parse("1903-01-09"), LocalTime.parse("23:53:23"),
-				DateTime.parse("2088-12-03T23:06:43.003"), 84684.03, true,
-				8464903L, new BigDecimal("84670.03"), "clob_type 8463203",
-				"YmxvYl90eXBlIDg0NjU0MDM=", "Yjg0NjIzMDM=");
+		verifyRow(3, "char_type 1384656904", "varchar_type 1384684104", 1384653604,
+				DateMidnight.parse("1976-12-12"), LocalTime.parse("08:26:44"),
+				DateTime.parse("1900-01-05T04:53:24.004"), 13846684.04, false,
+				1384644904L, new BigDecimal("13846469.04"), "clob_type 1384603204",
+				"YmxvYl90eXBlIDEzODQ2NzU0MDQ=", "ODQ2NTIzMDQ=");
 	}
 
 }

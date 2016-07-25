@@ -1,18 +1,16 @@
 package it.setup.core;
 
-import java.math.BigDecimal;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import test.support.ConfigSupport;
+
+import java.math.BigDecimal;
 
 @RunWith(LightAir.class)
 @Setup("DataTypesTest.xml")
@@ -35,23 +33,23 @@ public class DataTypesHsqlTest extends DataTypesSetupTestBase {
 
 	@Override
 	protected void verify() {
-		verifyRow(0, "efghijklmnopqrs     ", "abcdefghijklmnopqrstuvxyz",
+		verifyRow(0, "efghijklmnopqrs          ", "abcdefghijklmnopqrstuvxyz",
 				12345678, new DateMidnight(2999, 12, 31), new LocalTime(23, 59,
 						58), new DateTime(2998, 11, 30, 22, 57, 56, 789),
 				8765.4321, true, 9223372036854770000L, new BigDecimal(
 						"12345678901234.56"), "text1", "EjRWeJCrzeI=",
 				"/ty6CYdlQyI=");
-		verifyRow(1, "                    ", "", 0,
+		verifyRow(1, "                         ", "", 0,
 				new DateMidnight(2000, 1, 2), new LocalTime(0, 0, 0),
 				new DateTime(2000, 1, 2, 3, 4, 5, 678), 0., false, 0L,
 				new BigDecimal("0.00"), "", "", "AAAAAAAAAAA=");
 		verifyRow(2, null, null, null, null, null, null, null, null, null,
 				null, null, null, null);
-		verifyRow(3, "char_type 8466903   ", "varchar_type 8464103", 8463603,
-				DateMidnight.parse("1903-01-09"), LocalTime.parse("23:53:23"),
-				DateTime.parse("2088-12-03T23:06:43.003"), 84684.03, true,
-				8464903L, new BigDecimal("84670.03"), "clob_type 8463203",
-				"YmxvYl90eXBlIDg0NjU0MDM=", "Yjg0NjIzMDM=");
+		verifyRow(3, "char_type 1384656904     ", "varchar_type 1384684104", 1384653604,
+				DateMidnight.parse("1976-12-12"), LocalTime.parse("08:26:44"),
+				DateTime.parse("1900-01-05T04:53:24.004"), 13846684.04, false,
+				1384644904L, new BigDecimal("13846469.04"), "clob_type 1384603204",
+				"YmxvYl90eXBlIDEzODQ2NzU0MDQ=", "ODQ2NTIzMDQ=");
 	}
 
 }
