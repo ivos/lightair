@@ -72,10 +72,14 @@ public class Xml implements Keywords {
 		return doc;
 	}
 
+	private static String convert(String name) {
+		return name.toLowerCase();
+	}
+
 	private static Map<String, Object> createRowData(Node row) {
 		Map<String, Object> rowData = new LinkedHashMap<>();
 		String nodeName = row.getNodeName();
-		rowData.put(TABLE, nodeName);
+		rowData.put(TABLE, convert(nodeName));
 		rowData.put(COLUMNS, createAttributeData(row));
 		return Collections.unmodifiableMap(rowData);
 	}
@@ -85,7 +89,7 @@ public class Xml implements Keywords {
 		NamedNodeMap attributes = row.getAttributes();
 		for (int attrIndex = 0; attrIndex < attributes.getLength(); attrIndex++) {
 			Node attribute = attributes.item(attrIndex);
-			attributeData.put(attribute.getNodeName(), attribute.getNodeValue());
+			attributeData.put(convert(attribute.getNodeName()), attribute.getNodeValue());
 		}
 		return Collections.unmodifiableMap(attributeData);
 	}

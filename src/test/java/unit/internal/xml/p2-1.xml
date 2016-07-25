@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
 	<ta ca="cav1" cb="cbv1" cc="ccv1"/>
-	<ta cb="cbv2" cc="ccv2" cd="cdv2"/>
+	<TA CB="cbv2" CC="ccv2" CD="cdv2"/>
 	<tb cc="ccv3" cd="cdv3" ce="cev3"/>
 </dataset>
