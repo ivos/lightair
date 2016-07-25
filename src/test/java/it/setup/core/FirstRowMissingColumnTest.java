@@ -3,11 +3,11 @@ package it.setup.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import net.sf.lightair.internal.Api;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class FirstRowMissingColumnTest extends CommonTestBase {
 		db.execute("create table first_row_missing_column (id int primary key, "
 				+ "first_has_value varchar(50), first_missing varchar(50), "
 				+ "third_only varchar(50))");
-		Api.reInitialize();
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

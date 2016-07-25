@@ -3,11 +3,11 @@ package it.setup.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import net.sf.lightair.internal.Api;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class MultipleTablesTest extends CommonTestBase {
 		db.execute("create table a (id int primary key, a1 varchar(50))");
 		db.execute("create table b (id int primary key, b1 varchar(50))");
 		db.execute("create table c (id int primary key, c1 varchar(50))");
-		Api.reInitialize();
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

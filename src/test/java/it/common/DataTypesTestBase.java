@@ -1,11 +1,11 @@
 package it.common;
 
-import net.sf.lightair.internal.Api;
 import net.sf.lightair.internal.factory.Factory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 
 import javax.sql.DataSource;
@@ -42,7 +42,7 @@ public class DataTypesTestBase {
 				+ "date_type date, time_type time, timestamp_type timestamp, "
 				+ "double_type double, boolean_type boolean, bigint_type bigint, "
 				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(8))");
-		Api.reInitialize();
+		ApiTestSupport.reInitialize();
 	}
 
 	public static void dropTable() {

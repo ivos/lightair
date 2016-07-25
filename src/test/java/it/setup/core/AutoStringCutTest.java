@@ -3,11 +3,11 @@ package it.setup.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import net.sf.lightair.internal.Api;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 import java.util.List;
 import java.util.Map;
@@ -22,10 +22,10 @@ public class AutoStringCutTest extends CommonTestBase {
 
 	@BeforeClass
 	public static void beforeClass() {
-		db.execute("create table cut1prefix (char_type char(16), varchar_type varchar(19))");
-		db.execute("create table leave1prefix (char_type char(8), varchar_type varchar(8))");
+		db.execute("create table cut1prefix (char_type char(19), varchar_type varchar(22))");
+		db.execute("create table leave1prefix (char_type char(11), varchar_type varchar(11))");
 		db.execute("create table leave3number (char_type char(3), varchar_type varchar(3))");
-		Api.reInitialize();
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass
@@ -37,17 +37,15 @@ public class AutoStringCutTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		perform("cut1prefix", "char_type3356900", "varchar_type3354100");
-		perform("leave1prefix", "c9706900", "v9704100");
-		perform("leave3number", "900", "100");
+		perform("cut1prefix", "char_type1733556901", "varchar_type1733584101");
+		perform("leave1prefix", "c1197056901", "v1197084101");
+		perform("leave3number", "901", "101");
 	}
 
 	private void perform(String table, String charValue, String varcharValue) {
 		values = db.queryForList("select * from " + table);
-		assertEquals(table + " char_type", charValue,
-				values.get(0).get("char_type"));
-		assertEquals(table + " varchar_type", varcharValue,
-				values.get(0).get("varchar_type"));
+		assertEquals(table + " char_type", charValue, values.get(0).get("char_type"));
+		assertEquals(table + " varchar_type", varcharValue, values.get(0).get("varchar_type"));
 	}
 
 }

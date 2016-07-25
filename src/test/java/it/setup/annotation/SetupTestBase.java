@@ -1,9 +1,9 @@
 package it.setup.annotation;
 
 import it.common.CommonTestBase;
-import net.sf.lightair.internal.Api;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import test.support.ApiTestSupport;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,7 @@ public class SetupTestBase extends CommonTestBase {
 	@org.testng.annotations.BeforeClass
 	public static void beforeClass() {
 		db.execute("create table person(name varchar(255))");
-		Api.reInitialize();
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

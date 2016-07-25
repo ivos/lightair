@@ -3,7 +3,6 @@ package it.setup.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import net.sf.lightair.internal.Api;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -11,6 +10,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ReplaceTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table a (id int primary key, a1 varchar(50), "
 				+ "date1 date, time1 time, timestamp1 timestamp)");
-		Api.reInitialize();
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass
