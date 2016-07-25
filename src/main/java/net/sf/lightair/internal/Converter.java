@@ -2,6 +2,7 @@ package net.sf.lightair.internal;
 
 import net.sf.lightair.internal.auto.Auto;
 import net.sf.lightair.internal.auto.Index;
+import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -123,12 +124,22 @@ public class Converter implements Keywords {
 					throw new IllegalStateException("Duplicate auto value [" + value + "] in "
 							+ Index.formatColumnKey(profile, tableName, columnName) + ".");
 				}
-				autoValues.add(value);
+				if (!BOOLEAN.equals(dataType)) {
+					autoValues.add(value);
+				}
 			}
 			result = convertDataType(profile, tableName, columnName, dataType, jdbcDataType, value);
 		}
-		log.trace("Converted [{}]/{}.{} value {} of type {} ({}) to {}.",
-				profile, tableName, columnName, value, dataType, jdbcDataType, result);
+		if (log.isTraceEnabled()) {
+			if (null != result && result instanceof byte[]) {
+				log.trace("Converted [{}]/{}.{} value {} of type {} ({}) bytes {}.",
+						profile, tableName, columnName, value, dataType, jdbcDataType,
+						Base64.encodeBase64String((byte[]) result));
+			} else {
+				log.trace("Converted [{}]/{}.{} value {} of type {} ({}) to {}.",
+						profile, tableName, columnName, value, dataType, jdbcDataType, result);
+			}
+		}
 		return result;
 	}
 
@@ -192,12 +203,12 @@ public class Converter implements Keywords {
 			case NSTRING:
 				return value;
 			case BYTES:
-				return value.getBytes();
+				return Base64.decodeBase64(value);
 			case CLOB:
 			case NCLOB:
 				return new StringReader(value);
 			case BLOB:
-				return new ByteArrayInputStream(value.getBytes());
+				return new ByteArrayInputStream(Base64.decodeBase64(value));
 		}
 		log.error("Unknown type {} ({}) on [{}]/{}.{}, passing value {} through as String.",
 				dataType, jdbcDataType, profile, tableName, columnName, value);

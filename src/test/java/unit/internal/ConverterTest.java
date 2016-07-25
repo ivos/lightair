@@ -144,10 +144,10 @@ public class ConverterTest implements Keywords {
 						"timestamp_type", "2016-08-09T21:43:59.321",
 						"string_type", "string value",
 						"nstring_type", "nstring value",
-						"bytes_type", "bytes value",
+						"bytes_type", "Ynl0ZXMgdmFsdWU=",
 						"clob_type", "clob value",
 						"nclob_type", "nclob value",
-						"blob_type", "blob value"
+						"blob_type", "YmxvYiB2YWx1ZQ=="
 				)
 		));
 

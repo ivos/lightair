@@ -1,6 +1,7 @@
 package net.sf.lightair.internal.db;
 
 import net.sf.lightair.internal.Keywords;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +48,14 @@ public class Execute implements Keywords {
 	private static void setParameter(
 			PreparedStatement statement, int index, String type, int sqlDataType, Object value)
 			throws SQLException {
-		log.trace("Setting parameter {} with type {} to value {}.", index, type, value);
+		if (log.isTraceEnabled()) {
+			if (null != value && value instanceof byte[]) {
+				log.trace("Setting parameter {} with type {} to bytes {}.", index, type,
+						Base64.encodeBase64String((byte[]) value));
+			} else {
+				log.trace("Setting parameter {} with type {} to value {}.", index, type, value);
+			}
+		}
 		if (null == value) {
 			statement.setNull(index, sqlDataType);
 			return;
