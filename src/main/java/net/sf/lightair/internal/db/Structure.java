@@ -54,6 +54,7 @@ public class Structure implements Keywords {
 	}
 
 	private static List<String> loadTables(Connection connection, String schema) {
+		log.debug("Loading structure for schema {}.", schema);
 		List<String> data = new ArrayList<>();
 		try {
 			DatabaseMetaData meta = connection.getMetaData();
@@ -69,6 +70,7 @@ public class Structure implements Keywords {
 
 	private static Map<String, Map<String, Object>> loadTableColumns(
 			Connection connection, String schema, String table) {
+		log.debug("Loading structure for table {}/{}.", schema, table);
 		Map<String, Map<String, Object>> data = new LinkedHashMap<>();
 		try {
 			DatabaseMetaData meta = connection.getMetaData();
