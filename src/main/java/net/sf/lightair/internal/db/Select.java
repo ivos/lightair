@@ -40,6 +40,7 @@ public class Select implements Keywords {
 		log.debug("Creating select statement for {}.{}.", schema, tableName);
 
 		Map<String, Object> statement = new LinkedHashMap<>();
+		statement.put(TABLE, tableName);
 		statement.put(SQL, buildSql(schema, tableName, columns.keySet()));
 		statement.put(COLUMNS, columns);
 		return Collections.unmodifiableMap(statement);
