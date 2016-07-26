@@ -47,6 +47,6 @@ public class Select implements Keywords {
 	}
 
 	private static String buildSql(String schema, String tableName, Set<String> columns) {
-		return "select " + String.join(",", columns) + " from " + schema + "." + tableName;
+		return "select " + String.join(", ", columns) + " from " + schema + "." + tableName;
 	}
 }
