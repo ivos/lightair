@@ -28,7 +28,9 @@ public class SelectTest implements Keywords {
 	public static Map<String, Map<String, Object>> createTableStructure(String... columnNames) {
 		Map<String, Map<String, Object>> table = new LinkedHashMap<>();
 		for (String columnName : columnNames) {
-			table.put(columnName, null);
+			Map<String, Object> column = new LinkedHashMap<>();
+			column.put(DATA_TYPE, STRING);
+			table.put(columnName, column);
 		}
 		return table;
 	}
@@ -53,12 +55,18 @@ public class SelectTest implements Keywords {
 				createRow("t2")
 		);
 
-		List<String> data = Select.create(profileProperties, profileStructure, dataset);
+		List<Map<String, Object>> data = Select.create(profileProperties, profileStructure, dataset);
 
-		String expected = "[select t1a,t1b,t1c from s1.t1,\n" +
-				" select t2a,t2b,t2c,t2d from s1.t2,\n" +
-				" select t5a from s1.t5,\n" +
-				" select t3a,t3b,t3c from s1.t3]";
-		assertEquals(expected, data.toString().replace(", select ", ",\n select "));
+		String expected = "[{SQL=select t1a,t1b,t1c from s1.t1,\n" +
+				"  COLUMNS={t1a={DATA_TYPE=STRING}, t1b={DATA_TYPE=STRING}, t1c={DATA_TYPE=STRING}}},\n" +
+				" {SQL=select t2a,t2b,t2c,t2d from s1.t2,\n" +
+				"  COLUMNS={t2a={DATA_TYPE=STRING}, t2b={DATA_TYPE=STRING}, t2c={DATA_TYPE=STRING}, t2d={DATA_TYPE=STRING}}},\n" +
+				" {SQL=select t5a from s1.t5,\n" +
+				"  COLUMNS={t5a={DATA_TYPE=STRING}}},\n" +
+				" {SQL=select t3a,t3b,t3c from s1.t3,\n" +
+				"  COLUMNS={t3a={DATA_TYPE=STRING}, t3b={DATA_TYPE=STRING}, t3c={DATA_TYPE=STRING}}}]";
+		assertEquals(expected, data.toString()
+				.replace(" {SQL=", "\n {SQL=")
+				.replace(", COLUMNS=", ",\n  COLUMNS="));
 	}
 }

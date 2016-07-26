@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -15,7 +16,7 @@ public class Select implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Select.class);
 
-	public static List<String> create(
+	public static List<Map<String, Object>> create(
 			Map<String, String> profileProperties,
 			Map<String, Map<String, Map<String, Object>>> profileStructure,
 			List<Map<String, Object>> dataset) {
@@ -23,7 +24,7 @@ public class Select implements Keywords {
 
 		Objects.requireNonNull(schema, "Database schema is required.");
 
-		List<String> statements = new ArrayList<>();
+		List<Map<String, Object>> statements = new ArrayList<>();
 		dataset.stream()
 				.map(row -> (String) row.get(TABLE))
 				.distinct() // only select from each table once
@@ -32,12 +33,16 @@ public class Select implements Keywords {
 		return Collections.unmodifiableList(statements);
 	}
 
-	private static String createStatement(
+	private static Map<String, Object> createStatement(
 			Map<String, Map<String, Map<String, Object>>> profileStructure,
 			String schema, String tableName) {
 		Map<String, Map<String, Object>> columns = profileStructure.get(tableName);
 		log.debug("Creating select statement for {}.{}.", schema, tableName);
-		return buildSql(schema, tableName, columns.keySet());
+
+		Map<String, Object> statement = new LinkedHashMap<>();
+		statement.put(SQL, buildSql(schema, tableName, columns.keySet()));
+		statement.put(COLUMNS, columns);
+		return Collections.unmodifiableMap(statement);
 	}
 
 	private static String buildSql(String schema, String tableName, Set<String> columns) {
