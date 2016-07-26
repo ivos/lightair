@@ -33,7 +33,9 @@ public class DeleteTest implements Keywords {
 				createRow("t3"),
 				createRow("t2")
 		);
+
 		List<Map<String, Object>> data = Delete.create(profileProperties, profileStructure, dataset);
+
 		String expected = "[{SQL=delete from s1.t3, PARAMETERS=[]},\n" +
 				" {SQL=delete from s1.t2, PARAMETERS=[]},\n" +
 				" {SQL=delete from s1.t1, PARAMETERS=[]}]";

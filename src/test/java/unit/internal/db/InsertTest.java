@@ -68,7 +68,9 @@ public class InsertTest implements Keywords {
 				createRow("t2", "ta", "2", "tc", "cv2", "td", "dv2"),
 				createRow("t2", "ta", "3", "td", "dv3", "te", "ce3", "tf", "cf3")
 		);
+
 		List<Map<String, Object>> data = Insert.create(profileProperties, profileStructure, dataset);
+
 		String expected = "[" +
 				"{SQL=insert into s1.t1(ta,tb,tc) values (?,?,?), PARAMETERS=[{DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, VALUE=1},\n" +
 				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=bv1},\n" +

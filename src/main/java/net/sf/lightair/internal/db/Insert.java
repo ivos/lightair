@@ -34,12 +34,6 @@ public class Insert implements Keywords {
 		return Collections.unmodifiableList(statements);
 	}
 
-	private static String buildSql(String schema, String tableName, Map<String, String> columns) {
-		return "insert into " + schema + "." + tableName +
-				"(" + String.join(",", columns.keySet()) + ")" +
-				" values (" + String.join(",", Collections.nCopies(columns.size(), "?")) + ")";
-	}
-
 	private static Map<String, Object> createStatement(
 			String schema,
 			Map<String, Map<String, Map<String, Object>>> profileStructure,
@@ -57,6 +51,12 @@ public class Insert implements Keywords {
 		statement.put(SQL, buildSql(schema, tableName, columns));
 		statement.put(PARAMETERS, createParameters(schema, tableName, profileStructure, columns));
 		return Collections.unmodifiableMap(statement);
+	}
+
+	private static String buildSql(String schema, String tableName, Map<String, String> columns) {
+		return "insert into " + schema + "." + tableName +
+				"(" + String.join(",", columns.keySet()) + ")" +
+				" values (" + String.join(",", Collections.nCopies(columns.size(), "?")) + ")";
 	}
 
 	private static List<Map<String, Object>> createParameters(
