@@ -2,7 +2,7 @@ package net.sf.lightair.internal;
 
 import net.sf.lightair.internal.auto.Index;
 import net.sf.lightair.internal.db.Delete;
-import net.sf.lightair.internal.db.Execute;
+import net.sf.lightair.internal.db.ExecuteUpdate;
 import net.sf.lightair.internal.db.Insert;
 import net.sf.lightair.internal.db.Structure;
 import org.slf4j.Logger;
@@ -77,7 +77,7 @@ public class Api {
 			statements.addAll(Delete.create(profileProperties, profileStructure, dataset));
 			statements.addAll(Insert.create(profileProperties, profileStructure, dataset));
 
-			Execute.update(connection, statements);
+			ExecuteUpdate.run(connection, statements);
 		}
 		log.debug("Finished setup for files {}.", fileNames);
 	}

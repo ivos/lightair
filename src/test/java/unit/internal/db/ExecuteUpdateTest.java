@@ -1,7 +1,7 @@
 package unit.internal.db;
 
 import net.sf.lightair.internal.Keywords;
-import net.sf.lightair.internal.db.Execute;
+import net.sf.lightair.internal.db.ExecuteUpdate;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -65,7 +65,7 @@ public class ExecuteUpdateTest implements Keywords {
 		count = h2.db.queryForList("select * from s1.t1").size();
 		assertEquals("Before", 3, count);
 
-		Execute.update(h2.getConnection(), createStatements("delete from s1.t1", Collections.emptyList()));
+		ExecuteUpdate.run(h2.getConnection(), createStatements("delete from s1.t1", Collections.emptyList()));
 
 		count = h2.db.queryForList("select * from s1.t1").size();
 		assertEquals("After", 0, count);
@@ -84,7 +84,7 @@ public class ExecuteUpdateTest implements Keywords {
 		data = h2.db.queryForList("select * from t1");
 		assertEquals("Before", "[{T1A=1, T1B=b1, T1C=c1}]", data.toString());
 
-		Execute.update(h2.getConnection(),
+		ExecuteUpdate.run(h2.getConnection(),
 				createStatements(
 						"insert into t1 (t1a, t1b, t1c) values (?,?,?)",
 						createParameters(INTEGER, Types.INTEGER, 2,
@@ -117,7 +117,7 @@ public class ExecuteUpdateTest implements Keywords {
 				"[{T1A=1, T1B=b1, T1C=c1}, {T1A=2, T1B=b2, T1C=null}, {T1A=3, T1B=b3, T1C=c3}]",
 				data.toString());
 
-		Execute.update(h2.getConnection(),
+		ExecuteUpdate.run(h2.getConnection(),
 				createStatements(
 						"delete from t1",
 						Collections.emptyList(),
@@ -175,7 +175,7 @@ public class ExecuteUpdateTest implements Keywords {
 				"nchar_type,nvarchar_type,longnvarchar_type,binary_type,varbinary_type,longvarbinary_type," +
 				"clob_type,nclob_type,blob_type)" +
 				" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		Execute.update(h2.getConnection(),
+		ExecuteUpdate.run(h2.getConnection(),
 				createStatements(
 						sql,
 						createParameters(INTEGER, Types.INTEGER, 1,
@@ -285,7 +285,7 @@ public class ExecuteUpdateTest implements Keywords {
 				"binary_type,varbinary_type,longvarbinary_type," +
 				"clob_type,blob_type)" +
 				" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		Execute.update(h2.getConnection(),
+		ExecuteUpdate.run(h2.getConnection(),
 				createStatements(
 						sql,
 						createParameters(INTEGER, Types.INTEGER, 1,

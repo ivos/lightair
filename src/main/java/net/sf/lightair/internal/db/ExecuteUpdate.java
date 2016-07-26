@@ -17,11 +17,11 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
-public class Execute implements Keywords {
+public class ExecuteUpdate implements Keywords {
 
-	private static final Logger log = LoggerFactory.getLogger(Execute.class);
+	private static final Logger log = LoggerFactory.getLogger(ExecuteUpdate.class);
 
-	public static void update(Connection connection, List<Map<String, Object>> statements) {
+	public static void run(Connection connection, List<Map<String, Object>> statements) {
 		for (Map<String, Object> statement : statements) {
 			String sql = (String) statement.get(SQL);
 			@SuppressWarnings("unchecked")
