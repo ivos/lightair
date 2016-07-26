@@ -35,8 +35,9 @@ public class ExecuteUpdate implements Keywords {
 			PreparedStatement statement = connection.prepareStatement(sql);
 			for (int index = 0; index < parameters.size(); index++) {
 				Map<String, Object> parameter = parameters.get(index);
-				setParameter(statement, index + 1,
-						(String) parameter.get(DATA_TYPE), (int) parameter.get(JDBC_DATA_TYPE), parameter.get(VALUE));
+				String type = (String) parameter.get(DATA_TYPE);
+				int sqlDataType = (int) parameter.get(JDBC_DATA_TYPE);
+				setParameter(statement, index + 1, type, sqlDataType, parameter.get(VALUE));
 			}
 			int updateCount = statement.executeUpdate();
 			log.trace("Updated {} rows executing sql: {}", updateCount, sql);
