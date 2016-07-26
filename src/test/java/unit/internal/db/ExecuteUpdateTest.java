@@ -10,8 +10,8 @@ import test.support.DbTemplate;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -151,7 +151,7 @@ public class ExecuteUpdateTest implements Keywords {
 	}
 
 	@Test
-	public void insertDataTypesH2() throws UnsupportedEncodingException {
+	public void insertDataTypesH2() {
 		DbTemplate h2 = new DbTemplate("jdbc:h2:mem:test", "sa", "");
 		h2.db.execute("create table data_types (id int primary key," +
 				" bit_type bit, boolean_type boolean," +
@@ -199,9 +199,9 @@ public class ExecuteUpdateTest implements Keywords {
 								STRING, Types.NCHAR, "nchar1",
 								STRING, Types.NVARCHAR, "nvarchar1",
 								STRING, Types.LONGNVARCHAR, "longnvarchar1",
-								BYTES, Types.BINARY, "binary1".getBytes("UTF-8"),
-								BYTES, Types.VARBINARY, "varbin1".getBytes("UTF-8"),
-								BYTES, Types.LONGVARBINARY, "longvarbinary1".getBytes("UTF-8"),
+								BYTES, Types.BINARY, "binary1".getBytes(StandardCharsets.UTF_8),
+								BYTES, Types.VARBINARY, "varbin1".getBytes(StandardCharsets.UTF_8),
+								BYTES, Types.LONGVARBINARY, "longvarbinary1".getBytes(StandardCharsets.UTF_8),
 								CLOB, Types.CLOB, new StringReader("clob1"),
 								NCLOB, Types.NCLOB, new StringReader("nclob1"),
 								BLOB, Types.BLOB, new ByteArrayInputStream("blob1".getBytes())
@@ -262,7 +262,7 @@ public class ExecuteUpdateTest implements Keywords {
 	}
 
 	@Test
-	public void insertDataTypesHsql() throws UnsupportedEncodingException {
+	public void insertDataTypesHsql() {
 		DbTemplate h2 = new DbTemplate("jdbc:hsqldb:mem:test", "sa", "");
 		h2.db.execute("create table data_types (id int primary key," +
 				" bit_type bit, boolean_type boolean," +
@@ -306,9 +306,9 @@ public class ExecuteUpdateTest implements Keywords {
 								STRING, Types.CHAR, "char1",
 								STRING, Types.VARCHAR, "varchar1",
 								STRING, Types.LONGVARCHAR, "longvarchar1",
-								BYTES, Types.BINARY, "binary1".getBytes("UTF-8"),
-								BYTES, Types.VARBINARY, "varbin1".getBytes("UTF-8"),
-								BYTES, Types.LONGVARBINARY, "longvarbinary1".getBytes("UTF-8"),
+								BYTES, Types.BINARY, "binary1".getBytes(StandardCharsets.UTF_8),
+								BYTES, Types.VARBINARY, "varbin1".getBytes(StandardCharsets.UTF_8),
+								BYTES, Types.LONGVARBINARY, "longvarbinary1".getBytes(StandardCharsets.UTF_8),
 								CLOB, Types.CLOB, new StringReader("clob1"),
 								BLOB, Types.BLOB, new ByteArrayInputStream("blob1".getBytes())
 						),
