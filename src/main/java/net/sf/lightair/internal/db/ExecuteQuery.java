@@ -41,7 +41,7 @@ public class ExecuteQuery implements Keywords {
 			while (rs.next()) {
 				dataset.add(queryRow(columns, rs));
 			}
-			log.trace("Loaded {} rows executing sql: {}", dataset.size(), sql);
+			log.debug("Loaded {} rows executing sql: {}", dataset.size(), sql);
 		} catch (SQLException e) {
 			throw new RuntimeException("Error executing DB query.", e);
 		}

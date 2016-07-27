@@ -40,7 +40,7 @@ public class ExecuteUpdate implements Keywords {
 				setParameter(statement, index + 1, type, sqlDataType, parameter.get(VALUE));
 			}
 			int updateCount = statement.executeUpdate();
-			log.trace("Updated {} rows executing sql: {}", updateCount, sql);
+			log.debug("Updated {} rows executing sql: {}", updateCount, sql);
 		} catch (SQLException e) {
 			throw new RuntimeException("Error executing DB update.", e);
 		}
