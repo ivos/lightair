@@ -263,8 +263,8 @@ public class ExecuteUpdateTest implements Keywords {
 
 	@Test
 	public void insertDataTypesHsql() {
-		DbTemplate h2 = new DbTemplate("jdbc:hsqldb:mem:test", "sa", "");
-		h2.db.execute("create table data_types (id int primary key," +
+		DbTemplate hsql = new DbTemplate("jdbc:hsqldb:mem:test", "sa", "");
+		hsql.db.execute("create table data_types (id int primary key," +
 				" bit_type bit, boolean_type boolean," +
 				" tinyint_type tinyint, smallint_type smallint, integer_type integer, bigint_type bigint," +
 				" real_type real, float_type double, double_type double," +
@@ -275,7 +275,7 @@ public class ExecuteUpdateTest implements Keywords {
 				" clob_type clob, blob_type blob)");
 
 		List<Map<String, Object>> data;
-		data = h2.db.queryForList("select * from data_types");
+		data = hsql.db.queryForList("select * from data_types");
 		assertEquals("Before", "[]", data.toString());
 
 		String sql = "insert into data_types (id," +
@@ -285,7 +285,7 @@ public class ExecuteUpdateTest implements Keywords {
 				"binary_type,varbinary_type,longvarbinary_type," +
 				"clob_type,blob_type)" +
 				" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		ExecuteUpdate.run(h2.getConnection(),
+		ExecuteUpdate.run(hsql.getConnection(),
 				createStatements(
 						sql,
 						createParameters(INTEGER, Types.INTEGER, 1,
@@ -339,7 +339,7 @@ public class ExecuteUpdateTest implements Keywords {
 						)
 				));
 
-		data = h2.db.queryForList("select * from data_types");
+		data = hsql.db.queryForList("select * from data_types");
 		String expected = "[{ID=1, BIT_TYPE=false, BOOLEAN_TYPE=true," +
 				" TINYINT_TYPE=123, SMALLINT_TYPE=12345, INTEGER_TYPE=1234567890, BIGINT_TYPE=10000000000," +
 				" REAL_TYPE=123456.7890625, FLOAT_TYPE=123456.7890625, DOUBLE_TYPE=123456.7890123," +
@@ -358,6 +358,6 @@ public class ExecuteUpdateTest implements Keywords {
 		assertEquals("After", expected.replace(", ", ",\n "),
 				data.toString().replaceAll("\\[B@[^,}]+", "REPLACED").replace(", ", ",\n "));
 
-		h2.db.execute("drop table data_types");
+		hsql.db.execute("drop table data_types");
 	}
 }
