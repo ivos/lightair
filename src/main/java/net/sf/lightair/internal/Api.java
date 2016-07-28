@@ -2,14 +2,18 @@ package net.sf.lightair.internal;
 
 import net.sf.lightair.internal.auto.Index;
 import net.sf.lightair.internal.db.Delete;
+import net.sf.lightair.internal.db.ExecuteQuery;
 import net.sf.lightair.internal.db.ExecuteUpdate;
 import net.sf.lightair.internal.db.Insert;
+import net.sf.lightair.internal.db.Select;
 import net.sf.lightair.internal.db.Structure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,5 +84,27 @@ public class Api {
 			ExecuteUpdate.run(connection, statements);
 		}
 		log.debug("Finished setup for files {}.", fileNames);
+	}
+
+	public static void verify(Map<String, List<String>> fileNames) {
+		log.info("Performing verify for files {}.", fileNames);
+		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
+		Map<String, List<Map<String, Object>>> expectedDatasets = Converter.convert(structures, index, xmlDatasets);
+
+		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
+		for (String profile : expectedDatasets.keySet()) {
+			Map<String, String> profileProperties = properties.get(profile);
+			Map<String, Map<String, Map<String, Object>>> profileStructure = structures.get(profile);
+			List<Map<String, Object>> expectedDataset = expectedDatasets.get(profile);
+			Connection connection = connections.get(profile);
+
+			List<Map<String, Object>> statements = Select.create(profileProperties, profileStructure, expectedDataset);
+			actualDatasets.put(profile, ExecuteQuery.run(connection, statements));
+		}
+		actualDatasets = Collections.unmodifiableMap(actualDatasets);
+
+		Compare.compare(expectedDatasets, actualDatasets);
+
+		log.debug("Finished verify for files {}.", fileNames);
 	}
 }

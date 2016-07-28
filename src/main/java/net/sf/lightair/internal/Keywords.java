@@ -29,6 +29,13 @@ public interface Keywords {
 	String VALUE = "VALUE";
 	String SQL = "SQL";
 	String PARAMETERS = "PARAMETERS";
+	String COLUMN = "COLUMN";
+	String EXPECTED = "EXPECTED";
+	String ACTUAL = "ACTUAL";
+	String DIFFERENT = "DIFFERENT";
+	String MISSING = "MISSING";
+	String UNEXPECTED = "UNEXPECTED";
+	String DIFFERENCES = "DIFFERENCES";
 
 	String BOOLEAN = "BOOLEAN";
 	String BYTE = "BYTE";
