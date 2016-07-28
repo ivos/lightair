@@ -19,13 +19,13 @@ public class Select implements Keywords {
 	public static List<Map<String, Object>> create(
 			Map<String, String> profileProperties,
 			Map<String, Map<String, Map<String, Object>>> profileStructure,
-			List<Map<String, Object>> dataset) {
+			List<Map<String, Object>> expectedDataset) {
 		String schema = profileProperties.get(DATABASE_SCHEMA);
 
 		Objects.requireNonNull(schema, "Database schema is required.");
 
 		List<Map<String, Object>> statements = new ArrayList<>();
-		dataset.stream()
+		expectedDataset.stream()
 				.map(row -> (String) row.get(TABLE))
 				.distinct() // only select from each table once
 				.forEach(tableName ->

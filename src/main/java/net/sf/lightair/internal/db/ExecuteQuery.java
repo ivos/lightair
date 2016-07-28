@@ -20,32 +20,31 @@ public class ExecuteQuery implements Keywords {
 
 	public static Map<String, List<Map<String, Object>>> run(
 			Connection connection, List<Map<String, Object>> statements) {
-		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		Map<String, List<Map<String, Object>>> dataset = new LinkedHashMap<>();
 		for (Map<String, Object> statement : statements) {
 			String tableName = (String) statement.get(TABLE);
 			String sql = (String) statement.get(SQL);
 			@SuppressWarnings("unchecked")
 			Map<String, Map<String, Object>> columns = (Map<String, Map<String, Object>>) statement.get(COLUMNS);
-			List<Map<String, Object>> dataset = queryStatement(connection, sql, columns);
-			datasets.put(tableName, dataset);
+			dataset.put(tableName, queryStatement(connection, sql, columns));
 		}
-		return Collections.unmodifiableMap(datasets);
+		return Collections.unmodifiableMap(dataset);
 	}
 
 	private static List<Map<String, Object>> queryStatement(
 			Connection connection, String sql, Map<String, Map<String, Object>> columns) {
-		List<Map<String, Object>> dataset = new ArrayList<>();
+		List<Map<String, Object>> rows = new ArrayList<>();
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				dataset.add(queryRow(columns, rs));
+				rows.add(queryRow(columns, rs));
 			}
-			log.debug("Loaded {} rows executing sql: {}", dataset.size(), sql);
+			log.debug("Loaded {} rows executing sql: {}", rows.size(), sql);
 		} catch (SQLException e) {
 			throw new RuntimeException("Error executing DB query.", e);
 		}
-		return Collections.unmodifiableList(dataset);
+		return Collections.unmodifiableList(rows);
 	}
 
 	private static Map<String, Object> queryRow(

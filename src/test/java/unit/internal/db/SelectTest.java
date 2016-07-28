@@ -47,7 +47,7 @@ public class SelectTest implements Keywords {
 		profileStructure.put("t4", createTableStructure("t4a"));
 		profileStructure.put("t5", createTableStructure("t5a"));
 
-		List<Map<String, Object>> dataset = Arrays.asList(
+		List<Map<String, Object>> expectedDataset = Arrays.asList(
 				createRow("t1", "c1", "c2", "c3"),
 				createRow("t2"),
 				createRow("t5"),
@@ -55,7 +55,7 @@ public class SelectTest implements Keywords {
 				createRow("t2")
 		);
 
-		List<Map<String, Object>> data = Select.create(profileProperties, profileStructure, dataset);
+		List<Map<String, Object>> data = Select.create(profileProperties, profileStructure, expectedDataset);
 
 		String expected = "[{TABLE=t1,\n" +
 				"  SQL=select t1a, t1b, t1c from s1.t1,\n" +
