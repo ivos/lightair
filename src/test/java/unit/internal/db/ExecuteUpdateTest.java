@@ -8,8 +8,6 @@ import org.joda.time.LocalTime;
 import org.junit.Test;
 import test.support.DbTemplate;
 
-import java.io.ByteArrayInputStream;
-import java.io.StringReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
@@ -202,9 +200,9 @@ public class ExecuteUpdateTest implements Keywords {
 								BYTES, Types.BINARY, "binary1".getBytes(StandardCharsets.UTF_8),
 								BYTES, Types.VARBINARY, "varbin1".getBytes(StandardCharsets.UTF_8),
 								BYTES, Types.LONGVARBINARY, "longvarbinary1".getBytes(StandardCharsets.UTF_8),
-								CLOB, Types.CLOB, new StringReader("clob1"),
-								NCLOB, Types.NCLOB, new StringReader("nclob1"),
-								BLOB, Types.BLOB, new ByteArrayInputStream("blob1".getBytes())
+								CLOB, Types.CLOB, "clob1",
+								NCLOB, Types.NCLOB, "nclob1",
+								BLOB, Types.BLOB, "blob1".getBytes(StandardCharsets.UTF_8)
 						),
 						sql,
 						createParameters(INTEGER, Types.INTEGER, 2,
@@ -309,8 +307,8 @@ public class ExecuteUpdateTest implements Keywords {
 								BYTES, Types.BINARY, "binary1".getBytes(StandardCharsets.UTF_8),
 								BYTES, Types.VARBINARY, "varbin1".getBytes(StandardCharsets.UTF_8),
 								BYTES, Types.LONGVARBINARY, "longvarbinary1".getBytes(StandardCharsets.UTF_8),
-								CLOB, Types.CLOB, new StringReader("clob1"),
-								BLOB, Types.BLOB, new ByteArrayInputStream("blob1".getBytes())
+								CLOB, Types.CLOB, "clob1",
+								BLOB, Types.BLOB, "blob1".getBytes(StandardCharsets.UTF_8)
 						),
 						sql,
 						createParameters(INTEGER, Types.INTEGER, 2,

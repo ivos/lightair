@@ -5,8 +5,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
@@ -105,13 +105,13 @@ public class ExecuteUpdate implements Keywords {
 				statement.setBytes(index, (byte[]) value);
 				return;
 			case CLOB:
-				statement.setClob(index, (Reader) value);
+				statement.setClob(index, new StringReader((String) value));
 				return;
 			case NCLOB:
-				statement.setNClob(index, (Reader) value);
+				statement.setNClob(index, new StringReader((String) value));
 				return;
 			case BLOB:
-				statement.setBlob(index, (InputStream) value);
+				statement.setBlob(index, new ByteArrayInputStream((byte[]) value));
 				return;
 		}
 		log.error("Unknown type {}, trying to set it as STRING. Parameter index {} with value {}.", type, index, value);
