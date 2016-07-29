@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.sql.Types;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,7 +26,7 @@ public class InsertTest implements Keywords {
 			columns.put(data[i], data[i + 1]);
 		}
 		row.put(COLUMNS, columns);
-		return row;
+		return Collections.unmodifiableMap(row);
 	}
 
 	public static Map<String, Map<String, Object>> createTableStructure(Object... data) {
@@ -39,7 +40,7 @@ public class InsertTest implements Keywords {
 			column.put(JDBC_DATA_TYPE, jdbcDataType);
 			table.put((String) data[i], column);
 		}
-		return table;
+		return Collections.unmodifiableMap(table);
 	}
 
 	@Test

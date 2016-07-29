@@ -1,13 +1,22 @@
 package net.sf.lightair.internal;
 
+import net.sf.lightair.internal.auto.Index;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Compare implements Keywords {
 
@@ -21,12 +30,22 @@ public class Compare implements Keywords {
 
 		Map<String, Map<String, Map<String, List<?>>>> differences = new LinkedHashMap<>();
 		for (String profile : processedExpectedDatasets.keySet()) {
+			log.debug("Comparing profile {}.", profile);
 			Map<String, Map<String, List<?>>> profileDifferences = new LinkedHashMap<>();
 			Map<String, List<Map<String, Object>>> expectedDataset = processedExpectedDatasets.get(profile);
 			Map<String, List<Map<String, Object>>> actualDataset = actualDatasets.get(profile);
+			if (null == actualDataset) {
+				throw new NullPointerException(
+						"Missing profile " + profile + " in actual datasets.");
+			}
 			for (String tableName : expectedDataset.keySet()) {
-				Map<String, List<?>> tableDifferences =
-						compareTable(expectedDataset.get(tableName), actualDataset.get(tableName));
+				log.debug("Comparing table {}.", tableName);
+				List<Map<String, Object>> actualRows = actualDataset.get(tableName);
+				if (null == actualRows) {
+					throw new NullPointerException(
+							"Missing table " + Index.formatTableKey(profile, tableName) + " in actual dataset.");
+				}
+				Map<String, List<?>> tableDifferences = compareTable(expectedDataset.get(tableName), actualRows);
 				profileDifferences.put(tableName, tableDifferences);
 			}
 			differences.put(profile, Collections.unmodifiableMap(profileDifferences));
@@ -67,6 +86,7 @@ public class Compare implements Keywords {
 			}
 			data.put(profile, Collections.unmodifiableMap(processedDataset));
 		}
+		log.trace("Processed expected dataset.");
 		return Collections.unmodifiableMap(data);
 	}
 
@@ -75,23 +95,25 @@ public class Compare implements Keywords {
 			List<Map<String, Object>> actualRows) {
 		List<Map<String, Object>> missing = new ArrayList<>();
 		List<Map<String, Object>> different = new ArrayList<>();
-		List<Map<String, Object>> matched = new ArrayList<>();
+		Set<Integer> matched = new HashSet<>();
 
 		for (Map<String, Object> expectedRow : expectedRows) {
+			log.trace("Trying to match expected row {}.", expectedRow);
 
-			Map<String, Object> matchedRow = null;
+			Integer matchedRowId = null;
 			List<Map<String, Object>> matchedRowDifferences = null;
-			for (Map<String, Object> actualRow : actualRows) {
-				if (matched.contains(actualRow)) { // this actual row has already been matched: skip it
+			for (int actualRowId = 0; actualRowId < actualRows.size(); actualRowId++) {
+				if (matched.contains(actualRowId)) { // this actual row has already been matched: skip it
 					continue;
 				}
+				Map<String, Object> actualRow = actualRows.get(actualRowId);
 				List<Map<String, Object>> rowDifferences = getRowDifferences(expectedRow, actualRow);
-				if (null == matchedRow) { // first actual row, accept as matching for the time being
-					matchedRow = actualRow;
+				if (null == matchedRowId) { // first actual row, accept as matching for the time being
+					matchedRowId = actualRowId;
 					matchedRowDifferences = rowDifferences;
 				} else if (rowDifferences.size() < matchedRowDifferences.size()) {
 					// better match found: replace matched row and its differences
-					matchedRow = actualRow;
+					matchedRowId = actualRowId;
 					matchedRowDifferences = rowDifferences;
 				}
 				if (matchedRowDifferences.isEmpty()) {
@@ -103,7 +125,7 @@ public class Compare implements Keywords {
 				log.debug("Missing row {}.", expectedRow);
 				missing.add(expectedRow);
 			} else { // the expected row matched
-				matched.add(matchedRow);
+				matched.add(matchedRowId);
 				if (!matchedRowDifferences.isEmpty()) { // the expected row is different
 					Map<String, Object> differentRow = new LinkedHashMap<>();
 					differentRow.put(EXPECTED, expectedRow);
@@ -127,11 +149,12 @@ public class Compare implements Keywords {
 	private static List<Map<String, Object>> getUnexpectedRows(
 			List<Map<String, Object>> expectedRows,
 			List<Map<String, Object>> actualRows,
-			List<Map<String, Object>> matched) {
+			Set<Integer> matched) {
 		List<Map<String, Object>> unexpected = new ArrayList<>();
 		if (actualRows.size() > expectedRows.size()) { // there must be unexpected rows
-			for (Map<String, Object> actualRow : actualRows) {
-				if (!matched.contains(actualRow)) { // unmatched actual row: unexpected
+			for (int actualRowId = 0; actualRowId < actualRows.size(); actualRowId++) {
+				if (!matched.contains(actualRowId)) { // unmatched actual row: unexpected
+					Map<String, Object> actualRow = actualRows.get(actualRowId);
 					unexpected.add(actualRow);
 					log.debug("Unexpected row {}.", actualRow);
 				}
@@ -164,6 +187,39 @@ public class Compare implements Keywords {
 	}
 
 	private static boolean valueMatches(Object expectedValue, Object actualValue) {
+		if (null == expectedValue && null == actualValue) {
+			return true;
+		}
+		if (null == expectedValue || null == actualValue) {
+			return false;
+		}
+		if (expectedValue instanceof byte[] && actualValue instanceof byte[]) {
+			return Arrays.equals((byte[]) expectedValue, (byte[]) actualValue);
+		}
+		if (expectedValue instanceof Reader && actualValue instanceof Reader) {
+			expectedValue = readReader((Reader) expectedValue);
+			actualValue = readReader((Reader) actualValue);
+		}
+		if (expectedValue instanceof InputStream && actualValue instanceof InputStream) {
+			expectedValue = readInputStream((InputStream) expectedValue);
+			actualValue = readInputStream((InputStream) actualValue);
+		}
 		return expectedValue.equals(actualValue);
+	}
+
+	private static Object readReader(Reader reader) {
+		try {
+			return IOUtils.toString(reader);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot read value from " + reader);
+		}
+	}
+
+	private static Object readInputStream(InputStream inputStream) {
+		try {
+			return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot read value from " + inputStream);
+		}
 	}
 }
