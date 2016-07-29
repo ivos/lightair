@@ -1,14 +1,9 @@
 package net.sf.lightair.internal;
 
 import net.sf.lightair.internal.auto.Index;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,6 +11,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class Compare implements Keywords {
@@ -187,39 +183,9 @@ public class Compare implements Keywords {
 	}
 
 	private static boolean valueMatches(Object expectedValue, Object actualValue) {
-		if (null == expectedValue && null == actualValue) {
-			return true;
-		}
-		if (null == expectedValue || null == actualValue) {
-			return false;
-		}
 		if (expectedValue instanceof byte[] && actualValue instanceof byte[]) {
 			return Arrays.equals((byte[]) expectedValue, (byte[]) actualValue);
 		}
-		if (expectedValue instanceof Reader && actualValue instanceof Reader) {
-			expectedValue = readReader((Reader) expectedValue);
-			actualValue = readReader((Reader) actualValue);
-		}
-		if (expectedValue instanceof InputStream && actualValue instanceof InputStream) {
-			expectedValue = readInputStream((InputStream) expectedValue);
-			actualValue = readInputStream((InputStream) actualValue);
-		}
-		return expectedValue.equals(actualValue);
-	}
-
-	private static Object readReader(Reader reader) {
-		try {
-			return IOUtils.toString(reader);
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot read value from " + reader);
-		}
-	}
-
-	private static Object readInputStream(InputStream inputStream) {
-		try {
-			return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot read value from " + inputStream);
-		}
+		return Objects.equals(expectedValue, actualValue);
 	}
 }

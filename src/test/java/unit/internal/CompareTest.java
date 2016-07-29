@@ -5,8 +5,6 @@ import net.sf.lightair.internal.Keywords;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.StringReader;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Arrays;
@@ -222,7 +220,9 @@ public class CompareTest implements Keywords {
 		expectedDatasets.put("p1", Arrays.asList(
 				createRowExpected("t1", "a", "a1", "b", null),
 				createRowExpected("t1", "a", "a2", "b", "b2"),
-				createRowExpected("t1", "a", "a3", "b", null)
+				createRowExpected("t1", "a", "a3", "b", null),
+				createRowExpected("t1", "a", "a4", "b", null),
+				createRowExpected("t1", "a", "a5", "b", "bytes5".getBytes())
 		));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
@@ -231,7 +231,9 @@ public class CompareTest implements Keywords {
 						"t1", Arrays.asList(
 								createRow("a", "a1", "b", "b1"),
 								createRow("a", "a2", "b", null),
-								createRow("a", "a3", "b", null)
+								createRow("a", "a3", "b", null),
+								createRow("a", "a4", "b", "bytes4".getBytes()),
+								createRow("a", "a5", "b", null)
 						)
 				));
 
@@ -241,11 +243,16 @@ public class CompareTest implements Keywords {
 				" DIFFERENT=[{EXPECTED={a=a1, b=null},\n" +
 				" DIFFERENCES=[{COLUMN=b, EXPECTED=null, ACTUAL=b1}]},\n" +
 				" {EXPECTED={a=a2, b=b2},\n" +
-				" DIFFERENCES=[{COLUMN=b, EXPECTED=b2, ACTUAL=null}]}],\n" +
+				" DIFFERENCES=[{COLUMN=b, EXPECTED=b2, ACTUAL=null}]},\n" +
+				" {EXPECTED={a=a4, b=null},\n" +
+				" DIFFERENCES=[{COLUMN=b, EXPECTED=null, ACTUAL=BYTEARRAY}]},\n" +
+				" {EXPECTED={a=a5, b=BYTEARRAY},\n" +
+				" DIFFERENCES=[{COLUMN=b, EXPECTED=BYTEARRAY, ACTUAL=null}]}],\n" +
 				" UNEXPECTED=[]}}}";
 		assertEquals(expected, result.toString()
 				.replace("}, ", "},\n ")
 				.replace("], ", "],\n ")
+				.replaceAll("\\[B@[^,}]+", "BYTEARRAY")
 		);
 	}
 
@@ -260,8 +267,8 @@ public class CompareTest implements Keywords {
 						"time", new Date(DateTime.parse("1970-01-01T12:34:56").getMillis()),
 						"timestamp", new Date(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 						"bytes", "bytes1".getBytes(),
-						"clob", new StringReader("clob1"),
-						"blob", new ByteArrayInputStream("blob1".getBytes())
+						"clob", "clob1",
+						"blob", "blob1".getBytes()
 				)
 		));
 
@@ -276,8 +283,8 @@ public class CompareTest implements Keywords {
 										"time", new Date(DateTime.parse("1970-01-01T12:34:56").getMillis()),
 										"timestamp", new Date(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 										"bytes", "bytes1".getBytes(),
-										"clob", new StringReader("clob1"),
-										"blob", new ByteArrayInputStream("blob1".getBytes()))
+										"clob", "clob1",
+										"blob", "blob1".getBytes())
 						)
 				));
 
@@ -303,8 +310,8 @@ public class CompareTest implements Keywords {
 						"time", new Date(DateTime.parse("1970-01-01T12:34:56").getMillis()),
 						"timestamp", new Date(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 						"bytes", "bytes1".getBytes(),
-						"clob", new StringReader("clob1"),
-						"blob", new ByteArrayInputStream("blob1".getBytes())
+						"clob", "clob1",
+						"blob", "blob1".getBytes()
 				)
 		));
 
@@ -319,15 +326,15 @@ public class CompareTest implements Keywords {
 										"time", new Date(DateTime.parse("1970-01-01T12:34:57").getMillis()),
 										"timestamp", new Date(DateTime.parse("2015-12-31T12:34:56.124").getMillis()),
 										"bytes", "bytes2".getBytes(),
-										"clob", new StringReader("clob2"),
-										"blob", new ByteArrayInputStream("blob2".getBytes()))
+										"clob", "clob2",
+										"blob", "blob2".getBytes())
 						)
 				));
 
 		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
 
 		String expected = "{p1={t1={MISSING=[],\n" +
-				" DIFFERENT=[{EXPECTED={booltrue=true, boolfalse=false, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=1970-01-01, timestamp=2015-12-31, bytes=BYTEARRAY, clob=java.io.StringReader, blob=java.io.ByteArrayInputStream},\n" +
+				" DIFFERENT=[{EXPECTED={booltrue=true, boolfalse=false, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=1970-01-01, timestamp=2015-12-31, bytes=BYTEARRAY, clob=clob1, blob=BYTEARRAY},\n" +
 				" DIFFERENCES=[{COLUMN=booltrue, EXPECTED=true, ACTUAL=false},\n" +
 				" {COLUMN=boolfalse, EXPECTED=false, ACTUAL=true},\n" +
 				" {COLUMN=byte, EXPECTED=123, ACTUAL=124},\n" +
@@ -341,15 +348,13 @@ public class CompareTest implements Keywords {
 				" {COLUMN=time, EXPECTED=1970-01-01, ACTUAL=1970-01-01},\n" +
 				" {COLUMN=timestamp, EXPECTED=2015-12-31, ACTUAL=2015-12-31},\n" +
 				" {COLUMN=bytes, EXPECTED=BYTEARRAY, ACTUAL=BYTEARRAY},\n" +
-				" {COLUMN=clob, EXPECTED=java.io.StringReader, ACTUAL=java.io.StringReader},\n" +
-				" {COLUMN=blob, EXPECTED=java.io.ByteArrayInputStream, ACTUAL=java.io.ByteArrayInputStream}]}],\n" +
+				" {COLUMN=clob, EXPECTED=clob1, ACTUAL=clob2},\n" +
+				" {COLUMN=blob, EXPECTED=BYTEARRAY, ACTUAL=BYTEARRAY}]}],\n" +
 				" UNEXPECTED=[]}}}";
 		assertEquals(expected, result.toString()
 				.replace("}, ", "},\n ")
 				.replace("], ", "],\n ")
 				.replaceAll("\\[B@[^,}]+", "BYTEARRAY")
-				.replaceAll("java.io.StringReader@[^,}]+", "java.io.StringReader")
-				.replaceAll("java.io.ByteArrayInputStream@[^,}]+", "java.io.ByteArrayInputStream")
 		);
 	}
 }
