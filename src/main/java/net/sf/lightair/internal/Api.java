@@ -69,7 +69,7 @@ public class Api {
 	public static void setup(Map<String, List<String>> fileNames) {
 		log.info("Performing setup for files {}.", fileNames);
 		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
-		Map<String, List<Map<String, Object>>> datasets = Converter.convert(structures, index, xmlDatasets);
+		Map<String, List<Map<String, Object>>> datasets = Convert.convert(structures, index, xmlDatasets);
 
 		for (String profile : datasets.keySet()) {
 			Map<String, String> profileProperties = properties.get(profile);
@@ -89,7 +89,7 @@ public class Api {
 	public static void verify(Map<String, List<String>> fileNames) {
 		log.info("Performing verify for files {}.", fileNames);
 		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
-		Map<String, List<Map<String, Object>>> expectedDatasets = Converter.convert(structures, index, xmlDatasets);
+		Map<String, List<Map<String, Object>>> expectedDatasets = Convert.convert(structures, index, xmlDatasets);
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
 		for (String profile : expectedDatasets.keySet()) {
@@ -103,7 +103,7 @@ public class Api {
 		}
 		actualDatasets = Collections.unmodifiableMap(actualDatasets);
 
-		Compare.compare(expectedDatasets, actualDatasets);
+		Map<String, Map<String, Map<String, List<?>>>> differences = Compare.compare(expectedDatasets, actualDatasets);
 
 		log.debug("Finished verify for files {}.", fileNames);
 	}

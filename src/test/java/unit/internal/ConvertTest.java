@@ -1,6 +1,6 @@
 package unit.internal;
 
-import net.sf.lightair.internal.Converter;
+import net.sf.lightair.internal.Convert;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Index;
 import org.joda.time.DateTime;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class ConverterTest implements Keywords {
+public class ConvertTest implements Keywords {
 
 	@Before
 	public void setUp() {
@@ -78,7 +78,7 @@ public class ConverterTest implements Keywords {
 				InsertTest.createRow("t21", "t21a", "1232102", "t21b", "v21b02")
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
 
 		String expected = "{profile1=[{TABLE=t11,\n" +
 				" COLUMNS={t11a=1231101,\n" +
@@ -146,7 +146,7 @@ public class ConverterTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={boolean_type=true,\n" +
@@ -212,7 +212,7 @@ public class ConverterTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={integer_type=null,\n" +
@@ -245,7 +245,7 @@ public class ConverterTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={date_type=2015-12-31,\n" +
@@ -280,7 +280,7 @@ public class ConverterTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={date_type=1970-01-01,\n" +
@@ -315,7 +315,7 @@ public class ConverterTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={date_type=2015-12-31,\n" +
@@ -398,7 +398,7 @@ public class ConverterTest implements Keywords {
 				InsertTest.createRow("t1", "t1i", "@auto", "t1s", "@auto")
 		));
 
-		Map<String, List<Map<String, Object>>> result = Converter.convert(structures, index, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, index, datasets);
 
 		String expected = "{p1=[\n" +
 				" {TABLE=t1, COLUMNS={t1i=1100110101, t1s=t1s 1100110201}}, \n" +
@@ -452,7 +452,7 @@ public class ConverterTest implements Keywords {
 		));
 
 		try {
-			Converter.convert(structures, index, datasets);
+			Convert.convert(structures, index, datasets);
 			fail("Should throw.");
 		} catch (IllegalStateException e) {
 			assertEquals("Duplicate auto value [1] in [p1]/t1.t1s.", e.getMessage());
@@ -484,7 +484,7 @@ public class ConverterTest implements Keywords {
 		));
 
 		try {
-			Converter.convert(structures, index, datasets);
+			Convert.convert(structures, index, datasets);
 			fail("Should throw.");
 		} catch (IllegalStateException e) {
 			assertEquals("Duplicate auto value [1] in [p1]/t2.t2s.", e.getMessage());
@@ -523,7 +523,7 @@ public class ConverterTest implements Keywords {
 		));
 
 		try {
-			Converter.convert(structures, index, datasets);
+			Convert.convert(structures, index, datasets);
 			fail("Should throw.");
 		} catch (IllegalStateException e) {
 			assertEquals("Duplicate auto value [1] in [p2]/t1.t1s.", e.getMessage());

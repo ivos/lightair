@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Converter implements Keywords {
+public class Convert implements Keywords {
 
-	private static final Logger log = LoggerFactory.getLogger(Converter.class);
+	private static final Logger log = LoggerFactory.getLogger(Convert.class);
 
 	private static final String NULL_TOKEN = "@null";
 	private static final String DATE_TOKEN = "@date";
