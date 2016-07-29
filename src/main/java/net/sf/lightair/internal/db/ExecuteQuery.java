@@ -6,6 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,14 +61,16 @@ public class ExecuteQuery implements Keywords {
 			String type = (String) column.get(DATA_TYPE);
 			int sqlDataType = (int) column.get(JDBC_DATA_TYPE);
 			Object value = getValue(rs, columnName, type, sqlDataType);
+			if (rs.wasNull()) {
+				value = null;
+			}
 			row.put(columnName, value);
 		}
 		return Collections.unmodifiableMap(row);
 	}
 
-	private static Object getValue(ResultSet rs, String columnName, String type, int sqlDataType)
-			throws SQLException {
-		log.trace("Getting value for column {} with type {}.", columnName, type);
+	private static Object getValue(ResultSet rs, String columnName, String type, int sqlDataType) throws SQLException {
+		log.trace("Getting value for column {} with type {} ({}).", columnName, type, sqlDataType);
 		switch (type) {
 			case BOOLEAN:
 				return rs.getBoolean(columnName);
@@ -95,25 +101,43 @@ public class ExecuteQuery implements Keywords {
 			case BYTES:
 				return rs.getBytes(columnName);
 			case CLOB:
-				try {
-					return IOUtils.toString(rs.getClob(columnName).getCharacterStream());
-				} catch (IOException e) {
-					throw new RuntimeException("Error reading CLOB column " + columnName + " from database.", e);
-				}
+				return readClob(columnName, type, rs.getClob(columnName));
 			case NCLOB:
-				try {
-					return IOUtils.toString(rs.getNClob(columnName).getCharacterStream());
-				} catch (IOException e) {
-					throw new RuntimeException("Error reading NCLOB column " + columnName + " from database.", e);
-				}
+				return readClob(columnName, type, rs.getNClob(columnName));
 			case BLOB:
-				try {
-					return IOUtils.toByteArray(rs.getBlob(columnName).getBinaryStream());
-				} catch (IOException e) {
-					throw new RuntimeException("Error reading BLOB column " + columnName + " from database.", e);
-				}
+				return readBlob(columnName, type, rs.getBlob(columnName));
 		}
 		log.error("Unknown type {} on column {}, trying to get it as Object.", type, columnName);
 		return rs.getObject(columnName);
+	}
+
+	public static Object readClob(String columnName, String type, Clob clob) throws SQLException {
+		if (null == clob) {
+			return null;
+		}
+		Reader reader = clob.getCharacterStream();
+		if (null == reader) {
+			return null;
+		}
+		try {
+			return IOUtils.toString(reader);
+		} catch (IOException e) {
+			throw new RuntimeException("Error reading " + type + " column " + columnName + " from database.", e);
+		}
+	}
+
+	public static Object readBlob(String columnName, String type, Blob blob) throws SQLException {
+		if (null == blob) {
+			return null;
+		}
+		InputStream inputStream = blob.getBinaryStream();
+		if (null == inputStream) {
+			return null;
+		}
+		try {
+			return IOUtils.toByteArray(inputStream);
+		} catch (IOException e) {
+			throw new RuntimeException("Error reading " + type + " column " + columnName + " from database.", e);
+		}
 	}
 }
