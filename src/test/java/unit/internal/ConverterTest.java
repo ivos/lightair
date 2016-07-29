@@ -3,7 +3,6 @@ package unit.internal;
 import net.sf.lightair.internal.Converter;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Index;
-import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
 import org.junit.After;
@@ -11,11 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import unit.internal.db.InsertTest;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
@@ -168,14 +163,12 @@ public class ConverterTest implements Keywords {
 				" string_type=string value,\n" +
 				" nstring_type=nstring value,\n" +
 				" bytes_type=REPLACED,\n" +
-				" clob_type=REPLACED,\n" +
-				" nclob_type=REPLACED,\n" +
+				" clob_type=clob value,\n" +
+				" nclob_type=nclob value,\n" +
 				" blob_type=REPLACED}}]}";
 		assertEquals(expected, result.toString()
 				.replace(", ", ",\n ")
-				.replaceAll("\\[B@[^,}]+", "REPLACED")
-				.replaceAll("java.io.StringReader@[^,}]+", "REPLACED")
-				.replaceAll("java.io.ByteArrayInputStream@[^,}]+", "REPLACED"));
+				.replaceAll("\\[B@[^,}]+", "REPLACED"));
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
@@ -193,14 +186,12 @@ public class ConverterTest implements Keywords {
 		assertEquals(String.class, dataTypes.get("string_type").getClass());
 		assertEquals(String.class, dataTypes.get("nstring_type").getClass());
 		assertEquals(byte[].class, dataTypes.get("bytes_type").getClass());
-		assertEquals(StringReader.class, dataTypes.get("clob_type").getClass());
-		assertEquals(StringReader.class, dataTypes.get("nclob_type").getClass());
-		assertEquals(ByteArrayInputStream.class, dataTypes.get("blob_type").getClass());
+		assertEquals(String.class, dataTypes.get("clob_type").getClass());
+		assertEquals(String.class, dataTypes.get("nclob_type").getClass());
+		assertEquals(byte[].class, dataTypes.get("blob_type").getClass());
 
 		assertEquals("bytes value", new String((byte[]) dataTypes.get("bytes_type"), StandardCharsets.UTF_8));
-		assertEquals("clob value", IOUtils.toString((Reader) dataTypes.get("clob_type")));
-		assertEquals("nclob value", IOUtils.toString((Reader) dataTypes.get("nclob_type")));
-		assertEquals("blob value", IOUtils.toString((InputStream) dataTypes.get("blob_type")));
+		assertEquals("blob value", new String((byte[]) dataTypes.get("blob_type"), StandardCharsets.UTF_8));
 	}
 
 	@Test

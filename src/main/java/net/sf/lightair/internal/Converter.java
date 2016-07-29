@@ -10,8 +10,6 @@ import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.StringReader;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
@@ -201,14 +199,12 @@ public class Converter implements Keywords {
 				return new Timestamp(DateTime.parse(value).getMillis());
 			case STRING:
 			case NSTRING:
-				return value;
-			case BYTES:
-				return Base64.decodeBase64(value);
 			case CLOB:
 			case NCLOB:
-				return new StringReader(value);
+				return value;
+			case BYTES:
 			case BLOB:
-				return new ByteArrayInputStream(Base64.decodeBase64(value));
+				return Base64.decodeBase64(value);
 		}
 		log.error("Unknown type {} ({}) on [{}]/{}.{}, passing value {} through as String.",
 				dataType, jdbcDataType, profile, tableName, columnName, value);
