@@ -1,9 +1,11 @@
 package net.sf.lightair.internal.db;
 
 import net.sf.lightair.internal.Keywords;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -93,11 +95,23 @@ public class ExecuteQuery implements Keywords {
 			case BYTES:
 				return rs.getBytes(columnName);
 			case CLOB:
-				return rs.getClob(columnName).getCharacterStream();
+				try {
+					return IOUtils.toString(rs.getClob(columnName).getCharacterStream());
+				} catch (IOException e) {
+					throw new RuntimeException("Error reading CLOB column " + columnName + " from database.", e);
+				}
 			case NCLOB:
-				return rs.getNClob(columnName).getCharacterStream();
+				try {
+					return IOUtils.toString(rs.getNClob(columnName).getCharacterStream());
+				} catch (IOException e) {
+					throw new RuntimeException("Error reading NCLOB column " + columnName + " from database.", e);
+				}
 			case BLOB:
-				return rs.getBlob(columnName).getBinaryStream();
+				try {
+					return IOUtils.toByteArray(rs.getBlob(columnName).getBinaryStream());
+				} catch (IOException e) {
+					throw new RuntimeException("Error reading BLOB column " + columnName + " from database.", e);
+				}
 		}
 		log.error("Unknown type {} on column {}, trying to get it as Object.", type, columnName);
 		return rs.getObject(columnName);

@@ -4,14 +4,11 @@ import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.db.ExecuteQuery;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import test.support.DbTemplate;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -193,13 +190,11 @@ public class ExecuteQueryTest implements Keywords {
 				"binary_type=REPLACED,\n" +
 				"varbinary_type=REPLACED,\n" +
 				"longvarbinary_type=REPLACED,\n" +
-				"clob_type=java.io.BufferedReader,\n" +
-				"nclob_type=java.io.BufferedReader,\n" +
-				"blob_type=java.io.ByteArrayInputStream}]}";
+				"clob_type=clob1,\n" +
+				"nclob_type=nclob1,\n" +
+				"blob_type=REPLACED}]}";
 		assertEquals(expected, data.toString()
 				.replaceAll("\\[B@[^,}]+", "REPLACED")
-				.replaceAll("Reader@[^,}]+", "Reader")
-				.replaceAll("InputStream@[^,}]+", "InputStream")
 				.replace(", ", ",\n"));
 
 		Map<String, Object> row = data.get("data_types").get(0);
@@ -229,9 +224,7 @@ public class ExecuteQueryTest implements Keywords {
 		assertEquals("varbin1", new String((byte[]) row.get("varbinary_type")));
 		assertEquals(byte[].class, row.get("longvarbinary_type").getClass());
 		assertEquals("longvarbinary1", new String((byte[]) row.get("longvarbinary_type")));
-		assertEquals("clob1", IOUtils.toString((Reader) row.get("clob_type")));
-		assertEquals("nclob1", IOUtils.toString((Reader) row.get("nclob_type")));
-		assertEquals("blob1", IOUtils.toString((InputStream) row.get("blob_type")));
+		assertEquals("blob1", new String((byte[]) row.get("blob_type")));
 	}
 
 	@Test
@@ -317,12 +310,10 @@ public class ExecuteQueryTest implements Keywords {
 				"binary_type=REPLACED,\n" +
 				"varbinary_type=REPLACED,\n" +
 				"longvarbinary_type=REPLACED,\n" +
-				"clob_type=org.hsqldb.types.ClobInputStream,\n" +
-				"blob_type=org.hsqldb.types.BlobInputStream}]}";
+				"clob_type=clob1,\n" +
+				"blob_type=REPLACED}]}";
 		assertEquals(expected, data.toString()
 				.replaceAll("\\[B@[^,}]+", "REPLACED")
-				.replaceAll("Reader@[^,}]+", "Reader")
-				.replaceAll("InputStream@[^,}]+", "InputStream")
 				.replace(", ", ",\n"));
 
 		Map<String, Object> row = data.get("data_types").get(0);
@@ -351,8 +342,6 @@ public class ExecuteQueryTest implements Keywords {
 		assertEquals("varbin1", new String((byte[]) row.get("varbinary_type")));
 		assertEquals(byte[].class, row.get("longvarbinary_type").getClass());
 		assertEquals("longvarbinary1", new String((byte[]) row.get("longvarbinary_type")));
-		assertEquals("clob1", IOUtils.toString((Reader) row.get("clob_type")));
-		assertArrayEquals(Hex.decodeHex("1234567890abcdef".toCharArray()),
-				IOUtils.toByteArray((InputStream) row.get("blob_type")));
+		assertArrayEquals(Hex.decodeHex("1234567890abcdef".toCharArray()), (byte[]) row.get("blob_type"));
 	}
 }
