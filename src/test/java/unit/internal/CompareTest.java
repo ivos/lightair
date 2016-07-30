@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -30,7 +32,7 @@ public class CompareTest implements Keywords {
 		return Collections.unmodifiableMap(row);
 	}
 
-	private static Map<String, Object> createRow(Object... data) {
+	public static Map<String, Object> createRow(Object... data) {
 		assertTrue("Data in pairs", data.length % 2 == 0);
 		Map<String, Object> row = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i = i + 2) {
@@ -264,8 +266,8 @@ public class CompareTest implements Keywords {
 						"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 						"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
 						"date", new Date(DateTime.parse("2015-12-31").getMillis()),
-						"time", new Date(DateTime.parse("1970-01-01T12:34:56").getMillis()),
-						"timestamp", new Date(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
+						"time", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
+						"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 						"bytes", "bytes1".getBytes(),
 						"clob", "clob1",
 						"blob", "blob1".getBytes()
@@ -280,8 +282,8 @@ public class CompareTest implements Keywords {
 										"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 										"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
 										"date", new Date(DateTime.parse("2015-12-31").getMillis()),
-										"time", new Date(DateTime.parse("1970-01-01T12:34:56").getMillis()),
-										"timestamp", new Date(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
+										"time", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
+										"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 										"bytes", "bytes1".getBytes(),
 										"clob", "clob1",
 										"blob", "blob1".getBytes())
@@ -307,8 +309,8 @@ public class CompareTest implements Keywords {
 						"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 						"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
 						"date", new Date(DateTime.parse("2015-12-31").getMillis()),
-						"time", new Date(DateTime.parse("1970-01-01T12:34:56").getMillis()),
-						"timestamp", new Date(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
+						"time", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
+						"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 						"bytes", "bytes1".getBytes(),
 						"clob", "clob1",
 						"blob", "blob1".getBytes()
@@ -323,8 +325,8 @@ public class CompareTest implements Keywords {
 										"byte", (byte) 124, "short", (short) 12346, "integer", 1234567891, "long", 12345678902L,
 										"float", (float) 123.46, "double", 123.4568, "bigdecimal", new BigDecimal("123456.781"),
 										"date", new Date(DateTime.parse("2015-12-30").getMillis()),
-										"time", new Date(DateTime.parse("1970-01-01T12:34:57").getMillis()),
-										"timestamp", new Date(DateTime.parse("2015-12-31T12:34:56.124").getMillis()),
+										"time", new Time(DateTime.parse("1970-01-01T12:34:57").getMillis()),
+										"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.124").getMillis()),
 										"bytes", "bytes2".getBytes(),
 										"clob", "clob2",
 										"blob", "blob2".getBytes())
@@ -334,7 +336,7 @@ public class CompareTest implements Keywords {
 		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
 
 		String expected = "{p1={t1={MISSING=[],\n" +
-				" DIFFERENT=[{EXPECTED={booltrue=true, boolfalse=false, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=1970-01-01, timestamp=2015-12-31, bytes=BYTEARRAY, clob=clob1, blob=BYTEARRAY},\n" +
+				" DIFFERENT=[{EXPECTED={booltrue=true, boolfalse=false, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=12:34:56, timestamp=2015-12-31 12:34:56.123, bytes=BYTEARRAY, clob=clob1, blob=BYTEARRAY},\n" +
 				" DIFFERENCES=[{COLUMN=booltrue, EXPECTED=true, ACTUAL=false},\n" +
 				" {COLUMN=boolfalse, EXPECTED=false, ACTUAL=true},\n" +
 				" {COLUMN=byte, EXPECTED=123, ACTUAL=124},\n" +
@@ -345,8 +347,8 @@ public class CompareTest implements Keywords {
 				" {COLUMN=double, EXPECTED=123.4567, ACTUAL=123.4568},\n" +
 				" {COLUMN=bigdecimal, EXPECTED=123456.789, ACTUAL=123456.781},\n" +
 				" {COLUMN=date, EXPECTED=2015-12-31, ACTUAL=2015-12-30},\n" +
-				" {COLUMN=time, EXPECTED=1970-01-01, ACTUAL=1970-01-01},\n" +
-				" {COLUMN=timestamp, EXPECTED=2015-12-31, ACTUAL=2015-12-31},\n" +
+				" {COLUMN=time, EXPECTED=12:34:56, ACTUAL=12:34:57},\n" +
+				" {COLUMN=timestamp, EXPECTED=2015-12-31 12:34:56.123, ACTUAL=2015-12-31 12:34:56.124},\n" +
 				" {COLUMN=bytes, EXPECTED=BYTEARRAY, ACTUAL=BYTEARRAY},\n" +
 				" {COLUMN=clob, EXPECTED=clob1, ACTUAL=clob2},\n" +
 				" {COLUMN=blob, EXPECTED=BYTEARRAY, ACTUAL=BYTEARRAY}]}],\n" +
