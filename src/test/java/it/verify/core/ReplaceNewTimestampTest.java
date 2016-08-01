@@ -1,21 +1,20 @@
 package it.verify.core;
 
 import it.common.CommonTestBase;
-
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.Date;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
 import net.sf.lightair.internal.factory.Factory;
-
 import org.joda.time.DateTimeUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
+
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @RunWith(LightAir.class)
 @Verify
@@ -28,6 +27,7 @@ public class ReplaceNewTimestampTest extends CommonTestBase {
 		DateTimeUtils.setCurrentMillisSystem();
 		Factory.getInstance().init();
 		Factory.getInstance().setTimeDifferenceLimit(1000);
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

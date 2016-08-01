@@ -183,6 +183,7 @@ public class Factory implements PropertyKeys {
 		setupExecutor.setUnitilsWrapper(unitilsWrapper);
 		setupExecutor.setDataSetResolver(dataSetResolver);
 		verifyExecutor.setUnitilsWrapper(unitilsWrapper);
+		verifyExecutor.setDataSetResolver(dataSetResolver);
 		dataSetLoader.setDataSetResolver(dataSetResolver);
 		dataSetLoader.setDataSetFactory(dataSetFactory);
 		dataSetFactory.setPropertiesProvider(propertiesProvider);

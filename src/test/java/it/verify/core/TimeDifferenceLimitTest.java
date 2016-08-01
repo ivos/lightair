@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 @RunWith(LightAir.class)
 @Verify
@@ -19,6 +20,7 @@ public class TimeDifferenceLimitTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, "
 				+ "date1 date, time1 time, timestamp1 timestamp)");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

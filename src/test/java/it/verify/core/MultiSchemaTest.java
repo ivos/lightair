@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 @RunWith(LightAir.class)
 @Verify
@@ -22,6 +23,7 @@ public class MultiSchemaTest extends CommonTestBase {
 		db.execute("create table s2.ts2 (id int primary key, a varchar(50))");
 		db.execute("create table s3.ts3 (id int primary key, a varchar(50))");
 		db.execute("create table tds (id int primary key, a varchar(50))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

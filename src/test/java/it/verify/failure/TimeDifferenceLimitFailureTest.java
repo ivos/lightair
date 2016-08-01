@@ -1,17 +1,17 @@
 package it.verify.failure;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
 import net.sf.lightair.annotation.Verify;
 import net.sf.lightair.internal.factory.Factory;
-
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+import test.support.ApiTestSupport;
 import test.support.ExceptionVerifyingJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(ExceptionVerifyingJUnitRunner.class)
 @Verify
@@ -21,6 +21,7 @@ public class TimeDifferenceLimitFailureTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, "
 				+ "date1 date, time1 time, timestamp1 timestamp)");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

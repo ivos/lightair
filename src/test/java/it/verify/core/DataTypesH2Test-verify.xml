@@ -2,13 +2,13 @@
 <dataset>
 	<data_types id="0" char_type="efghijklmnopqrs" varchar_type="abcdefghijklmnopqrstuvxyz"
 		integer_type="12345678" date_type="2999-12-31" time_type="23:59:58"
-		timestamp_type="2998-11-30 22:57:56.789" double_type="8765.4321"
+		timestamp_type="2998-11-30T22:57:56.789" double_type="8765.4321"
 		boolean_type="TRUE" bigint_type="9223372036854770000" decimal_type="12345678901234.56"
 		clob_type="text1" blob_type="EjRWeJCrzeI=" binary_type="/ty6CYdlQyI=" />
 	<data_types id="1" char_type="" varchar_type=""
 		integer_type="0" date_type="2000-01-02" time_type="00:00:00"
-		timestamp_type="2000-01-02 03:04:05.678" double_type="0" boolean_type="FALSE"
-		bigint_type="0" decimal_type="0.00" clob_type="" blob_type="@null"
+		timestamp_type="2000-01-02T03:04:05.678" double_type="0" boolean_type="FALSE"
+		bigint_type="0" decimal_type="0.00" clob_type="" blob_type=""
 		binary_type="" />
 	<data_types id="2" char_type="@null" varchar_type="@null"
 		integer_type="@null" date_type="@null" time_type="@null"

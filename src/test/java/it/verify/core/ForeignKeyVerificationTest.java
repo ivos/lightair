@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 /**
  * Table expected empty is empty in database.
@@ -22,6 +23,7 @@ public class ForeignKeyVerificationTest extends CommonTestBase {
 		db.execute("create table detail (id int primary key, master_id int, d1 varchar(50))");
 		db.execute("alter table detail add constraint fk_detail_master "
 				+ "foreign key (master_id) references master (id)");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

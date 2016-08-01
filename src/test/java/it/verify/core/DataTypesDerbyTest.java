@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 
 @RunWith(LightAir.class)
@@ -31,6 +32,7 @@ public class DataTypesDerbyTest extends DataTypesTestBase {
 				+ "date_type date, time_type time, timestamp_type timestamp, "
 				+ "double_type double, boolean_type boolean, bigint_type bigint, "
 				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type blob)");
+		ApiTestSupport.reInitialize();
 	}
 
 	@Test

@@ -1,15 +1,15 @@
 package it.verify.failure;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
 import net.sf.lightair.annotation.Verify;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+import test.support.ApiTestSupport;
 import test.support.ExceptionVerifyingJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Table expected empty has a row in database.
@@ -22,6 +22,7 @@ public class ExpectedEmptyTableWithRowTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table filled(id int primary key, a1 varchar(255))");
 		db.execute("create table empty_(id int primary key, b1 varchar(255))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass
