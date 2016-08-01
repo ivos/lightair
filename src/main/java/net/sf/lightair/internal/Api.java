@@ -104,6 +104,10 @@ public class Api {
 		actualDatasets = Collections.unmodifiableMap(actualDatasets);
 
 		Map<String, Map<String, Map<String, List<?>>>> differences = Compare.compare(expectedDatasets, actualDatasets);
+		String report = Report.report(differences);
+		if (!report.isEmpty()) {
+			throw new AssertionError(report);
+		}
 
 		log.debug("Finished verify for files {}.", fileNames);
 	}
