@@ -31,9 +31,9 @@ public class InsertTest implements Keywords {
 
 	public static Map<String, Map<String, Object>> createTableStructure(Object... data) {
 		assertTrue("Data in triples", data.length % 3 == 0);
-		Map<String, Map<String, Object>> table = new HashMap<>();
+		Map<String, Map<String, Object>> table = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i = i + 3) {
-			Map<String, Object> column = new HashMap<>();
+			Map<String, Object> column = new LinkedHashMap<>();
 			Object dataType = data[i + 1];
 			Object jdbcDataType = data[i + 2];
 			column.put(DATA_TYPE, dataType);

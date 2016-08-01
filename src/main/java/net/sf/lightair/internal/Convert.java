@@ -45,7 +45,8 @@ public class Convert implements Keywords {
 			if (null == profileStructure) {
 				throw new NullPointerException("Structure for profile [" + profile + "] is missing.");
 			}
-			result.put(profile, convertDataset(index, autoValues, profile, profileStructure, datasets));
+			List<Map<String, Object>> dataset = datasets.get(profile);
+			result.put(profile, convertDataset(index, autoValues, profile, profileStructure, dataset));
 		}
 		return Collections.unmodifiableMap(result);
 	}
@@ -53,9 +54,8 @@ public class Convert implements Keywords {
 	private static List<Map<String, Object>> convertDataset(
 			Map<String, String> index, Set<String> autoValues,
 			String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
-			Map<String, List<Map<String, Object>>> datasets) {
+			List<Map<String, Object>> dataset) {
 		Map<String, Integer> rowIds = new HashMap<>();
-		List<Map<String, Object>> dataset = datasets.get(profile);
 		List<Map<String, Object>> convertedDataset = new ArrayList<>();
 		for (Map<String, Object> row : dataset) {
 			String tableName = (String) row.get(TABLE);
@@ -85,18 +85,24 @@ public class Convert implements Keywords {
 					Index.formatTableKey(profile, tableName) + " is missing.");
 		}
 		Map<String, Object> convertedColumns = new LinkedHashMap<>();
-		for (String columnName : columns.keySet()) {
-			Map<String, Object> column = table.get(columnName);
-			if (null == column) {
-				throw new NullPointerException("Structure for column " +
-						Index.formatColumnKey(profile, tableName, columnName) + " is missing.");
+		Set<String> datasetColumnNames = columns.keySet();
+		for (String columnName : table.keySet()) { // order columns by structure, not XML dataset
+			if (!datasetColumnNames.contains(columnName)) {
+				continue;
 			}
+			Map<String, Object> column = table.get(columnName);
 			Object convertedValue = convertValue(index, autoValues,
 					profile, tableName, columnName, rowId,
 					(String) column.get(DATA_TYPE), (Integer) column.get(JDBC_DATA_TYPE),
 					(Integer) column.get(SIZE), (Integer) column.get(DECIMAL_DIGITS),
 					columns.get(columnName));
 			convertedColumns.put(columnName, convertedValue);
+		}
+		for (String columnName : datasetColumnNames) { // verify no other column in dataset
+			if (!table.containsKey(columnName)) {
+				throw new NullPointerException("Structure for column " +
+						Index.formatColumnKey(profile, tableName, columnName) + " is missing.");
+			}
 		}
 		return Collections.unmodifiableMap(convertedColumns);
 	}

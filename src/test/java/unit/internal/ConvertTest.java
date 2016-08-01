@@ -48,7 +48,8 @@ public class ConvertTest implements Keywords {
 		profileStructure = new HashMap<>();
 		profileStructure.put("t11", InsertTest.createTableStructure(
 				"t11a", INTEGER, Types.INTEGER,
-				"t11b", STRING, Types.VARCHAR
+				"t11b", STRING, Types.VARCHAR,
+				"t11c", STRING, Types.VARCHAR
 		));
 		profileStructure.put("t12", InsertTest.createTableStructure(
 				"t12a", INTEGER, Types.INTEGER,
@@ -69,8 +70,8 @@ public class ConvertTest implements Keywords {
 
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
 		datasets.put("profile1", Arrays.asList(
-				InsertTest.createRow("t11", "t11a", "1231101", "t11b", "v11b01"),
-				InsertTest.createRow("t11", "t11a", "1231102", "t11b", "v11b02"),
+				InsertTest.createRow("t11", "t11b", "v11b01", "t11a", "1231101"), // swap order
+				InsertTest.createRow("t11", "t11c", "v11c02", "t11b", "v11b02", "t11a", "1231102"), // swap order
 				InsertTest.createRow("t12", "t12a", "1231201", "t12b", "v12b01")
 		));
 		datasets.put("profile2", Arrays.asList(
@@ -85,7 +86,8 @@ public class ConvertTest implements Keywords {
 				" t11b=v11b01}},\n" +
 				" {TABLE=t11,\n" +
 				" COLUMNS={t11a=1231102,\n" +
-				" t11b=v11b02}},\n" +
+				" t11b=v11b02,\n" +
+				" t11c=v11c02}},\n" +
 				" {TABLE=t12,\n" +
 				" COLUMNS={t12a=1231201,\n" +
 				" t12b=v12b01}}],\n" +
@@ -332,9 +334,9 @@ public class ConvertTest implements Keywords {
 
 	public static Map<String, Map<String, Object>> createTableStructure(Object... data) {
 		assertTrue("Data by fours", data.length % 4 == 0);
-		Map<String, Map<String, Object>> table = new HashMap<>();
+		Map<String, Map<String, Object>> table = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i = i + 4) {
-			Map<String, Object> column = new HashMap<>();
+			Map<String, Object> column = new LinkedHashMap<>();
 			Object dataType = data[i + 1];
 			Object jdbcDataType = data[i + 2];
 			Object size = data[i + 3];

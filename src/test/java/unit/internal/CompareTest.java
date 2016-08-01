@@ -116,7 +116,7 @@ public class CompareTest implements Keywords {
 				createTables(
 						"t11", Arrays.asList(
 								createRow("t11a", "1231101", "t11b", "v11b01"),
-								createRow("t11a", "1231102act", "t11b", "v11b02act")
+								createRow("t11b", "v11b02act", "t11a", "1231102act")
 						),
 						"t12", Arrays.asList(
 								createRow("t12a", "1231201", "t12b", "v12b01"),
