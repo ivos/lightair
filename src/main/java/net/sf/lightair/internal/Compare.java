@@ -94,8 +94,12 @@ public class Compare implements Keywords {
 		Set<Integer> matched = new HashSet<>();
 
 		for (Map<String, Object> expectedRow : expectedRows) {
-			log.trace("Trying to match expected row {}.", expectedRow);
+			if (expectedRow.keySet().isEmpty()) { // table expected empty
+				log.debug("Empty expected row, do not match any actual rows.");
+				continue;
+			}
 
+			log.trace("Trying to match expected row {}.", expectedRow);
 			Integer matchedRowId = null;
 			List<Map<String, Object>> matchedRowDifferences = null;
 			for (int actualRowId = 0; actualRowId < actualRows.size(); actualRowId++) {
@@ -147,13 +151,11 @@ public class Compare implements Keywords {
 			List<Map<String, Object>> actualRows,
 			Set<Integer> matched) {
 		List<Map<String, Object>> unexpected = new ArrayList<>();
-		if (actualRows.size() > expectedRows.size()) { // there must be unexpected rows
-			for (int actualRowId = 0; actualRowId < actualRows.size(); actualRowId++) {
-				if (!matched.contains(actualRowId)) { // unmatched actual row: unexpected
-					Map<String, Object> actualRow = actualRows.get(actualRowId);
-					unexpected.add(actualRow);
-					log.debug("Unexpected row {}.", actualRow);
-				}
+		for (int actualRowId = 0; actualRowId < actualRows.size(); actualRowId++) {
+			if (!matched.contains(actualRowId)) { // unmatched actual row: unexpected
+				Map<String, Object> actualRow = actualRows.get(actualRowId);
+				unexpected.add(actualRow);
+				log.debug("Unexpected row {}.", actualRow);
 			}
 		}
 		return Collections.unmodifiableList(unexpected);

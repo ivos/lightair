@@ -359,4 +359,42 @@ public class CompareTest implements Keywords {
 				.replaceAll("\\[B@[^,}]+", "BYTEARRAY")
 		);
 	}
+
+	@Test
+	public void emptyTable() {
+		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
+		expectedDatasets.put("p1", Arrays.asList(
+				createRowExpected("empty_match"),
+				createRowExpected("empty_nonmatch"),
+				createRowExpected("empty_match"),
+				createRowExpected("empty_nonmatch"),
+				createRowExpected("non_empty"),
+				createRowExpected("non_empty", "c2", "v2"),
+				createRowExpected("non_empty")
+		));
+
+		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
+		actualDatasets.put("p1",
+				createTables(
+						"empty_match", Collections.emptyList(),
+						"empty_nonmatch", Arrays.asList(createRow("c1", "v1")),
+						"non_empty", Arrays.asList(createRow("c2", "v2"))
+				));
+
+		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+
+		String expected = "{p1={empty_match={MISSING=[],\n" +
+				" DIFFERENT=[],\n" +
+				" UNEXPECTED=[]},\n" +
+				" empty_nonmatch={MISSING=[],\n" +
+				" DIFFERENT=[],\n" +
+				" UNEXPECTED=[{c1=v1}]},\n" +
+				" non_empty={MISSING=[],\n" +
+				" DIFFERENT=[],\n" +
+				" UNEXPECTED=[]}}}";
+		assertEquals(expected, result.toString()
+				.replace("}, ", "},\n ")
+				.replace("], ", "],\n ")
+		);
+	}
 }
