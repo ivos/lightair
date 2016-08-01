@@ -63,13 +63,16 @@ public class Convert implements Keywords {
 			Map<String, String> columns = (Map) row.get(COLUMNS);
 			Map<String, Object> convertedRow = new LinkedHashMap<>();
 			convertedRow.put(TABLE, tableName);
-			if (!columns.isEmpty()) { // do not increment rowId on empty rows
+			Map<String, Object> convertedColumns;
+			if (columns.isEmpty()) { // do not increment rowId on empty rows
+				convertedColumns = Collections.emptyMap();
+			} else {
 				Integer rowId = rowIds.get(tableName);
 				rowId = (null == rowId) ? 1 : rowId + 1;
 				rowIds.put(tableName, rowId);
-				convertedRow.put(COLUMNS, convertColumns(
-						index, autoValues, profile, profileStructure, tableName, columns, rowId));
+				convertedColumns = convertColumns(index, autoValues, profile, profileStructure, tableName, columns, rowId);
 			}
+			convertedRow.put(COLUMNS, convertedColumns);
 			convertedDataset.add(Collections.unmodifiableMap(convertedRow));
 		}
 		return Collections.unmodifiableList(convertedDataset);

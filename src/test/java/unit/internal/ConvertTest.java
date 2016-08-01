@@ -407,7 +407,7 @@ public class ConvertTest implements Keywords {
 				" {TABLE=t1, COLUMNS={t1i=1100110102, t1s=fixed 11}}, \n" +
 				" {TABLE=t1, COLUMNS={t1i=123, t1s=fixed 12}}, \n" +
 				" {TABLE=t1, COLUMNS={t1i=1100110104, t1s=t1s 1100110204}}, \n" +
-				" {TABLE=t1}, \n" +
+				" {TABLE=t1, COLUMNS={}}, \n" +
 				" {TABLE=t1, COLUMNS={t1i=1100110105, t1s=t1s 1100110205}}, \n" +
 				" {TABLE=t2, COLUMNS={t2i=987, t2s=fixed 21}}, \n" +
 				" {TABLE=t1, COLUMNS={t1i=1100110106, t1s=t1s 1100110206}}, \n" +
