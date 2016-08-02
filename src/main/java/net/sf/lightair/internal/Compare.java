@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Compare implements Keywords {
 
@@ -26,7 +26,7 @@ public class Compare implements Keywords {
 
 		Map<String, Map<String, Map<String, List<?>>>> differences = new LinkedHashMap<>();
 		for (String profile : processedExpectedDatasets.keySet()) {
-			log.debug("Comparing profile {}.", profile);
+			log.debug("Comparing profile [{}].", profile);
 			Map<String, Map<String, List<?>>> profileDifferences = new LinkedHashMap<>();
 			Map<String, List<Map<String, Object>>> expectedDataset = processedExpectedDatasets.get(profile);
 			Map<String, List<Map<String, Object>>> actualDataset = actualDatasets.get(profile);
@@ -89,76 +89,95 @@ public class Compare implements Keywords {
 	private static Map<String, List<?>> compareTable(
 			List<Map<String, Object>> expectedRows,
 			List<Map<String, Object>> actualRows) {
-		List<Map<String, Object>> missing = new ArrayList<>();
-		List<Map<String, Object>> different = new ArrayList<>();
-		Set<Integer> matched = new HashSet<>();
+		List<Map<String, Object>> sortedActualRows = sortActualRows(expectedRows, actualRows);
 
-		for (Map<String, Object> expectedRow : expectedRows) {
-			if (expectedRow.keySet().isEmpty()) { // table expected empty
-				log.debug("Empty expected row, do not match any actual rows.");
+		List<Map<String, Object>> different = new ArrayList<>();
+		List<Map<String, Object>> unexpected = new ArrayList<>();
+		List<Integer> unmatchedExpectedRowIds = IntStream
+				.rangeClosed(0, expectedRows.size() - 1).boxed()
+				.filter(i -> !expectedRows.get(i).keySet().isEmpty()) // skip empty expected rows
+				.collect(Collectors.toList());
+
+		for (int actualRowId = 0; actualRowId < sortedActualRows.size(); actualRowId++) {
+			Map<String, Object> actualRow = sortedActualRows.get(actualRowId);
+			if (unmatchedExpectedRowIds.isEmpty()) {
+				unexpected.add(actualRow);
 				continue;
 			}
-
-			log.trace("Trying to match expected row {}.", expectedRow);
-			Integer matchedRowId = null;
-			List<Map<String, Object>> matchedRowDifferences = null;
-			for (int actualRowId = 0; actualRowId < actualRows.size(); actualRowId++) {
-				if (matched.contains(actualRowId)) { // this actual row has already been matched: skip it
-					continue;
-				}
-				Map<String, Object> actualRow = actualRows.get(actualRowId);
-				List<Map<String, Object>> rowDifferences = getRowDifferences(expectedRow, actualRow);
-				if (null == matchedRowId) { // first actual row, accept as matching for the time being
-					matchedRowId = actualRowId;
-					matchedRowDifferences = rowDifferences;
-				} else if (rowDifferences.size() < matchedRowDifferences.size()) {
-					// better match found: replace matched row and its differences
-					matchedRowId = actualRowId;
-					matchedRowDifferences = rowDifferences;
-				}
-				if (matchedRowDifferences.isEmpty()) {
-					break; // perfect match found: skip all further matching
-				}
+			List<Map<String, Object>> unmatchedExpectedRows =
+					getUnmatchedExpectedRows(expectedRows, unmatchedExpectedRowIds);
+			int bestMatchingRowId = findBestMatchingRowId(actualRow, unmatchedExpectedRows);
+			unmatchedExpectedRowIds.remove(bestMatchingRowId);
+			Map<String, Object> expectedRow = unmatchedExpectedRows.get(bestMatchingRowId);
+			List<Map<String, Object>> rowDifferences = getRowDifferences(expectedRow, actualRow);
+			if (rowDifferences.isEmpty()) {
+				log.trace("Perfect match for row {}.", expectedRow);
+			} else {
+				Map<String, Object> differentRow = new LinkedHashMap<>();
+				differentRow.put(EXPECTED, expectedRow);
+				differentRow.put(DIFFERENCES, rowDifferences);
+				different.add(Collections.unmodifiableMap(differentRow));
+				log.debug("Different row {}.", expectedRow);
 			}
-
-			if (null == matchedRowDifferences) { // no actual row remained: the expected row is missing
-				log.debug("Missing row {}.", expectedRow);
-				missing.add(expectedRow);
-			} else { // the expected row matched
-				matched.add(matchedRowId);
-				if (!matchedRowDifferences.isEmpty()) { // the expected row is different
-					Map<String, Object> differentRow = new LinkedHashMap<>();
-					differentRow.put(EXPECTED, expectedRow);
-					differentRow.put(DIFFERENCES, matchedRowDifferences);
-					different.add(Collections.unmodifiableMap(differentRow));
-					log.debug("Different row {}.", expectedRow);
-				} else { // perfect match
-					log.trace("Perfect match for row {}.", expectedRow);
-				}
-			}
-
 		}
 
 		Map<String, List<?>> data = new LinkedHashMap<>();
-		data.put(MISSING, Collections.unmodifiableList(missing));
+		data.put(MISSING, Collections.unmodifiableList(
+				getUnmatchedExpectedRows(expectedRows, unmatchedExpectedRowIds)));
 		data.put(DIFFERENT, Collections.unmodifiableList(different));
-		data.put(UNEXPECTED, getUnexpectedRows(expectedRows, actualRows, matched));
+		data.put(UNEXPECTED, Collections.unmodifiableList(unexpected));
 		return Collections.unmodifiableMap(data);
 	}
 
-	private static List<Map<String, Object>> getUnexpectedRows(
+	private static List<Map<String, Object>> getUnmatchedExpectedRows(
 			List<Map<String, Object>> expectedRows,
-			List<Map<String, Object>> actualRows,
-			Set<Integer> matched) {
-		List<Map<String, Object>> unexpected = new ArrayList<>();
+			List<Integer> unmatchedExpectedRowIds) {
+		return unmatchedExpectedRowIds.stream()
+				.map(expectedRows::get)
+				.collect(Collectors.toList());
+	}
+
+	private static List<Map<String, Object>> sortActualRows(
+			List<Map<String, Object>> expectedRows,
+			List<Map<String, Object>> actualRows) {
+		if (expectedRows.isEmpty()) {
+			return actualRows;
+		}
+		int[][] data = new int[actualRows.size()][2];
 		for (int actualRowId = 0; actualRowId < actualRows.size(); actualRowId++) {
-			if (!matched.contains(actualRowId)) { // unmatched actual row: unexpected
-				Map<String, Object> actualRow = actualRows.get(actualRowId);
-				unexpected.add(actualRow);
-				log.debug("Unexpected row {}.", actualRow);
+			Map<String, Object> actualRow = actualRows.get(actualRowId);
+			int bestMatchingRowId = findBestMatchingRowId(actualRow, expectedRows);
+			data[actualRowId][0] = actualRowId;
+			data[actualRowId][1] = getRowDifferences(expectedRows.get(bestMatchingRowId), actualRow).size();
+		}
+		Arrays.sort(data, (int[] o1, int[] o2) -> {
+			int matchingColumnsComparison = Integer.compare(o1[1], o2[1]);
+			if (0 != matchingColumnsComparison) {
+				return matchingColumnsComparison;
+			}
+			return Integer.compare(o1[0], o2[0]);
+		});
+		List<Map<String, Object>> sortedActualRows = new ArrayList<>();
+		for (int actualRowId = 0; actualRowId < actualRows.size(); actualRowId++) {
+			sortedActualRows.add(actualRows.get(data[actualRowId][0]));
+		}
+		return Collections.unmodifiableList(sortedActualRows);
+	}
+
+	private static Integer findBestMatchingRowId(
+			Map<String, Object> actualRow,
+			List<Map<String, Object>> expectedRows) {
+		List<Map<String, Object>> bestRowDifferences = null;
+		Integer bestExpectedRowId = null;
+		for (int expectedRowId = 0; expectedRowId < expectedRows.size(); expectedRowId++) {
+			Map<String, Object> expectedRow = expectedRows.get(expectedRowId);
+			List<Map<String, Object>> rowDifferences = getRowDifferences(expectedRow, actualRow);
+			if (null == bestRowDifferences || rowDifferences.size() < bestRowDifferences.size()) {
+				bestRowDifferences = rowDifferences;
+				bestExpectedRowId = expectedRowId;
 			}
 		}
-		return Collections.unmodifiableList(unexpected);
+		return bestExpectedRowId;
 	}
 
 	private static List<Map<String, Object>> getRowDifferences(

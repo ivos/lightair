@@ -102,8 +102,9 @@ public class CompareTest implements Keywords {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
 				createRowExpected("t11", "t11a", "1231101", "t11b", "v11b01"),
-				createRowExpected("t11", "t11a", "1231102exp", "t11b", "v11b02exp"),
-				createRowExpected("t11", "t11a", "1231102mis", "t11b", "v11b02mis"),
+				createRowExpected("t11", "t11a", "1231102exp", "t11b", "v11b02exp", "t11c", "v11c02"),
+				createRowExpected("t11", "t11a", "1231103mis", "t11b", "v11b03mis"),
+				createRowExpected("t11", "t11a", "1231104", "t11b", "v11b04"),
 				createRowExpected("t12", "t12a", "1231201", "t12b", "v12b01")
 		));
 		expectedDatasets.put("p2", Arrays.asList(
@@ -116,8 +117,9 @@ public class CompareTest implements Keywords {
 				createTables(
 						"t11", Arrays.asList(
 								createRow("t11a", "1231101", "t11b", "v11b01"),
-								createRow("t11b", "v11b02act", "t11a", "1231102act")
-						),
+								createRow("t11b", "v11b02act", "t11a", "1231102act", "t11c", "v11c02"),
+								createRow("t11a", "1231104", "t11b", "v11b04")
+								),
 						"t12", Arrays.asList(
 								createRow("t12a", "1231201", "t12b", "v12b01"),
 								createRow("t12a", "1231202une", "t12b", "v12b02une")
@@ -133,8 +135,8 @@ public class CompareTest implements Keywords {
 
 		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
 
-		String expected = "{p1={t11={MISSING=[{t11a=1231102mis, t11b=v11b02mis}],\n" +
-				" DIFFERENT=[{EXPECTED={t11a=1231102exp, t11b=v11b02exp},\n" +
+		String expected = "{p1={t11={MISSING=[{t11a=1231103mis, t11b=v11b03mis}],\n" +
+				" DIFFERENT=[{EXPECTED={t11a=1231102exp, t11b=v11b02exp, t11c=v11c02},\n" +
 				" DIFFERENCES=[{COLUMN=t11a, EXPECTED=1231102exp, ACTUAL=1231102act},\n" +
 				" {COLUMN=t11b, EXPECTED=v11b02exp, ACTUAL=v11b02act}]}],\n" +
 				" UNEXPECTED=[]},\n" +
