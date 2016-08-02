@@ -112,7 +112,7 @@ public class ReportTest implements Keywords {
 						))
 		));
 		differences.put("p2", createProfile(
-				"t12", createTable(
+				"t21", createTable(
 						Arrays.asList(
 								createRow("mis211a", "mis211av", "mis211b", "mis211bv", "mis211c", "mis211cv")
 						),
@@ -127,6 +127,14 @@ public class ReportTest implements Keywords {
 						Arrays.asList(
 								createRow("une211a", "une211av", "une211b", "une211bv", "une211c", "une211cv")
 						))
+		));
+		differences.put(DEFAULT_PROFILE, createProfile(
+				"t31", createTable(
+						Arrays.asList(
+								createRow("mis311a", "mis311av")
+						),
+						Collections.emptyList(),
+						Collections.emptyList())
 		));
 
 		String report = Report.report(differences);
@@ -151,12 +159,14 @@ public class ReportTest implements Keywords {
 				"   Best matching differences: \n" +
 				"    dif121a: expected [dif121aexp], but was [dif121aact]\n" +
 				"  Unexpected row: {une121a=une121av, une121b=une121bv, une121c=une121cv}\n" +
-				"Found differences for table [p2]/t12:\n" +
+				"Found differences for table [p2]/t21:\n" +
 				"  Missing row: {mis211a=mis211av, mis211b=mis211bv, mis211c=mis211cv}\n" +
 				"  Different row: {dif211a=dif211av, dif211b=dif211bv, dif211c=dif211cv}\n" +
 				"   Best matching differences: \n" +
 				"    dif211a: expected [dif211aexp], but was [dif211aact]\n" +
-				"  Unexpected row: {une211a=une211av, une211b=une211bv, une211c=une211cv}\n";
+				"  Unexpected row: {une211a=une211av, une211b=une211bv, une211c=une211cv}\n" +
+				"Found differences for table t31:\n" +
+				"  Missing row: {mis311a=mis311av}\n";
 		assertEquals(expected, report);
 	}
 

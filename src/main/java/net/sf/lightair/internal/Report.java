@@ -38,7 +38,13 @@ public class Report implements Keywords {
 		List<Map<String, Object>> unexpected = (List) tableDifferences.get(UNEXPECTED);
 
 		if (!missing.isEmpty() || !different.isEmpty() || !unexpected.isEmpty()) {
-			sb.append("\nFound differences for table " + Index.formatTableKey(profile, tableName) + ":");
+			sb.append("\nFound differences for table ");
+			if (DEFAULT_PROFILE.equals(profile)) {
+				sb.append(tableName);
+			} else {
+				sb.append(Index.formatTableKey(profile, tableName));
+			}
+			sb.append(":");
 			appendRows(sb, "Missing", missing);
 			appendDifferent(sb, different);
 			appendRows(sb, "Unexpected", unexpected);
