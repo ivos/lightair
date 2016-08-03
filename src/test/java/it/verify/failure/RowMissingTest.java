@@ -34,12 +34,9 @@ public class RowMissingTest extends CommonTestBase {
 	}
 
 	public void testVerifyException(Throwable error) {
-		String msg = "Assertion failed. "
-				+ "Differences found between the expected data set and actual database content.\n"
-				+ "Found differences for table PUBLIC.a:\n\n"
-				+ "  Missing row:\n  id, a1\n  \"1\", \"11\"\n\n\n"
-				+ "Actual database content:\n\nPUBLIC.A\n  ID, A1\n"
-				+ "  0, \"01\"\n  2, \"21\"\n\n";
+		String msg = "Differences found between the expected data set and actual database content.\n" +
+				"Found differences for table a:\n" +
+				"  Missing row: {id=1, a1=11}\n";
 		assertEquals(msg, error.getMessage());
 	}
 

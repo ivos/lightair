@@ -38,12 +38,9 @@ public class UnexpectedRowTest extends CommonTestBase {
 	}
 
 	public void onlyUnexpectedVerifyException(Throwable error) {
-		String msg = "Assertion failed. "
-				+ "Differences found between the expected data set and actual database content.\n"
-				+ "Found differences for table PUBLIC.a:\n\n"
-				+ "  Unexpected row:\n  ID, A1\n  1, \"11\"\n\n\n"
-				+ "Actual database content:\n\nPUBLIC.A\n  ID, A1\n"
-				+ "  0, \"01\"\n  1, \"11\"\n  2, \"21\"\n\n";
+		String msg = "Differences found between the expected data set and actual database content.\n" +
+				"Found differences for table a:\n" +
+				"  Unexpected row: {id=1, a1=11}\n";
 		assertEquals(msg, error.getMessage());
 	}
 
@@ -59,14 +56,12 @@ public class UnexpectedRowTest extends CommonTestBase {
 	}
 
 	public void unexpectedAndOtherDifVerifyException(Throwable error) {
-		String msg = "Assertion failed. "
-				+ "Differences found between the expected data set and actual database content.\n"
-				+ "Found differences for table PUBLIC.a:\n\n"
-				+ "  Unexpected row:\n  ID, A1\n  1, \"11\"\n\n"
-				+ "  Different row: \n  id, a1\n  \"2\", \"21\"\n\n"
-				+ "  Best matching differences:  \n  a1: \"21\" <-> \"21w\"\n\n\n"
-				+ "Actual database content:\n\nPUBLIC.A\n  ID, A1\n"
-				+ "  0, \"01\"\n  1, \"11\"\n  2, \"21w\"\n\n";
+		String msg = "Differences found between the expected data set and actual database content.\n" +
+				"Found differences for table a:\n" +
+				"  Different row: {id=2, a1=21}\n" +
+				"   Best matching differences: \n" +
+				"    a1: expected [21], but was [21w]\n" +
+				"  Unexpected row: {id=1, a1=11}\n";
 		assertEquals(msg, error.getMessage());
 	}
 

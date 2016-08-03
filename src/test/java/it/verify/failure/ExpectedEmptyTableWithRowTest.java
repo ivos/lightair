@@ -42,12 +42,9 @@ public class ExpectedEmptyTableWithRowTest extends CommonTestBase {
 	}
 
 	public void testVerifyException(Throwable error) {
-		String msg = "Assertion failed. "
-				+ "Differences found between the expected data set and actual database content.\n"
-				+ "Expected table to be empty but found rows for table PUBLIC.empty_\n\n\n"
-				+ "Actual database content:\n\nPUBLIC.FILLED\n"
-				+ "  ID, A1\n  0, \"a01\"\n  1, \"a11\"\n  2, \"a21\"\n\n"
-				+ "PUBLIC.EMPTY_\n  ID, B1\n  0, \"b01\"\n\n";
+		String msg = "Differences found between the expected data set and actual database content.\n" +
+				"Found differences for table empty_:\n" +
+				"  Unexpected row: {id=0, b1=b01}\n";
 		assertEquals(msg, error.getMessage());
 	}
 

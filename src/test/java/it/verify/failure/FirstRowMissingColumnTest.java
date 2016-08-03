@@ -40,16 +40,11 @@ public class FirstRowMissingColumnTest extends CommonTestBase {
 	}
 
 	public void testVerifyException(Throwable error) {
-		String msg = "Assertion failed. "
-				+ "Differences found between the expected data set and actual database content.\n"
-				+ "Found differences for table PUBLIC.a:\n\n"
-				+ "  Different row: \n  id, expected, unspecified\n"
-				+ "  \"1\", \"e1\", \"u1\"\n\n"
-				+ "  Best matching differences:  \n"
-				+ "  unspecified: \"u1\" <-> \"wrong\"\n\n\n"
-				+ "Actual database content:\n\nPUBLIC.A\n"
-				+ "  ID, EXPECTED, UNSPECIFIED\n  0, \"e0\", \"u0\"\n"
-				+ "  1, \"e1\", \"wrong\"\n  2, \"e2\", \"u2\"\n\n";
+		String msg = "Differences found between the expected data set and actual database content.\n" +
+				"Found differences for table a:\n" +
+				"  Different row: {id=1, expected=e1, unspecified=u1}\n" +
+				"   Best matching differences: \n" +
+				"    unspecified: expected [u1], but was [wrong]\n";
 		assertEquals(msg, error.getMessage());
 	}
 
