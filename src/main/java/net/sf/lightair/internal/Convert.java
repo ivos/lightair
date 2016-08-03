@@ -3,10 +3,10 @@ package net.sf.lightair.internal;
 import net.sf.lightair.internal.auto.Auto;
 import net.sf.lightair.internal.auto.Index;
 import org.apache.commons.codec.binary.Base64;
-import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,11 +114,20 @@ public class Convert implements Keywords {
 		} else if (ANY_TOKEN.equals(value)) {
 			result = value;
 		} else if (DATE_TOKEN.equals(value)) {
-			result = getTokenDate(dataType);
+			result = convertTemporal(getTokenDate(), dataType);
 		} else if (TIME_TOKEN.equals(value)) {
-			result = getTokenTime(dataType);
+			result = convertTemporal(getTokenTime(), dataType);
 		} else if (TIMESTAMP_TOKEN.equals(value)) {
-			result = getTokenTimestamp(dataType);
+			result = convertTemporal(getTokenTimestamp(), dataType);
+		} else if (isDuration(value, DATE_TOKEN)) {
+			Period period = parsePeriod(value.substring(DATE_TOKEN.length()));
+			result = convertTemporal(getTokenDate().plus(period), dataType);
+		} else if (isDuration(value, TIME_TOKEN)) {
+			Period period = parsePeriod(value.substring(TIME_TOKEN.length()));
+			result = convertTemporal(getTokenTime().plus(period), dataType);
+		} else if (isDuration(value, TIMESTAMP_TOKEN)) {
+			Period period = parsePeriod(value.substring(TIMESTAMP_TOKEN.length()));
+			result = convertTemporal(getTokenTimestamp().plus(period), dataType);
 		} else {
 			if (AUTO_TOKEN.equals(value)) {
 				value = Auto.generate(index, profile, tableName, columnName, rowId,
@@ -146,38 +155,45 @@ public class Convert implements Keywords {
 		return result;
 	}
 
-	private static Object getTokenDate(String dataType) {
-		DateTime value = DateMidnight.now().toDateTime();
+	private static DateTime getTokenDate() {
+		return coerceToDate(DateTime.now());
+	}
+
+	private static DateTime getTokenTime() {
+		return coerceToTime(DateTime.now());
+	}
+
+	private static DateTime getTokenTimestamp() {
+		return DateTime.now();
+	}
+
+	private static DateTime coerceToTime(DateTime value) {
+		return value.withDate(1970, 1, 1).withMillisOfSecond(0);
+	}
+
+	private static DateTime coerceToDate(DateTime value) {
+		return value.withTime(0, 0, 0, 0);
+	}
+
+	private static java.util.Date convertTemporal(DateTime value, String dataType) {
+		if (DATE.equals(dataType)) {
+			return new Date(coerceToDate(value).getMillis());
+		}
 		if (TIME.equals(dataType)) {
-			return convertToTime(value);
-		} else if (TIMESTAMP.equals(dataType)) {
-			return new Timestamp(value.getMillis());
+			return new Time(coerceToTime(value).getMillis());
 		}
-		return new Date(value.getMillis());
+		return new Timestamp(value.getMillis());
 	}
 
-	private static Object getTokenTime(String dataType) {
-		DateTime value = DateTime.now().withDate(1970, 1, 1).withMillisOfSecond(0);
-		if (DATE.equals(dataType)) {
-			return new Date(DateTime.parse("1970-01-01").getMillis());
-		} else if (TIMESTAMP.equals(dataType)) {
-			return new Timestamp(value.getMillis());
-		}
-		return new Time(value.getMillis());
+	private static boolean isDuration(String value, String temporalType) {
+		return value.startsWith(temporalType + "+") || value.startsWith(temporalType + "-");
 	}
 
-	private static Object getTokenTimestamp(String dataType) {
-		DateTime value = new DateTime();
-		if (DATE.equals(dataType)) {
-			return new Date(LocalDate.now().toDateMidnight().getMillis());
-		} else if (TIMESTAMP.equals(dataType)) {
-			return new Timestamp(value.getMillis());
+	private static Period parsePeriod(String value) {
+		if (value.startsWith("-")) {
+			return Period.parse(value.substring(1)).negated();
 		}
-		return convertToTime(value);
-	}
-
-	private static Time convertToTime(DateTime value) {
-		return new Time(value.withDate(1970, 1, 1).withMillisOfSecond(0).getMillis());
+		return Period.parse(value.substring(1));
 	}
 
 	private static Object convertDataType(

@@ -352,6 +352,45 @@ public class ConvertTest implements Keywords {
 		assertEquals(DateTime.parse("2015-12-31T12:34:56.123"), new DateTime(dataTypes.get("timestamp_type")));
 	}
 
+	@Test
+	public void duration() {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
+		profileStructure.put("data_types", InsertTest.createTableStructure(
+				"date_type", DATE, Types.DATE,
+				"time_type", TIME, Types.TIME,
+				"timestamp_type", TIMESTAMP, Types.TIMESTAMP
+		));
+		structures.put(DEFAULT_PROFILE, profileStructure);
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+				InsertTest.createRow("data_types",
+						"date_type", "@date+P3D",
+						"time_type", "@time+PT3M",
+						"timestamp_type", "@timestamp+P3DT3M"
+				),
+				InsertTest.createRow("data_types",
+						"date_type", "@date-P3D",
+						"time_type", "@time-PT3M",
+						"timestamp_type", "@timestamp-P3DT3M"
+				)
+		));
+
+		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+
+		// now: 2015-12-31 12:34:56.123
+		String expected = "{=[{TABLE=data_types,\n" +
+				" COLUMNS={date_type=2016-01-03,\n" +
+				" time_type=12:37:56,\n" +
+				" timestamp_type=2016-01-03 12:37:56.123}},\n" +
+				" {TABLE=data_types,\n" +
+				" COLUMNS={date_type=2015-12-28,\n" +
+				" time_type=12:31:56,\n" +
+				" timestamp_type=2015-12-28 12:31:56.123}}]}";
+		assertEquals(expected, result.toString().replace(", ", ",\n "));
+	}
+
 	public static Map<String, Map<String, Object>> createTableStructure(Object... data) {
 		assertTrue("Data by fours", data.length % 4 == 0);
 		Map<String, Map<String, Object>> table = new LinkedHashMap<>();
