@@ -27,12 +27,6 @@ public class Convert implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Convert.class);
 
-	private static final String NULL_TOKEN = "@null";
-	private static final String DATE_TOKEN = "@date";
-	private static final String TIME_TOKEN = "@time";
-	private static final String TIMESTAMP_TOKEN = "@timestamp";
-	private static final String AUTO_TOKEN = "@auto";
-
 	public static Map<String, List<Map<String, Object>>> convert(
 			Map<String, Map<String, Map<String, Map<String, Object>>>> structures,
 			Map<String, String> index,
@@ -117,6 +111,8 @@ public class Convert implements Keywords {
 		Object result;
 		if (NULL_TOKEN.equals(value)) {
 			result = null;
+		} else if (ANY_TOKEN.equals(value)) {
+			result = value;
 		} else if (DATE_TOKEN.equals(value)) {
 			result = getTokenDate(dataType);
 		} else if (TIME_TOKEN.equals(value)) {

@@ -204,6 +204,9 @@ public class Compare implements Keywords {
 	}
 
 	private static boolean valueMatches(Object expectedValue, Object actualValue) {
+		if (ANY_TOKEN.equals(expectedValue) && null != actualValue) {
+			return true;
+		}
 		if (expectedValue instanceof byte[] && actualValue instanceof byte[]) {
 			return Arrays.equals((byte[]) expectedValue, (byte[]) actualValue);
 		}

@@ -2,7 +2,6 @@ package it.setup.core;
 
 import it.common.CommonTestBase;
 import net.sf.lightair.annotation.Setup;
-import net.sf.lightair.exception.TokenAnyInSetupException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,7 +31,8 @@ public class AnyTest extends CommonTestBase {
 	}
 
 	public void testVerifyException(Throwable error) {
-		assertEquals(TokenAnyInSetupException.class, error.getClass());
+		String expected = "Token @any found in setup dataset. This token is only allowed in verification datasets.";
+		assertEquals(expected, error.getMessage());
 	}
 
 }

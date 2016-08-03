@@ -55,4 +55,11 @@ public interface Keywords {
 	String NCLOB = "NCLOB";
 	String BLOB = "BLOB";
 
+	String NULL_TOKEN = "@null";
+	String DATE_TOKEN = "@date";
+	String TIME_TOKEN = "@time";
+	String TIMESTAMP_TOKEN = "@timestamp";
+	String AUTO_TOKEN = "@auto";
+	String ANY_TOKEN = "@any";
+
 }

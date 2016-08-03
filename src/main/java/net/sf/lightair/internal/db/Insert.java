@@ -39,7 +39,7 @@ public class Insert implements Keywords {
 			Map<String, Map<String, Map<String, Object>>> profileStructure,
 			Map<String, Object> row) {
 		@SuppressWarnings("unchecked")
-		Map<String, String> columns = (Map<String, String>) row.get(COLUMNS);
+		Map<String, Object> columns = (Map<String, Object>) row.get(COLUMNS);
 		if (columns.isEmpty()) {
 			return null;
 		}
@@ -53,7 +53,7 @@ public class Insert implements Keywords {
 		return Collections.unmodifiableMap(statement);
 	}
 
-	private static String buildSql(String schema, String tableName, Map<String, String> columns) {
+	private static String buildSql(String schema, String tableName, Map<String, Object> columns) {
 		return "insert into " + schema + "." + tableName +
 				"(" + String.join(",", columns.keySet()) + ")" +
 				" values (" + String.join(",", Collections.nCopies(columns.size(), "?")) + ")";
@@ -61,7 +61,7 @@ public class Insert implements Keywords {
 
 	private static List<Map<String, Object>> createParameters(
 			String schema, String tableName,
-			Map<String, Map<String, Map<String, Object>>> profileStructure, Map<String, String> columns) {
+			Map<String, Map<String, Map<String, Object>>> profileStructure, Map<String, Object> columns) {
 		Map<String, Map<String, Object>> table = profileStructure.get(tableName);
 
 		if (null == table) {
@@ -78,7 +78,7 @@ public class Insert implements Keywords {
 
 	private static Map<String, Object> createParameter(
 			String schema, String tableName,
-			Map<String, Map<String, Object>> table, Map<String, String> columns, String columnName) {
+			Map<String, Map<String, Object>> table, Map<String, Object> columns, String columnName) {
 		Map<String, Object> column = table.get(columnName);
 
 		if (null == column) {
@@ -86,11 +86,17 @@ public class Insert implements Keywords {
 					" not found in loaded database structure.");
 		}
 
+		Object value = columns.get(columnName);
+		if (ANY_TOKEN.equals(value)) {
+			throw new AssertionError(
+					"Token @any found in setup dataset. This token is only allowed in verification datasets.");
+		}
+
 		log.debug("Creating insert parameter for {}.{}.{}.", schema, tableName, columnName);
 		Map<String, Object> parameter = new LinkedHashMap<>();
 		parameter.put(DATA_TYPE, column.get(DATA_TYPE));
 		parameter.put(JDBC_DATA_TYPE, column.get(JDBC_DATA_TYPE));
-		parameter.put(VALUE, columns.get(columnName));
+		parameter.put(VALUE, value);
 		return Collections.unmodifiableMap(parameter);
 	}
 }

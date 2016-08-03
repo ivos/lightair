@@ -119,7 +119,7 @@ public class CompareTest implements Keywords {
 								createRow("t11a", "1231101", "t11b", "v11b01"),
 								createRow("t11b", "v11b02act", "t11a", "1231102act", "t11c", "v11c02"),
 								createRow("t11a", "1231104", "t11b", "v11b04")
-								),
+						),
 						"t12", Arrays.asList(
 								createRow("t12a", "1231201", "t12b", "v12b01"),
 								createRow("t12a", "1231202une", "t12b", "v12b02une")
@@ -393,6 +393,33 @@ public class CompareTest implements Keywords {
 				" UNEXPECTED=[{c1=v1}]},\n" +
 				" non_empty={MISSING=[],\n" +
 				" DIFFERENT=[],\n" +
+				" UNEXPECTED=[]}}}";
+		assertEquals(expected, result.toString()
+				.replace("}, ", "},\n ")
+				.replace("], ", "],\n ")
+		);
+	}
+
+	@Test
+	public void tokenAny() {
+		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
+		expectedDatasets.put("p1", Arrays.asList(
+				createRowExpected("t1", "anystring", "@any", "anyint", "@any", "anynull", "@any")
+		));
+
+		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
+		actualDatasets.put("p1",
+				createTables(
+						"t1", Arrays.asList(
+								createRow("anystring", "some string", "anyint", 123, "anynull", null)
+						)
+				));
+
+		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+
+		String expected = "{p1={t1={MISSING=[],\n" +
+				" DIFFERENT=[{EXPECTED={anystring=@any, anyint=@any, anynull=@any},\n" +
+				" DIFFERENCES=[{COLUMN=anynull, EXPECTED=@any, ACTUAL=null}]}],\n" +
 				" UNEXPECTED=[]}}}";
 		assertEquals(expected, result.toString()
 				.replace("}, ", "},\n ")

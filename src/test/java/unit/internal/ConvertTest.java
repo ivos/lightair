@@ -224,7 +224,7 @@ public class ConvertTest implements Keywords {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
 		assertNull("integer value", dataTypes.get("integer_type"));
-		assertNull("string value", dataTypes.get("string value"));
+		assertNull("string value", dataTypes.get("string_type"));
 	}
 
 	@Test
@@ -530,5 +530,36 @@ public class ConvertTest implements Keywords {
 		} catch (IllegalStateException e) {
 			assertEquals("Duplicate auto value [1] in [p2]/t1.t1s.", e.getMessage());
 		}
+	}
+
+	@Test
+	public void tokenAny() {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
+		profileStructure.put("data_types", InsertTest.createTableStructure(
+				"integer_type", INTEGER, Types.INTEGER,
+				"string_type", STRING, Types.VARCHAR
+		));
+		structures.put(DEFAULT_PROFILE, profileStructure);
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+				InsertTest.createRow("data_types",
+						"integer_type", "@any",
+						"string_type", "@any"
+				)
+		));
+
+		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+
+		String expected = "{=[{TABLE=data_types,\n" +
+				" COLUMNS={integer_type=@any,\n" +
+				" string_type=@any}}]}";
+		assertEquals(expected, result.toString().replace(", ", ",\n "));
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
+		assertEquals("integer value", "@any", dataTypes.get("integer_type"));
+		assertEquals("string value", "@any", dataTypes.get("string_type"));
 	}
 }

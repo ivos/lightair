@@ -14,6 +14,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class InsertTest implements Keywords {
 
@@ -84,5 +85,29 @@ public class InsertTest implements Keywords {
 				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=ce3},\n" +
 				" {DATA_TYPE=STRING, JDBC_DATA_TYPE=12, VALUE=cf3}]}]";
 		assertEquals(expected, data.toString().replace("}, ", "},\n "));
+	}
+
+	@Test
+	public void tokenAny() {
+		Map<String, String> profileProperties = new HashMap<>();
+		profileProperties.put(DATABASE_SCHEMA, "s1");
+
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
+		profileStructure.put("t1",
+				createTableStructure(
+						"anytoken", STRING, Types.VARCHAR
+				));
+
+		List<Map<String, Object>> dataset = Arrays.asList(
+				createRow("t1", "anytoken", "@any")
+		);
+
+		try {
+			Insert.create(profileProperties, profileStructure, dataset);
+			fail("Should throw.");
+		} catch (AssertionError e) {
+			String expected = "Token @any found in setup dataset. This token is only allowed in verification datasets.";
+			assertEquals(expected, e.getMessage());
+		}
 	}
 }
