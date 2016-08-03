@@ -149,7 +149,7 @@ public class Convert implements Keywords {
 	private static Object getTokenDate(String dataType) {
 		DateTime value = DateMidnight.now().toDateTime();
 		if (TIME.equals(dataType)) {
-			return new Time(value.withDate(1970, 1, 1).withMillisOfSecond(0).getMillis());
+			return convertToTime(value);
 		} else if (TIMESTAMP.equals(dataType)) {
 			return new Timestamp(value.getMillis());
 		}
@@ -159,7 +159,7 @@ public class Convert implements Keywords {
 	private static Object getTokenTime(String dataType) {
 		DateTime value = DateTime.now().withDate(1970, 1, 1).withMillisOfSecond(0);
 		if (DATE.equals(dataType)) {
-			return new Date(value.getMillis());
+			return new Date(DateTime.parse("1970-01-01").getMillis());
 		} else if (TIMESTAMP.equals(dataType)) {
 			return new Timestamp(value.getMillis());
 		}
@@ -169,11 +169,15 @@ public class Convert implements Keywords {
 	private static Object getTokenTimestamp(String dataType) {
 		DateTime value = new DateTime();
 		if (DATE.equals(dataType)) {
-			return new Date(value.getMillis());
+			return new Date(LocalDate.now().toDateMidnight().getMillis());
 		} else if (TIMESTAMP.equals(dataType)) {
 			return new Timestamp(value.getMillis());
 		}
-		return new Time(value.getMillis());
+		return convertToTime(value);
+	}
+
+	private static Time convertToTime(DateTime value) {
+		return new Time(value.withDate(1970, 1, 1).withMillisOfSecond(0).getMillis());
 	}
 
 	private static Object convertDataType(

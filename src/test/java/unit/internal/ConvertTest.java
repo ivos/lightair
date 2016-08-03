@@ -5,6 +5,8 @@ import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Index;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -257,9 +259,15 @@ public class ConvertTest implements Keywords {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
+		// types
 		assertEquals(Date.class, dataTypes.get("date_type").getClass());
 		assertEquals(Time.class, dataTypes.get("time_type").getClass());
 		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
+		// values
+		assertEquals(LocalDate.parse("2015-12-31").toDateMidnight().toDateTime(), new DateTime(dataTypes.get("date_type")));
+		assertEquals(new LocalTime("00:00:00").toDateTime(DateTime.parse("1970-01-01")),
+				new DateTime(dataTypes.get("time_type")));
+		assertEquals(DateTime.parse("2015-12-31T00:00:00.0"), new DateTime(dataTypes.get("timestamp_type")));
 	}
 
 	@Test
@@ -292,9 +300,15 @@ public class ConvertTest implements Keywords {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
+		// types
 		assertEquals(Date.class, dataTypes.get("date_type").getClass());
 		assertEquals(Time.class, dataTypes.get("time_type").getClass());
 		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
+		// values
+		assertEquals(LocalDate.parse("1970-01-01").toDateMidnight().toDateTime(), new DateTime(dataTypes.get("date_type")));
+		assertEquals(new LocalTime("12:34:56").toDateTime(DateTime.parse("1970-01-01")),
+				new DateTime(dataTypes.get("time_type")));
+		assertEquals(DateTime.parse("1970-01-01T12:34:56.0"), new DateTime(dataTypes.get("timestamp_type")));
 	}
 
 	@Test
@@ -327,9 +341,15 @@ public class ConvertTest implements Keywords {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
+		// types
 		assertEquals(Date.class, dataTypes.get("date_type").getClass());
 		assertEquals(Time.class, dataTypes.get("time_type").getClass());
 		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
+		// values
+		assertEquals(LocalDate.parse("2015-12-31").toDateMidnight().toDateTime(), new DateTime(dataTypes.get("date_type")));
+		assertEquals(new LocalTime("12:34:56").toDateTime(DateTime.parse("1970-01-01")),
+				new DateTime(dataTypes.get("time_type")));
+		assertEquals(DateTime.parse("2015-12-31T12:34:56.123"), new DateTime(dataTypes.get("timestamp_type")));
 	}
 
 	public static Map<String, Map<String, Object>> createTableStructure(Object... data) {

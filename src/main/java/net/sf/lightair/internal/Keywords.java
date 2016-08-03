@@ -10,6 +10,8 @@ public interface Keywords {
 	String DATABASE_DIALECT = "database.dialect";
 	String DATABASE_SCHEMA = "database.schema";
 
+	String TIME_DIFFERENCE_LIMIT_MILLIS = "time.difference.limit.millis";
+
 	String XSD_DIRECTORY = "xsd.directory";
 	String AUTO_INDEX_DIRECTORY = "auto.index.directory";
 

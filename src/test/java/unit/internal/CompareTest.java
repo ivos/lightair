@@ -11,6 +11,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,12 @@ public class CompareTest implements Keywords {
 		return Collections.unmodifiableMap(tables);
 	}
 
+	private static Map<String, String> createProfileProperties(int limit) {
+		Map<String, String> profileProperties = new HashMap<>();
+		profileProperties.put(TIME_DIFFERENCE_LIMIT_MILLIS, String.valueOf(limit));
+		return Collections.unmodifiableMap(profileProperties);
+	}
+
 	@Test
 	public void multipleProfilesAndTablesMatch() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
@@ -83,7 +90,8 @@ public class CompareTest implements Keywords {
 						)
 				));
 
-		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
 
 		String expected = "{p1={t11={MISSING=[],\n" +
 				" DIFFERENT=[],\n" +
@@ -133,7 +141,8 @@ public class CompareTest implements Keywords {
 						)
 				));
 
-		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
 
 		String expected = "{p1={t11={MISSING=[{t11a=1231103mis, t11b=v11b03mis}],\n" +
 				" DIFFERENT=[{EXPECTED={t11a=1231102exp, t11b=v11b02exp, t11c=v11c02},\n" +
@@ -170,7 +179,8 @@ public class CompareTest implements Keywords {
 						)
 				));
 
-		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
 
 		String expected = "{p1={t1={MISSING=[],\n" +
 				" DIFFERENT=[],\n" +
@@ -202,7 +212,8 @@ public class CompareTest implements Keywords {
 						)
 				));
 
-		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
 
 		String expected = "{p1={t1={MISSING=[],\n" +
 				" DIFFERENT=[{EXPECTED={a=a2, b=b2exp, c=c2exp},\n" +
@@ -241,7 +252,8 @@ public class CompareTest implements Keywords {
 						)
 				));
 
-		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
 
 		String expected = "{p1={t1={MISSING=[],\n" +
 				" DIFFERENT=[{EXPECTED={a=a1, b=null},\n" +
@@ -292,7 +304,8 @@ public class CompareTest implements Keywords {
 						)
 				));
 
-		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
 
 		String expected = "{p1={t1={MISSING=[],\n" +
 				" DIFFERENT=[],\n" +
@@ -335,7 +348,8 @@ public class CompareTest implements Keywords {
 						)
 				));
 
-		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
 
 		String expected = "{p1={t1={MISSING=[],\n" +
 				" DIFFERENT=[{EXPECTED={booltrue=true, boolfalse=false, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=12:34:56, timestamp=2015-12-31 12:34:56.123, bytes=BYTEARRAY, clob=clob1, blob=BYTEARRAY},\n" +
@@ -383,7 +397,8 @@ public class CompareTest implements Keywords {
 						"non_empty", Arrays.asList(createRow("c2", "v2"))
 				));
 
-		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
 
 		String expected = "{p1={empty_match={MISSING=[],\n" +
 				" DIFFERENT=[],\n" +
@@ -415,11 +430,48 @@ public class CompareTest implements Keywords {
 						)
 				));
 
-		Map<String, Map<String, Map<String, List<?>>>> result = Compare.compare(expectedDatasets, actualDatasets);
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
 
 		String expected = "{p1={t1={MISSING=[],\n" +
 				" DIFFERENT=[{EXPECTED={anystring=@any, anyint=@any, anynull=@any},\n" +
 				" DIFFERENCES=[{COLUMN=anynull, EXPECTED=@any, ACTUAL=null}]}],\n" +
+				" UNEXPECTED=[]}}}";
+		assertEquals(expected, result.toString()
+				.replace("}, ", "},\n ")
+				.replace("], ", "],\n ")
+		);
+	}
+
+	@Test
+	public void timeDifferenceLimit() {
+		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
+		expectedDatasets.put("p1", Arrays.asList(
+				createRowExpected("t1",
+						"time_match", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
+						"timestamp_match", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
+						"time_nonmatch", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
+						"timestamp_nonmatch", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis())
+				)));
+
+		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
+		actualDatasets.put("p1",
+				createTables(
+						"t1", Arrays.asList(
+								createRow(
+										"time_match", new Time(DateTime.parse("1970-01-01T12:35:01").getMillis()),
+										"timestamp_match", new Timestamp(DateTime.parse("2015-12-31T12:35:01.123").getMillis()),
+										"time_nonmatch", new Time(DateTime.parse("1970-01-01T12:35:02").getMillis()),
+										"timestamp_nonmatch", new Timestamp(DateTime.parse("2015-12-31T12:35:01.124").getMillis())
+								))));
+
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(5_000), expectedDatasets, actualDatasets);
+
+		String expected = "{p1={t1={MISSING=[],\n" +
+				" DIFFERENT=[{EXPECTED={time_match=12:34:56, timestamp_match=2015-12-31 12:34:56.123, time_nonmatch=12:34:56, timestamp_nonmatch=2015-12-31 12:34:56.123},\n" +
+				" DIFFERENCES=[{COLUMN=time_nonmatch, EXPECTED=12:34:56, ACTUAL=12:35:02},\n" +
+				" {COLUMN=timestamp_nonmatch, EXPECTED=2015-12-31 12:34:56.123, ACTUAL=2015-12-31 12:35:01.124}]}],\n" +
 				" UNEXPECTED=[]}}}";
 		assertEquals(expected, result.toString()
 				.replace("}, ", "},\n ")
