@@ -63,5 +63,6 @@ public interface Keywords {
 	String TIMESTAMP_TOKEN = "@timestamp";
 	String AUTO_TOKEN = "@auto";
 	String ANY_TOKEN = "@any";
+	String VARIABLE_PREFIX = "$";
 
 }

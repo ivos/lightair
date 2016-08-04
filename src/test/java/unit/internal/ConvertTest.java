@@ -592,33 +592,41 @@ public class ConvertTest implements Keywords {
 	}
 
 	@Test
-	public void tokenAny() {
+	public void passThrough() { // @any, variables
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
 		profileStructure.put("data_types", InsertTest.createTableStructure(
-				"integer_type", INTEGER, Types.INTEGER,
-				"string_type", STRING, Types.VARCHAR
+				"integer_any", INTEGER, Types.INTEGER,
+				"string_any", STRING, Types.VARCHAR,
+				"integer_var", INTEGER, Types.INTEGER,
+				"string_var", STRING, Types.VARCHAR
 		));
 		structures.put(DEFAULT_PROFILE, profileStructure);
 
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
 		datasets.put(DEFAULT_PROFILE, Arrays.asList(
 				InsertTest.createRow("data_types",
-						"integer_type", "@any",
-						"string_type", "@any"
+						"integer_any", "@any",
+						"string_any", "@any",
+						"integer_var", "$var1",
+						"string_var", "$var2"
 				)
 		));
 
 		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
-				" COLUMNS={integer_type=@any,\n" +
-				" string_type=@any}}]}";
+				" COLUMNS={integer_any=@any,\n" +
+				" string_any=@any,\n" +
+				" integer_var=$var1,\n" +
+				" string_var=$var2}}]}";
 		assertEquals(expected, result.toString().replace(", ", ",\n "));
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
-		assertEquals("integer value", "@any", dataTypes.get("integer_type"));
-		assertEquals("string value", "@any", dataTypes.get("string_type"));
+		assertEquals("integer any", "@any", dataTypes.get("integer_any"));
+		assertEquals("string any", "@any", dataTypes.get("string_any"));
+		assertEquals("integer var", "$var1", dataTypes.get("integer_var"));
+		assertEquals("string var", "$var2", dataTypes.get("string_var"));
 	}
 }

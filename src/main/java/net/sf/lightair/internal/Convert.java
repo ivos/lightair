@@ -3,6 +3,7 @@ package net.sf.lightair.internal;
 import net.sf.lightair.internal.auto.Auto;
 import net.sf.lightair.internal.auto.Index;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -111,7 +112,7 @@ public class Convert implements Keywords {
 		Object result;
 		if (NULL_TOKEN.equals(value)) {
 			result = null;
-		} else if (ANY_TOKEN.equals(value)) {
+		} else if (ANY_TOKEN.equals(value) || StringUtils.startsWith(value, VARIABLE_PREFIX)) {
 			result = value;
 		} else if (DATE_TOKEN.equals(value)) {
 			result = convertTemporal(getTokenDate(), dataType);

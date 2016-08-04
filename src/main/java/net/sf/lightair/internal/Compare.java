@@ -1,6 +1,7 @@
 package net.sf.lightair.internal;
 
 import net.sf.lightair.internal.auto.Index;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ public class Compare implements Keywords {
 			Map<String, List<Map<String, Object>>> expectedDatasets,
 			Map<String, Map<String, List<Map<String, Object>>>> actualDatasets) {
 		long limit = getLimit(profileProperties);
+		Map<String, Object> variables = new HashMap<>();
 
 		Map<String, Map<String, List<Map<String, Object>>>> processedExpectedDatasets =
 				processExpectedDatasets(expectedDatasets);
@@ -45,7 +48,8 @@ public class Compare implements Keywords {
 					throw new NullPointerException(
 							"Missing table " + Index.formatTableKey(profile, tableName) + " in actual dataset.");
 				}
-				Map<String, List<?>> tableDifferences = compareTable(limit, expectedDataset.get(tableName), actualRows);
+				Map<String, List<?>> tableDifferences =
+						compareTable(limit, variables, expectedDataset.get(tableName), actualRows);
 				profileDifferences.put(tableName, tableDifferences);
 			}
 			differences.put(profile, Collections.unmodifiableMap(profileDifferences));
@@ -99,7 +103,7 @@ public class Compare implements Keywords {
 	}
 
 	private static Map<String, List<?>> compareTable(
-			long limit,
+			long limit, Map<String, Object> variables,
 			List<Map<String, Object>> expectedRows,
 			List<Map<String, Object>> actualRows) {
 		List<Map<String, Object>> sortedActualRows = sortActualRows(limit, expectedRows, actualRows);
@@ -122,7 +126,7 @@ public class Compare implements Keywords {
 			int bestMatchingRowId = findBestMatchingRowId(limit, actualRow, unmatchedExpectedRows);
 			unmatchedExpectedRowIds.remove(bestMatchingRowId);
 			Map<String, Object> expectedRow = unmatchedExpectedRows.get(bestMatchingRowId);
-			List<Map<String, Object>> rowDifferences = getRowDifferences(limit, expectedRow, actualRow);
+			List<Map<String, Object>> rowDifferences = getRowDifferences(limit, variables, expectedRow, actualRow);
 			if (rowDifferences.isEmpty()) {
 				log.trace("Perfect match for row {}.", expectedRow);
 			} else {
@@ -164,7 +168,8 @@ public class Compare implements Keywords {
 			Map<String, Object> actualRow = actualRows.get(actualRowId);
 			int bestMatchingRowId = findBestMatchingRowId(limit, actualRow, expectedRows);
 			data[actualRowId][0] = actualRowId;
-			data[actualRowId][1] = getRowDifferences(limit, expectedRows.get(bestMatchingRowId), actualRow).size();
+			data[actualRowId][1] =
+					getRowDifferences(limit, null, expectedRows.get(bestMatchingRowId), actualRow).size();
 		}
 		Arrays.sort(data, (int[] o1, int[] o2) -> {
 			int matchingColumnsComparison = Integer.compare(o1[1], o2[1]);
@@ -188,7 +193,7 @@ public class Compare implements Keywords {
 		Integer bestExpectedRowId = null;
 		for (int expectedRowId = 0; expectedRowId < expectedRows.size(); expectedRowId++) {
 			Map<String, Object> expectedRow = expectedRows.get(expectedRowId);
-			List<Map<String, Object>> rowDifferences = getRowDifferences(limit, expectedRow, actualRow);
+			List<Map<String, Object>> rowDifferences = getRowDifferences(limit, null, expectedRow, actualRow);
 			if (null == bestRowDifferences || rowDifferences.size() < bestRowDifferences.size()) {
 				bestRowDifferences = rowDifferences;
 				bestExpectedRowId = expectedRowId;
@@ -198,22 +203,26 @@ public class Compare implements Keywords {
 	}
 
 	private static List<Map<String, Object>> getRowDifferences(
-			long limit,
+			long limit, Map<String, Object> variables,
 			Map<String, Object> expectedRow,
 			Map<String, Object> actualRow) {
 		List<Map<String, Object>> data = new ArrayList<>();
 		for (String columnName : expectedRow.keySet()) {
 			Object expectedValue = expectedRow.get(columnName);
 			Object actualValue = actualRow.get(columnName);
-			if (!valueMatches(limit, expectedValue, actualValue)) {
-				data.add(createDifference(columnName, expectedValue, actualValue));
+			if (!valueMatches(limit, variables, expectedValue, actualValue)) {
+				data.add(createDifference(variables, columnName, expectedValue, actualValue));
 			}
 		}
 		return Collections.unmodifiableList(data);
 	}
 
 	private static Map<String, Object> createDifference(
+			Map<String, Object> variables,
 			String columnName, Object expectedValue, Object actualValue) {
+		if (isVariable(variables, expectedValue)) {
+			expectedValue = variables.get(expectedValue);
+		}
 		LinkedHashMap<String, Object> data = new LinkedHashMap<>();
 		data.put(COLUMN, columnName);
 		data.put(EXPECTED, expectedValue);
@@ -221,9 +230,20 @@ public class Compare implements Keywords {
 		return Collections.unmodifiableMap(data);
 	}
 
-	private static boolean valueMatches(long limit, Object expectedValue, Object actualValue) {
+	private static boolean valueMatches(
+			long limit, Map<String, Object> variables,
+			Object expectedValue, Object actualValue) {
 		if (ANY_TOKEN.equals(expectedValue) && null != actualValue) {
 			return true;
+		}
+		if (isVariable(variables, expectedValue)) {
+			if (variables.containsKey(expectedValue)) {
+				expectedValue = variables.get(expectedValue);
+			} else {
+				variables.put((String) expectedValue, actualValue);
+				log.debug("Assigned to variable [{}] value [{}].", expectedValue, actualValue);
+				return true;
+			}
 		}
 		if (expectedValue instanceof Date && actualValue instanceof Date) {
 			long diff = Math.abs(((Date) expectedValue).getTime() - ((Date) actualValue).getTime());
@@ -233,5 +253,10 @@ public class Compare implements Keywords {
 			return Arrays.equals((byte[]) expectedValue, (byte[]) actualValue);
 		}
 		return Objects.equals(expectedValue, actualValue);
+	}
+
+	private static boolean isVariable(Map<String, Object> variables, Object expectedValue) {
+		return (null != variables) && (expectedValue instanceof String)
+				&& StringUtils.startsWith((String) expectedValue, VARIABLE_PREFIX);
 	}
 }

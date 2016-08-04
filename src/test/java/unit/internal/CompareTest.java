@@ -478,4 +478,41 @@ public class CompareTest implements Keywords {
 				.replace("], ", "],\n ")
 		);
 	}
+
+	@Test
+	public void variables() {
+		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
+		expectedDatasets.put("p1", Arrays.asList(
+				createRowExpected("t1", "c1", "$var1", "c2", "$var2", "c3", "v131"),
+				createRowExpected("t1", "c1", "$var1", "c2", "$var2", "c3", "v132"),
+				createRowExpected("t1", "c1", "v113", "c2", 7123, "c3", "v133"),
+				createRowExpected("t1", "c1", "$var1", "c2", "$var2", "c3", "v134"),
+				createRowExpected("t1", "c1", "$var1", "c2", "$var2", "c3", "v135")
+		));
+
+		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
+		actualDatasets.put("p1",
+				createTables(
+						"t1", Arrays.asList(
+								createRow("c1", "var1 value", "c2", 7482, "c3", "v131"),
+								createRow("c1", "var1 value", "c2", 7482, "c3", "v132"),
+								createRow("c1", "v113", "c2", 7123, "c3", "v133"),
+								createRow("c1", "v114", "c2", 7124, "c3", "v134"),
+								createRow("c1", "var1 value", "c2", 7482, "c3", "v135")
+						)
+				));
+
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
+
+		String expected = "{p1={t1={MISSING=[],\n" +
+				" DIFFERENT=[{EXPECTED={c1=$var1, c2=$var2, c3=v134},\n" +
+				" DIFFERENCES=[{COLUMN=c1, EXPECTED=var1 value, ACTUAL=v114},\n" +
+				" {COLUMN=c2, EXPECTED=7482, ACTUAL=7124}]}],\n" +
+				" UNEXPECTED=[]}}}";
+		assertEquals(expected, result.toString()
+				.replace("}, ", "},\n ")
+				.replace("], ", "],\n ")
+		);
+	}
 }
