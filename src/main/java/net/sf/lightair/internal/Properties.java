@@ -40,7 +40,8 @@ public class Properties implements Keywords {
 		try {
 			URL resource = Properties.class.getClassLoader().getResource(fileName);
 			if (null == resource) {
-				throw new RuntimeException("Properties not found: " + fileName);
+				throw new RuntimeException("Properties not found: " + fileName +
+						"\nShould be relative to: " + Properties.class.getClassLoader().getResource(".").getFile());
 			}
 			URLConnection urlConnection = resource.openConnection();
 			urlConnection.setUseCaches(false);

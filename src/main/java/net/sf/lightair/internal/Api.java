@@ -62,7 +62,7 @@ public class Api implements Keywords {
 		properties = null;
 	}
 
-	public static void generateXsd(String propertiesFileName) {
+	public static void generateXsd() {
 		Xsd.generate(properties, structures);
 	}
 
