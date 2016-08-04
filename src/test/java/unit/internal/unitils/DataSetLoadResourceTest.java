@@ -1,18 +1,21 @@
 package unit.internal.unitils;
 
-import static org.junit.Assert.*;
-
-import java.lang.reflect.Method;
-
 import net.sf.lightair.exception.DataSetNotFoundException;
 import net.sf.lightair.internal.factory.Factory;
 import net.sf.lightair.internal.properties.PropertiesProvider;
 import net.sf.lightair.internal.unitils.DataSetLoader;
-
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.unitils.dbunit.util.MultiSchemaDataSet;
 
+import java.lang.reflect.Method;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
+@Ignore
 public class DataSetLoadResourceTest {
 
 	DataSetLoader l;

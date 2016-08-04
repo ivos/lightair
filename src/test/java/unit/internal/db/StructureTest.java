@@ -61,6 +61,11 @@ public class StructureTest implements Keywords {
 
 		Map structures = Structure.loadAll(properties, connections);
 
+		h2.db.execute("drop table data_types");
+		h2.db.execute("drop table t1");
+		hsql.db.execute("drop table data_types");
+		hsql.db.execute("drop table t2");
+
 		String expected = "{profile1={data_types={id={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=true, SIZE=10, DECIMAL_DIGITS=0},\n" +
 				" bit_type={DATA_TYPE=BOOLEAN, JDBC_DATA_TYPE=16, NOT_NULL=false, SIZE=1, DECIMAL_DIGITS=0},\n" +
 				" boolean_type={DATA_TYPE=BOOLEAN, JDBC_DATA_TYPE=16, NOT_NULL=false, SIZE=1, DECIMAL_DIGITS=0},\n" +

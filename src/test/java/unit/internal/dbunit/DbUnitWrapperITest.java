@@ -1,12 +1,15 @@
 package unit.internal.dbunit;
 
-import static org.junit.Assert.*;
 import net.sf.lightair.internal.dbunit.DbUnitWrapper;
 import net.sf.lightair.internal.factory.Factory;
-
 import org.dbunit.database.IDatabaseConnection;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+@Ignore
 public class DbUnitWrapperITest {
 
 	DbUnitWrapper w = Factory.getInstance().getDbUnitWrapper();

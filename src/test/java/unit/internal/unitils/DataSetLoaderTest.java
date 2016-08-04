@@ -1,22 +1,25 @@
 package unit.internal.unitils;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.lang.reflect.Method;
-import java.net.URL;
-
 import net.sf.lightair.exception.IllegalDataSetContentException;
 import net.sf.lightair.internal.unitils.DataSetFactory;
 import net.sf.lightair.internal.unitils.DataSetLoader;
 import net.sf.lightair.internal.util.DataSetResolver;
 import net.sf.seaf.test.jmock.JMockSupport;
-
 import org.jmock.Expectations;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.unitils.dbunit.util.MultiSchemaDataSet;
 
+import java.io.File;
+import java.lang.reflect.Method;
+import java.net.URL;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
+@Ignore
 public class DataSetLoaderTest extends JMockSupport {
 
 	DataSetLoader l;

@@ -25,8 +25,10 @@ public class Connections implements Keywords {
 	}
 
 	public static void close(Map<String, Connection> connections) {
-		connections.entrySet().stream()
-				.forEach(entry -> closeConnection(entry.getKey(), entry.getValue()));
+		if (null != connections) {
+			connections.entrySet().stream()
+					.forEach(entry -> closeConnection(entry.getKey(), entry.getValue()));
+		}
 	}
 
 	private static Connection openConnection(String profile, Map<String, String> profileProperties) {
