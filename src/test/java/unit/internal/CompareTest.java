@@ -4,6 +4,7 @@ import net.sf.lightair.internal.Compare;
 import net.sf.lightair.internal.Keywords;
 import org.joda.time.DateTime;
 import org.junit.Test;
+import unit.internal.db.InsertTest;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -20,18 +21,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class CompareTest implements Keywords {
-
-	public static Map<String, Object> createRowExpected(String table, Object... data) {
-		assertTrue("Data in pairs", data.length % 2 == 0);
-		Map<String, Object> row = new LinkedHashMap<>();
-		row.put(TABLE, table);
-		Map<String, Object> columns = new LinkedHashMap<>();
-		for (int i = 0; i < data.length; i = i + 2) {
-			columns.put((String) data[i], data[i + 1]);
-		}
-		row.put(COLUMNS, columns);
-		return Collections.unmodifiableMap(row);
-	}
 
 	public static Map<String, Object> createRow(Object... data) {
 		assertTrue("Data in pairs", data.length % 2 == 0);
@@ -62,13 +51,13 @@ public class CompareTest implements Keywords {
 	public void multipleProfilesAndTablesMatch() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("t11", "t11a", "1231101", "t11b", "v11b01"),
-				createRowExpected("t11", "t11a", "1231102", "t11b", "v11b02"),
-				createRowExpected("t12", "t12a", "1231201", "t12b", "v12b01")
+				InsertTest.createRow("t11", "t11a", "1231101", "t11b", "v11b01"),
+				InsertTest.createRow("t11", "t11a", "1231102", "t11b", "v11b02"),
+				InsertTest.createRow("t12", "t12a", "1231201", "t12b", "v12b01")
 		));
 		expectedDatasets.put("p2", Arrays.asList(
-				createRowExpected("t21", "t21a", "1232101", "t21b", "v21b01"),
-				createRowExpected("t21", "t21a", "1232102", "t21b", "v21b02")
+				InsertTest.createRow("t21", "t21a", "1232101", "t21b", "v21b01"),
+				InsertTest.createRow("t21", "t21a", "1232102", "t21b", "v21b02")
 		));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
@@ -109,15 +98,15 @@ public class CompareTest implements Keywords {
 	public void multipleProfilesAndTablesDiffs() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("t11", "t11a", "1231101", "t11b", "v11b01"),
-				createRowExpected("t11", "t11a", "1231102exp", "t11b", "v11b02exp", "t11c", "v11c02"),
-				createRowExpected("t11", "t11a", "1231103mis", "t11b", "v11b03mis"),
-				createRowExpected("t11", "t11a", "1231104", "t11b", "v11b04"),
-				createRowExpected("t12", "t12a", "1231201", "t12b", "v12b01")
+				InsertTest.createRow("t11", "t11a", "1231101", "t11b", "v11b01"),
+				InsertTest.createRow("t11", "t11a", "1231102exp", "t11b", "v11b02exp", "t11c", "v11c02"),
+				InsertTest.createRow("t11", "t11a", "1231103mis", "t11b", "v11b03mis"),
+				InsertTest.createRow("t11", "t11a", "1231104", "t11b", "v11b04"),
+				InsertTest.createRow("t12", "t12a", "1231201", "t12b", "v12b01")
 		));
 		expectedDatasets.put("p2", Arrays.asList(
-				createRowExpected("t21", "t21a", "1232101", "t21b", "v21b01exp"),
-				createRowExpected("t21", "t21a", "1232102", "t21b", "v21b02")
+				InsertTest.createRow("t21", "t21a", "1232101", "t21b", "v21b01exp"),
+				InsertTest.createRow("t21", "t21a", "1232102", "t21b", "v21b02")
 		));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
@@ -166,8 +155,8 @@ public class CompareTest implements Keywords {
 	public void rowsWithIdenticalData() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("t1", "a", "a1", "b", "b1"),
-				createRowExpected("t1", "a", "a1", "b", "b1")
+				InsertTest.createRow("t1", "a", "a1", "b", "b1"),
+				InsertTest.createRow("t1", "a", "a1", "b", "b1")
 		));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
@@ -195,10 +184,10 @@ public class CompareTest implements Keywords {
 	public void rowMatchingOrder() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("t1", "a", "a4"),
-				createRowExpected("t1", "a", "a3exp", "b", "b3exp"),
-				createRowExpected("t1", "a", "a2", "b", "b2exp", "c", "c2exp"),
-				createRowExpected("t1", "a", "a1", "b", "b1", "c", "c1", "d", "d1")
+				InsertTest.createRow("t1", "a", "a4"),
+				InsertTest.createRow("t1", "a", "a3exp", "b", "b3exp"),
+				InsertTest.createRow("t1", "a", "a2", "b", "b2exp", "c", "c2exp"),
+				InsertTest.createRow("t1", "a", "a1", "b", "b1", "c", "c1", "d", "d1")
 		));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
@@ -233,11 +222,11 @@ public class CompareTest implements Keywords {
 	public void nulls() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("t1", "a", "a1", "b", null),
-				createRowExpected("t1", "a", "a2", "b", "b2"),
-				createRowExpected("t1", "a", "a3", "b", null),
-				createRowExpected("t1", "a", "a4", "b", null),
-				createRowExpected("t1", "a", "a5", "b", "bytes5".getBytes())
+				InsertTest.createRow("t1", "a", "a1", "b", null),
+				InsertTest.createRow("t1", "a", "a2", "b", "b2"),
+				InsertTest.createRow("t1", "a", "a3", "b", null),
+				InsertTest.createRow("t1", "a", "a4", "b", null),
+				InsertTest.createRow("t1", "a", "a5", "b", "bytes5".getBytes())
 		));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
@@ -276,7 +265,7 @@ public class CompareTest implements Keywords {
 	public void dataTypesMatching() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("t1", "booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
+				InsertTest.createRow("t1", "booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
 						"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 						"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
 						"date", new Date(DateTime.parse("2015-12-31").getMillis()),
@@ -320,7 +309,7 @@ public class CompareTest implements Keywords {
 	public void dataTypesDiffs() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("t1", "booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
+				InsertTest.createRow("t1", "booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
 						"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 						"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
 						"date", new Date(DateTime.parse("2015-12-31").getMillis()),
@@ -380,13 +369,13 @@ public class CompareTest implements Keywords {
 	public void emptyTable() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("empty_match"),
-				createRowExpected("empty_nonmatch"),
-				createRowExpected("empty_match"),
-				createRowExpected("empty_nonmatch"),
-				createRowExpected("non_empty"),
-				createRowExpected("non_empty", "c2", "v2"),
-				createRowExpected("non_empty")
+				InsertTest.createRow("empty_match"),
+				InsertTest.createRow("empty_nonmatch"),
+				InsertTest.createRow("empty_match"),
+				InsertTest.createRow("empty_nonmatch"),
+				InsertTest.createRow("non_empty"),
+				InsertTest.createRow("non_empty", "c2", "v2"),
+				InsertTest.createRow("non_empty")
 		));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
@@ -419,7 +408,7 @@ public class CompareTest implements Keywords {
 	public void tokenAny() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("t1", "anystring", "@any", "anyint", "@any", "anynull", "@any")
+				InsertTest.createRow("t1", "anystring", "@any", "anyint", "@any", "anynull", "@any")
 		));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
@@ -447,7 +436,7 @@ public class CompareTest implements Keywords {
 	public void timeDifferenceLimit() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("t1",
+				InsertTest.createRow("t1",
 						"time_match", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
 						"timestamp_match", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 						"time_nonmatch", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
@@ -483,11 +472,11 @@ public class CompareTest implements Keywords {
 	public void variables() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
-				createRowExpected("t1", "c1", "$var1", "c2", "$var2", "c3", "v131"),
-				createRowExpected("t1", "c1", "$var1", "c2", "$var2", "c3", "v132"),
-				createRowExpected("t1", "c1", "v113", "c2", 7123, "c3", "v133"),
-				createRowExpected("t1", "c1", "$var1", "c2", "$var2", "c3", "v134"),
-				createRowExpected("t1", "c1", "$var1", "c2", "$var2", "c3", "v135")
+				InsertTest.createRow("t1", "c1", "$var1", "c2", "$var2", "c3", "v131"),
+				InsertTest.createRow("t1", "c1", "$var1", "c2", "$var2", "c3", "v132"),
+				InsertTest.createRow("t1", "c1", "v113", "c2", 7123, "c3", "v133"),
+				InsertTest.createRow("t1", "c1", "$var1", "c2", "$var2", "c3", "v134"),
+				InsertTest.createRow("t1", "c1", "$var1", "c2", "$var2", "c3", "v135")
 		));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();

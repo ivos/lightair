@@ -18,13 +18,13 @@ import static org.junit.Assert.fail;
 
 public class InsertTest implements Keywords {
 
-	public static Map<String, Object> createRow(String table, String... data) {
+	public static Map<String, Object> createRow(String table, Object... data) {
 		assertTrue("Data in pairs", data.length % 2 == 0);
 		Map<String, Object> row = new LinkedHashMap<>();
 		row.put(TABLE, table);
-		Map<String, String> columns = new LinkedHashMap<>();
+		Map<String, Object> columns = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i = i + 2) {
-			columns.put(data[i], data[i + 1]);
+			columns.put((String) data[i], data[i + 1]);
 		}
 		row.put(COLUMNS, columns);
 		return Collections.unmodifiableMap(row);
@@ -66,9 +66,9 @@ public class InsertTest implements Keywords {
 				));
 
 		List<Map<String, Object>> dataset = Arrays.asList(
-				createRow("t1", "ta", "1", "tb", "bv1", "tc", "cv1"),
-				createRow("t2", "ta", "2", "tc", "cv2", "td", "dv2"),
-				createRow("t2", "ta", "3", "td", "dv3", "te", "ce3", "tf", "cf3")
+				createRow("t1", "ta", 1, "tb", "bv1", "tc", "cv1"),
+				createRow("t2", "ta", 2, "tc", "cv2", "td", "dv2"),
+				createRow("t2", "ta", 3, "td", "dv3", "te", "ce3", "tf", "cf3")
 		);
 
 		List<Map<String, Object>> data = Insert.create(profileProperties, profileStructure, dataset);

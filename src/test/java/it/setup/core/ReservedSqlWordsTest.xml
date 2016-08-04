@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<SELECT id="0" VARCHAR="abcdefghijklmnopqrstuvxyz" INTEGER="12345678"
-		DATE="2999-12-31" ORDER="order1" />
+	<SELECT id="0" VARCHAR="abcdefghijklmnopqrstuvxyz" INTEGER="12345678" DATE="2999-12-31" ORDER="order1"/>
 </dataset>
