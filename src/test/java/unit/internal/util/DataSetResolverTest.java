@@ -1,6 +1,6 @@
 package unit.internal.util;
 
-import net.sf.lightair.internal.junit.util.DataSetResolver;
+import net.sf.lightair.internal.util.DataSetResolver;
 import org.junit.Before;
 import org.junit.Test;
 

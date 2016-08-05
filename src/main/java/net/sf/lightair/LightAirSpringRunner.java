@@ -1,6 +1,7 @@
 package net.sf.lightair;
 
-import net.sf.lightair.internal.junit.util.Factory;
+import net.sf.lightair.internal.Api;
+import net.sf.lightair.internal.util.Factory;
 import org.junit.rules.RunRules;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;

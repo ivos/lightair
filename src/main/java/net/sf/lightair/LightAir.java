@@ -3,7 +3,7 @@ package net.sf.lightair;
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.annotation.Verify;
 import net.sf.lightair.internal.Keywords;
-import net.sf.lightair.internal.junit.util.Factory;
+import net.sf.lightair.internal.util.Factory;
 import org.junit.rules.RunRules;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;

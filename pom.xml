@@ -200,6 +200,7 @@
 			<version>2.3.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
 		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the JDK. -->
 		<dependency>
 			<groupId>org.springframework</groupId>

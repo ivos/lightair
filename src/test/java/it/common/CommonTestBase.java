@@ -1,6 +1,6 @@
 package it.common;
 
-import net.sf.lightair.internal.junit.util.Factory;
+import net.sf.lightair.internal.util.Factory;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
