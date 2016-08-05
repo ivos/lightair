@@ -1,6 +1,6 @@
 package it.common;
 
-import net.sf.lightair.internal.factory.Factory;
+import net.sf.lightair.internal.util.Factory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,7 +21,6 @@ public class DataTypesTestBase {
 	@BeforeClass
 	public static void initDataTypesTestBase() {
 		Factory.getInstance().init();
-		ConfigSupport.init();
 	}
 
 	@AfterClass

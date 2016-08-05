@@ -23,7 +23,6 @@ public class ReplaceNewTimestampTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, time1 time, timestamp1 timestamp)");
 		DateTimeUtils.setCurrentMillisSystem();
-		ConfigSupport.init();
 		ConfigSupport.replaceConfig("diff1");
 	}
 

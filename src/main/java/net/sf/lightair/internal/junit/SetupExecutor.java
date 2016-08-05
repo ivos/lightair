@@ -1,11 +1,7 @@
 package net.sf.lightair.internal.junit;
 
 import net.sf.lightair.annotation.Setup;
-import net.sf.lightair.exception.DataSetNotFoundException;
-import net.sf.lightair.exception.TokenAnyInSetupException;
 import net.sf.lightair.internal.Api;
-import net.sf.lightair.internal.factory.Factory;
-import net.sf.lightair.internal.unitils.UnitilsWrapper;
 import net.sf.lightair.internal.util.DataSetResolver;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
@@ -15,6 +11,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +31,6 @@ public class SetupExecutor {
 			stopWatch = new StopWatch();
 			stopWatch.start();
 		}
-		Factory.getInstance().initDataSetProcessing();
 
 		Map<String, List<String>> apiFileNames = new LinkedHashMap<>();
 		List<URL> urls = dataSetResolver.resolve(profile, testMethod, "", fileNames);
@@ -43,16 +39,13 @@ public class SetupExecutor {
 					try {
 						return new File(url.toURI()).getPath();
 					} catch (URISyntaxException e) {
-						throw new DataSetNotFoundException(e);
+						throw new RuntimeException("Data set not found " + Arrays.toString(fileNames) + ".", e);
 					}
 				})
 				.collect(Collectors.toList());
 		apiFileNames.put(profile, filePaths);
 		Api.setup(apiFileNames);
 
-		if (Factory.getInstance().getDataSetProcessingData().isTokenAnyPresent()) {
-			throw new TokenAnyInSetupException();
-		}
 		if (null != stopWatch) {
 			stopWatch.stop();
 			log.debug("Database set up in {} ms.", stopWatch.getTime());
@@ -60,17 +53,6 @@ public class SetupExecutor {
 	}
 
 	// beans and their setters:
-
-	protected UnitilsWrapper unitilsWrapper;
-
-	/**
-	 * Set Unitils wrapper.
-	 *
-	 * @param unitilsWrapper Unitils wrapper
-	 */
-	public void setUnitilsWrapper(UnitilsWrapper unitilsWrapper) {
-		this.unitilsWrapper = unitilsWrapper;
-	}
 
 	private DataSetResolver dataSetResolver;
 

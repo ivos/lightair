@@ -33,7 +33,6 @@ public class ProfilesTestBase {
 		dbHsqldb.execute("create table hsqldbPerson (hsqldbName varchar(50))");
 		dbDefaultH2.execute("create schema custom authorization sa");
 		dbCustom.execute("create table custom.customPerson (customName varchar(50))");
-		ConfigSupport.init();
 		ConfigSupport.replaceConfig("profiles");
 	}
 

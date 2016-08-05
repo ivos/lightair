@@ -1,11 +1,8 @@
 package net.sf.lightair;
 
 import net.sf.lightair.internal.Api;
-import net.sf.lightair.internal.factory.Factory;
+import net.sf.lightair.internal.util.Factory;
 import org.junit.rules.RunRules;
-import org.junit.runner.Result;
-import org.junit.runner.notification.RunListener;
-import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
@@ -50,20 +47,5 @@ public class LightAirSpringRunner extends SpringJUnit4ClassRunner {
 	protected Statement methodInvoker(FrameworkMethod method, Object test) {
 		Statement statement = super.methodInvoker(method, test);
 		return new RunRules(statement, Factory.getInstance().getAllTestRules(method), describeChild(method));
-	}
-
-	/**
-	 * Overriding classBlock in order to add connection closing listener.
-	 */
-	@Override
-	protected Statement classBlock(final RunNotifier notifier) {
-		notifier.addListener(new RunListener() {
-			@Override
-			public void testRunFinished(Result result) throws Exception {
-				// close and clean all db connections
-				Factory.getInstance().resetConnectionCache();
-			}
-		});
-		return super.classBlock(notifier);
 	}
 }

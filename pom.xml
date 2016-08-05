@@ -53,8 +53,8 @@
 		</license>
 	</licenses>
 	<issueManagement>
-		<system>Sourceforge</system>
-		<url>http://sourceforge.net/p/lightair/tickets/</url>
+		<system>GitHub</system>
+		<url>https://github.com/ivos/lightair/issues</url>
 	</issueManagement>
 
 	<properties>
@@ -62,7 +62,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<jwebunit-version>3.1</jwebunit-version>
 		<junit-version>4.11</junit-version>
 		<testng-version>6.8.13</testng-version>
 	</properties>
@@ -118,71 +117,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- DbUnit -->
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<version>2.4.9</version>
-		</dependency>
-		<dependency>
-			<groupId>org.unitils</groupId>
-			<artifactId>unitils-core</artifactId>
-			<version>3.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>ognl</groupId>
-					<artifactId>ognl</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- Unitils -->
-		<dependency>
-			<groupId>org.unitils</groupId>
-			<artifactId>unitils-dbunit</artifactId>
-			<version>3.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hibernate</groupId>
-					<artifactId>hibernate</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-dbcp</groupId>
-					<artifactId>commons-dbcp</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.unitils</groupId>
-					<artifactId>unitils-database</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- JWebUnit -->
-		<dependency>
-			<groupId>net.sourceforge.jwebunit</groupId>
-			<artifactId>jwebunit-core</artifactId>
-			<!-- ! version extracted to ${jwebunit-version} for project-setup.apt.vm -->
-			<version>3.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hamcrest</groupId>
-					<artifactId>hamcrest-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit-dep</artifactId>
-				</exclusion>
-			</exclusions>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<!-- fix jwebunit-core dependencies, servlet-api should always be provided -->
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<!-- Apache -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -200,13 +134,6 @@
 			<version>1.8</version>
 		</dependency>
 
-		<!-- C3P0 -->
-		<dependency>
-			<groupId>com.mchange</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>0.9.2.1</version>
-		</dependency>
-
 		<!-- Joda time -->
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -221,14 +148,7 @@
 			<version>1.7.5</version>
 		</dependency>
 		<dependency>
-			<!-- route c3p0 logging to slf4j -->
-			<groupId>org.slf4j</groupId>
-			<artifactId>log4j-over-slf4j</artifactId>
-			<version>1.7.5</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<!-- unitils (and spring-jdbc in test) log via jcl, route to slf4j: -->
+			<!-- spring-jdbc in test logs via jcl, route to slf4j: -->
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>1.7.5</version>
@@ -280,19 +200,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>10.10.1.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>3.2.3.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the 
-			JDK. -->
+		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the JDK. -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>

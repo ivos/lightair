@@ -1,10 +1,8 @@
 package net.sf.lightair;
 
-import static net.sourceforge.jwebunit.junit.JWebUnit.setBaseUrl;
-import net.sf.lightair.annotation.BaseUrl;
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.annotation.Verify;
-import net.sf.lightair.internal.factory.Factory;
+import net.sf.lightair.internal.util.Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.IInvokedMethod;
@@ -50,11 +48,6 @@ public class LightAirNGListener implements IInvokedMethodListener, ITestListener
 				for (Setup set : setups) {
 					Factory.getInstance().getSetupExecutor().execute(set, method);
 				}
-			}
-			BaseUrl baseUrl = getActiveBaseUrlAnnotation(method);
-			if (null != baseUrl){
-				log.info("Applying base URL [{}].", baseUrl);
-				setBaseUrl(baseUrl.value());
 			}
 		}
 	}
@@ -129,21 +122,8 @@ public class LightAirNGListener implements IInvokedMethodListener, ITestListener
 		return verifies;
 	}
 
-	/**
-	 * Get BaseUrl for executing before given method.
-	 */
-	private BaseUrl getActiveBaseUrlAnnotation(Method method) {
-		BaseUrl methodVerifyAnnotation = method.getAnnotation(BaseUrl.class);
-		if (null != methodVerifyAnnotation) {
-			return methodVerifyAnnotation;
-		}
-		return method.getDeclaringClass().getAnnotation(BaseUrl.class);
-	}
-
 	// ITestListener's methods
 	public void onFinish(ITestContext iTestContext) {
-		// reset connection cache after test execution
-		Factory.getInstance().resetConnectionCache();
 	}
 
 	public void onTestStart(ITestResult iTestResult) {

@@ -17,7 +17,6 @@ public class TimeDifferenceLimitTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, "
 				+ "date1 date, time1 time, timestamp1 timestamp)");
-		ConfigSupport.init();
 		ConfigSupport.replaceConfig("diff60");
 	}
 

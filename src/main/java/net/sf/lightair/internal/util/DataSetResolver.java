@@ -1,13 +1,12 @@
 package net.sf.lightair.internal.util;
 
-import net.sf.lightair.exception.DataSetNotFoundException;
-import net.sf.lightair.exception.IllegalDataSetContentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,10 +30,8 @@ public class DataSetResolver {
 				addExplicitFiles(testMethod, fileNames, resources);
 			}
 			return resources;
-		} catch (IllegalDataSetContentException e) {
-			throw new IllegalDataSetContentException(e, fileNames);
-		} catch (DataSetNotFoundException e) {
-			throw new DataSetNotFoundException(e, fileNames);
+		} catch (RuntimeException e) {
+			throw new RuntimeException("Data set not found " + Arrays.toString(fileNames) + ".", e);
 		}
 	}
 
@@ -124,13 +121,11 @@ public class DataSetResolver {
 	 * @param testMethod Test method
 	 * @param fileName   File name to resolve
 	 * @return Resolved file
-	 * @throws DataSetNotFoundException when no such file exists
 	 */
-	public URL resolve(Method testMethod, String fileName)
-			throws DataSetNotFoundException {
+	public URL resolve(Method testMethod, String fileName) {
 		URL url = resolveIfExists(testMethod, fileName);
 		if (null == url) {
-			throw new DataSetNotFoundException(fileName);
+			throw new RuntimeException("Data set not found [" + fileName + "].");
 		}
 		return url;
 	}

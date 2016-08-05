@@ -32,7 +32,6 @@ public class TimeDifferenceLimitFailureTest extends CommonTestBase {
 
 	@Before
 	public void before() {
-		ConfigSupport.init();
 		ConfigSupport.replaceConfig("diff60");
 	}
 
