@@ -1,7 +1,7 @@
 package net.sf.lightair.internal.junit;
 
 import net.sf.lightair.annotation.Verify;
-import net.sf.lightair.internal.Api;
+import net.sf.lightair.Api;
 import net.sf.lightair.internal.util.DataSetResolver;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;

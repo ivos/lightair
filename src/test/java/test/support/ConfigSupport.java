@@ -1,6 +1,6 @@
 package test.support;
 
-import net.sf.lightair.internal.Api;
+import net.sf.lightair.Api;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Index;
 

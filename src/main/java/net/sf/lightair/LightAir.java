@@ -2,7 +2,6 @@ package net.sf.lightair;
 
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.annotation.Verify;
-import net.sf.lightair.internal.Api;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.util.Factory;
 import org.junit.rules.RunRules;

@@ -1,5 +1,13 @@
-package net.sf.lightair.internal;
+package net.sf.lightair;
 
+import net.sf.lightair.internal.Compare;
+import net.sf.lightair.internal.Connections;
+import net.sf.lightair.internal.Convert;
+import net.sf.lightair.internal.Keywords;
+import net.sf.lightair.internal.Properties;
+import net.sf.lightair.internal.Report;
+import net.sf.lightair.internal.Xml;
+import net.sf.lightair.internal.Xsd;
 import net.sf.lightair.internal.auto.Index;
 import net.sf.lightair.internal.db.Delete;
 import net.sf.lightair.internal.db.ExecuteQuery;
