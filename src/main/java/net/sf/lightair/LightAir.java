@@ -3,6 +3,7 @@ package net.sf.lightair;
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.annotation.Verify;
 import net.sf.lightair.internal.Api;
+import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.factory.Factory;
 import org.junit.rules.RunRules;
 import org.junit.runner.Result;
@@ -27,17 +28,10 @@ import org.junit.runners.model.Statement;
  * Then use annotations @{@link Setup}, @{@link Verify} to define actions Light
  * air should take on the test.
  */
-public class LightAir extends BlockJUnit4ClassRunner {
-
-	public static final String DEFAULT_PROPERTIES_FILE_NAME = "light-air.properties";
-	public static final String PROPERTIES_PROPERTY_NAME = "light.air.properties";
+public class LightAir extends BlockJUnit4ClassRunner implements Keywords {
 
 	static {
-		String properties = System.getProperty(PROPERTIES_PROPERTY_NAME);
-		if (null == properties) {
-			properties = DEFAULT_PROPERTIES_FILE_NAME;
-		}
-		Api.initialize(properties);
+		Api.initialize(Api.getPropertiesFileName());
 		Runtime.getRuntime().addShutdownHook(new Thread(Api::shutdown));
 	}
 
@@ -52,8 +46,7 @@ public class LightAir extends BlockJUnit4ClassRunner {
 	@Override
 	protected Statement methodInvoker(FrameworkMethod method, Object test) {
 		Statement statement = super.methodInvoker(method, test);
-		return new RunRules(statement, Factory.getInstance().getAllTestRules(
-				method), describeChild(method));
+		return new RunRules(statement, Factory.getInstance().getAllTestRules(method), describeChild(method));
 	}
 
 	/**

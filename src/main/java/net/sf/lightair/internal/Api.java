@@ -21,11 +21,21 @@ public class Api implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Api.class);
 
+	public static final String PROPERTIES_PROPERTY_NAME = "light.air.properties";
+
 	private static String propertiesFileName;
 	private static Map<String, Map<String, String>> properties;
 	private static Map<String, Connection> connections;
 	private static Map<String, Map<String, Map<String, Map<String, Object>>>> structures;
 	private static Map<String, String> index;
+
+	public static String getPropertiesFileName() {
+		String fileName = System.getProperty(PROPERTIES_PROPERTY_NAME);
+		if (null == fileName) {
+			fileName = DEFAULT_PROPERTIES_FILE_NAME;
+		}
+		return fileName;
+	}
 
 	public static void initialize(String propertiesFileName) {
 		log.info("Initializing Light Air.");
@@ -45,6 +55,20 @@ public class Api implements Keywords {
 		performShutdown();
 		performInitialization();
 		log.debug("Light Air has re-initialized.");
+	}
+
+	public static void ensureInitialized(String propertiesFileName) {
+		log.trace("Ensuring Light Air has been initialized.");
+		if (null == index) {
+			initialize(propertiesFileName);
+		}
+	}
+
+	public static void ensureShutdown() {
+		log.trace("Ensuring Light Air has been shutdown.");
+		if (null != properties) {
+			shutdown();
+		}
 	}
 
 	private static void performInitialization() {

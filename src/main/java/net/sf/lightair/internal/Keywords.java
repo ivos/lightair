@@ -15,7 +15,7 @@ public interface Keywords {
 	String XSD_DIRECTORY = "xsd.directory";
 	String AUTO_INDEX_DIRECTORY = "auto.index.directory";
 
-	String DEFAULT_PROPERTIES_FILE_NAME = "light-air.properties";
+	String DEFAULT_PROPERTIES_FILE_NAME = "target/test-classes/light-air.properties";
 	String DEFAULT_XSD_DIRECTORY = "src/test/java";
 	String DEFAULT_AUTO_INDEX_DIRECTORY = "src/test/resources";
 

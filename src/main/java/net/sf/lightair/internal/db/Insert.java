@@ -92,7 +92,7 @@ public class Insert implements Keywords {
 					"Token @any found in setup dataset. This token is only allowed in verification datasets.");
 		}
 
-		log.debug("Creating insert parameter for {}.{}.{}.", schema, tableName, columnName);
+		log.trace("Creating insert parameter for {}.{}.{}.", schema, tableName, columnName);
 		Map<String, Object> parameter = new LinkedHashMap<>();
 		parameter.put(DATA_TYPE, column.get(DATA_TYPE));
 		parameter.put(JDBC_DATA_TYPE, column.get(JDBC_DATA_TYPE));
