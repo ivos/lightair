@@ -93,6 +93,7 @@ public class Structure implements Keywords {
 	}
 
 	private static String resolveDataType(int sqlDataType, String sqlTypeName) {
+		// generic:
 		switch (sqlDataType) {
 			case Types.BIT:
 			case Types.BOOLEAN:
@@ -140,6 +141,27 @@ public class Structure implements Keywords {
 			case Types.BLOB:
 				return BLOB;
 		}
+
+		// Oracle:
+		if (Types.OTHER == sqlDataType) {
+			switch (sqlTypeName) {
+				case "ROWID":
+					return LONG;
+				case "NCLOB":
+					return NCLOB;
+				case "NCHAR":
+				case "NVARCHAR2":
+					return NSTRING;
+			}
+		}
+		if (101 == sqlDataType && "BINARY_DOUBLE".equals(sqlTypeName)) {
+			return DOUBLE;
+		}
+		if (100 == sqlDataType && "BINARY_FLOAT".equals(sqlTypeName)) {
+			return FLOAT;
+		}
+
+		// fallback to String:
 		log.error("Unknown type {} (with name {}), trying to resolve it as STRING.", sqlDataType, sqlTypeName);
 		return STRING;
 	}

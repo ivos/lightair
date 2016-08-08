@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.sf.lightair</groupId>
@@ -69,8 +70,8 @@
 		<connection>scm:git:git@github.com:ivos/lightair.git</connection>
 		<developerConnection>scm:git:git@github.com:ivos/lightair.git</developerConnection>
 		<url>https://github.com/ivos/lightair</url>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>sonatype-nexus-snapshots</id>
@@ -199,13 +200,13 @@
 			<version>2.3.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the JDK. -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>3.2.3.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the JDK. -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
