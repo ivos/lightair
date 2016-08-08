@@ -283,7 +283,7 @@ public class CompareTest implements Keywords {
 						"t1", Arrays.asList(
 								createRow("booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
 										"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
-										"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
+										"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.78900"),
 										"date", new Date(DateTime.parse("2015-12-31").getMillis()),
 										"time", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
 										"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),

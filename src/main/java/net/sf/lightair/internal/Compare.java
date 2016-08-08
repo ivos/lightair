@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -251,6 +252,9 @@ public class Compare implements Keywords {
 		}
 		if (expectedValue instanceof byte[] && actualValue instanceof byte[]) {
 			return Arrays.equals((byte[]) expectedValue, (byte[]) actualValue);
+		}
+		if (expectedValue instanceof BigDecimal && actualValue instanceof BigDecimal) {
+			return 0 == ((BigDecimal) expectedValue).compareTo(((BigDecimal) actualValue));
 		}
 		return Objects.equals(expectedValue, actualValue);
 	}
