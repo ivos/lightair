@@ -30,6 +30,11 @@ import java.lang.reflect.Method;
  */
 public class LightAirNGListener implements IInvokedMethodListener, ITestListener {
 
+	static {
+		Api.initialize(Api.getPropertiesFileName());
+		Runtime.getRuntime().addShutdownHook(new Thread(Api::shutdown));
+	}
+
 	private final Logger log = LoggerFactory.getLogger(LightAirNGListener.class);
 
 	/**

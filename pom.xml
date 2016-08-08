@@ -268,11 +268,11 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.19</version>
 					<dependencies>
-						<!--<dependency>-->
-							<!--<groupId>org.apache.maven.surefire</groupId>-->
-							<!--<artifactId>surefire-testng</artifactId>-->
-							<!--<version>2.19</version>-->
-						<!--</dependency>-->
+						<dependency>
+							<groupId>org.apache.maven.surefire</groupId>
+							<artifactId>surefire-testng</artifactId>
+							<version>2.19</version>
+						</dependency>
 						<dependency>
 							<groupId>org.apache.maven.surefire</groupId>
 							<artifactId>surefire-junit47</artifactId>
@@ -281,15 +281,15 @@
 					</dependencies>
 					<configuration>
 						<threadCount>1</threadCount>
-						<!--<suiteXmlFiles>-->
-							<!--<suiteXmlFile>src/test/resources/testng/testng.xml</suiteXmlFile>-->
-						<!--</suiteXmlFiles>-->
-						<!--<properties>-->
-							<!--<property>-->
-								<!--<name>surefire.testng.verbose</name>-->
-								<!--<value>2</value>-->
-							<!--</property>-->
-						<!--</properties>-->
+						<suiteXmlFiles>
+							<suiteXmlFile>src/test/resources/testng/testng.xml</suiteXmlFile>
+						</suiteXmlFiles>
+						<properties>
+							<property>
+								<name>surefire.testng.verbose</name>
+								<value>2</value>
+							</property>
+						</properties>
 					</configuration>
 				</plugin>
 			</plugins>
