@@ -1,6 +1,6 @@
 package it.common;
 
-import net.sf.lightair.internal.util.Factory;
+import net.sf.lightair.internal.junit.util.Factory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.springframework.jdbc.core.JdbcTemplate;

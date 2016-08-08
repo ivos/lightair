@@ -2,7 +2,7 @@ package net.sf.lightair;
 
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.annotation.Verify;
-import net.sf.lightair.internal.util.Factory;
+import net.sf.lightair.internal.junit.util.Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.IInvokedMethod;

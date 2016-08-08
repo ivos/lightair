@@ -1,4 +1,4 @@
-package net.sf.lightair.internal.util;
+package net.sf.lightair.internal.junit.util;
 
 import net.sf.lightair.internal.junit.SetupExecutor;
 import net.sf.lightair.internal.junit.SetupListTestRule;

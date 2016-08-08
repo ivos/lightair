@@ -1,4 +1,4 @@
-package net.sf.lightair.internal.util;
+package net.sf.lightair.internal.junit.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
