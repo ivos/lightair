@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class Xsd implements Keywords {
@@ -125,7 +126,7 @@ public class Xsd implements Keywords {
 	private static void writeFile(File directory, String fileName, String content) {
 		File file = new File(directory, fileName);
 		try {
-			FileUtils.writeStringToFile(file, content);
+			FileUtils.writeStringToFile(file, content, StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot write XSD file " + file, e);
 		}
