@@ -31,8 +31,7 @@ public class ExecuteUpdate implements Keywords {
 	}
 
 	private static void updateStatement(Connection connection, String sql, List<Map<String, Object>> parameters) {
-		try {
-			PreparedStatement statement = connection.prepareStatement(sql);
+		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			for (int index = 0; index < parameters.size(); index++) {
 				Map<String, Object> parameter = parameters.get(index);
 				String type = (String) parameter.get(DATA_TYPE);

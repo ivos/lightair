@@ -40,11 +40,11 @@ public class ExecuteQuery implements Keywords {
 	private static List<Map<String, Object>> queryStatement(
 			Connection connection, String sql, Map<String, Map<String, Object>> columns) {
 		List<Map<String, Object>> rows = new ArrayList<>();
-		try {
-			PreparedStatement statement = connection.prepareStatement(sql);
-			ResultSet rs = statement.executeQuery();
-			while (rs.next()) {
-				rows.add(queryRow(columns, rs));
+		try (PreparedStatement statement = connection.prepareStatement(sql)) {
+			try (ResultSet rs = statement.executeQuery()) {
+				while (rs.next()) {
+					rows.add(queryRow(columns, rs));
+				}
 			}
 			log.debug("Loaded {} rows executing sql: {}", rows.size(), sql);
 		} catch (SQLException e) {
