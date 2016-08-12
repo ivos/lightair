@@ -29,14 +29,30 @@ public class Structure implements Keywords {
 		return Collections.unmodifiableMap(structures);
 	}
 
+	public static void updateForTables(
+			Map<String, Map<String, Map<String, Map<String, Object>>>> structures,
+			Map<String, List<Map<String, Object>>> datasets,
+			Map<String, Map<String, String>> properties,
+			Map<String, Connection> connections) {
+		for (String profile : datasets.keySet()) {
+			Map<String, Map<String, Map<String, Object>>> profileStructures = structures.get(profile);
+			if (null == profileStructures) {
+				profileStructures = new LinkedHashMap<>();
+				structures.put(profile, profileStructures);
+			}
+			updateForProfile(profileStructures, datasets.get(profile),
+					properties.get(profile), connections.get(profile));
+		}
+	}
+
 	private static String convert(String name) {
 		return name.toLowerCase();
 	}
 
 	private static Map<String, Map<String, Map<String, Object>>> loadProfile(
-			String profile, Map<String, String> profileProperties, Connection connection) {
-		String dialect = profileProperties.get(DATABASE_DIALECT);
-		String schema = profileProperties.get(DATABASE_SCHEMA);
+			String profile, Map<String, String> properties, Connection connection) {
+		String dialect = properties.get(DATABASE_DIALECT);
+		String schema = properties.get(DATABASE_SCHEMA);
 
 		Objects.requireNonNull(dialect, "Database dialect is required.");
 

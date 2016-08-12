@@ -1,4 +1,4 @@
-package unit.internal.db;
+package unit.internal.db.structure;
 
 import net.sf.lightair.internal.Connections;
 import net.sf.lightair.internal.Keywords;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class StructureTest implements Keywords {
+public class LoadAllTest implements Keywords {
 
 	private Map<String, String> createProperties(
 			String driverClassName, String url, String userName, String password, String dialect, String schema) {

@@ -35,7 +35,6 @@ public class Api implements Keywords {
 	private static Map<String, Map<String, String>> properties;
 	private static Map<String, Connection> connections;
 	private static Map<String, Map<String, Map<String, Map<String, Object>>>> structures;
-	private static Map<String, String> index;
 
 	public static String getPropertiesFileName() {
 		String fileName = System.getProperty(PROPERTIES_PROPERTY_NAME);
@@ -67,7 +66,7 @@ public class Api implements Keywords {
 
 	public static void ensureInitialized(String propertiesFileName) {
 		log.trace("Ensuring Light Air has been initialized.");
-		if (null == index) {
+		if (null == structures) {
 			initialize(propertiesFileName);
 		}
 	}
@@ -82,25 +81,25 @@ public class Api implements Keywords {
 	private static void performInitialization() {
 		properties = Properties.load(propertiesFileName);
 		connections = Connections.open(properties);
-		structures = Structure.loadAll(properties, connections);
-		index = Index.readAndUpdate(properties, structures);
+		structures = new LinkedHashMap<>();
 	}
 
 	private static void performShutdown() {
 		Connections.close(connections);
-		index = null;
 		structures = null;
 		connections = null;
 		properties = null;
 	}
 
 	public static void generateXsd() {
-		Xsd.generate(properties, structures);
+		Xsd.generate(properties, Structure.loadAll(properties, connections));
 	}
 
 	public static void setup(Map<String, List<String>> fileNames) {
 		log.info("Performing setup for files {}.", fileNames);
 		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
+		Structure.updateForTables(structures, xmlDatasets, properties, connections);
+		Map<String, String> index = Index.readAndUpdate(properties, structures);
 		Map<String, List<Map<String, Object>>> datasets = Convert.convert(structures, index, xmlDatasets);
 
 		for (String profile : datasets.keySet()) {
@@ -121,6 +120,8 @@ public class Api implements Keywords {
 	public static void verify(Map<String, List<String>> fileNames) {
 		log.info("Performing verify for files {}.", fileNames);
 		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
+		Structure.updateForTables(structures, xmlDatasets, properties, connections);
+		Map<String, String> index = Index.readAndUpdate(properties, structures);
 		Map<String, List<Map<String, Object>>> expectedDatasets = Convert.convert(structures, index, xmlDatasets);
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
