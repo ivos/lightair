@@ -9,10 +9,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -43,55 +41,44 @@ public class Structure implements Keywords {
 		Objects.requireNonNull(dialect, "Database dialect is required.");
 
 		log.debug("Loading structure for profile [{}].", profile);
-
 		Map<String, Map<String, Map<String, Object>>> data = new LinkedHashMap<>();
-		List<String> tables = loadTables(connection, schema);
-		for (String table : tables) {
-			Map<String, Map<String, Object>> columns = loadTableColumns(connection, schema, table);
-			data.put(convert(table), columns);
-		}
-		return Collections.unmodifiableMap(data);
-	}
-
-	private static List<String> loadTables(Connection connection, String schema) {
-		log.debug("Loading structure for schema {}.", schema);
-		List<String> data = new ArrayList<>();
 		try {
 			DatabaseMetaData meta = connection.getMetaData();
-			try (ResultSet rs = meta.getTables(connection.getCatalog(), schema, null, null)) {
+			try (ResultSet rs = meta.getColumns(connection.getCatalog(), schema, null, null)) {
+				String currentTableName = null;
+				Map<String, Map<String, Object>> table = null;
 				while (rs.next()) {
-					data.add(rs.getString(3));
-				}
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException("Cannot load database metadata.", e);
-		}
-		return Collections.unmodifiableList(data);
-	}
-
-	private static Map<String, Map<String, Object>> loadTableColumns(
-			Connection connection, String schema, String table) {
-		log.debug("Loading structure for table {}/{}.", schema, table);
-		Map<String, Map<String, Object>> data = new LinkedHashMap<>();
-		try {
-			DatabaseMetaData meta = connection.getMetaData();
-			try (ResultSet rs = meta.getColumns(connection.getCatalog(), schema, table, null)) {
-				while (rs.next()) {
+					String tableName = convert(rs.getString(3));
+					if (!tableName.equals(currentTableName)) {
+						if (null != table) {
+							data.put(currentTableName, table);
+						}
+						table = new LinkedHashMap<>();
+						currentTableName = tableName;
+					}
 					String columnName = convert(rs.getString(4));
-					Map<String, Object> column = new LinkedHashMap<>();
-					String dataType = resolveDataType(rs.getInt(5), rs.getString(6));
-					column.put(DATA_TYPE, dataType);
-					column.put(JDBC_DATA_TYPE, rs.getInt(5));
-					column.put(NOT_NULL, 0 == rs.getInt(11));
-					column.put(SIZE, rs.getInt(7));
-					column.put(DECIMAL_DIGITS, rs.getInt(9));
-					data.put(columnName, column);
+					table.put(columnName, createColumn(rs));
+				}
+				if (null != currentTableName) {
+					data.put(currentTableName, table);
 				}
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException("Cannot load database metadata.", e);
 		}
+		log.debug("Loaded {} tables in profile [{}].", data.size(), profile);
 		return Collections.unmodifiableMap(data);
+	}
+
+	private static Map<String, Object> createColumn(ResultSet rs) throws SQLException {
+		Map<String, Object> column = new LinkedHashMap<>();
+		String dataType = resolveDataType(rs.getInt(5), rs.getString(6));
+		column.put(DATA_TYPE, dataType);
+		column.put(JDBC_DATA_TYPE, rs.getInt(5));
+		column.put(NOT_NULL, 0 == rs.getInt(11));
+		column.put(SIZE, rs.getInt(7));
+		column.put(DECIMAL_DIGITS, rs.getInt(9));
+		return Collections.unmodifiableMap(column);
 	}
 
 	private static String resolveDataType(int sqlDataType, String sqlTypeName) {
