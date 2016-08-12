@@ -30,14 +30,13 @@ public class Index implements Keywords {
 		String autoIndexDirectory = getAutoIndexDirectory(properties);
 		File file = new File(autoIndexDirectory, AUTO_INDEX_FILE);
 
-		Map<String, String> indexFile = loadIndexFile(file);
-		Map<String, String> updates = getUpdates(indexFile, structures);
+		Map<String, String> indexFile = new LinkedHashMap<>();
+		loadIndexFile(file, indexFile);
+		Map<String, String> updates = getUpdates(Collections.unmodifiableMap(indexFile), structures);
 		writeUpdatesToIndexFile(file, updates);
 
-		Map<String, String> merged = new LinkedHashMap<>();
-		merged.putAll(indexFile);
-		merged.putAll(updates);
-		return Collections.unmodifiableMap(merged);
+		indexFile.putAll(updates);
+		return Collections.unmodifiableMap(indexFile);
 	}
 
 	public static String formatTableKey(String profile, String tableName) {
@@ -56,12 +55,11 @@ public class Index implements Keywords {
 		return autoIndexDirectory;
 	}
 
-	private static Map<String, String> loadIndexFile(File file) {
+	private static void loadIndexFile(File file, Map<String, String> indexFile) {
 		if (!file.exists()) {
-			return Collections.emptyMap();
+			return;
 		}
 		log.debug("Reading index file {}.", file.getPath());
-		Map<String, String> indexFile = new LinkedHashMap<>();
 		try {
 			FileUtils.readLines(file, StandardCharsets.UTF_8).stream()
 					.forEachOrdered(line -> {
@@ -71,7 +69,6 @@ public class Index implements Keywords {
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot load auto index file " + file.getPath(), e);
 		}
-		return Collections.unmodifiableMap(indexFile);
 	}
 
 	private static boolean isTableKey(String key) {
