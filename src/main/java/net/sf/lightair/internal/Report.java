@@ -36,11 +36,11 @@ public class Report implements Keywords {
 	private static void appendTableDifferences(
 			String profile, String tableName,
 			StringBuilder sb, Map<String, List<?>> tableDifferences) {
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		List<Map<String, Object>> missing = (List) tableDifferences.get(MISSING);
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		List<Map<String, Object>> different = (List) tableDifferences.get(DIFFERENT);
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		List<Map<String, Object>> unexpected = (List) tableDifferences.get(UNEXPECTED);
 
 		if (!missing.isEmpty() || !different.isEmpty() || !unexpected.isEmpty()) {
@@ -77,9 +77,9 @@ public class Report implements Keywords {
 
 	private static void appendDifferent(StringBuilder sb, List<Map<String, Object>> different) {
 		for (Map<String, Object> differentRow : different) {
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			Map<String, Object> expectedRow = (Map) differentRow.get(EXPECTED);
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			List<Map<String, Object>> rowDifferences = (List) differentRow.get(DIFFERENCES);
 			sb.append("\n  Different row: ");
 			appendRow(sb, expectedRow);

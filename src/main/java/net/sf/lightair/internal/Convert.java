@@ -54,7 +54,7 @@ public class Convert implements Keywords {
 		List<Map<String, Object>> convertedDataset = new ArrayList<>();
 		for (Map<String, Object> row : dataset) {
 			String tableName = (String) row.get(TABLE);
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			Map<String, String> columns = (Map) row.get(COLUMNS);
 			Map<String, Object> convertedRow = new LinkedHashMap<>();
 			convertedRow.put(TABLE, tableName);

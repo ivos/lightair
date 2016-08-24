@@ -174,7 +174,7 @@ public class ConvertTest implements Keywords {
 				.replace(", ", ",\n ")
 				.replaceAll("\\[B@[^,}]+", "REPLACED"));
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
 		assertEquals(Boolean.class, dataTypes.get("boolean_type").getClass());
 		assertEquals(Byte.class, dataTypes.get("byte_type").getClass());
@@ -223,7 +223,7 @@ public class ConvertTest implements Keywords {
 				" string_type=null}}]}";
 		assertEquals(expected, result.toString().replace(", ", ",\n "));
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
 		assertNull("integer value", dataTypes.get("integer_type"));
 		assertNull("string value", dataTypes.get("string_type"));
@@ -257,7 +257,7 @@ public class ConvertTest implements Keywords {
 				" timestamp_type=2015-12-31 00:00:00.0}}]}";
 		assertEquals(expected, result.toString().replace(", ", ",\n "));
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
 		// types
 		assertEquals(Date.class, dataTypes.get("date_type").getClass());
@@ -298,7 +298,7 @@ public class ConvertTest implements Keywords {
 				" timestamp_type=1970-01-01 12:34:56.0}}]}";
 		assertEquals(expected, result.toString().replace(", ", ",\n "));
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
 		// types
 		assertEquals(Date.class, dataTypes.get("date_type").getClass());
@@ -339,7 +339,7 @@ public class ConvertTest implements Keywords {
 				" timestamp_type=2015-12-31 12:34:56.123}}]}";
 		assertEquals(expected, result.toString().replace(", ", ",\n "));
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
 		// types
 		assertEquals(Date.class, dataTypes.get("date_type").getClass());
@@ -478,7 +478,7 @@ public class ConvertTest implements Keywords {
 		assertEquals(expected, result.toString()
 				.replace("{TABLE=", "\n {TABLE=").replace("], p", "],\n p"));
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> row = (Map) result.get("p1").get(0).get(COLUMNS);
 		assertEquals(Integer.class, row.get("t1i").getClass());
 		assertEquals(String.class, row.get("t1s").getClass());
@@ -622,7 +622,7 @@ public class ConvertTest implements Keywords {
 				" string_var=$var2}}]}";
 		assertEquals(expected, result.toString().replace(", ", ",\n "));
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
 		assertEquals("integer any", "@any", dataTypes.get("integer_any"));
 		assertEquals("string any", "@any", dataTypes.get("string_any"));

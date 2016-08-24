@@ -20,6 +20,7 @@ public class XmlTest implements Keywords {
 	private void verifyRow(int i, List<Map<String, Object>> data, String table, String... values) {
 		assertNotNull("Row exists " + i, data.get(i));
 		assertEquals("Row table " + i, table, data.get(i).get(TABLE));
+		@SuppressWarnings("rawtypes")
 		Map columns = (Map) data.get(i).get(COLUMNS);
 		for (int j = 0; j < values.length - 1; j = j + 2) {
 			String column = values[j];

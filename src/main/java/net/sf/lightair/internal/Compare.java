@@ -81,7 +81,7 @@ public class Compare implements Keywords {
 			Map<String, List<Map<String, Object>>> processedDataset = new LinkedHashMap<>();
 			for (Map<String, Object> row : expectedDataset) {
 				String tableName = (String) row.get(TABLE);
-				@SuppressWarnings("unchecked")
+				@SuppressWarnings({ "unchecked", "rawtypes" })
 				Map<String, Object> columns = (Map) row.get(COLUMNS);
 				List<Map<String, Object>> table = processedDataset.get(tableName);
 				if (null == table) {

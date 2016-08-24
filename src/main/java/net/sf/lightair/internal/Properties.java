@@ -52,7 +52,7 @@ public class Properties implements Keywords {
 			try {
 				java.util.Properties properties = new java.util.Properties();
 				properties.load(is);
-				@SuppressWarnings("unchecked")
+				@SuppressWarnings({ "unchecked", "rawtypes" })
 				Map<String, String> map = (Map) properties;
 				log.debug("For profile [{}] loaded properties file {}.", profile, fileName);
 				return Collections.unmodifiableMap(map);

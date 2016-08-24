@@ -32,7 +32,7 @@ public class ReportTest implements Keywords {
 		return Collections.unmodifiableMap(table);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Map<String, Map<String, List<?>>> createProfile(Object... data) {
 		assertTrue("Data in pairs", data.length % 2 == 0);
 		Map<String, Map<String, List<?>>> profile = new LinkedHashMap<>();

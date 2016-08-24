@@ -59,6 +59,7 @@ public class StructureTest implements Keywords {
 				" clob_type clob, blob_type blob)");
 		hsql.db.execute("create table t2 (t2a int, t2b varchar(10) not null, t2c varchar(20))");
 
+		@SuppressWarnings("rawtypes")
 		Map structures = Structure.loadAll(properties, connections);
 
 		h2.db.execute("drop table data_types");

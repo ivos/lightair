@@ -31,7 +31,7 @@ public class CompareTest implements Keywords {
 		return Collections.unmodifiableMap(row);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Map<String, List<Map<String, Object>>> createTables(Object... data) {
 		assertTrue("Data in pairs", data.length % 2 == 0);
 		Map<String, List<Map<String, Object>>> tables = new LinkedHashMap<>();

@@ -3,8 +3,6 @@ package net.sf.lightair;
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.annotation.Verify;
 import net.sf.lightair.internal.junit.util.Factory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestContext;
@@ -34,8 +32,6 @@ public class LightAirNGListener implements IInvokedMethodListener, ITestListener
 		Api.initialize(Api.getPropertiesFileName());
 		Runtime.getRuntime().addShutdownHook(new Thread(Api::shutdown));
 	}
-
-	private final Logger log = LoggerFactory.getLogger(LightAirNGListener.class);
 
 	/**
 	 * Method executed before every test method handling db setup and base url for JWebUnit
