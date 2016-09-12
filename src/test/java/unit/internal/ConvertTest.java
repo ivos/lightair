@@ -108,10 +108,19 @@ public class ConvertTest implements Keywords {
 		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
 		profileStructure.put("data_types", InsertTest.createTableStructure(
 				"boolean_type", BOOLEAN, Types.BOOLEAN,
+				"boolean_as_int", BOOLEAN, Types.BOOLEAN,
 				"byte_type", BYTE, Types.TINYINT,
+				"byte_as_true", BYTE, Types.TINYINT,
+				"byte_as_false", BYTE, Types.TINYINT,
 				"short_type", SHORT, Types.SMALLINT,
+				"short_as_true", SHORT, Types.SMALLINT,
+				"short_as_false", SHORT, Types.SMALLINT,
 				"integer_type", INTEGER, Types.INTEGER,
+				"integer_as_true", INTEGER, Types.INTEGER,
+				"integer_as_false", INTEGER, Types.INTEGER,
 				"long_type", LONG, Types.BIGINT,
+				"long_as_true", LONG, Types.BIGINT,
+				"long_as_false", LONG, Types.BIGINT,
 				"float_type", FLOAT, Types.REAL,
 				"double_type", DOUBLE, Types.DOUBLE,
 				"bigdecimal_type", BIGDECIMAL, Types.DECIMAL,
@@ -131,10 +140,19 @@ public class ConvertTest implements Keywords {
 		datasets.put(DEFAULT_PROFILE, Arrays.asList(
 				InsertTest.createRow("data_types",
 						"boolean_type", "true",
+						"boolean_as_int", "1",
 						"byte_type", "123",
+						"byte_as_true", "truE",
+						"byte_as_false", "falsE",
 						"short_type", "12345",
+						"short_as_true", "truE",
+						"short_as_false", "falsE",
 						"integer_type", "1234567890",
+						"integer_as_true", "truE",
+						"integer_as_false", "falsE",
 						"long_type", "40234567890",
+						"long_as_true", "truE",
+						"long_as_false", "falsE",
 						"float_type", "1234.56",
 						"double_type", "123456.789123",
 						"bigdecimal_type", "1234567890123456789.123456789",
@@ -154,10 +172,19 @@ public class ConvertTest implements Keywords {
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={boolean_type=true,\n" +
+				" boolean_as_int=true,\n" +
 				" byte_type=123,\n" +
+				" byte_as_true=1,\n" +
+				" byte_as_false=0,\n" +
 				" short_type=12345,\n" +
+				" short_as_true=1,\n" +
+				" short_as_false=0,\n" +
 				" integer_type=1234567890,\n" +
+				" integer_as_true=1,\n" +
+				" integer_as_false=0,\n" +
 				" long_type=40234567890,\n" +
+				" long_as_true=1,\n" +
+				" long_as_false=0,\n" +
 				" float_type=1234.56,\n" +
 				" double_type=123456.789123,\n" +
 				" bigdecimal_type=1234567890123456789.123456789,\n" +

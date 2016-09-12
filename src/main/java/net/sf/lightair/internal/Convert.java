@@ -197,11 +197,31 @@ public class Convert implements Keywords {
 		return Period.parse(value.substring(1));
 	}
 
+	private static boolean isTrue(String value) {
+		return "true".equalsIgnoreCase(value);
+	}
+
+	private static boolean isFalse(String value) {
+		return "false".equalsIgnoreCase(value);
+	}
+
 	private static Object convertDataType(
 			String profile, String tableName, String columnName, String dataType, int jdbcDataType, String value) {
 		switch (dataType) {
+			case BYTE:
+			case SHORT:
+			case INTEGER:
+			case LONG:
+				if (isTrue(value)) {
+					return 1;
+				}
+				if (isFalse(value)) {
+					return 0;
+				}
+		}
+		switch (dataType) {
 			case BOOLEAN:
-				return Boolean.parseBoolean(value);
+				return (isTrue(value) || "1".equals(value));
 			case BYTE:
 				return Byte.parseByte(value);
 			case SHORT:
