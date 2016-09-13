@@ -81,7 +81,7 @@ public class Compare implements Keywords {
 			Map<String, List<Map<String, Object>>> processedDataset = new LinkedHashMap<>();
 			for (Map<String, Object> row : expectedDataset) {
 				String tableName = (String) row.get(TABLE);
-				@SuppressWarnings({ "unchecked", "rawtypes" })
+				@SuppressWarnings({"unchecked", "rawtypes"})
 				Map<String, Object> columns = (Map) row.get(COLUMNS);
 				List<Map<String, Object>> table = processedDataset.get(tableName);
 				if (null == table) {
@@ -116,18 +116,18 @@ public class Compare implements Keywords {
 				.filter(i -> !expectedRows.get(i).keySet().isEmpty()) // skip empty expected rows
 				.collect(Collectors.toList());
 
-		for (int actualRowId = 0; actualRowId < sortedActualRows.size(); actualRowId++) {
-			Map<String, Object> actualRow = sortedActualRows.get(actualRowId);
+		for (Map<String, Object> actualRow : sortedActualRows) {
 			if (unmatchedExpectedRowIds.isEmpty()) {
 				unexpected.add(actualRow);
 				continue;
 			}
 			List<Map<String, Object>> unmatchedExpectedRows =
 					getUnmatchedExpectedRows(expectedRows, unmatchedExpectedRowIds);
-			int bestMatchingRowId = findBestMatchingRowId(limit, actualRow, unmatchedExpectedRows);
+			int bestMatchingRowId = findBestMatchingRowId(limit, variables, actualRow, unmatchedExpectedRows);
 			unmatchedExpectedRowIds.remove(bestMatchingRowId);
 			Map<String, Object> expectedRow = unmatchedExpectedRows.get(bestMatchingRowId);
-			List<Map<String, Object>> rowDifferences = getRowDifferences(limit, variables, expectedRow, actualRow);
+			List<Map<String, Object>> rowDifferences =
+					getRowDifferences(limit, variables, true, expectedRow, actualRow);
 			if (rowDifferences.isEmpty()) {
 				log.trace("Perfect match for row {}.", expectedRow);
 			} else {
@@ -167,10 +167,10 @@ public class Compare implements Keywords {
 		int[][] data = new int[actualRows.size()][2];
 		for (int actualRowId = 0; actualRowId < actualRows.size(); actualRowId++) {
 			Map<String, Object> actualRow = actualRows.get(actualRowId);
-			int bestMatchingRowId = findBestMatchingRowId(limit, actualRow, expectedRows);
+			int bestMatchingRowId = findBestMatchingRowId(limit, null, actualRow, expectedRows);
 			data[actualRowId][0] = actualRowId;
 			data[actualRowId][1] =
-					getRowDifferences(limit, null, expectedRows.get(bestMatchingRowId), actualRow).size();
+					getRowDifferences(limit, null, false, expectedRows.get(bestMatchingRowId), actualRow).size();
 		}
 		Arrays.sort(data, (int[] o1, int[] o2) -> {
 			int matchingColumnsComparison = Integer.compare(o1[1], o2[1]);
@@ -187,14 +187,15 @@ public class Compare implements Keywords {
 	}
 
 	private static Integer findBestMatchingRowId(
-			long limit,
+			long limit, Map<String, Object> variables,
 			Map<String, Object> actualRow,
 			List<Map<String, Object>> expectedRows) {
 		List<Map<String, Object>> bestRowDifferences = null;
 		Integer bestExpectedRowId = null;
 		for (int expectedRowId = 0; expectedRowId < expectedRows.size(); expectedRowId++) {
 			Map<String, Object> expectedRow = expectedRows.get(expectedRowId);
-			List<Map<String, Object>> rowDifferences = getRowDifferences(limit, null, expectedRow, actualRow);
+			List<Map<String, Object>> rowDifferences =
+					getRowDifferences(limit, variables, false, expectedRow, actualRow);
 			if (null == bestRowDifferences || rowDifferences.size() < bestRowDifferences.size()) {
 				bestRowDifferences = rowDifferences;
 				bestExpectedRowId = expectedRowId;
@@ -204,14 +205,14 @@ public class Compare implements Keywords {
 	}
 
 	private static List<Map<String, Object>> getRowDifferences(
-			long limit, Map<String, Object> variables,
+			long limit, Map<String, Object> variables, boolean finalMatch,
 			Map<String, Object> expectedRow,
 			Map<String, Object> actualRow) {
 		List<Map<String, Object>> data = new ArrayList<>();
 		for (String columnName : expectedRow.keySet()) {
 			Object expectedValue = expectedRow.get(columnName);
 			Object actualValue = actualRow.get(columnName);
-			if (!valueMatches(limit, variables, expectedValue, actualValue)) {
+			if (!valueMatches(limit, variables, finalMatch, expectedValue, actualValue)) {
 				data.add(createDifference(variables, columnName, expectedValue, actualValue));
 			}
 		}
@@ -232,7 +233,7 @@ public class Compare implements Keywords {
 	}
 
 	private static boolean valueMatches(
-			long limit, Map<String, Object> variables,
+			long limit, Map<String, Object> variables, boolean finalMatch,
 			Object expectedValue, Object actualValue) {
 		if (ANY_TOKEN.equals(expectedValue) && null != actualValue) {
 			return true;
@@ -240,7 +241,7 @@ public class Compare implements Keywords {
 		if (isVariable(variables, expectedValue)) {
 			if (variables.containsKey(expectedValue)) {
 				expectedValue = variables.get(expectedValue);
-			} else {
+			} else if (finalMatch) {
 				variables.put((String) expectedValue, actualValue);
 				log.debug("Assigned to variable [{}] value [{}].", expectedValue, actualValue);
 				return true;

@@ -31,7 +31,7 @@ public class CompareTest implements Keywords {
 		return Collections.unmodifiableMap(row);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private static Map<String, List<Map<String, Object>>> createTables(Object... data) {
 		assertTrue("Data in pairs", data.length % 2 == 0);
 		Map<String, List<Map<String, Object>>> tables = new LinkedHashMap<>();
@@ -498,6 +498,40 @@ public class CompareTest implements Keywords {
 				" DIFFERENT=[{EXPECTED={c1=$var1, c2=$var2, c3=v134},\n" +
 				" DIFFERENCES=[{COLUMN=c1, EXPECTED=var1 value, ACTUAL=v114},\n" +
 				" {COLUMN=c2, EXPECTED=7482, ACTUAL=7124}]}],\n" +
+				" UNEXPECTED=[]}}}";
+		assertEquals(expected, result.toString()
+				.replace("}, ", "},\n ")
+				.replace("], ", "],\n ")
+		);
+	}
+
+	@Test
+	public void variablesInfluenceBestRowMatch() {
+		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
+		expectedDatasets.put("p1", Arrays.asList(
+				InsertTest.createRow("t1", "c1", "$var1", "c3", "v131"), // define var1
+				InsertTest.createRow("t1", "c1", "$var2", "c3", "v132"), // define var2
+				InsertTest.createRow("t1", "c1", "$var1", "c3", "same"), // match var1
+				InsertTest.createRow("t1", "c1", "$var2", "c3", "same")  // match var2
+		));
+
+		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
+		actualDatasets.put("p1",
+				createTables(
+						"t1", Arrays.asList(
+								createRow("c1", "var1 value", "c3", "v131"),
+								createRow("c1", "var2 value", "c3", "v132"),
+								// rows switched and only matched by var value:
+								createRow("c1", "var2 value", "c3", "same"),
+								createRow("c1", "var1 value", "c3", "same")
+						)
+				));
+
+		Map<String, Map<String, Map<String, List<?>>>> result =
+				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
+
+		String expected = "{p1={t1={MISSING=[],\n" +
+				" DIFFERENT=[],\n" +
 				" UNEXPECTED=[]}}}";
 		assertEquals(expected, result.toString()
 				.replace("}, ", "},\n ")
