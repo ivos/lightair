@@ -12,7 +12,6 @@ import java.sql.Types;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class Structure implements Keywords {
 
@@ -35,10 +34,7 @@ public class Structure implements Keywords {
 
 	private static Map<String, Map<String, Map<String, Object>>> loadProfile(
 			String profile, Map<String, String> profileProperties, Connection connection) {
-		String dialect = profileProperties.get(DATABASE_DIALECT);
 		String schema = profileProperties.get(DATABASE_SCHEMA);
-
-		Objects.requireNonNull(dialect, "Database dialect is required.");
 
 		log.debug("Loading structure for profile [{}].", profile);
 		Map<String, Map<String, Map<String, Object>>> data = new LinkedHashMap<>();

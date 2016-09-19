@@ -7,7 +7,6 @@ public interface Keywords {
 	String DATABASE_USER_NAME = "database.userName";
 	String DATABASE_PASSWORD = "database.password";
 
-	String DATABASE_DIALECT = "database.dialect";
 	String DATABASE_SCHEMA = "database.schema";
 
 	String TIME_DIFFERENCE_LIMIT_MILLIS = "time.difference.limit.millis";

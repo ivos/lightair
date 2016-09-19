@@ -15,11 +15,6 @@ Configure Light Air
  You can override the location of the .properties file by setting a system (environment) property
  named <<<light.air.properties>>> to the name of your custom .properties file.
 
- <<Database dialect>>\
- Set the <<<database.dialect>>> property to the name of the database you use for the tests.\
- Select one of: <<<h2>>>, <<<oracle>>>, <<<oracle9>>>, <<<oracle10>>>, <<<hsqldb>>>, 
- <<<mysql>>>, <<<db2>>>, <<<postgresql>>>, <<<derby>>>, <<<mssql>>>, <<<informix>>>.
-
  <<Set time difference limit>>\
  Set the <<<time.difference.limit.millis>>> property to define a <<maximum
  allowable difference>> in milliseconds of <<temporal columns>>.\

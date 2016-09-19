@@ -16,9 +16,8 @@ import static org.junit.Assert.assertEquals;
 public class StructureTest implements Keywords {
 
 	private Map<String, String> createProperties(
-			String driverClassName, String url, String userName, String password, String dialect, String schema) {
+			String driverClassName, String url, String userName, String password, String schema) {
 		Map<String, String> properties = ConnectionsTest.createProperties(driverClassName, url, userName, password);
-		properties.put(DATABASE_DIALECT, dialect);
 		properties.put(DATABASE_SCHEMA, schema);
 		return properties;
 	}
@@ -27,9 +26,9 @@ public class StructureTest implements Keywords {
 	public void test() {
 		Map<String, Map<String, String>> properties = new HashMap<>();
 		properties.put("profile1", createProperties(
-				"org.h2.Driver", "jdbc:h2:mem:test", "sa", "", "h2", "PUBLIC"));
+				"org.h2.Driver", "jdbc:h2:mem:test", "sa", "", "PUBLIC"));
 		properties.put("profile2", createProperties(
-				"org.hsqldb.jdbc.JDBCDriver", "jdbc:hsqldb:mem:test", "sa", "", "hsql", "PUBLIC"));
+				"org.hsqldb.jdbc.JDBCDriver", "jdbc:hsqldb:mem:test", "sa", "", "PUBLIC"));
 
 		Map<String, Connection> connections = Connections.open(properties);
 

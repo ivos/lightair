@@ -171,10 +171,6 @@ database.userName=sa
 database.password=
 database.schema=PUBLIC
 
-# Database dialect
-# Select one of: h2, oracle, oracle9, oracle10, hsqldb, mysql, db2, postgresql, derby, mssql
-database.dialect=h2
-
 # Set the maximum allowable difference of temporal column values in verification
 # This value should be greater than the maximum duration of any test case (on any environment)
 time.difference.limit.millis=5000
