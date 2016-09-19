@@ -58,28 +58,13 @@ Project setup
 </dependency>
 +---+
 
-*** Optional: for web applications
-
- Add JWebUnit plugin dependency of your choice: either HtmlUnit or Selenium.
- HtmlUnit plugin is recommended.
- Use a version compatible with jwebunit-core pulled in by Light Air itself.
-
-+---+
-<dependency>
- <groupId>net.sourceforge.jwebunit</groupId>
- <artifactId>jwebunit-htmlunit-plugin</artifactId>
- <version>${jwebunit-version}</version>
- <scope>test</scope>
-</dependency>
-+---+
-
 ** Test resources
 
  The XML dataset files are expected to be next to the test class, in the same package.
  This way you are not required to chase them all over the project 
  or switch regularly between the test class directory and test resources directory.
  
- To support this properly in Maven (and m2eclipse), use the following:
+ To support this properly in Maven, use the following:
  
 +---+
 <build>
@@ -107,7 +92,7 @@ Project setup
  it is typically not desirable that they be run as unit tests in 
  the Maven <<<test>>> lifecycle phase.
  
- A way to approach this issue is to name the test with "*IT.java" suffix
+ A way to approach this issue is to name the tests with "*IT.java" suffix
  (as opposed to "*Test.java"). 
  This excludes them from the Maven <<<test>>> lifecycle phase.
  Next, define a profile to run the Light Air tests:
@@ -119,14 +104,15 @@ Project setup
   <build>
    <plugins>
     <plugin>
-     <groupId>org.jboss.as.plugins</groupId>
-     <artifactId>jboss-as-maven-plugin</artifactId>
+     <!-- replace this with your app server maven plugin: -->
+     <groupId>my.app.server</groupId>
+     <artifactId>my-app-server-maven-plugin</artifactId>
      <executions>
       <execution>
        <id>deploy-pre-integration-test</id>
        <phase>pre-integration-test</phase>
        <goals>
-        <goal>deploy</goal>
+        <goal>my-app-server-deploy-goal</goal>
        </goals>
       </execution>
      </executions>
@@ -134,7 +120,7 @@ Project setup
     <plugin>
      <groupId>org.apache.maven.plugins</groupId>
      <artifactId>maven-surefire-plugin</artifactId>
-     <version>2.9</version>
+     <version>2.19</version>
      <executions>
       <execution>
        <id>integration-test</id>
@@ -156,11 +142,11 @@ Project setup
 </profiles>
 +---+
 
- The example above also includes the deployment of the packaged application
- to a JBoss AS. You would replace that with a configuration corresponding
- to your application/web server.
- 
- Now, you can package your WAR file, deploy it to application server and 
+ The example above also includes a template for the deployment of the packaged application
+ to an application server. You would replace that with a configuration corresponding
+ to your particular application/web server.
+
+ Now, you can package your WAR file, deploy it to application server and
  execute all Light Air integration tests by issuing:
 
 +---+
@@ -180,34 +166,18 @@ mvn clean install -Pit
 +---+
 # Database connection
 database.driverClassName=org.h2.Driver
-database.connectionUrl=jdbc:h2:~/data/my-project/db;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
+database.connectionUrl=jdbc:h2:~/data/my-project/db;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE
 database.userName=sa
 database.password=
+database.schema=PUBLIC
 
 # Database dialect
 # Select one of: h2, oracle, oracle9, oracle10, hsqldb, mysql, db2, postgresql, derby, mssql
 database.dialect=h2
 
-# Database default schema
-# Set the schema to be used when no schema is specified in a dataset
-database.defaultSchema=PUBLIC
-
-# Names of database schemas from which to generate the XSDs
-# Use a comma-separated list for multiple schemas: SCHEMA1,SCHEMA2,SCHEMA3
-database.schemaNames=PUBLIC
-
 # Set the maximum allowable difference of temporal column values in verification
 # This value should be greater than the maximum duration of any test case (on any environment)
 time.difference.limit.millis=5000
-
-# uncomment to escape table and column names:
-#dbunit.properties.escapePattern="?"
-
-# uncomment to use batched statements:
-#dbunit.features.batchedStatements=true
-
-# uncomment to skip Oracle recycle bin tables:
-#dbunit.features.skipOracleRecycleBinTables=true
 +---+
 
  Be aware, that Light Air tests must connect to <<the same database instance>>
@@ -220,14 +190,15 @@ time.difference.limit.millis=5000
 
 * Generate XSD files
 
- Use the {{{http://lightairmp.sourceforge.net/} LightAir Maven plugin}} 
+ Use the {{{http://lightairmp.sourceforge.net/} LightAir Maven plugin}}
+ (or call {{{./apidocs/net/sf/lightair/Api.html#generateXsd--}Api.generateXsd}})
  to generate XSD files from the database.
 
 * Logback test configuration file
 
  If you use Logback as the slf4j runtime, 
  create a file named <<<logback-test.xml>>> in <<<src/test/resources>>>
- with content recommended on Logback site.
+ with content recommended on the Logback site.
  
  This file lets you manage logging in tests, including log output from Light Air.
  

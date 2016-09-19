@@ -6,29 +6,40 @@
  2011-09-26
  ---
 
-Test database applications with common sense
- 
- Light Air is a tool to support 
- <<black-box system (integration) tests>> of database applications for developers.
- 
- It strives for <<intuitive>>, simple usage and <<common-sense behavior>>. 
- 
- It straightens a couple of features in DbUnit and Unitils 
- that are not exactly intuitive or simple to be used \
- and wraps
- {{{http://dbunit.sourceforge.net/}DbUnit}}, 
- {{{http://www.unitils.org/}Unitils}} and 
- {{{http://jwebunit.sourceforge.net/}JWebUnit}}
- in a common, <<modern usage pattern>>.
- 
- \ 
+Test database applications declaratively
 
- Proceed to {{{./motivation.html}motivation}} 
- to find out whether Light Air is suitable for you.
- 
+ Light Air is a tool that supports <<black-box system (integration) tests of database applications
+ for developers in a declarative style>>.
+
+ It strives for intuitive usage and common-sense behavior.
+
+ Light Air removes the need to write code to setup database for tests,
+ you simply declare the required state of the database
+ and Light Air sets it up automatically.
+
+ Similarly, you declare the expected state of the database at the end of a test
+ and Light Air verifies that it matches the actual database state.
+
+ The removal of lengthy, tedious and error prone test code to setup and verify database
+ not only simplifies the tests, but as a result:
+
+ * encourages proper test design (e.g. separate setup for each test), and
+
+ * increases test coverage:
+
+   * it is extremely easy to verify more database columns, so more data gets actually verified,
+
+   * it is easy to write a new test, so more tests get written.
+
+ []
+
+ Proceed to {{{./motivation.html}motivation}} to find out more about Light Air.
+
  \ 
 
 ===
 
  Light Air project is hosted by Sourceforge.net at 
  {{{http://sf.net/projects/lightair/}Light Air Sourceforge page}}.
+
+ Light Air code is hosted by GitHub at {{{https://github.com/ivos/lightair}Light Air GitHub page}}.
