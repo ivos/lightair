@@ -13,6 +13,7 @@
 				<item name="Verify" href="features/verify.html" />
 				<item name="Configuration" href="features/configure.html" />
 				<item name="XSD generation" href="features/generate-xsd.html" />
+				<item name="API" href="features/api.html" />
 			</item>
 			<item name="Development" href="development.html" />
 			<item name="Maven plugin" href="http://lightairmp.sourceforge.net/" />

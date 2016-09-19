@@ -202,10 +202,8 @@ time.difference.limit.millis=5000
  
  This file lets you manage logging in tests, including log output from Light Air.
  
-* Resolving problems with slf4j runtime versions
-
- When another dependency overrides slf4j API with a conflicting incompatible version  
- you may have to override it explicitly in POM.
+ (Note: When another dependency overrides slf4j API with a conflicting incompatible version
+ you may have to override it explicitly in POM.)
 
 *--:
  {{{./write-test.html}Next: Write a test >>}}
