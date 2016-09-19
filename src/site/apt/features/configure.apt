@@ -8,19 +8,14 @@
 
 Configure Light Air
 
- [[1]] <<Light Air properties file>>\
+ <<Light Air properties file>>\
  Light Air reads configuration from a .properties file.\
  By default, it is named <<<light-air.properties>>>, and is read from the (test) classpath, 
  so it should reside in <<<src/test/resources>>>.\
  You can override the location of the .properties file by setting a system (environment) property
  named <<<light.air.properties>>> to the name of your custom .properties file.
 
- [[2]] <<Database dialect>>\
- Set the <<<database.dialect>>> property to the name of the database you use for the tests.\
- Select one of: <<<h2>>>, <<<oracle>>>, <<<oracle9>>>, <<<oracle10>>>, <<<hsqldb>>>, 
- <<<mysql>>>, <<<db2>>>, <<<postgresql>>>, <<<derby>>>, <<<mssql>>>, <<<informix>>>.
-
- [[3]] <<Set time difference limit>>\
+ <<Set time difference limit>>\
  Set the <<<time.difference.limit.millis>>> property to define a <<maximum
  allowable difference>> in milliseconds of <<temporal columns>>.\
  Set this to an expected duration of the longest test on the slowest environment,
@@ -28,7 +23,7 @@ Configure Light Air
 
  <Examples:> 5000 (= 5 seconds), 60000 (= 1 minute).
 
- [[4]] <<Profiles>>\
+ <<Profiles>>\
  Use profiles to <<connect to multiple databases>>.\
  To set up a new profile, create a new .properties file for the profile with the usual Light Air properties.
  Then link to this profile .properties from the "<main>" Light Air .properties file 
@@ -62,36 +57,22 @@ profile.oracle=light-air-oracle.properties
  We can also use <<<@Setup.List>>> and <<<@Verify.List>>> to setup and verify
  multiple databases on the same test class or test method.
 
- [[5]] <<Configure DbUnit>>\
- Use the following pattern to configure <<DbUnit features and properties>> in <<<light-air.properties>>>:
+ <<Override XSD directory>>\
+ Light Air by default generates XSD file(s) into the <<<src/test/java>>> directory.
+ You can override this by setting the <<<xsd.directory>>> in the main properties file:
 
 +---+
-dbunit.features.<feature-name>=<feature-value>
-dbunit.properties.<property-name>=<property-value>
+xsd.directory=my/xsd/directory
 +---+
 
- where:
-
-  * <<<\<feature-name\>>>> is the remainder of the DbUnit property name 
- after the <<<http://www.dbunit.org/features/>>>
-
-  * <<<\<property-name\>>>> is the remainder of the DbUnit property name 
- after the <<<http://www.dbunit.org/properties/>>> prefix
-
- If the property value is a valid Java <<class name>> and the class has a public, no-args constructor,
- an <<instance>> of the class is <<instantiated>> and passed to DbUnit.
-
- See {{{http://dbunit.sourceforge.net/properties.html} DbUnit properties and features documentation}}.
- 
- <Examples:>
-
- To set the escape pattern to quote the table and column names in double-quotes:
+ <<Override @auto index directory>>\
+ Light Air by default generates an index file to support proper functionality of the @auto token
+ into the <<<src/test/resources>>> directory.
+ You can override this by setting the <<<auto.index.directory>>> in the main properties file:
 
 +---+
-dbunit.properties.escapePattern="?"
+auto.index.directory=my/auto/index/directory
 +---+
-
- []
 
 *--:
  {{{./generate-xsd.html}Next: Generate XSD >>}}

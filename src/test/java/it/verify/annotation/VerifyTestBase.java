@@ -4,6 +4,7 @@ import it.common.CommonTestBase;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import test.support.ApiTestSupport;
 
 public class VerifyTestBase extends CommonTestBase {
 
@@ -11,6 +12,7 @@ public class VerifyTestBase extends CommonTestBase {
 	@org.testng.annotations.BeforeClass
 	public static void beforeClass() {
 		db.execute("create table person(id int primary key, name varchar(255))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

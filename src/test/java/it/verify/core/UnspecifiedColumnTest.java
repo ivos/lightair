@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 /**
  * Unspecified column on a given row is ignored. (And not verified to be null.)
@@ -20,6 +21,7 @@ public class UnspecifiedColumnTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, expected varchar(255), "
 				+ "unspecified varchar(255))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

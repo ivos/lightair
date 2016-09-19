@@ -1,18 +1,18 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
 @Setup({ "MergeColumnsAcrossFiles.1.xml", "MergeColumnsAcrossFiles.2.xml",
@@ -26,6 +26,7 @@ public class MergeColumnsAcrossFilesTest extends CommonTestBase {
 		db.execute("create table a (id int primary key, "
 				+ "a1 varchar(50), a2 varchar(50), "
 				+ "a3 varchar(50), a4 varchar(50))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

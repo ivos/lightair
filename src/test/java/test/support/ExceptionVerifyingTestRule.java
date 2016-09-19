@@ -1,12 +1,12 @@
 package test.support;
 
-import static org.junit.Assert.*;
-
-import java.lang.reflect.Method;
-
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+
+import java.lang.reflect.Method;
+
+import static org.junit.Assert.fail;
 
 public class ExceptionVerifyingTestRule implements TestRule {
 

@@ -3,13 +3,11 @@ package it.verify.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
-import net.sf.lightair.internal.factory.Factory;
-
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ConfigSupport;
 
 @RunWith(LightAir.class)
 @Verify
@@ -19,17 +17,13 @@ public class TimeDifferenceLimitTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, "
 				+ "date1 date, time1 time, timestamp1 timestamp)");
+		ConfigSupport.replaceConfig("diff60");
 	}
 
 	@AfterClass
 	public static void afterClass() {
 		db.execute("drop table a");
-		Factory.getInstance().setTimeDifferenceLimit(0);
-	}
-
-	@Before
-	public void before() {
-		Factory.getInstance().setTimeDifferenceLimit(60 * 1000);
+		ConfigSupport.restoreConfig();
 	}
 
 	@Test

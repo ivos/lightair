@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 @RunWith(LightAir.class)
 @Verify
@@ -18,6 +19,7 @@ public class AnyTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, a1 varchar(255), int1 int, "
 				+ "double1 double, date1 date, time1 time, timestamp1 timestamp)");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

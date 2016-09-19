@@ -36,10 +36,9 @@ public class VerifyTestRule extends AbstractTestRule<Verify> {
 	/**
 	 * Set verify executor.
 	 * 
-	 * @param verifyExecutor
+	 * @param verifyExecutor executor
 	 */
 	public void setVerifyExecutor(VerifyExecutor verifyExecutor) {
 		this.verifyExecutor = verifyExecutor;
 	}
-
 }

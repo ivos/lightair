@@ -1,18 +1,18 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
 @Setup
@@ -26,6 +26,7 @@ public class DeleteAllTest extends CommonTestBase {
 		db.execute("insert into a (id, a1) values (10, 'deleted10')");
 		db.execute("insert into a (id, a1) values (11, 'deleted11')");
 		db.execute("insert into a (id, a1) values (12, 'deleted12')");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

@@ -8,9 +8,19 @@
 
 Setup database
 
- [[1]] <<Default @Setup annotation>>\
- When test method or test class is annotated with <<<@Setup>>>, system 
- locates sequentially the following files in the package of the class, the first file found wins:
+ Setup the database content before each test to make tests repeatable.
+
+ Use separate and specific setup dataset for each test - setup exactly the data that is required by the test.\
+ Avoid "kitchen-sink" single shared setup for all the tests -
+ it quickly gets unmaintained as it is not obvious which data is used by which test
+ (and which data is NOT used anymore) and becomes a major roadblock on tests refactoring.
+
+ Rows are inserted into the database in the order specified in the dataset.
+ (Tables are deleted before that in the reverse order.)
+
+ <<Default @Setup annotation>>\
+ When a test method or a test class is annotated with <<<@Setup>>>,
+ the following files are located sequentially in the package of the class, the first file found wins:
 
   * <<<\<test class name\>.\<test method name\>.xml>>>
 
@@ -18,110 +28,104 @@ Setup database
 
   * <<<\<test class name\>.xml>>>
  
- Then performs <<"clean insert">> database operation with the dataset located. 
- If no such dataset exists, system throws exception.
+ Then a <<"clean insert">> database operation is performed with the dataset located.
 
- <Examples:>
+ <Example:>
 
 +---+
 @Setup
 public class MyTest {
-	@Test
-	public void test() {
-	}
+  @Test
+  public void test() {
+  }
 }
 +---+
 
- [[2]] <<Specify dataset file names in @Setup>>\
- When <<<@Setup>>> annotation contains <<file names>> of datasets, system uses those file names
+ <<Specify dataset file names in @Setup>>\
+ When the <<<@Setup>>> annotation contains <<file names>> of datasets, they are used
  to locate the datasets in the package of the test class 
- and performs "clean insert" database operation with <<all>> datasets located. 
- If a specified dataset does not exist, system throws exception.
+ and the "clean insert" database operation is performed with all such datasets located.
 
- <Examples:>
+ <Example:>
 
 +---+
 @Setup({ "setup-1.xml", "setup-2.xml" })
 public class MyTest {
-	@Test
-	public void test() {
-	}
+  @Test
+  public void test() {
+  }
 }
 +---+
 
- [[3]] <<Specify profile in @Setup>>\
+ <<Specify profile in @Setup>>\
  Use <<<profile>>> attribute of <<<@Setup>>> annotation to instruct Light Air to 
  apply the datasets on the <<connection defined by the profile>>.\
  See the Profiles section in {{{./configure.html}Configure Light Air}} for details
  on how to setup profiles.
 
- <Examples:>
+ <Example:>
 
 +---+
 @Setup(value = { "setup-1.xml", "setup-2.xml" }, profile = "oracle")
 public class MyTest {
-	@Test
-	public void test() {
-	}
+  @Test
+  public void test() {
+  }
 }
 +---+
 
- [[4]] <<Specify multiple @Setup annotations>>\
+ <<Specify multiple @Setup annotations>>\
  Use <<<@Setup.List>>> annotation to define <<multiple>> <<<@Setup>>> <<annotations>>
  for the same test class or test method.
 
- <Examples:>
+ <Example:>
 
 +---+
 @Setup.List({
-	@Setup("setup-h2.xml"),
-	@Setup(value = "setup-hsql.xml", profile = "hsql"),
-	@Setup(value = { "setup-ora-1.xml", "setup-ora-2.xml" }, profile = "oracle") })
+  @Setup("setup-h2.xml"),
+  @Setup(value = "setup-hsql.xml", profile = "hsql"),
+  @Setup(value = { "setup-ora-1.xml", "setup-ora-2.xml" }, profile = "oracle") })
 public class MyTest {
-	@Test
-	public void test() {
-	}
+  @Test
+  public void test() {
+  }
 }
 +---+
 
- [[5]] <<Use all columns of a row in setup>>\
- When inserting a row during setup, fill values to all columns defined <<on the row>>,
- no matter what columns were defined on other rows of the table.\
- This fixes bug of DbUnit, where the first row of the table freezes columns used
- by the dataset, other columns defined on subsequent rows are then ignored by DbUnit.
+ <<Empty row>>\
+ Use "empty row", i.e. element with no attributes, to clean the table without inserting any rows.
 
- <Examples:>
+ <Example:>
 
 +---+
 <dataset>
-	<table first_has_value="a" />
-	<table first_has_value="b" first_missing="c" />
-	<table                     first_missing="d" third_only="e" />
+  <my_table/>
 </dataset>
 +---+
 
- [[6]] <<Replace @null with null value>>\
- Use <<<@null>>> in XML dataset to setup column to <<null value>> explicitly.
- (By omitting the column on the row you can also set it up to null value implicitly.)
+ <<Token @null - null value>>\
+ Use <<<@null>>> to setup column to <<null value>> explicitly.
+ (By omitting the column on the row you can also set it up to null value implicitly,
+ unless there is a default value defined at the database level.)
 
- [[7]] <<Replace @date with current date>>\
- Use <<<@date>>> in XML dataset to setup column to <<current date>> midnight value.\
+ <<Token @date - current date>>\
+ Use <<<@date>>> to setup column to <<current date>> midnight value.\
  The current date value includes <<<yyyy-MM-dd>>>
  as in <2012-12-31>.\
- The time part is set to midnight <00:00:00.000>.
+ The time part is set to midnight (00:00:00.000).
 
- [[8]] <<Replace @time with current time>>\
- Use <<<@time>>> in XML dataset to setup column to <<current time>> value.\
+ <<Token @time - current time>>\
+ Use <<<@time>>> to setup column to <<current time>> value.\
  The current time value includes <<<HH:mm:ss>>> as in <23:59:58>.\
  The date part is set to 1970-01-01. 
  The milliseconds are set to 0 (zero).
 
- [[9]] <<Replace @timestamp with current timestamp>>\
- Use <<<@timestamp>>> in XML dataset to setup column to <<current timestamp>> value.\
- The current timestamp value includes <<<yyyy-MM-dd HH:mm:ss.SSS>>>
- as in <2012-12-31 23:59:58.123>.
+ <<Token @timestamp - current timestamp>>\
+ Use <<<@timestamp>>> to setup column to <<current timestamp>> value.\
+ The current timestamp value includes <<<yyyy-MM-ddTHH:mm:ss.SSS>>>
+ as in <2012-12-31T23:59:58.123>.
 
- [[10]] <<Modify the temporal tokens with a duration>>\
+ <<Modify the temporal tokens with a duration>>\
  You can modify the temporal tokens <<<@date>>>, <<<@time>>> and <<<@timestamp>>> by 
  appending a sign (+ or -) and a 
  {{{http://en.wikipedia.org/wiki/ISO_8601#Durations}duration in ISO 8601 format}}.
@@ -143,30 +147,19 @@ public class MyTest {
   * This <<<@timestamp-P2Y3M4DT5H6M7S>>> represents 
   2 years, 3 months, 4 days, 5 hours, 6 minutes and 7 seconds in the past.
 
- [[11]] <<Generate column value automatically with @auto>>\
+ <<Token @auto - generate unique value>>\
  Use <<<@auto>>> as a column value to have the actual value <<generated automatically>>.\
  The value is guaranteed to be <<unique>>, with the obvious exception of boolean columns.
 
- <Examples:>
+ <Example:>
 
 +---+
 <dataset>
-	<user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
-	<user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
-	<user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
+  <user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
+  <user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
+  <user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
 </dataset>
 +---+
-
- [[12]] <<Specify database schema of a table row using XML namespace>>\
- Specify row <<schema>> using XML namespace:
-
-+---+
-<dataset xmlns:s1="SCHEMA1">
-	<s1:table_in_s1 id="0" />
-</dataset>
-+---+
-
- []
 
 *--:
  {{{./verify.html}Next: Verify database >>}}

@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.sf.lightair</groupId>
 	<artifactId>light-air</artifactId>
-	<version>2.9.1-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Light Air</name>
@@ -53,16 +54,15 @@
 		</license>
 	</licenses>
 	<issueManagement>
-		<system>Sourceforge</system>
-		<url>http://sourceforge.net/p/lightair/tickets/</url>
+		<system>GitHub</system>
+		<url>https://github.com/ivos/lightair/issues</url>
 	</issueManagement>
 
 	<properties>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<jwebunit-version>3.1</jwebunit-version>
 		<junit-version>4.11</junit-version>
 		<testng-version>6.8.13</testng-version>
 	</properties>
@@ -70,8 +70,8 @@
 		<connection>scm:git:git@github.com:ivos/lightair.git</connection>
 		<developerConnection>scm:git:git@github.com:ivos/lightair.git</developerConnection>
 		<url>https://github.com/ivos/lightair</url>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>sonatype-nexus-snapshots</id>
@@ -118,71 +118,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- DbUnit -->
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<version>2.4.9</version>
-		</dependency>
-		<dependency>
-			<groupId>org.unitils</groupId>
-			<artifactId>unitils-core</artifactId>
-			<version>3.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>ognl</groupId>
-					<artifactId>ognl</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- Unitils -->
-		<dependency>
-			<groupId>org.unitils</groupId>
-			<artifactId>unitils-dbunit</artifactId>
-			<version>3.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hibernate</groupId>
-					<artifactId>hibernate</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-dbcp</groupId>
-					<artifactId>commons-dbcp</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.unitils</groupId>
-					<artifactId>unitils-database</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- JWebUnit -->
-		<dependency>
-			<groupId>net.sourceforge.jwebunit</groupId>
-			<artifactId>jwebunit-core</artifactId>
-			<!-- ! version extracted to ${jwebunit-version} for project-setup.apt.vm -->
-			<version>3.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hamcrest</groupId>
-					<artifactId>hamcrest-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit-dep</artifactId>
-				</exclusion>
-			</exclusions>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<!-- fix jwebunit-core dependencies, servlet-api should always be provided -->
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<!-- Apache -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -200,13 +135,6 @@
 			<version>1.8</version>
 		</dependency>
 
-		<!-- C3P0 -->
-		<dependency>
-			<groupId>com.mchange</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>0.9.2.1</version>
-		</dependency>
-
 		<!-- Joda time -->
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -221,14 +149,7 @@
 			<version>1.7.5</version>
 		</dependency>
 		<dependency>
-			<!-- route c3p0 logging to slf4j -->
-			<groupId>org.slf4j</groupId>
-			<artifactId>log4j-over-slf4j</artifactId>
-			<version>1.7.5</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<!-- unitils (and spring-jdbc in test) log via jcl, route to slf4j: -->
+			<!-- spring-jdbc in test logs via jcl, route to slf4j: -->
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>1.7.5</version>
@@ -279,20 +200,13 @@
 			<version>2.3.0</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>10.10.1.1</version>
-			<scope>test</scope>
-		</dependency>
+		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the JDK. -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>3.2.3.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the 
-			JDK. -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -329,7 +243,7 @@
 			<plugins>
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.3.2</version>
+					<version>3.5.1</version>
 					<configuration>
 						<source>${maven.compiler.source}</source>
 						<target>${maven.compiler.target}</target>
@@ -338,7 +252,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.4</version>
+					<version>3.5.1</version>
 					<configuration>
 						<chmod>false</chmod>
 					</configuration>
@@ -347,7 +261,7 @@
 						<dependency>
 							<groupId>org.apache.maven.wagon</groupId>
 							<artifactId>wagon-ssh</artifactId>
-							<version>2.1</version>
+							<version>2.10</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -358,12 +272,12 @@
 						<dependency>
 							<groupId>org.apache.maven.surefire</groupId>
 							<artifactId>surefire-testng</artifactId>
-							<version>2.19</version>
+							<version>2.19.1</version>
 						</dependency>
 						<dependency>
 							<groupId>org.apache.maven.surefire</groupId>
 							<artifactId>surefire-junit47</artifactId>
-							<version>2.19</version>
+							<version>2.19.1</version>
 						</dependency>
 					</dependencies>
 					<configuration>
@@ -388,7 +302,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.7</version>
+				<version>2.9</version>
 				<reportSets>
 					<reportSet>
 						<reports>
@@ -435,7 +349,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.6</version>
 				<configuration>
 					<targetJdk>${maven.compiler.target}</targetJdk>
 				</configuration>
@@ -443,7 +357,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.16</version>
+				<version>2.19.1</version>
 				<reportSets>
 					<reportSet>
 						<reports>
@@ -452,11 +366,11 @@
 					</reportSet>
 				</reportSets>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.6</version>
-			</plugin>
+			<!--<plugin>-->
+				<!--<groupId>org.codehaus.mojo</groupId>-->
+				<!--<artifactId>cobertura-maven-plugin</artifactId>-->
+				<!--<version>2.7</version>-->
+			<!--</plugin>-->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>taglist-maven-plugin</artifactId>
@@ -465,19 +379,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-changes-plugin</artifactId>
-				<version>2.9</version>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>changes-report</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-changes-plugin</artifactId>
-				<version>2.9</version>
+				<version>2.12</version>
 				<configuration>
 					<addActionDate>true</addActionDate>
 				</configuration>
@@ -508,7 +410,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.4</version>
+						<version>1.6</version>
 						<executions>
 							<execution>
 								<id>sign</id>

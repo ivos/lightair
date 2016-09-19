@@ -1,13 +1,14 @@
 package it.setup.annotation;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import test.support.ApiTestSupport;
 
 import java.util.List;
 import java.util.Map;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import static org.junit.Assert.assertEquals;
 
 public class SetupTestBase extends CommonTestBase {
 
@@ -15,6 +16,7 @@ public class SetupTestBase extends CommonTestBase {
 	@org.testng.annotations.BeforeClass
 	public static void beforeClass() {
 		db.execute("create table person(name varchar(255))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

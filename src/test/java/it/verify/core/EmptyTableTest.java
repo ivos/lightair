@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 /**
  * Table expected empty is empty in database.
@@ -20,6 +21,7 @@ public class EmptyTableTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table filled(id int primary key, a1 varchar(255))");
 		db.execute("create table empty_(id int primary key, b1 varchar(255))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

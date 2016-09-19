@@ -39,11 +39,10 @@ public class SetupListTestRule extends AbstractTestRule<Setup.List> {
 
 	/**
 	 * Set setup executor.
-	 * 
-	 * @param setupExecutor
+	 *
+	 * @param setupExecutor executor
 	 */
 	public void setSetupExecutor(SetupExecutor setupExecutor) {
 		this.setupExecutor = setupExecutor;
 	}
-
 }

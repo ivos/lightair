@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 @RunWith(LightAir.class)
 @Verify
@@ -17,6 +18,7 @@ public class UnspecifiedTableTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table expected(id int primary key, a1 varchar(255))");
 		db.execute("create table unspecified(id int primary key, b1 varchar(255))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

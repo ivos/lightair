@@ -8,14 +8,12 @@
 
 Write a test
 
- The following example tests updating of user's profile on an example web application:
+ The following example tests updating of user's profile on an example application:
 
 +---+
 package it.user;
 
-import static net.sourceforge.jwebunit.junit.JWebUnit.*;
 import net.sf.lightair.LightAir;
-import net.sf.lightair.annotation.BaseUrl;
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.annotation.Verify;
 
@@ -25,24 +23,13 @@ import org.junit.runner.RunWith;
 @RunWith(LightAir.class)
 @Setup
 @Verify
-@BaseUrl("http://localhost:8080/my-application")
 public class ProfileUpdateIT {
 
-	@Test
-	public void test() {
-		beginAt("login");
-		setTextField("email", "email2");
-		setTextField("password", "pwd2");
-		submit();
-		assertTextPresent("Logged in as: email2");
-
-		clickLink("profile");
-
-		setTextField("name", "Name 2_a");
-		submit();
-
-		assertTextFieldEquals("name", "Name 2_a");
-	}
+  @Test
+  public void test() {
+    // invoke the actual update of the user's profile
+    // (call a REST API, call a SOAP web service, or trigger the UI).
+  }
 
 }
 +---+
@@ -53,21 +40,18 @@ public class ProfileUpdateIT {
 @Listeners(LightAirNGListener.class)
 @Setup
 @Verify
-@BaseUrl("http://localhost:8080/my-application")
 public class ProfileUpdateIT {
-	...
+  ...
 +---+
 
  Next to the class (in the same package), create <<<ProfileUpdateIT.xml>>> file
- to setup database before the test:
+ to setup the database before the test:
  
 +---+
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="../../dataset.xsd">
-	<user id="1" email="email1" name="Name 1" password="pwd1" version="1" />
-	<user id="2" email="email2" name="Name 2" password="pwd2" version="1" />
-	<user id="3" email="email3" name="Name 3" password="pwd3" version="1" />
+    xsi:noNamespaceSchemaLocation="../../dataset.xsd">
+  <user id="1" version="1" email="email1" name="Name 1" password="pwd1"/>
 </dataset>
 +---+
 
@@ -77,18 +61,10 @@ public class ProfileUpdateIT {
 +---+
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="../../dataset.xsd">
-	<user id="1" email="email1" name="Name 1" password="pwd1" version="1" />
-	<user id="2" email="email2" name="Name 2_a" password="pwd2" />
-	<user id="3" email="email3" name="Name 3" password="pwd3" version="1" />
+    xsi:noNamespaceSchemaLocation="../../dataset.xsd">
+  <user id="1" version="2" email="email1" name="Name 1 updated" password="pwd1" />
 </dataset>
 +---+
-
- Note that the version column of the updated row in verification dataset is not specified,
- this means its value is not verified 
- (as opposed to other tools where it would be verified to be null).
- 
- See the list of features for other examples of "straightening" the functionality.
 
 *--:
  {{{./features/setup.html}Next: Features >>}}

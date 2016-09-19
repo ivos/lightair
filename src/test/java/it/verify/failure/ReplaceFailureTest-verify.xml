@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<a id="0" a1="value0" date1="2011-10-21" time1="22:49:48" timestamp1="2011-11-21 23:59:58.123" />
+	<a id="0" a1="value0" date1="2011-10-21" time1="22:49:48" timestamp1="2011-11-21T23:59:58.123" />
 	<a id="1" a1="@null" date1="@date" time1="@time" timestamp1="@timestamp" />
-	<a id="2" a1="value2" date1="2011-10-22" time1="22:49:49" timestamp1="2011-11-22 23:59:59.124" />
+	<a id="2" a1="value2" date1="2011-10-22" time1="22:49:49" timestamp1="2011-11-22T23:59:59.124" />
 </dataset>

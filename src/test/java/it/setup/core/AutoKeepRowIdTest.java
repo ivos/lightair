@@ -1,18 +1,18 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
 @Setup
@@ -26,6 +26,7 @@ public class AutoKeepRowIdTest extends CommonTestBase {
 				+ "startsAuto varchar(20), startsManual varchar(20))");
 		db.execute("create table b (id int primary key, "
 				+ "startsAuto varchar(20), startsManual varchar(20))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass
@@ -36,17 +37,17 @@ public class AutoKeepRowIdTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		verifyTable("a", "421");
-		verifyTable("b", "241");
+		verifyTable("a", "0421");
+		verifyTable("b", "4241");
 	}
 
 	private void verifyTable(String table, String prefix) {
 		values = db.queryForList("select * from " + table);
-		verifyRow(table, 0, 1, "startsauto " + prefix + "7500", "sm1");
-		verifyRow(table, 1, 2, "sa2", "startsmanual " + prefix + "9501");
+		verifyRow(table, 0, 1, "startsauto1" + prefix + "67501", "sm1");
+		verifyRow(table, 1, 2, "sa2", "startsmanu1" + prefix + "39502");
 		verifyRow(table, 2, 3, "sa3", "sm3");
-		verifyRow(table, 3, 4, "startsauto " + prefix + "7503", "startsmanual "
-				+ prefix + "9503");
+		verifyRow(table, 3, 4, "startsauto1" + prefix + "67504", "startsmanu1"
+				+ prefix + "39504");
 		assertEquals("Count " + table, new Integer(4), db.queryForObject(
 				"select count(*) from " + table, Integer.class));
 	}

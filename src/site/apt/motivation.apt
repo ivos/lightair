@@ -15,7 +15,7 @@ Motivation, or Is Light Air for me?
  because that is what I hand out to my customer. 
  I am not interested for example in testing a method on a DAO class, 
  I want to test the relevant functionality of the complete application, 
- from user interface down to the database. 
+ from API (or user interface) down to the database.
  Once I have a test for the complete functionality, 
  testing a method on a DAO becomes usually irrelevant.
 
@@ -31,17 +31,15 @@ Motivation, or Is Light Air for me?
 
  [[1]] Clean up database.
 
- [[1]] Setup database into a known state required for the test.
+ [[1]] Setup database into a known state required for the particular test.
 
- [[1]] Execute the tested functionality with the application.
+ [[1]] Execute the tested functionality within the application.
 
  [[1]] Verify application output.
 
  [[1]] Verify database state after the functionality was executed.
  
  []
-
-* Working with the database
 
  Each test will start with <<setting up the test data>>. 
  I want the test to be <<repeatable>>, 
@@ -53,65 +51,41 @@ Motivation, or Is Light Air for me?
 
  I want to specify setup data in the DbUnit's "flat XML format". 
  It's the <<simplest data format>> based on XML. 
- It's also <<the most convenient one>>. 
- And with any average XML editor it requires less typing than other formats, 
- including those constructed exactly for this purpose.
+ It's also <<the most convenient one>>: with any average XML-aware editor it requires less typing than any other format.
 
- I want the test tool to <<generate XSD from database>> 
+ Within the root <<<\<dataset/\>>>> element each sub-element declares a row in a database table.
+ The name of the element specifies the name of the table. Attributes specify column names and their respective values:
+
++---+
+<dataset>
+  <order id="1" number="1234-567"/>
+  <line_item id="1" order_id="1" quantity="10"/>
+  <line_item id="2" order_id="1" quantity="30"/>
+</dataset>
++---+
+
+ I want the test tool to <<generate an XSD from the database>>
  to support me when writing the test data by <<suggesting names of tables and columns>>. 
- I want to configure the generation of XSD in my Maven build, 
- alongside generating DDL by the hibernate3-maven-plugin 
+ I want to configure the generation of XSD in my build,
  so that it is run whenever my database schema changes.
 
  Similarly, I want the tool to <<verify database content>> after each test execution.
- I want to specify the data in the same format as for setup.
+ I want to specify the data in the same format as for the setup.
 
  For both setup and verification data definitions,
- I want <<standard tokens>>, like @null, @any, @date, @time, @timestamp, 
- pre-defined and be able to use them immediately without any hassle.
- 
- I want the tool to <<interpret the data definitions according to common sense>>.
- This includes, for example:
- 
- * When a column value is defined on a row, it is used (inserted or verified).
- If a column is not defined on a row, 
- it is ignored (not inserted, or not verified at all).
+ I want to be able to use <<standard tokens>>, like @null, @any, @date, @time, @timestamp.
 
- * In verification, rows should be matched by the number of matching columns.
- This leads to the least possible number of differences.
- 
- * Verification fails if an expected row is missing in the database. 
- It also fails, if an unexpected row is found in the database.
- 
- []
- 
  I generally use surrogate primary keys generated as a sequence number.
  I want to be able to <<verify foreign keys>> referencing such generated
- primary keys. I want to use the mechanism of variables for this purpose.
- 
-+---+
-<order id="$orderId" number="1234-567" />
-<line_item id="@any" order_id="$orderId" quantity="10" />
-<line_item id="@any" order_id="$orderId" quantity="30" />
-+---+
- 
- The above dataset verifies there is one row in the order table with the given number, 
- and there are two rows in the line_item table with the given quantities.
- What is important, it also verifies that the two <<line items are related>>
- to the order via foreign key order_id, no matter what the actual value
- of that foreign key is. 
- The expression $orderId is a variable, 
- which on its first occurrence (in this case in order.id) 
- takes the actual value from the database and defines a variable having this value.
- On any subsequent occurrence (in this case in both the line_item.order_id column values)
- it verifies that the actual database value is equal to the already defined value of the variable.
+ primary keys. I want to use the mechanism of variables for this purpose
+ (see {{{./features/verify.html}Features -> Verify}} for more info).
 
  When writing tests I frequently want to use <<unique values>>, 
  for example to verify proper mapping of attributes from user to DB and vice versa.
  I do not care what particular values are used, I just want to have them unique,
  so that I can tell from the destination values that the mapping works correctly.\
- I want to be able to use <<@auto token>> to have the test tool <<generate a unique 
- value for the column automatically>>.
+ I want to be able to use an <<@auto token>> to have the test tool <<generate a unique
+ value>> for the column automatically.
 
  This will:
  
@@ -123,30 +97,20 @@ Motivation, or Is Light Air for me?
  
  []
  
- So, for example, I can write a dataset like this:
+ So, for example, I want to write a dataset like this:
 
 +---+
 <dataset>
-	<user id="11" email="@auto" name="@auto" password="@auto" version="@auto" />
-	<user_session id="21" user_id="11" started="@auto" version="@auto" />
+  <user id="11" email="@auto" name="@auto" password="@auto" version="@auto" />
+  <user_session id="21" user_id="11" started="@auto" version="@auto" />
 
-	<user id="12" email="@auto" name="@auto" password="@auto" version="@auto" />
-	<user_session id="22" user_id="12" started="@auto" version="@auto" />
+  <user id="12" email="@auto" name="@auto" password="@auto" version="@auto" />
+  <user_session id="22" user_id="12" started="@auto" version="@auto" />
 </dataset>
 +---+
 
-* Working with the application
-
- I want to write my test in Java by hand.
- The test code should be written manually, 
- so that it can be maintained, <<refactored>>, <<re-used>>, and extended.
- I don't want to use any tools that generate some obscure scripts, 
- that do not allow me to refactor and reuse the test code.
- 
- I want my test code to <<sustain trivial changes>> in user interface.
- In a web application, the UI is ever-changing.
- The test must remain valid when "trivial" changes are performed,
- e.g. swap two fields, or wrap fields in a group to provide for border or alignment.
+ Well, Light Air gives you all of these, and more!
+ Continue to the next section to learn how to setup Light Air in your own project.
 
 *---:
  {{{./project-setup.html}Next: Project setup >>}}

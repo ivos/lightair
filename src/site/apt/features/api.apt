@@ -1,0 +1,43 @@
+ ---
+ Programmatic API
+ ---
+ Ivo Maixner
+ ---
+ 2016-09-19
+ ---
+
+Programmatic API
+
+ Light Air provides programmatic API with the {{{../apidocs/net/sf/lightair/Api.html}net.sf.lightair.Api class}}.
+
+ The general contract is to {{{../apidocs/net/sf/lightair/Api.html#initialize-java.lang.String-}initialize}}
+ and {{{../apidocs/net/sf/lightair/Api.html#shutdown--}shutdown}}
+ and in between perform either {{{../apidocs/net/sf/lightair/Api.html#generateXsd--}generateXsd}} call
+ or (a series of) {{{../apidocs/net/sf/lightair/Api.html#setup-java.util.Map-}setup}}
+ and {{{../apidocs/net/sf/lightair/Api.html#verify-java.util.Map-}verify}} calls.
+
+ To generate XSD files:
+
++---+
+Api.initialize(Api.getPropertiesFileName());
+Api.generateXsd();
+Api.shutdown();
++---+
+
+ To setup and verify database:
+
++---+
+Map<String, List<String>> fileNames = new HashMap<>();
+fileNames.put(Keywords.DEFAULT_PROFILE, Arrays.asList("my-dataset-1.xml", "my-dataset-2.xml"));
+
+Api.initialize(Api.getPropertiesFileName());
+Api.setup(fileNames);
+// ...execute function under test...
+Api.verify(fileNames);
+// ...possibly repeat setup and verify for other tests...
+Api.shutdown();
++---+
+
+*--:
+ {{{../development.html}Next: Development >>}}
+*--:

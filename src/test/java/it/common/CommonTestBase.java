@@ -1,6 +1,6 @@
 package it.common;
 
-import net.sf.lightair.internal.factory.Factory;
+import net.sf.lightair.internal.junit.util.Factory;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
@@ -13,16 +13,14 @@ public class CommonTestBase {
 	protected final static JdbcTemplate db;
 
 	static {
-		SingleConnectionDataSource dataSource = new SingleConnectionDataSource(
-				"jdbc:h2:mem:test", "sa", "", true);
+		SingleConnectionDataSource dataSource = new SingleConnectionDataSource("jdbc:h2:mem:test", "sa", "", true);
 		db = new JdbcTemplate(dataSource);
 	}
 
 	@BeforeClass
 	@org.testng.annotations.BeforeClass
 	public static void initCommonTestBase() {
-		DateTimeUtils.setCurrentMillisFixed(new DateTime(2009, 8, 28, 19, 49,
-				59, 987).getMillis());
+		DateTimeUtils.setCurrentMillisFixed(new DateTime(2009, 8, 28, 19, 49, 59, 987).getMillis());
 		Factory.getInstance().init();
 	}
 

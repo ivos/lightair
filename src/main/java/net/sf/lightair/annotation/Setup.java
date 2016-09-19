@@ -1,11 +1,12 @@
 package net.sf.lightair.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Sets up database before test.
@@ -23,9 +24,9 @@ import java.lang.annotation.Target;
  * By default, system locates sequentially the following files in the package of
  * the class, the first file found wins:
  * <ol>
- * <li>&lt;test class name>.&lt;test method name>.xml</li>
- * <li>&lt;test method name>.xml</li>
- * <li>&lt;test class name>.xml</li>
+ * <li>&lt;test class name&gt;.&lt;test method name&gt;.xml</li>
+ * <li>&lt;test method name&gt;.xml</li>
+ * <li>&lt;test class name&gt;.xml</li>
  * </ol>
  * <p>
  * Specify the names of files explicitly in the annotation to override the
@@ -40,14 +41,14 @@ import java.lang.annotation.Target;
  * </pre>
  * <p>
  * The setup files must conform to the DBunit's "flat XML dataset" format, which
- * means there is a root &lt;dataset /> element, which contains one element for
+ * means there is a root &lt;dataset /&gt; element, which contains one element for
  * each row, where the name of the row element specifies the database table and
  * its elements specify the table columns. So, for example:
  * 
  * <pre>
- * &lt;dataset>
- * 	&lt;person name="Joe" />
- * &lt;/dataset>
+ * &lt;dataset&gt;
+ * 	&lt;person name="Joe" /&gt;
+ * &lt;/dataset&gt;
  * </pre>
  * <p>
  * System performs "clean insert" database operation with all datasets located,
@@ -66,8 +67,6 @@ public @interface Setup {
 
 	/**
 	 * Names of files with datasets.
-	 * 
-	 * @return
 	 */
 	String[] value() default {};
 
@@ -77,8 +76,6 @@ public @interface Setup {
 	 * A profile lets you connect to a different database. A profile must be
 	 * defined in LightAir properties file and must have its own properties file
 	 * which defines the connection to the profile database.
-	 * 
-	 * @return
 	 */
 	String profile() default "";
 
@@ -93,5 +90,4 @@ public @interface Setup {
 	@interface List {
 		Setup[] value();
 	}
-
 }

@@ -1,18 +1,18 @@
 package it.setup.core;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
-
-import java.util.List;
-import java.util.Map;
-
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
 @Setup
@@ -25,6 +25,7 @@ public class DefaultTest extends CommonTestBase {
 		db.execute("create table a (id int primary key,"
 				+ " fixedm char(20) default 'D' not null, autom char(20) default 'D' not null,"
 				+ " fixedo char(20) default 'D', autoo char(20) default 'D')");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass
@@ -38,7 +39,7 @@ public class DefaultTest extends CommonTestBase {
 				db.queryForObject("select count(*) from a", Integer.class));
 
 		values = db.queryForList("select * from a");
-		verifyRow(0, 1, "A", "autom 4218100", "A", "autoo 4218300");
+		verifyRow(0, 1, "A", "autom 1042168101", "A", "autoo 1042128301");
 		verifyRow(1, 2, "D", "D", "D", "D");
 	}
 

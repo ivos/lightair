@@ -1,4 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<a id="1" time1="@timestamp" timestamp1="@timestamp" />
+	<a id="1" timestamp1="@timestamp" />
 </dataset>

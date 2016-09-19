@@ -1,11 +1,20 @@
 <document xmlns="http://maven.apache.org/changes/1.0.0"
-	xmlns:xsi="http://http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
+          xmlns:xsi="http://http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
 	<properties>
 		<title>Changes</title>
 	</properties>
 	<body>
-		<release date="2016-07-15" version="2.10.0" description="Performance optimization.">
+		<release date="2016-09-19" version="3.0.0" description="Total rewrite.">
+			<action type="update">Total rewrite of Light Air. WARNING: This release is NOT BACKWARD COMPATIBLE with
+				2.x.x releases and NO STRAIGHTFORWARD UPGRADE PATH EXISTS due to substantial structural changes.
+			</action>
+			<action type="remove">Dependencies on DBUnit and Unitils dropped.</action>
+			<action type="add">Programmatic API provided.</action>
+			<action type="update">@auto indexes fixed, so they are dependable.</action>
+			<action type="add">A host of other minor improvements resulting from new re-implementation.</action>
+		</release>
+		<release date="" version="2.10.0" description="Performance optimization.">
 			<action type="add" dev="premeks">Read metadata only for tables in verify data set.</action>
 		</release>
 		<release date="2016-06-03" version="2.9.0" description="Fix TestNG support.">
@@ -33,7 +42,7 @@
 			</action>
 		</release>
 		<release date="2014-08-11" version="2.2.0"
-			description="Spring runner. Short dataset file names. Performace improvement.">
+		         description="Spring runner. Short dataset file names. Performace improvement.">
 			<action type="update" due-to="Albert Sputa">Cache DBUnit connections.
 				Performance improvement.
 			</action>
@@ -44,8 +53,7 @@
 				test method.
 			</action>
 		</release>
-		<release date="2014-05-13" version="2.1.2"
-			description="Fix @auto on wide tables. Support DB default values.">
+		<release date="2014-05-13" version="2.1.2" description="Fix @auto on wide tables. Support DB default values.">
 			<action type="fix">Fix method annotation overrides class annotation
 				even when one is List and the other is not.
 			</action>
@@ -54,19 +62,18 @@
 			<action type="add">Add proper support for DB default values.
 			</action>
 		</release>
-		<release date="2014-03-17" version="2.1.1"
-			description="Fix remove absolute system path from pom.">
+		<release date="2014-03-17" version="2.1.1" description="Fix remove absolute system path from pom.">
 			<action type="fix">Fix remove absolute system path from pom. Caused
 				problems on Windows.
 			</action>
 		</release>
 		<release date="2014-03-05" version="2.1.0"
-			description="Fix generate @auto with correct row index.">
+		         description="Fix generate @auto with correct row index.">
 			<action type="fix">Fix generate @auto with correct row index.
 			</action>
 		</release>
 		<release date="2014-01-13" version="2.0.0"
-			description="Token @auto. Profiles. Configurable properties file location">
+		         description="Token @auto. Profiles. Configurable properties file location">
 			<action type="add">Add support for DB views.</action>
 			<action type="add">Add token @auto.</action>
 			<action type="add">Add support for profiles - connections to
@@ -76,8 +83,7 @@
 				file using system property.
 			</action>
 		</release>
-		<release date="2013-11-24" version="1.0.0"
-			description="Pool connections. Durations.">
+		<release date="2013-11-24" version="1.0.0" description="Pool connections. Durations.">
 			<action type="add">Add support for duration in temporal tokens.
 			</action>
 			<action type="add">Use datasource to pool database connections.

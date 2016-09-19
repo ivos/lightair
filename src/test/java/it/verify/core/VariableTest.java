@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 @RunWith(LightAir.class)
 @Verify
@@ -16,6 +17,7 @@ public class VariableTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, a1 varchar(255))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass

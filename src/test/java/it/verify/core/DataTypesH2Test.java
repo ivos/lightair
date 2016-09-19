@@ -7,6 +7,7 @@ import net.sf.lightair.annotation.Verify;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ConfigSupport;
 
 @RunWith(LightAir.class)
 @Verify
@@ -14,6 +15,7 @@ public class DataTypesH2Test extends DataTypesTestBase {
 
 	static {
 		connect("jdbc:h2:mem:test", "sa", "");
+		ConfigSupport.restoreConfig();
 	}
 
 	@BeforeClass

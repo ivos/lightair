@@ -8,9 +8,19 @@
 
 Verify database
 
- [[1]] <<Default @Verify annotation>>\
- When test method or test class is annotated with <<<@Verify>>>, system
- locates sequentially the following files in the package of the class, the first file found wins:
+ Verify the content of the database at the end of each test.
+
+ Use the dataset format to specify the tables, rows and column values to be verified.
+
+ Tables not included in the dataset are ignored in verification.
+ However, once a table is included, all the rows in the dataset must match exactly,
+ missing or unexpected rows fail the verification.
+
+ The order of rows in verification is irrelevant, the rows are matched by the number of matching column values.
+
+ <<Default @Verify annotation>>\
+ When a test method or a test class is annotated with <<<@Verify>>>,
+ the following files are located sequentially in the package of the class, the first file found wins:
 
   * <<<\<test class name\>.\<test method name\>-verify.xml>>>
 
@@ -18,38 +28,36 @@ Verify database
 
   * <<<\<test class name\>-verify.xml>>>
 
- Then <<verifies>> the dataset against the database. 
- If no such dataset exists, system throws exception.
+ Then the dataset is <<verified>> against the database.
 
- <Examples:>
+ <Example:>
 
 +---+
 @Verify
 public class MyTest {
-	@Test
-	public void test() {
-	}
+  @Test
+  public void test() {
+  }
 }
 +---+
 
- [[2]] <<Specify dataset file names in @Verify>>\
- When <<<@Verify>>> annotation contains <<file names>> of datasets, system uses those file names
- to locate the datasets in the package of the test class 
- and verifies the dataset against the database with <<all>> datasets located merged into one. 
- If a specified dataset does not exist, system throws exception.
- 
- <Examples:>
+ <<Specify dataset file names in @Verify>>\
+ When <<<@Verify>>> annotation contains <<file names>> of datasets, they are used
+ to locate the datasets in the package of the test class
+ and the dataset is verified against the database with all located datasets merged into one.
+
+ <Example:>
 
 +---+
 @Verify({ "verify-1.xml", "verify-2.xml" })
 public class MyTest {
-	@Test
-	public void test() {
-	}
+  @Test
+  public void test() {
+  }
 }
 +---+
 
- [[3]] <<Specify profile in @Verify>>\
+ <<Specify profile in @Verify>>\
  Use <<<profile>>> attribute of <<<@Verify>>> annotation to instruct Light Air to 
  apply the datasets on the <<connection defined by the profile>>.\
  See the Profiles section in {{{./configure.html}Configure Light Air}} for details
@@ -60,13 +68,13 @@ public class MyTest {
 +---+
 @Verify(value = { "verify-1.xml", "verify-2.xml" }, profile = "oracle")
 public class MyTest {
-	@Test
-	public void test() {
-	}
+  @Test
+  public void test() {
+  }
 }
 +---+
 
- [[4]] <<Specify multiple @Verify annotations>>\
+ <<Specify multiple @Verify annotations>>\
  Use <<<@Verify.List>>> annotation to define <<multiple>> <<<@Verify>>> <<annotations>>
  for the same test class or test method.
 
@@ -74,132 +82,84 @@ public class MyTest {
 
 +---+
 @Verify.List({
-	@Verify("verify-h2.xml"),
-	@Verify(value = "verify-hsql.xml", profile = "hsql"),
-	@Verify(value = { "verify-ora-1.xml", "verify-ora-2.xml" }, profile = "oracle") })
+  @Verify("verify-h2.xml"),
+  @Verify(value = "verify-hsql.xml", profile = "hsql"),
+  @Verify(value = { "verify-ora-1.xml", "verify-ora-2.xml" }, profile = "oracle") })
 public class MyTest {
-	@Test
-	public void test() {
-	}
+  @Test
+  public void test() {
+  }
 }
 +---+
 
- [[5]] <<Verification fails when a column value does not match>>\
- Detailed message indicating the particular row and column is displayed.
+ <<Empty row>>\
+ Use "empty row", i.e. element with no attributes, to verify the DB table is empty (has no rows).
 
- [[6]] <<Row order is irrelevant in verification>>\
- Rows in verification dataset may be in <<any order>>.
-
- [[7]] <<Verification fails when an expected row is not found in database>>\
- Detailed message indicating the particular row is displayed.
-
- [[8]] <<Table not specified in expected dataset is ignored in verification>>
-
- [[9]] <<Column not specified in expected row is ignored in verification>>\
- When a column is not present on a row of an expected dataset, 
- its value in database row is <<ignored>>. 
- This works regardless whether the column is specified in the expected dataset 
- on any other row.
-
- <Examples:>
+ <Example:>
 
 +---+
 <dataset>
-	<table expected="a" unspecified="b" />
-	<table expected="c" />
-	<table expected="e" unspecified="f" />
+  <my_table/>
 </dataset>
 +---+
 
- The value of column <<<unspecified>>> in the second row will be ignored.
-
- [[10]] <<Use all columns of a row in verification>>\
- When verifying a row, use values of all columns defined <<on the row>>,
- no matter what columns were defined on other rows of the table.\
- This fixes bug of DbUnit, where the first row of the table freezes columns used
- by the dataset, other columns defined on subsequent rows are then ignored by DbUnit.
-
- <Examples:>
-
-+---+
-<dataset>
-	<table expected="a" />
-	<table expected="b" unspecified="c" />
-	<table expected="d" />
-</dataset>
-+---+
-
- The value of column <<<unspecified>>> in the second row will be verified.
-
- [[11]] <<Verify that table expected to be empty is empty in database>>\
- Fail when there are rows in the table in database.
-
- <Examples:>
-
-+---+
-<dataset>
-	<table />
-</dataset>
-+---+
-
- [[12]] <<Verification fails when an unexpected row is found in database>>\
- Detailed message indicating the particular row is displayed.
-
- [[13]] <<Match table rows by number of matching columns in verification>>\
- When matching rows of a database table, 
- first sort actual rows by the <<number of matching columns>> 
- to any best-matching expected row, 
- then match each actual row in that order to best-matching remaining expected row.
-
- [[14]] <<Support variables in verification>>\
- Use <<$name>> expressions as <<variables>> in verification datasets 
+ <<Variables>>\
+ Use <<<$name>>> expressions as <<variables>> in verification datasets
  to verify that two (or more) column values are equal.
  This can be used for example to verify a <<foreign key>> 
  referencing a generated primary key.
 
- <Examples:>
+ <Example:>
 
 +---+
 <dataset>
-	<order id="$orderId" number="1234-567" />
-	<line_item id="@any" order_id="$orderId" quantity="10" />
-	<line_item id="@any" order_id="$orderId" quantity="30" />
+  <order id="$orderId" number="1234-567" />
+  <line_item id="@any" order_id="$orderId" quantity="10" />
+  <line_item id="@any" order_id="$orderId" quantity="30" />
 </dataset>
 +---+
 
- [[15]] <<Include primary keys in verification failure message>>\
- Display actual database content in verification failure message 
- including primary key column values.
+ The above dataset verifies there is one row in the <<<order>>> table with the given number,
+ and there are two rows in the <<<line_item>>> table with the given quantities.
+ What is important, it also verifies that the two <<line items are related>>
+ to the order via foreign key <<<order_id>>>, no matter what the actual value
+ of that foreign key is.
 
- [[16]] <<Specify a column can have any non-null value with @any>>\
- Use <<<@any>>> in verification XML dataset to specify 
- that the actual column should have <<any non-null>> value.\
+ The expression <<<$orderId>>> is a variable,
+ which on its first occurrence (in this case in <<<order.id>>>)
+ takes the actual value from the database and defines a variable having this value.
+ On any subsequent occurrence (in this case in both the <<<line_item.order_id>>> column values)
+ it verifies that the actual database value is equal to the already defined value of the variable.
+
+ <<Token @any - any non-null value >>\
+ Use <<<@any>>> to specify that the actual column should have <<any non-null>> value.
+
  When you omit the column in the row, its value will be ignored.
  By using <<<@any>>> you can <<explicitly>> specify that the column value should be ignored,
  provided there is a value at all.
  (Use <<<@null>>> to verify the column has no value.) 
 
- [[17]] <<Replace @null with null value>>\
- Use <<<@null>>> in XML dataset to verify a column has <<null value>>.
+ <<Token @null - null value>>\
+ Use <<<@null>>> to verify a column has <<null value>>.
 
- [[18]] <<Replace @date with current date>>\
- Use <<<@date>>> in XML dataset to verify a column has <<current date>> midnight value.\
+ <<Token @date - current date>>\
+ Use <<<@date>>> to verify a column has <<current date>> midnight value.\
  The current date value includes <<<yyyy-MM-dd>>>
  as in <2012-12-31>.\
- The time part is verified to be midnight <00:00:00.000>.
+ The time part is verified to be midnight (00:00:00.000).
 
- [[19]] <<Replace @time with current time>>\
- Use <<<@time>>> in XML dataset to verify a column has <<current time>> value.\
+ <<Token @time - current time>>\
+ Use <<<@time>>> to verify a column has <<current time>> value.\
  The current time value includes <<<HH:mm:ss>>> as in <23:59:58>.\
  The date part is verified to be 1970-01-01. 
  The milliseconds are verified to be 0 (zero).
 
- [[20]] <<Replace @timestamp with current timestamp>>\
- Use <<<@timestamp>>> in XML dataset to verify a column has <<current timestamp>> value.\
- The current timestamp value includes <<<yyyy-MM-dd HH:mm:ss.SSS>>>
- as in <2012-12-31 23:59:58.123>.
+ <<Token @timestamp - current timestamp>>\
+ Use <<<@timestamp>>> to verify a column has <<current timestamp>> value.\
+ The current timestamp value includes <<<yyyy-MM-ddTHH:mm:ss.SSS>>>
+ as in <2012-12-31T23:59:58.123>.
 
- [[21]] <<Modify the temporal tokens with a duration>>\
+ <<Modify the temporal tokens with a duration>>\
  You can modify the temporal tokens <<<@date>>>, <<<@time>>> and <<<@timestamp>>> by 
  appending a sign (+ or -) and a 
  {{{http://en.wikipedia.org/wiki/ISO_8601#Durations}duration in ISO 8601 format}}.
@@ -221,31 +181,20 @@ public class MyTest {
   * This <<<@timestamp-P2Y3M4DT5H6M7S>>> represents 
   2 years, 3 months, 4 days, 5 hours, 6 minutes and 7 seconds in the past.
 
- [[22]] <<Generate column value automatically with @auto>>\
+ <<Token @auto - generate unique value>>\
  Use <<<@auto>>> as a column value to have the actual value <<generated automatically>>.\
  The value is guaranteed to be <<unique>>, with the obvious exception of boolean columns.
 
- <Examples:>
+ <Example:>
 
 +---+
 <dataset>
-	<user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
-	<user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
-	<user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
+  <user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
+  <user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
+  <user id="@auto" email="@auto" name="@auto" password="@auto" version="@auto" />
 </dataset>
 +---+
-
- [[23]] <<Specify database schema of a table row using XML namespace>>\
- Specify row <<schema>> using XML namespace:
-
-+---+
-<dataset xmlns:s1="SCHEMA1">
-	<s1:table_in_s1 id="0" />
-</dataset>
-+---+
-
- []
 
 *--:
- {{{./execute.html}Next: Execute web application >>}}
+ {{{./configure.html}Next: Configure Light Air >>}}
 *--:

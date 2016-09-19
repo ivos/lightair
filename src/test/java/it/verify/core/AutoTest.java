@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.support.ApiTestSupport;
 
 @RunWith(LightAir.class)
 @Verify
@@ -25,6 +26,7 @@ public class AutoTest extends CommonTestBase {
 				+ "date_type date, time_type time, timestamp_type timestamp, "
 				+ "double_type double, boolean_type boolean, bigint_type bigint, "
 				+ "decimal_type decimal(20,3), clob_type clob, blob_type blob, binary_type binary(20))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass
@@ -38,31 +40,31 @@ public class AutoTest extends CommonTestBase {
 		db.execute("delete from a1");
 		db.update("insert into a1 (id,char_type,varchar_type,integer_type,date_type,time_type,timestamp_type,"
 				+ "double_type,boolean_type,bigint_type,decimal_type,clob_type,blob_type,binary_type) values "
-				+ "(2734900,'char_type 2736900','varchar_type 2734100',2733600,'2004-04-25','16:13:20',"
-				+ "'1990-05-09T15:26:40',27384.0,false,2735000,2737.0,'clob_type 2733200',"
-				+ "'626c6f625f747970652032373335343030','62696e6172795f747970652032373332333030')");
+				+ "(1327384901,'char_type 1327356901','varchar_type 1327384101',1327353601,'1990-08-18','03:46:41',"
+				+ "'1913-09-11T00:13:21.001',13273684.01,true,1327344901,1327346.901,'clob_type 1327303201',"
+				+ "'626c6f625f747970652031333237333735343031','62696e6172795f74797031333237333532333031')");
 		db.update("insert into a1 (id,char_type,varchar_type,integer_type,date_type,time_type,timestamp_type,"
 				+ "double_type,boolean_type,bigint_type,decimal_type,clob_type,blob_type,binary_type) values "
-				+ "(2734901,'char_type 2736901','varchar_type 2734101',2733601,'2004-04-26','16:13:21',"
-				+ "'1990-05-10T15:26:41.001',27384.01,true,2735001,2737.001,'clob_type 2733201',"
-				+ "'626c6f625f747970652032373335343031','62696e6172795f747970652032373332333031')");
+				+ "(1327384902,'char_type 1327356902','varchar_type 1327384102',1327353602,'1990-08-19','03:46:42',"
+				+ "'1913-09-12T00:13:22.002',13273684.02,false,1327344902,1327346.902,'clob_type 1327303202',"
+				+ "'626c6f625f747970652031333237333735343032','62696e6172795f74797031333237333532333032')");
 		db.update("insert into a1 (id,char_type,varchar_type,integer_type,date_type,time_type,timestamp_type,"
 				+ "double_type,boolean_type,bigint_type,decimal_type,clob_type,blob_type,binary_type) values "
-				+ "(2734902,'char_type 2736902','varchar_type 2734102',2733602,'2004-04-27','16:13:22',"
-				+ "'1990-05-11T15:26:42.002',27384.02,false,2735002,2737.002,'clob_type 2733202',"
-				+ "'626c6f625f747970652032373335343032','62696e6172795f747970652032373332333032')");
+				+ "(1327384903,'char_type 1327356903','varchar_type 1327384103',1327353603,'1990-08-20','03:46:43',"
+				+ "'1913-09-13T00:13:23.003',13273684.03,true,1327344903,1327346.903,'clob_type 1327303203',"
+				+ "'626c6f625f747970652031333237333735343033','62696e6172795f74797031333237333532333033')");
 
 		db.execute("delete from a2");
 		db.update("insert into a2 (id,char_type,varchar_type,integer_type,date_type,time_type,timestamp_type,"
 				+ "double_type,boolean_type,bigint_type,decimal_type,clob_type,blob_type,binary_type) values "
-				+ "(0314900,'char_type 0316900','varchar_type 0314100',313600,'1974-03-14','16:00:00',"
-				+ "'1960-03-27T15:13:20',3184.0,false,315000,317.0,'clob_type 0313200',"
-				+ "'626c6f625f747970652030333135343030','62696e6172795f747970652030333132333030')");
+				+ "(1603184901,'char_type 1603156901','varchar_type 1603184101',1603153601,'2007-01-21','06:53:21',"
+				+ "'1930-02-14T03:20:01.001',16031684.01,true,1603144901,1603146.901,'clob_type 1603103201',"
+				+ "'626c6f625f747970652031363033313735343031','62696e6172795f74797031363033313532333031')");
 		db.update("insert into a2 (id,char_type,varchar_type,integer_type,date_type,time_type,timestamp_type,"
 				+ "double_type,boolean_type,bigint_type,decimal_type,clob_type,blob_type,binary_type) values "
-				+ "(0314901,'char_type 0316901','varchar_type 0314101',313601,'1974-03-15','16:00:01',"
-				+ "'1960-03-28T15:13:21.001',3184.010,true,315001,317.001,'clob_type 0313201',"
-				+ "'626c6f625f747970652030333135343031','62696e6172795f747970652030333132333031')");
+				+ "(1603184902,'char_type 1603156902','varchar_type 1603184102',1603153602,'2007-01-22','06:53:22',"
+				+ "'1930-02-15T03:20:02.002',16031684.02,false,1603144902,1603146.902,'clob_type 1603103202',"
+				+ "'626c6f625f747970652031363033313735343032','62696e6172795f74797031363033313532333032')");
 	}
 
 }

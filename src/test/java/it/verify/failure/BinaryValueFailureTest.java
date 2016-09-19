@@ -1,15 +1,15 @@
 package it.verify.failure;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
 import net.sf.lightair.annotation.Verify;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+import test.support.ApiTestSupport;
 import test.support.ExceptionVerifyingJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(ExceptionVerifyingJUnitRunner.class)
 @Verify
@@ -18,6 +18,7 @@ public class BinaryValueFailureTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, a1 binary)");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass
@@ -34,17 +35,11 @@ public class BinaryValueFailureTest extends CommonTestBase {
 	}
 
 	public void testVerifyException(Throwable error) {
-		String msg = "Assertion failed. "
-				+ "Differences found between the expected data set and actual database content.\n"
-				+ "Found differences for table PUBLIC.a:\n\n"
-				+ "  Different row: \n  id, a1\n"
-				+ "  \"1\", \"/ty6CYdlQyI=\"\n\n"
-				+ "  Best matching differences:  \n"
-				+ "  a1: \"/ty6CYdlQyI=\" <-> \"/ty6CYdlQy8=\"\n\n\n"
-				+ "Actual database content:\n\nPUBLIC.A\n  ID, A1\n"
-				+ "  0, [-2, -36, -70, 9, -121, 101, 67, 33]\n"
-				+ "  1, [-2, -36, -70, 9, -121, 101, 67, 47]\n"
-				+ "  2, [-2, -36, -70, 9, -121, 101, 67, 35]\n\n";
+		String msg = "Differences found between the expected data set and actual database content.\n" +
+				"Found differences for table a:\n" +
+				"  Different row: {id=1, a1=/ty6CYdlQyI=}\n" +
+				"   Best matching differences: \n" +
+				"    a1: expected [/ty6CYdlQyI=], but was [/ty6CYdlQy8=]\n";
 		assertEquals(msg, error.getMessage());
 	}
 

@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:la="http://lightair.sourceforge.net/">
+	<xsd:import namespace="http://lightair.sourceforge.net/" schemaLocation="light-air-types.xsd"/>
+
+	<xsd:element name="dataset">
+		<xsd:complexType>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="ta" type="ta__Type"/>
+				<xsd:element name="tb" type="tb__Type"/>
+				<xsd:element name="data_types" type="data_types__Type"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="ta__Type">
+		<xsd:attribute name="ca" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="cb" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="cc" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="cd" use="optional" type="la:StringNullableType"/>
+	</xsd:complexType>
+	<xsd:complexType name="tb__Type">
+		<xsd:attribute name="cc" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="cd" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="ce" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="cf" use="optional" type="la:StringNullableType"/>
+	</xsd:complexType>
+	<xsd:complexType name="data_types__Type">
+		<xsd:attribute name="boolean_nullable_type" use="optional" type="la:BooleanNullableType"/>
+		<xsd:attribute name="boolean_type" use="optional" type="la:BooleanType"/>
+		<xsd:attribute name="byte_nullable_type" use="optional" type="la:ByteNullableType"/>
+		<xsd:attribute name="byte_type" use="optional" type="la:ByteType"/>
+		<xsd:attribute name="short_nullable_type" use="optional" type="la:ShortNullableType"/>
+		<xsd:attribute name="short_type" use="optional" type="la:ShortType"/>
+		<xsd:attribute name="integer_nullable_type" use="optional" type="la:IntegerNullableType"/>
+		<xsd:attribute name="integer_type" use="optional" type="la:IntegerType"/>
+		<xsd:attribute name="long_nullable_type" use="optional" type="la:LongNullableType"/>
+		<xsd:attribute name="long_type" use="optional" type="la:LongType"/>
+		<xsd:attribute name="float_nullable_type" use="optional" type="la:BigdecimalNullableType"/>
+		<xsd:attribute name="float_type" use="optional" type="la:BigdecimalType"/>
+		<xsd:attribute name="double_nullable_type" use="optional" type="la:BigdecimalNullableType"/>
+		<xsd:attribute name="double_type" use="optional" type="la:BigdecimalType"/>
+		<xsd:attribute name="bigdecimal_nullable_type" use="optional" type="la:BigdecimalNullableType"/>
+		<xsd:attribute name="bigdecimal_type" use="optional" type="la:BigdecimalType"/>
+		<xsd:attribute name="date_nullable_type" use="optional" type="la:DateNullableType"/>
+		<xsd:attribute name="date_type" use="optional" type="la:DateType"/>
+		<xsd:attribute name="time_nullable_type" use="optional" type="la:TimeNullableType"/>
+		<xsd:attribute name="time_type" use="optional" type="la:TimeType"/>
+		<xsd:attribute name="timestamp_nullable_type" use="optional" type="la:TimestampNullableType"/>
+		<xsd:attribute name="timestamp_type" use="optional" type="la:TimestampType"/>
+		<xsd:attribute name="string_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="string_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="nstring_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="nstring_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="bytes_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="bytes_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="clob_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="clob_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="nclob_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="nclob_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="blob_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="blob_type" use="optional" type="la:StringType"/>
+	</xsd:complexType>
+</xsd:schema>

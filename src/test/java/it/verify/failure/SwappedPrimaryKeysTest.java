@@ -1,15 +1,15 @@
 package it.verify.failure;
 
-import static org.junit.Assert.*;
 import it.common.CommonTestBase;
 import net.sf.lightair.annotation.Verify;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+import test.support.ApiTestSupport;
 import test.support.ExceptionVerifyingJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * When two rows have exchanged primary keys, do not match rows by the primary
@@ -27,6 +27,7 @@ public class SwappedPrimaryKeysTest extends CommonTestBase {
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, a1 varchar(255), "
 				+ "a2 varchar(255), a3 varchar(255))");
+		ApiTestSupport.reInitialize();
 	}
 
 	@AfterClass
@@ -42,18 +43,14 @@ public class SwappedPrimaryKeysTest extends CommonTestBase {
 	}
 
 	public void testVerifyException(Throwable error) {
-		String msg = "Assertion failed. "
-				+ "Differences found between the expected data set and actual database content.\n"
-				+ "Found differences for table PUBLIC.a:\n\n"
-				+ "  Different row: \n  id, a1, a2, a3\n"
-				+ "  \"1\", \"01\", \"02\", \"03\"\n\n"
-				+ "  Best matching differences:  \n  id: \"1\" <-> 0\n\n"
-				+ "  Different row: \n  id, a1, a2, a3\n"
-				+ "  \"0\", \"11\", \"12\", \"13\"\n\n"
-				+ "  Best matching differences:  \n  id: \"0\" <-> 1\n\n"
-				+ "\nActual database content:\n\n"
-				+ "PUBLIC.A\n  ID, A1, A2, A3\n  0, \"01\", \"02\", \"03\"\n"
-				+ "  1, \"11\", \"12\", \"13\"\n\n";
+		String msg = "Differences found between the expected data set and actual database content.\n" +
+				"Found differences for table a:\n" +
+				"  Different row: {id=1, a1=01, a2=02, a3=03}\n" +
+				"   Best matching differences: \n" +
+				"    id: expected [1], but was [0]\n" +
+				"  Different row: {id=0, a1=11, a2=12, a3=13}\n" +
+				"   Best matching differences: \n" +
+				"    id: expected [0], but was [1]\n";
 		assertEquals(msg, error.getMessage());
 	}
 
