@@ -11,13 +11,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Light air Spring JUnit runner.
  * <p>
  * To enable Light air on a Spring JUnit test, annotate it as follows:
- * <p>
  * <pre>
  * &#064;RunWith(LightAirSpringRunner.class)
  * public class MyTest {
  * }
  * </pre>
- * <p>
  * You can use standard spring @
  * {@link org.springframework.test.context.ContextConfiguration} to setup test
  * environment. Then use annotations @{@link net.sf.lightair.annotation.Setup}, @

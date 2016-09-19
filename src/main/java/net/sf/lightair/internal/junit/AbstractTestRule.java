@@ -23,7 +23,8 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 	 *
 	 * @param frameworkMethod           JUnit framework method on which the test rule is being applied
 	 * @param annotationType            Type of annotation that configures the test rule
-	 * @param alternativeAnnotationType
+	 * @param alternativeAnnotationType Alternative annotation type
+	 * @param <A>                       Generic support param
 	 */
 	public <A extends Annotation> AbstractTestRule(
 			FrameworkMethod frameworkMethod, Class<T> annotationType, Class<A> alternativeAnnotationType) {
@@ -65,7 +66,7 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 	/**
 	 * Called before wrapped statement.
 	 *
-	 * @throws Throwable
+	 * @throws Throwable Anything
 	 */
 	protected void before() throws Throwable {
 	}
@@ -73,7 +74,7 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 	/**
 	 * Called after wrapped statement.
 	 *
-	 * @throws Throwable
+	 * @throws Throwable Anything
 	 */
 	protected void after() throws Throwable {
 	}
@@ -97,5 +98,4 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 	public Method getTestMethod() {
 		return testMethod;
 	}
-
 }

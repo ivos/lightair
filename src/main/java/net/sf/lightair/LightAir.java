@@ -14,13 +14,11 @@ import org.junit.runners.model.Statement;
  * Light air JUnit runner.
  * <p>
  * To enable Light air on a JUnit test, annotate it as follows:
- * <p>
  * <pre>
  * &#064;RunWith(LightAir.class)
  * public class MyTest {
  * }
  * </pre>
- * <p>
  * Then use annotations @{@link Setup}, @{@link Verify} to define actions Light
  * air should take on the test.
  */

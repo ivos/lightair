@@ -40,10 +40,9 @@ public class VerifyListTestRule extends AbstractTestRule<Verify.List> {
 	/**
 	 * Set verify executor.
 	 * 
-	 * @param verifyExecutor
+	 * @param verifyExecutor executor
 	 */
 	public void setVerifyExecutor(VerifyExecutor verifyExecutor) {
 		this.verifyExecutor = verifyExecutor;
 	}
-
 }

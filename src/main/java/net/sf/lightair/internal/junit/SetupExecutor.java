@@ -59,7 +59,7 @@ public class SetupExecutor {
 	/**
 	 * Set dataset resolver
 	 *
-	 * @param dataSetResolver
+	 * @param dataSetResolver resolver
 	 */
 	public void setDataSetResolver(DataSetResolver dataSetResolver) {
 		this.dataSetResolver = dataSetResolver;

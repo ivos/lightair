@@ -36,10 +36,9 @@ public class SetupTestRule extends AbstractTestRule<Setup> {
 	/**
 	 * Set setup executor.
 	 * 
-	 * @param setupExecutor
+	 * @param setupExecutor executor
 	 */
 	public void setSetupExecutor(SetupExecutor setupExecutor) {
 		this.setupExecutor = setupExecutor;
 	}
-
 }
