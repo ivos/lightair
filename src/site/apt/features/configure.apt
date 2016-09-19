@@ -57,6 +57,23 @@ profile.oracle=light-air-oracle.properties
  We can also use <<<@Setup.List>>> and <<<@Verify.List>>> to setup and verify
  multiple databases on the same test class or test method.
 
+ <<Override XSD directory>>\
+ Light Air by default generates XSD file(s) into the <<<src/test/java>>> directory.
+ You can override this by setting the <<<xsd.directory>>> in the main properties file:
+
++---+
+xsd.directory=my/xsd/directory
++---+
+
+ <<Override @auto index directory>>\
+ Light Air by default generates an index file to support proper functionality of the @auto token
+ into the <<<src/test/resources>>> directory.
+ You can override this by setting the <<<auto.index.directory>>> in the main properties file:
+
++---+
+auto.index.directory=my/auto/index/directory
++---+
+
 *--:
  {{{./generate-xsd.html}Next: Generate XSD >>}}
 *--:

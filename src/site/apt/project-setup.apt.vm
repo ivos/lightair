@@ -176,6 +176,8 @@ database.schema=PUBLIC
 time.difference.limit.millis=5000
 +---+
 
+ Read more about {{{./features/configure.html}configuring Light Air}}.
+
  Be aware, that Light Air tests must connect to <<the same database instance>>
  as the application running within the application server.\
  Therefore you are looking to access the database in a "server mode", 
