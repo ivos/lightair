@@ -5,6 +5,10 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="2016-09-20" version="3.0.1" description="Fixes.">
+			<action type="fix">Rename environment variable to LIGHT_AIR_PROPERTIES.</action>
+			<action type="fix">Add support BigDecimal as true/false for Oracle booleans.</action>
+		</release>
 		<release date="2016-09-19" version="3.0.0" description="Total rewrite.">
 			<action type="update">Total rewrite of Light Air. WARNING: This release is NOT BACKWARD COMPATIBLE with
 				2.x.x releases and NO STRAIGHTFORWARD UPGRADE PATH EXISTS due to substantial structural changes.
