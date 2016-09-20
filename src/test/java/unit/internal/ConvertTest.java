@@ -124,6 +124,8 @@ public class ConvertTest implements Keywords {
 				"float_type", FLOAT, Types.REAL,
 				"double_type", DOUBLE, Types.DOUBLE,
 				"bigdecimal_type", BIGDECIMAL, Types.DECIMAL,
+				"bigdecimal_as_true", BIGDECIMAL, Types.DECIMAL,
+				"bigdecimal_as_false", BIGDECIMAL, Types.DECIMAL,
 				"date_type", DATE, Types.DATE,
 				"time_type", TIME, Types.TIME,
 				"timestamp_type", TIMESTAMP, Types.TIMESTAMP,
@@ -156,6 +158,8 @@ public class ConvertTest implements Keywords {
 						"float_type", "1234.56",
 						"double_type", "123456.789123",
 						"bigdecimal_type", "1234567890123456789.123456789",
+						"bigdecimal_as_true", "true",
+						"bigdecimal_as_false", "false",
 						"date_type", "2016-08-09",
 						"time_type", "21:43:59",
 						"timestamp_type", "2016-08-09T21:43:59.321",
@@ -188,6 +192,8 @@ public class ConvertTest implements Keywords {
 				" float_type=1234.56,\n" +
 				" double_type=123456.789123,\n" +
 				" bigdecimal_type=1234567890123456789.123456789,\n" +
+				" bigdecimal_as_true=1,\n" +
+				" bigdecimal_as_false=0,\n" +
 				" date_type=2016-08-09,\n" +
 				" time_type=21:43:59,\n" +
 				" timestamp_type=2016-08-09 21:43:59.321,\n" +
