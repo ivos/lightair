@@ -13,7 +13,7 @@ Configure Light Air
  By default, it is named <<<light-air.properties>>>, and is read from the (test) classpath, 
  so it should reside in <<<src/test/resources>>>.\
  You can override the location of the .properties file by setting a system (environment) property
- named <<<light.air.properties>>> to the name of your custom .properties file.
+ named <<<LIGHT_AIR_PROPERTIES>>> to the name of your custom .properties file.
 
  <<Set time difference limit>>\
  Set the <<<time.difference.limit.millis>>> property to define a <<maximum

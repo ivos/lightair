@@ -56,7 +56,7 @@ public class Api implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Api.class);
 
-	public static final String PROPERTIES_PROPERTY_NAME = "light.air.properties";
+	public static final String PROPERTIES_PROPERTY_NAME = "LIGHT_AIR_PROPERTIES";
 
 	private static String propertiesFileName;
 	private static Map<String, Map<String, String>> properties;
