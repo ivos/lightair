@@ -51,6 +51,7 @@ public class Structure implements Keywords {
 						}
 						table = new LinkedHashMap<>();
 						currentTableName = tableName;
+						log.trace("Loading table {} in profile [{}].", tableName, profile);
 					}
 					String columnName = convert(rs.getString(4));
 					table.put(columnName, createColumn(rs));
@@ -59,10 +60,14 @@ public class Structure implements Keywords {
 					data.put(currentTableName, table);
 				}
 			}
+			log.debug("Loaded {} tables in profile [{}].", data.size(), profile);
+			if (0 == data.size()) {
+				log.warn("NO TABLES LOADED in profile [{}]! URL: [{}], user name [{}], schema [{}].",
+						profile, meta.getURL(), meta.getUserName(), schema);
+			}
 		} catch (SQLException e) {
 			throw new RuntimeException("Cannot load database metadata.", e);
 		}
-		log.debug("Loaded {} tables in profile [{}].", data.size(), profile);
 		return Collections.unmodifiableMap(data);
 	}
 
