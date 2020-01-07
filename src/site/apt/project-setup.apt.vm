@@ -94,7 +94,9 @@ Project setup
  
  A way to approach this issue is to name the tests with "*IT.java" suffix
  (as opposed to "*Test.java"). 
- This excludes them from the Maven <<<test>>> lifecycle phase.
+ This excludes them from the Maven <<<test>>> lifecycle phase
+ and makes sure such tests are picked up by the Maven Failsafe plugin
+ which is designed to run this type of tests.
  Next, define a profile to run the Light Air tests:
 
 +---+
@@ -119,20 +121,14 @@ Project setup
     </plugin>
     <plugin>
      <groupId>org.apache.maven.plugins</groupId>
-     <artifactId>maven-surefire-plugin</artifactId>
-     <version>2.19</version>
+     <artifactId>maven-failsafe-plugin</artifactId>
+     <version>2.21.0</version>
      <executions>
       <execution>
-       <id>integration-test</id>
-       <phase>integration-test</phase>
        <goals>
-        <goal>test</goal>
+        <goal>integration-test</goal>
+        <goal>verify</goal>
        </goals>
-       <configuration>
-        <includes>
-         <include>**/*IT.java</include>
-        </includes>
-       </configuration>
       </execution>
      </executions>
     </plugin>
@@ -202,6 +198,15 @@ time.difference.limit.millis=5000
  
  (Note: When another dependency overrides slf4j API with a conflicting incompatible version
  you may have to override it explicitly in POM.)
+
+* Sample project
+
+ There is a sample project demonstrating using Light Air at
+ {{{https://github.com/ivos/lightair-spring-sample} https://github.com/ivos/lightair-spring-sample}}
+
+ Feel free to copy & paste code from there.
+
+ You may also get some inspiration about writing Light Air tests.
 
 *--:
  {{{./write-test.html}Next: Write a test >>}}
