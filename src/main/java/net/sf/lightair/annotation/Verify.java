@@ -53,9 +53,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <p>
  * System verifies all datasets located against the database.
  * <p>
- * Use {@link Verify.List} to define multiple <code>@Verify</code> annotations
+ * Use @{@link Verify.List} to define multiple <code>@Verify</code> annotations
  * on the same element.
- * 
+ *
+ * <p>
+ * See <a href="http://lightair.sourceforge.net/features/verify.html">http://lightair.sourceforge.net/features/verify.html</a>
+ * for more info.
+ * </p>
+ *
+ * @see Await
  * @see Verify.List
  */
 @Target({ TYPE, METHOD })
@@ -65,6 +71,7 @@ public @interface Verify {
 
 	/**
 	 * Names of files with datasets.
+	 * @return datasets
 	 */
 	String[] value() default {};
 
@@ -74,11 +81,12 @@ public @interface Verify {
 	 * A profile lets you connect to a different database. A profile must be
 	 * defined in LightAir properties file and must have its own properties file
 	 * which defines the connection to the profile database.
+	 * @return profile
 	 */
 	String profile() default "";
 
 	/**
-	 * Defines several <code>@Verify</code> annotations on the same element.
+	 * Defines several @{@link Verify} annotations on the same element.
 	 * 
 	 * @see Verify
 	 */

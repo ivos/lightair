@@ -1,0 +1,35 @@
+ ---
+ Await database
+ ---
+ Ivo Maixner
+ ---
+ 2020-03-19
+ ---
+
+Await database
+
+ Verify the content of the database at the end of an asynchronous test.
+
+ Verifies the database repeatedly until either the result is successful or timeout has expired.
+
+ The timeout is the "time difference limit", which should already correspond to the longest test,
+ see {{{./configure.html}Configuration}}.
+
+ This is useful in cases when the system feature under test executes asynchronously.
+ For example, imagine a scoring system that receives new events via messaging
+ with the fire-and-forget pattern. The test sends the message, but after that it has no means
+ of finding out when (or whether) the system functionality has already finished processing it.
+
+ If you used plain Verify in such a case, the test would (intermittently) fail, because at the
+ time of verification, the system has not (completely) processed the message yet
+ and the database has not been updated (committed).
+
+ By using Await instead of Verify you tell Light Air to repeat the verification until
+ either the verification succeeds or the timeout has expired.
+
+ The verification functionality itself of Await is exactly the same as in
+ {{{./verify.html}Verify}}.
+
+*--:
+ {{{./configure.html}Next: Configure Light Air >>}}
+*--:

@@ -5,6 +5,9 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="??" version="3.1.0" description="Await">
+			<action type="add">Add Await functionality.</action>
+		</release>
 		<release date="2016-09-20" version="3.0.1" description="Fixes.">
 			<action type="fix">Rename environment variable to LIGHT_AIR_PROPERTIES.</action>
 			<action type="fix">Add support BigDecimal as true/false for Oracle booleans.</action>

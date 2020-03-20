@@ -21,6 +21,11 @@ import org.junit.runners.model.Statement;
  * </pre>
  * Then use annotations @{@link Setup}, @{@link Verify} to define actions Light
  * air should take on the test.
+ *
+ * <p>
+ * See <a href="http://lightair.sourceforge.net/write-test.html">http://lightair.sourceforge.net/write-test.html</a>
+ * for more info.
+ * </p>
  */
 public class LightAir extends BlockJUnit4ClassRunner implements Keywords {
 

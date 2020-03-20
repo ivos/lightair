@@ -10,15 +10,17 @@ Development
 
  Any help with development of Light Air is very welcome. 
  Please contact me if you have any addition.
- You can also create a ticket on the project's Sourceforege pages.
+ You can also create a ticket on the project's Github repo.
 
-* Clone GIT repo
+* Git repo
 
- To clone GIT repo (read-only):
+ Available at {{{https://github.com/ivos/lightair} https://github.com/ivos/lightair}}.
+
+ To clone the repo (read-only):
  
 +---+
-git clone git://git.code.sf.net/p/lightair/code light-air
-cd light-air/
+git clone https://github.com/ivos/lightair.git
+cd lightair/
 mvn install
 +---+
 

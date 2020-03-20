@@ -11,6 +11,7 @@
 			<item name="Features" href="features/setup.html" collapse="true">
 				<item name="Setup" href="features/setup.html" />
 				<item name="Verify" href="features/verify.html" />
+				<item name="Await" href="features/await.html" />
 				<item name="Configuration" href="features/configure.html" />
 				<item name="XSD generation" href="features/generate-xsd.html" />
 				<item name="API" href="features/api.html" />

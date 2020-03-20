@@ -14,7 +14,8 @@ Programmatic API
  and {{{../apidocs/net/sf/lightair/Api.html#shutdown--}shutdown}}
  and in between perform either {{{../apidocs/net/sf/lightair/Api.html#generateXsd--}generateXsd}} call
  or (a series of) {{{../apidocs/net/sf/lightair/Api.html#setup-java.util.Map-}setup}}
- and {{{../apidocs/net/sf/lightair/Api.html#verify-java.util.Map-}verify}} calls.
+ and {{{../apidocs/net/sf/lightair/Api.html#verify-java.util.Map-}verify}}
+ or {{{../apidocs/net/sf/lightair/Api.html#await-java.util.Map-}await}} calls.
 
  To generate XSD files:
 
@@ -34,7 +35,9 @@ Api.initialize(Api.getPropertiesFileName());
 Api.setup(fileNames);
 // ...execute function under test...
 Api.verify(fileNames);
-// ...possibly repeat setup and verify for other tests...
+// ...or for asynchronous functionality:
+Api.await(fileNames);
+// ...possibly repeat setup and verify / await for other tests...
 Api.shutdown();
 +---+
 

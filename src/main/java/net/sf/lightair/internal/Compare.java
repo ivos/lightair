@@ -26,7 +26,7 @@ public class Compare implements Keywords {
 			Map<String, String> profileProperties,
 			Map<String, List<Map<String, Object>>> expectedDatasets,
 			Map<String, Map<String, List<Map<String, Object>>>> actualDatasets) {
-		long limit = getLimit(profileProperties);
+		long limit = Properties.getLimit(profileProperties);
 		Map<String, Object> variables = new HashMap<>();
 
 		Map<String, Map<String, List<Map<String, Object>>>> processedExpectedDatasets =
@@ -56,14 +56,6 @@ public class Compare implements Keywords {
 			differences.put(profile, Collections.unmodifiableMap(profileDifferences));
 		}
 		return Collections.unmodifiableMap(differences);
-	}
-
-	private static long getLimit(Map<String, String> profileProperties) {
-		String limit = profileProperties.get(TIME_DIFFERENCE_LIMIT_MILLIS);
-		if (null == limit) {
-			return 0;
-		}
-		return Long.valueOf(limit);
 	}
 
 	/**
@@ -261,7 +253,8 @@ public class Compare implements Keywords {
 	}
 
 	private static boolean isVariable(Map<String, Object> variables, Object expectedValue) {
-		return (null != variables) && (expectedValue instanceof String)
+		return null != variables
+				&& expectedValue instanceof String
 				&& StringUtils.startsWith((String) expectedValue, VARIABLE_PREFIX);
 	}
 }

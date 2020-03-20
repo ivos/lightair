@@ -20,11 +20,8 @@ The removal of lengthy, tedious and error prone test code to setup and verify da
 not only simplifies the tests, but as a result:
 
 * encourages proper test design (e.g. separate setup for each test), and
-
 * increases test coverage:
-
-* it is extremely easy to verify more database columns, so more data gets actually verified,
-
-* it is easy to write a new test, so more tests get written.
+    * it is extremely easy to verify more database columns, so more data gets actually verified,
+    * it is easy to write a new test, so more tests get written.
 
 Go to [Light Air website](http://lightair.sourceforge.net/).

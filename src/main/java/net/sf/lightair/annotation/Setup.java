@@ -55,9 +55,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * which means all tables in the datasets are deleted in reverse order, then all
  * rows are inserted in the order specified.
  * <p>
- * Use {@link Setup.List} to define multiple <code>@Setup</code> annotations on
+ * Use @{@link Setup.List} to define multiple <code>@Setup</code> annotations on
  * the same element.
- * 
+ *
+ * <p>
+ * See <a href="http://lightair.sourceforge.net/features/setup.html">http://lightair.sourceforge.net/features/setup.html</a>
+ * for more info.
+ * </p>
+ *
  * @see Setup.List
  */
 @Target({ TYPE, METHOD })
@@ -67,6 +72,7 @@ public @interface Setup {
 
 	/**
 	 * Names of files with datasets.
+	 * @return datasets
 	 */
 	String[] value() default {};
 
@@ -76,11 +82,12 @@ public @interface Setup {
 	 * A profile lets you connect to a different database. A profile must be
 	 * defined in LightAir properties file and must have its own properties file
 	 * which defines the connection to the profile database.
+	 * @return profile
 	 */
 	String profile() default "";
 
 	/**
-	 * Defines several <code>@Setup</code> annotations on the same element.
+	 * Defines several @{@link Setup} annotations on the same element.
 	 * 
 	 * @see Setup
 	 */

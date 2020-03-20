@@ -221,7 +221,7 @@ public class Convert implements Keywords {
 		}
 		switch (dataType) {
 			case BOOLEAN:
-				return (isTrue(value) || "1".equals(value));
+				return isTrue(value) || "1".equals(value);
 			case BYTE:
 				return Byte.parseByte(value);
 			case SHORT:

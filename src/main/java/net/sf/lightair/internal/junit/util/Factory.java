@@ -1,5 +1,8 @@
 package net.sf.lightair.internal.junit.util;
 
+import net.sf.lightair.internal.junit.AwaitExecutor;
+import net.sf.lightair.internal.junit.AwaitListTestRule;
+import net.sf.lightair.internal.junit.AwaitTestRule;
 import net.sf.lightair.internal.junit.SetupExecutor;
 import net.sf.lightair.internal.junit.SetupListTestRule;
 import net.sf.lightair.internal.junit.SetupTestRule;
@@ -35,6 +38,12 @@ public class Factory {
 		return verifyExecutor;
 	}
 
+	private final AwaitExecutor awaitExecutor = new AwaitExecutor();
+
+	public AwaitExecutor getAwaitExecutor() {
+		return awaitExecutor;
+	}
+
 	private final DataSetResolver dataSetResolver = new DataSetResolver();
 
 	public DataSetResolver getDataSetResolver() {
@@ -48,6 +57,7 @@ public class Factory {
 		log.debug("Initializing factory.");
 		setupExecutor.setDataSetResolver(dataSetResolver);
 		verifyExecutor.setDataSetResolver(dataSetResolver);
+		awaitExecutor.setDataSetResolver(dataSetResolver);
 	}
 
 	// getters for classes always newly instantiated
@@ -76,11 +86,25 @@ public class Factory {
 		return rule;
 	}
 
+	public AwaitTestRule getAwaitTestRule(FrameworkMethod frameworkMethod) {
+		AwaitTestRule rule = new AwaitTestRule(frameworkMethod);
+		rule.setAwaitExecutor(awaitExecutor);
+		return rule;
+	}
+
+	public AwaitListTestRule getAwaitListTestRule(FrameworkMethod frameworkMethod) {
+		AwaitListTestRule rule = new AwaitListTestRule(frameworkMethod);
+		rule.setAwaitExecutor(awaitExecutor);
+		return rule;
+	}
+
 	public List<TestRule> getAllTestRules(FrameworkMethod method) {
 		return Arrays.asList((TestRule) getSetupTestRule(method),
 				(TestRule) getSetupListTestRule(method),
 				(TestRule) getVerifyTestRule(method),
-				(TestRule) getVerifyListTestRule(method));
+				(TestRule) getVerifyListTestRule(method),
+				(TestRule) getAwaitTestRule(method),
+				(TestRule) getAwaitListTestRule(method));
 	}
 
 	// access as singleton

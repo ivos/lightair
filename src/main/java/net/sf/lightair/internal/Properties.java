@@ -52,7 +52,7 @@ public class Properties implements Keywords {
 			try {
 				java.util.Properties properties = new java.util.Properties();
 				properties.load(is);
-				@SuppressWarnings({ "unchecked", "rawtypes" })
+				@SuppressWarnings({"unchecked", "rawtypes"})
 				Map<String, String> map = (Map) properties;
 				log.debug("For profile [{}] loaded properties file {}.", profile, fileName);
 				return Collections.unmodifiableMap(map);
@@ -62,5 +62,13 @@ public class Properties implements Keywords {
 		} catch (IOException e) {
 			throw new RuntimeException("Properties file unreadable: " + fileName);
 		}
+	}
+
+	public static long getLimit(Map<String, String> profileProperties) {
+		String limit = profileProperties.get(TIME_DIFFERENCE_LIMIT_MILLIS);
+		if (null == limit) {
+			return 0;
+		}
+		return Long.valueOf(limit);
 	}
 }

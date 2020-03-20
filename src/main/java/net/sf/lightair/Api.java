@@ -1,5 +1,6 @@
 package net.sf.lightair;
 
+import net.sf.lightair.internal.Awaiting;
 import net.sf.lightair.internal.Compare;
 import net.sf.lightair.internal.Connections;
 import net.sf.lightair.internal.Convert;
@@ -30,7 +31,7 @@ import java.util.Map;
  * <p>
  * The general contract is to {@link Api#initialize(String)} and {@link Api#shutdown()}
  * and in between perform either {@link Api#generateXsd()} call
- * or (a series of) {@link Api#setup(Map)} and {@link Api#verify(Map)} calls.
+ * or (a series of) {@link Api#setup(Map)} and {@link Api#verify(Map)} or {@link Api#await(Map)} calls.
  * <p>
  * To generate XSD files:
  * <pre>
@@ -48,7 +49,9 @@ import java.util.Map;
  * Api.setup(fileNames);
  * // ...execute function under test...
  * Api.verify(fileNames);
- * // ...possibly repeat setup and verify for other tests...
+ * // ...or for asynchronous functionality:
+ * Api.await(fileNames);
+ * // ...possibly repeat setup and verify / await for other tests...
  * Api.shutdown();
  * </pre>
  */
@@ -92,7 +95,7 @@ public class Api implements Keywords {
 	}
 
 	/**
-	 * Shutdown initialized Light Air to properly release resources, like DB connections.
+	 * Shutdown previously initialized Light Air to properly release resources, like DB connections.
 	 */
 	public static void shutdown() {
 		log.debug("Shutting down Light Air.");
@@ -188,6 +191,36 @@ public class Api implements Keywords {
 	 */
 	public static void verify(Map<String, List<String>> fileNames) {
 		log.info("Performing verify for files {}.", fileNames);
+
+		String report = generateReport(fileNames);
+
+		if (!report.isEmpty()) {
+			throw new AssertionError(report);
+		}
+		log.debug("Finished verify for files {}.", fileNames);
+	}
+
+	/**
+	 * Verify database after an asynchronous test.
+	 * <p>
+	 * Verifies the database repeatedly until either the result is successful or timeout has expired.
+	 *
+	 * @param fileNames map of profile names to lists of names of verification dataset files for the profile
+	 */
+	public static void await(Map<String, List<String>> fileNames) {
+		log.info("Performing await for files {}.", fileNames);
+		Map<String, String> defaultProfileProperties = properties.get(DEFAULT_PROFILE);
+		long defaultProfileLimit = Properties.getLimit(defaultProfileProperties);
+
+		String report = Awaiting.awaitEmpty(defaultProfileLimit, () -> generateReport(fileNames));
+
+		if (!report.isEmpty()) {
+			throw new AssertionError(report);
+		}
+		log.debug("Finished await for files {}.", fileNames);
+	}
+
+	private static String generateReport(Map<String, List<String>> fileNames) {
 		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
 		Map<String, List<Map<String, Object>>> expectedDatasets = Convert.convert(structures, index, xmlDatasets);
 
@@ -206,11 +239,6 @@ public class Api implements Keywords {
 		Map<String, String> defaultProfileProperties = properties.get(DEFAULT_PROFILE);
 		Map<String, Map<String, Map<String, List<?>>>> differences =
 				Compare.compare(defaultProfileProperties, expectedDatasets, actualDatasets);
-		String report = Report.report(differences);
-		if (!report.isEmpty()) {
-			throw new AssertionError(report);
-		}
-
-		log.debug("Finished verify for files {}.", fileNames);
+		return Report.report(differences);
 	}
 }

@@ -31,7 +31,8 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 		testMethod = frameworkMethod.getMethod();
 		T methodAnnotation = testMethod.getAnnotation(annotationType);
 		final boolean hasAlternativeAnnotation =
-				(null != alternativeAnnotationType) && (null != testMethod.getAnnotation(alternativeAnnotationType));
+				null != alternativeAnnotationType
+						&& null != testMethod.getAnnotation(alternativeAnnotationType);
 		if (hasAlternativeAnnotation) {
 			annotation = null;
 		} else if (null != methodAnnotation) {
