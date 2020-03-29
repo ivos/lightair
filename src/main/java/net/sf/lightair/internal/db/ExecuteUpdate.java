@@ -98,9 +98,11 @@ public class ExecuteUpdate implements Keywords {
 				statement.setTimestamp(index, (Timestamp) value);
 				return;
 			case STRING:
+			case FIXED_STRING:
 				statement.setString(index, (String) value);
 				return;
 			case NSTRING:
+			case FIXED_NSTRING:
 				statement.setNString(index, (String) value);
 				return;
 			case BYTES:

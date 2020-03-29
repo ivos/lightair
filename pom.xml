@@ -118,7 +118,7 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Apache -->
+		<!-- Apache commons -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>

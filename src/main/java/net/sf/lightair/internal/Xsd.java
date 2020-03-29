@@ -96,8 +96,8 @@ public class Xsd implements Keywords {
 		if (FLOAT.equals(dataType) || DOUBLE.equals(dataType)) {
 			dataType = BIGDECIMAL;
 		}
-		if (NSTRING.equals(dataType) || BYTES.equals(dataType) ||
-				BLOB.equals(dataType) || CLOB.equals(dataType) || NCLOB.equals(dataType)) {
+		if (FIXED_STRING.equals(dataType) || NSTRING.equals(dataType) || FIXED_NSTRING.equals(dataType) ||
+				BYTES.equals(dataType) || BLOB.equals(dataType) || CLOB.equals(dataType) || NCLOB.equals(dataType)) {
 			dataType = STRING;
 		}
 		boolean notNull = (boolean) column.get(NOT_NULL);

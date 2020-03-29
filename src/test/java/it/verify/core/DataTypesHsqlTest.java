@@ -40,10 +40,10 @@ public class DataTypesHsqlTest extends DataTypesTestBase {
 				+ "null, null, null, "
 				+ "null, null, null, null, null, null, null)");
 		// auto
-//		db.update("insert into data_types values (3, 'char_type 1384656904', "
-//				+ "'varchar_type 1384684104', 1384653604, "
-//				+ "'1976-12-12', '08:26:44', '1900-01-05 04:53:24.004', "
-//				+ "13846684.04, false, 1384644904, "
-//				+ "13846469.04, 'clob_type 1384603204', '626c6f625f747970652031333834363735343034', '3834363532333034')");
+		db.update("insert into data_types values (3, 'char_type 1384656904', "
+				+ "'varchar_type 1384684104', 1384653604, "
+				+ "'1976-12-12', '08:26:44', '1900-01-05 04:53:24.004', "
+				+ "13846684.04, false, 1384644904, "
+				+ "13846469.04, 'clob_type 1384603204', '626c6f625f747970652031333834363735343034', '3834363532333034')");
 	}
 }

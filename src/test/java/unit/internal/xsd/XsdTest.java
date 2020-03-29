@@ -78,8 +78,12 @@ public class XsdTest extends TemplatingTestBase implements Keywords {
 		addColumn(columns, "TIMESTAMP_TYPE", "TIMESTAMP", true);
 		addColumn(columns, "STRING_NULLABLE_TYPE", "STRING", false);
 		addColumn(columns, "STRING_TYPE", "STRING", true);
+		addColumn(columns, "FIXED_STRING_NULLABLE_TYPE", "FIXED_STRING", false);
+		addColumn(columns, "FIXED_STRING_TYPE", "FIXED_STRING", true);
 		addColumn(columns, "NSTRING_NULLABLE_TYPE", "NSTRING", false);
 		addColumn(columns, "NSTRING_TYPE", "NSTRING", true);
+		addColumn(columns, "FIXED_NSTRING_NULLABLE_TYPE", "FIXED_NSTRING", false);
+		addColumn(columns, "FIXED_NSTRING_TYPE", "FIXED_NSTRING", true);
 		addColumn(columns, "BYTES_NULLABLE_TYPE", "BYTES", false);
 		addColumn(columns, "BYTES_TYPE", "BYTES", true);
 		addColumn(columns, "CLOB_NULLABLE_TYPE", "CLOB", false);

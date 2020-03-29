@@ -247,7 +247,9 @@ public class Convert implements Keywords {
 			case TIMESTAMP:
 				return new Timestamp(DateTime.parse(value).getMillis());
 			case STRING:
+			case FIXED_STRING:
 			case NSTRING:
+			case FIXED_NSTRING:
 			case CLOB:
 			case NCLOB:
 				return value;

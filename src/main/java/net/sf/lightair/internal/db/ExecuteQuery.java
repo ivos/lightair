@@ -98,8 +98,10 @@ public class ExecuteQuery implements Keywords {
 			case TIMESTAMP:
 				return rs.getTimestamp(columnName);
 			case STRING:
+			case FIXED_STRING:
 				return rs.getString(columnName);
 			case NSTRING:
+			case FIXED_NSTRING:
 				return rs.getNString(columnName);
 			case BYTES:
 				return rs.getBytes(columnName);

@@ -81,10 +81,10 @@ public class StructureTest implements Keywords {
 				" date_type={DATA_TYPE=DATE, JDBC_DATA_TYPE=91, NOT_NULL=false, SIZE=8, DECIMAL_DIGITS=0},\n" +
 				" time_type={DATA_TYPE=TIME, JDBC_DATA_TYPE=92, NOT_NULL=false, SIZE=6, DECIMAL_DIGITS=0},\n" +
 				" timestamp_type={DATA_TYPE=TIMESTAMP, JDBC_DATA_TYPE=93, NOT_NULL=false, SIZE=23, DECIMAL_DIGITS=10},\n" +
-				" char_type={DATA_TYPE=STRING, JDBC_DATA_TYPE=1, NOT_NULL=false, SIZE=20, DECIMAL_DIGITS=0},\n" +
+				" char_type={DATA_TYPE=FIXED_STRING, JDBC_DATA_TYPE=1, NOT_NULL=false, SIZE=20, DECIMAL_DIGITS=0},\n" +
 				" varchar_type={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=50, DECIMAL_DIGITS=0},\n" +
 				" longvarchar_type={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=5000, DECIMAL_DIGITS=0},\n" +
-				" nchar_type={DATA_TYPE=STRING, JDBC_DATA_TYPE=1, NOT_NULL=false, SIZE=20, DECIMAL_DIGITS=0},\n" +
+				" nchar_type={DATA_TYPE=FIXED_STRING, JDBC_DATA_TYPE=1, NOT_NULL=false, SIZE=20, DECIMAL_DIGITS=0},\n" +
 				" nvarchar_type={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=50, DECIMAL_DIGITS=0},\n" +
 				" longnvarchar_type={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=5000, DECIMAL_DIGITS=0},\n" +
 				" binary_type={DATA_TYPE=BYTES, JDBC_DATA_TYPE=-3, NOT_NULL=false, SIZE=8, DECIMAL_DIGITS=0},\n" +
@@ -111,7 +111,7 @@ public class StructureTest implements Keywords {
 				" date_type={DATA_TYPE=DATE, JDBC_DATA_TYPE=91, NOT_NULL=false, SIZE=10, DECIMAL_DIGITS=0},\n" +
 				" time_type={DATA_TYPE=TIME, JDBC_DATA_TYPE=92, NOT_NULL=false, SIZE=8, DECIMAL_DIGITS=0},\n" +
 				" timestamp_type={DATA_TYPE=TIMESTAMP, JDBC_DATA_TYPE=93, NOT_NULL=false, SIZE=26, DECIMAL_DIGITS=0},\n" +
-				" char_type={DATA_TYPE=STRING, JDBC_DATA_TYPE=1, NOT_NULL=false, SIZE=20, DECIMAL_DIGITS=0},\n" +
+				" char_type={DATA_TYPE=FIXED_STRING, JDBC_DATA_TYPE=1, NOT_NULL=false, SIZE=20, DECIMAL_DIGITS=0},\n" +
 				" varchar_type={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=50, DECIMAL_DIGITS=0},\n" +
 				" longvarchar_type={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=5000, DECIMAL_DIGITS=0},\n" +
 				" nvarchar_type={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=50, DECIMAL_DIGITS=0},\n" +

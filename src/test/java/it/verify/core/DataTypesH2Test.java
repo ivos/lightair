@@ -40,10 +40,17 @@ public class DataTypesH2Test extends DataTypesTestBase {
 				+ "null, null, null, "
 				+ "null, null, null, null, null, null, null)");
 		// auto
-		db.update("insert into data_types values (3, 'char_type 1384656904', "
+		db.update("insert into data_types values (3, 'unsupported', "
 				+ "'varchar_type 1384684104', 1384653604, "
 				+ "'1976-12-12', '08:26:44', '1900-01-05 04:53:24.004', "
 				+ "13846684.04, false, 1384644904, "
 				+ "13846469.04, 'clob_type 1384603204', '626c6f625f747970652031333834363735343034', '3834363532333034')");
+
+		// H2 does not support proper CHAR data type, instead of right-padding with spaces,
+		// it truncates all trailing spaces (!).
+		// See https://groups.google.com/forum/#!topic/h2-database/oB3Wrv0obEQ
+		// The @auto token on CHAR types however generates value right-padded with spaces
+		// to enable proper match when comparing the values in @Verify.
+		// Therefore @auto on CHAR types in H2 cannot be used in @Verify.
 	}
 }

@@ -132,6 +132,9 @@ public class Auto implements Keywords {
 			case CLOB:
 			case NCLOB:
 				return stringValue;
+			case FIXED_STRING:
+			case FIXED_NSTRING:
+				return StringUtils.rightPad(stringValue, columnLength);
 			case BYTES:
 			case BLOB:
 				return Base64.encodeBase64String(stringValue.getBytes());
