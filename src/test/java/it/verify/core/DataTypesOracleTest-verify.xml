@@ -1,19 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
+	<!--full-->
 	<data_types id="0" char_type="efghijklmnopqrs     " varchar_type="abcdefghijklmnopqrstuvxyz"
-	            varchar2_type="abcdefghijklmnopqrstuvxyz" integer_type="12345678"
-	            date_type="2999-12-31" time_type="1970-01-01T23:59:58" timestamp_type="2998-11-30T22:57:56"
-	            float_type="765.432" double_type="8765.4321" boolean_type="1" bigint_type="9223372036854770000"
+	            varchar2_type="abcdefghijklmnopqrstuvxyz" integer_type="12345678" date_type="2999-12-31"
+	            time_type="1970-01-01T23:59:58" timestamp_type="2998-11-30T22:57:56" float_type="765.432"
+	            double_type="8765.4321" boolean_type="1" bigint_type="9223372036854770000"
 	            decimal_type="12345678901234.560" clob_type="text1" blob_type="EjRWeJCrzeI="
 	            binary_type="/ty6CYdlQyI="/>
-	<data_types id="1" char_type="@null" varchar_type="@null" varchar2_type="@null"
-	            integer_type="0" date_type="2000-01-02" time_type="1970-01-01T00:00:00"
-	            timestamp_type="2000-01-02T03:04:05" float_type="0" double_type="0" boolean_type="0"
-	            bigint_type="0" decimal_type="0" clob_type="@null" blob_type="@null"
+	<!--empty-->
+	<data_types id="1" char_type="@null" varchar_type="@null" varchar2_type="@null" integer_type="0"
+	            date_type="2000-01-02" time_type="1970-01-01T00:00:00" timestamp_type="2000-01-02T03:04:05"
+	            float_type="0" double_type="0" boolean_type="0" bigint_type="0" decimal_type="0" clob_type="@null"
+	            blob_type="@null" binary_type="@null"/>
+	<!--null-->
+	<data_types id="2" char_type="@null" varchar_type="@null" varchar2_type="@null" integer_type="@null"
+	            date_type="@null" time_type="@null" timestamp_type="@null" float_type="@null" double_type="@null"
+	            boolean_type="@null" bigint_type="@null" decimal_type="@null" clob_type="@null" blob_type="@null"
 	            binary_type="@null"/>
-	<data_types id="2" char_type="@null" varchar_type="@null" varchar2_type="@null"
-	            integer_type="@null" date_type="@null" time_type="@null"
-	            timestamp_type="@null" float_type="@null" double_type="@null" boolean_type="@null"
-	            bigint_type="@null" decimal_type="@null" clob_type="@null" blob_type="@null"
-	            binary_type="@null"/>
+	<!--auto-->
+	<!--<data_types id="3" char_type="@auto" varchar_type="@auto" integer_type="@auto" date_type="@auto" time_type="@auto"-->
+	<!--timestamp_type="@auto" double_type="@auto" boolean_type="@auto" bigint_type="@auto" decimal_type="@auto"-->
+	<!--clob_type="@auto" blob_type="@auto" binary_type="@auto"/>-->
 </dataset>

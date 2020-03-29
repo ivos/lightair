@@ -53,16 +53,21 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 
 	@Override
 	protected void verify() {
+		// full
 		verifyRowOracle(0, "efghijklmnopqrs     ", "abcdefghijklmnopqrstuvxyz",
 				12345678, "2999-12-31 00:00:00.0", "1970-01-01 23:59:58.0",
 				"2998-11-30 22:57:56.789", 8765.4321, true,
 				9223372036854770000L, new BigDecimal("12345678901234.56"),
 				"text1", "EjRWeJCrzeI=", "/ty6CYdlQyI=");
+		// empty
 		verifyRowOracle(1, null, null, 0, "2000-01-02 00:00:00.0",
-				"1970-01-01 00:00:00.0", "2000-01-02 03:04:05.678", 0., false,
-				0L, new BigDecimal("0"), null, null, null);
-		verifyRowOracle(2, null, null, null, null, null, null, null, null,
+				"1970-01-01 00:00:00.0", "2000-01-02 03:04:05.678", 0.,
+				false, 0L, new BigDecimal("0"), null, null, null);
+		// null
+		verifyRowOracle(2, null, null, null, null, null,
+				null, null, null,
 				null, null, null, null, null);
+		// auto
 		verifyRowOracle(3, "char_type 1384656904", "varchar_type 1384684104",
 				1384653604, "1976-12-12 16:25:04.0", "1935-01-22 08:26:44.804",
 				"1900-01-05 04:53:24.004", 13846684.04, false, 1384644904L,

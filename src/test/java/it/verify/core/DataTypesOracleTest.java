@@ -45,6 +45,7 @@ public class DataTypesOracleTest extends DataTypesTestBase {
 	@Test
 	public void test() {
 		db.execute("delete from data_types");
+		// full
 		db.update("insert into data_types values (0, 'efghijklmnopqrs', "
 				+ "'abcdefghijklmnopqrstuvxyz', 'abcdefghijklmnopqrstuvxyz', 12345678, "
 				+ "to_date('2999-12-31','yyyy-mm-dd'), "
@@ -52,13 +53,21 @@ public class DataTypesOracleTest extends DataTypesTestBase {
 				+ "to_date('2998-11-30 22:57:56','yyyy-mm-dd hh24:mi:ss'), "
 				+ "765.432, 8765.4321, 1, 9223372036854770000, "
 				+ "12345678901234.56, 'text1', '1234567890abcde2', 'fedcba0987654322')");
+		// empty
 		db.update("insert into data_types values (1, '', '', '', 0, "
 				+ "to_date('2000-01-02','yyyy-mm-dd'), "
 				+ "to_date('1970-01-01 00:00:00','yyyy-mm-dd hh24:mi:ss'), "
 				+ "to_date('2000-01-02 03:04:05','yyyy-mm-dd hh24:mi:ss'), "
 				+ "0, 0, 0, 0, 0, '', '', '')");
+		// null
 		db.update("insert into data_types values (2, null, null, null, null, "
 				+ "null, null, null, "
 				+ "null, null, null, null, null, null, null, null)");
+		// auto
+//		db.update("insert into data_types values (3, 'char_type 1384656904', "
+//				+ "'varchar_type 1384684104', 1384653604, "
+//				+ "'1976-12-12', '08:26:44', '1900-01-05 04:53:24.004', "
+//				+ "13846684.04, false, 1384644904, "
+//				+ "13846469.04, 'clob_type 1384603204', '626c6f625f747970652031333834363735343034', '3834363532333034')");
 	}
 }
