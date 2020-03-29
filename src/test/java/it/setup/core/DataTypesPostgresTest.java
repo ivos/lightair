@@ -43,7 +43,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				+ " real_type real, double_type double precision,"
 				+ " date_type date, time_type time, timestamp_type timestamp,"
 				+ " boolean_type boolean,"
-				+ " blob_type bytea)");
+				+ " blob_type bytea,"
+				+ " uuid_type uuid)");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -64,7 +65,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				LocalDate.parse("2999-12-31"), LocalTime.parse("23:59:58"),
 				LocalDateTime.parse("2998-11-30T22:57:56.789"),
 				true,
-				"EjRWeJCrzeI=");
+				"EjRWeJCrzeI=",
+				"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11");
 		// empty
 		verifyRowPostgres(1,
 				"                         ", "", "",
@@ -74,7 +76,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				LocalDate.parse("2000-01-02"), LocalTime.parse("00:00:00"),
 				LocalDateTime.parse("2000-01-02T03:04:05.678"),
 				false,
-				"");
+				"",
+				"00000000-0000-0000-0000-000000000000");
 		// null
 		verifyRowPostgres(2,
 				null, null, null,
@@ -82,6 +85,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				null, null,
 				null, null,
 				null, null, null,
+				null,
 				null,
 				null);
 		// auto
@@ -93,7 +97,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				LocalDate.parse("1976-12-12"), LocalTime.parse("08:26:44"),
 				LocalDateTime.parse("1900-01-05T04:53:24.004"),
 				false,
-				"YmxvYl90eXBlIDEzODQ2NzU0MDQ=");
+				"YmxvYl90eXBlIDEzODQ2NzU0MDQ=",
+				"acec9dca-7e2e-36ba-a4e6-8a9df3e52e4b");
 	}
 
 	private void verifyRowPostgres(
@@ -104,7 +109,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			Float real_type, Double double_type,
 			LocalDate date_type, LocalTime time_type, LocalDateTime timestamp_type,
 			Boolean boolean_type,
-			String blob_type
+			String blob_type,
+			String uuid_type
 	) {
 		assertEquals("id " + id, id, values.get(id).get("id"));
 		// char
@@ -142,5 +148,11 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		assertEquals("boolean_type type " + id, boolean_type, values.get(id).get("boolean_type"));
 		// binary
 		assertEquals("blob_type type " + id, blob_type, convertBytesToString(values.get(id).get("blob_type")));
+		// uuid
+		if (uuid_type == null) {
+			assertNull("uuid_type type " + id, values.get(id).get("uuid_type"));
+		} else {
+			assertEquals("uuid_type type " + id, uuid_type, values.get(id).get("uuid_type").toString());
+		}
 	}
 }

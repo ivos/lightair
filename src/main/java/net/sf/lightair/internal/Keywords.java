@@ -60,6 +60,7 @@ public interface Keywords {
 	String CLOB = "CLOB";
 	String NCLOB = "NCLOB";
 	String BLOB = "BLOB";
+	String UUID = "UUID";
 
 	String NULL_TOKEN = "@null";
 	String DATE_TOKEN = "@date";

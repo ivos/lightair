@@ -42,7 +42,7 @@ public class StructureTest implements Keywords {
 				" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
 				" nchar_type nchar(20), nvarchar_type nvarchar(50), longnvarchar_type longnvarchar(5000)," +
 				" binary_type binary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
-				" clob_type clob, nclob_type nclob, blob_type blob)");
+				" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid)");
 		h2.db.execute("create table t1 (t1a int, t1b varchar2(10) not null, t1c varchar2(20))");
 
 		DbTemplate hsql = new DbTemplate("jdbc:hsqldb:mem:test", "sa", "");
@@ -92,7 +92,8 @@ public class StructureTest implements Keywords {
 				" longvarbinary_type={DATA_TYPE=BYTES, JDBC_DATA_TYPE=-3, NOT_NULL=false, SIZE=5000, DECIMAL_DIGITS=0},\n" +
 				" clob_type={DATA_TYPE=CLOB, JDBC_DATA_TYPE=2005, NOT_NULL=false, SIZE=2147483647, DECIMAL_DIGITS=0},\n" +
 				" nclob_type={DATA_TYPE=CLOB, JDBC_DATA_TYPE=2005, NOT_NULL=false, SIZE=2147483647, DECIMAL_DIGITS=0},\n" +
-				" blob_type={DATA_TYPE=BLOB, JDBC_DATA_TYPE=2004, NOT_NULL=false, SIZE=2147483647, DECIMAL_DIGITS=0}},\n" +
+				" blob_type={DATA_TYPE=BLOB, JDBC_DATA_TYPE=2004, NOT_NULL=false, SIZE=2147483647, DECIMAL_DIGITS=0},\n" +
+				" uuid_type={DATA_TYPE=BYTES, JDBC_DATA_TYPE=-2, NOT_NULL=false, SIZE=2147483647, DECIMAL_DIGITS=0}},\n" +
 				" t1={t1a={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=false, SIZE=10, DECIMAL_DIGITS=0},\n" +
 				" t1b={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=true, SIZE=10, DECIMAL_DIGITS=0},\n" +
 				" t1c={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=20, DECIMAL_DIGITS=0}}},\n" +

@@ -117,6 +117,9 @@ public class ExecuteUpdate implements Keywords {
 			case BLOB:
 				statement.setBlob(index, new ByteArrayInputStream((byte[]) value));
 				return;
+			case UUID:
+				statement.setObject(index, java.util.UUID.fromString((String) value));
+				return;
 		}
 		log.error("Unknown type {}, trying to set it as STRING. Parameter index {} with value {}.", type, index, value);
 		statement.setString(index, (String) value);

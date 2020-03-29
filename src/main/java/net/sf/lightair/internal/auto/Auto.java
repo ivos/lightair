@@ -138,6 +138,8 @@ public class Auto implements Keywords {
 			case BYTES:
 			case BLOB:
 				return Base64.encodeBase64String(stringValue.getBytes());
+			case UUID:
+				return java.util.UUID.nameUUIDFromBytes(stringValue.getBytes()).toString();
 		}
 		log.error("Unknown type {} on column {}, returning integer value {}.", dataType, columnName, autoNumber);
 		return autoNumber;

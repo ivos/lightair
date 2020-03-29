@@ -252,6 +252,7 @@ public class Convert implements Keywords {
 			case FIXED_NSTRING:
 			case CLOB:
 			case NCLOB:
+			case UUID:
 				return value;
 			case BYTES:
 			case BLOB:

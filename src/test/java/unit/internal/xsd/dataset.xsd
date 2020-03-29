@@ -63,5 +63,7 @@
 		<xsd:attribute name="nclob_type" use="optional" type="la:StringType"/>
 		<xsd:attribute name="blob_nullable_type" use="optional" type="la:StringNullableType"/>
 		<xsd:attribute name="blob_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="uuid_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="uuid_type" use="optional" type="la:StringType"/>
 	</xsd:complexType>
 </xsd:schema>

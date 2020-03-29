@@ -1,6 +1,7 @@
 package net.sf.lightair.internal.db;
 
 import net.sf.lightair.internal.Keywords;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,22 +138,23 @@ public class Structure implements Keywords {
 				return BLOB;
 		}
 
-		// Oracle:
 		if (Types.OTHER == sqlDataType) {
-			switch (sqlTypeName) {
-				case "ROWID":
+			switch (StringUtils.upperCase(sqlTypeName)) {
+				case "ROWID": // Oracle
 					return LONG;
-				case "NCLOB":
+				case "NCLOB": // Oracle
 					return NCLOB;
-				case "NCHAR":
-				case "NVARCHAR2":
+				case "NCHAR": // Oracle
+				case "NVARCHAR2": // Oracle
 					return NSTRING;
+				case "UUID": // Postgres
+					return UUID;
 			}
 		}
-		if (101 == sqlDataType && "BINARY_DOUBLE".equals(sqlTypeName)) {
+		if (101 == sqlDataType && "BINARY_DOUBLE".equals(sqlTypeName)) { // Oracle
 			return DOUBLE;
 		}
-		if (100 == sqlDataType && "BINARY_FLOAT".equals(sqlTypeName)) {
+		if (100 == sqlDataType && "BINARY_FLOAT".equals(sqlTypeName)) { // Oracle
 			return FLOAT;
 		}
 
