@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Create <code>select</code> SQL statements from an expected dataset.
+ */
 public class Select implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Select.class);

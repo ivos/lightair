@@ -12,6 +12,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+/**
+ * Generate XSD files from database structure.
+ */
 public class Xsd implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Xsd.class);

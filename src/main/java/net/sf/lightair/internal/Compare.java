@@ -18,6 +18,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Compare expected and actual datasets and produce structured differences.
+ */
 public class Compare implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Compare.class);

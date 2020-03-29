@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Generate textual report from structured differences between datasets.
+ */
 public class Report implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Report.class);

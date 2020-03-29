@@ -2,6 +2,9 @@ package net.sf.lightair.internal;
 
 import java.util.concurrent.Callable;
 
+/**
+ * Helper functions for awaiting target database state.
+ */
 public class Awaiting {
 
 	private static final long DELAY_BETWEEN_CALLS = 20;

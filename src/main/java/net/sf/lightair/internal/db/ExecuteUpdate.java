@@ -17,6 +17,9 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Execute <code>delete</code> and <code>insert</code> SQL statements.
+ */
 public class ExecuteUpdate implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(ExecuteUpdate.class);

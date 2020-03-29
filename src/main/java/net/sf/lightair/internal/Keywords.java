@@ -1,5 +1,8 @@
 package net.sf.lightair.internal;
 
+/**
+ * Constant keywords.
+ */
 public interface Keywords {
 
 	String DATABASE_DRIVER_CLASS_NAME = "database.driverClassName";

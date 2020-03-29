@@ -16,6 +16,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Keep index file with hashes for tables and columns.
+ */
 public class Index implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Index.class);

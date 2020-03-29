@@ -13,6 +13,9 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Load database structure.
+ */
 public class Structure implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Structure.class);

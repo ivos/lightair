@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Generate unique pseudo-random values for the <code>@auto</code> token.
+ */
 public class Auto implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Auto.class);

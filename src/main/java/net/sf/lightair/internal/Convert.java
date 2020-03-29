@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Convert String values in datasets parsed from XML into proper data types based on database structure.
+ */
 public class Convert implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Convert.class);

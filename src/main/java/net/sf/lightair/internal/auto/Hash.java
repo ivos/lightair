@@ -5,6 +5,9 @@ import org.apache.commons.codec.digest.MessageDigestAlgorithms;
 
 import java.security.MessageDigest;
 
+/**
+ * Calculate hash from a String.
+ */
 public class Hash {
 
 	private static MessageDigest md5 = DigestUtils.getDigest(MessageDigestAlgorithms.MD5);

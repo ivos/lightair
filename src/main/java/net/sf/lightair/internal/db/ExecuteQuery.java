@@ -20,6 +20,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Execute <code>select</code> SQL statements, producing a dataset.
+ */
 public class ExecuteQuery implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(ExecuteQuery.class);
