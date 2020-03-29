@@ -1,17 +1,13 @@
 package it.setup.core;
 
-import com.opentable.db.postgres.embedded.EmbeddedPostgres;
-import it.common.DataTypesTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -26,20 +22,8 @@ import static org.junit.Assert.assertNull;
 @Setup
 public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 
-	private static EmbeddedPostgres postgres;
-
 	static {
-		try {
-			postgres = EmbeddedPostgres.builder()
-					.setPort(5432)
-					.setCleanDataDirectory(false)
-					.setDataDirectory("./target/embeddedpostgres")
-					.setServerConfig("max_connections", "10")
-					.setServerConfig("max_wal_senders", "0")
-					.start();
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot start embedded Postgres.", e);
-		}
+		initPostgres();
 		connect("jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres");
 		ConfigSupport.replaceConfig("postgres");
 	}
@@ -61,16 +45,6 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				+ " boolean_type boolean,"
 				+ " blob_type bytea)");
 		ApiTestSupport.reInitialize();
-	}
-
-	@AfterClass
-	public static void afterClass() {
-		DataTypesTestBase.afterClass();
-		try {
-			postgres.close();
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot stop embedded Postgres.", e);
-		}
 	}
 
 	@Test
