@@ -55,7 +55,7 @@ public class StructureTest implements Keywords {
 				" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
 				" nvarchar_type nvarchar(50)," +
 				" binary_type binary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
-				" clob_type clob, blob_type blob)");
+				" clob_type clob, blob_type blob, uuid_type uuid)");
 		hsql.db.execute("create table t2 (t2a int, t2b varchar(10) not null, t2c varchar(20))");
 
 		@SuppressWarnings("rawtypes")
@@ -93,7 +93,7 @@ public class StructureTest implements Keywords {
 				" clob_type={DATA_TYPE=CLOB, JDBC_DATA_TYPE=2005, NOT_NULL=false, SIZE=2147483647, DECIMAL_DIGITS=0},\n" +
 				" nclob_type={DATA_TYPE=CLOB, JDBC_DATA_TYPE=2005, NOT_NULL=false, SIZE=2147483647, DECIMAL_DIGITS=0},\n" +
 				" blob_type={DATA_TYPE=BLOB, JDBC_DATA_TYPE=2004, NOT_NULL=false, SIZE=2147483647, DECIMAL_DIGITS=0},\n" +
-				" uuid_type={DATA_TYPE=BYTES, JDBC_DATA_TYPE=-2, NOT_NULL=false, SIZE=2147483647, DECIMAL_DIGITS=0}},\n" +
+				" uuid_type={DATA_TYPE=UUID, JDBC_DATA_TYPE=-2, NOT_NULL=false, SIZE=2147483647, DECIMAL_DIGITS=0}},\n" +
 				" t1={t1a={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=false, SIZE=10, DECIMAL_DIGITS=0},\n" +
 				" t1b={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=true, SIZE=10, DECIMAL_DIGITS=0},\n" +
 				" t1c={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=20, DECIMAL_DIGITS=0}}},\n" +
@@ -120,7 +120,8 @@ public class StructureTest implements Keywords {
 				" varbinary_type={DATA_TYPE=BYTES, JDBC_DATA_TYPE=-3, NOT_NULL=false, SIZE=8, DECIMAL_DIGITS=0},\n" +
 				" longvarbinary_type={DATA_TYPE=BYTES, JDBC_DATA_TYPE=-3, NOT_NULL=false, SIZE=5000, DECIMAL_DIGITS=0},\n" +
 				" clob_type={DATA_TYPE=CLOB, JDBC_DATA_TYPE=2005, NOT_NULL=false, SIZE=1073741824, DECIMAL_DIGITS=0},\n" +
-				" blob_type={DATA_TYPE=BLOB, JDBC_DATA_TYPE=2004, NOT_NULL=false, SIZE=1073741824, DECIMAL_DIGITS=0}},\n" +
+				" blob_type={DATA_TYPE=BLOB, JDBC_DATA_TYPE=2004, NOT_NULL=false, SIZE=1073741824, DECIMAL_DIGITS=0},\n"
+				+ " uuid_type={DATA_TYPE=UUID, JDBC_DATA_TYPE=-2, NOT_NULL=false, SIZE=16, DECIMAL_DIGITS=0}},\n" +
 				" t2={t2a={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=false, SIZE=32, DECIMAL_DIGITS=0},\n" +
 				" t2b={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=true, SIZE=10, DECIMAL_DIGITS=0},\n" +
 				" t2c={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=20, DECIMAL_DIGITS=0}}}}";

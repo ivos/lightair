@@ -55,10 +55,12 @@ public class Structure implements Keywords {
 						}
 						table = new LinkedHashMap<>();
 						currentTableName = tableName;
-						log.trace("Loading table {} in profile [{}].", tableName, profile);
+						log.debug("Loading table {} in profile [{}].", tableName, profile);
 					}
 					String columnName = convert(rs.getString(4));
-					table.put(columnName, createColumn(rs));
+					Map<String, Object> column = createColumn(rs);
+					log.trace("Resolved column [{}].[{}] as: {}", tableName, columnName, column);
+					table.put(columnName, column);
 				}
 				if (null != currentTableName) {
 					data.put(currentTableName, table);
@@ -77,7 +79,7 @@ public class Structure implements Keywords {
 
 	private static Map<String, Object> createColumn(ResultSet rs) throws SQLException {
 		Map<String, Object> column = new LinkedHashMap<>();
-		String dataType = resolveDataType(rs.getInt(5), rs.getString(6));
+		String dataType = resolveDataType(rs.getInt(5), StringUtils.upperCase(rs.getString(6)));
 		column.put(DATA_TYPE, dataType);
 		column.put(JDBC_DATA_TYPE, rs.getInt(5));
 		column.put(NOT_NULL, 0 == rs.getInt(11));
@@ -87,6 +89,12 @@ public class Structure implements Keywords {
 	}
 
 	private static String resolveDataType(int sqlDataType, String sqlTypeName) {
+//		log.trace("Resolving data type {}, [{}]", sqlDataType, sqlTypeName);
+
+		if ("UUID".equals(sqlTypeName)) {
+			return UUID; // Postgres, H2, HSQL
+		}
+
 		// generic:
 		switch (sqlDataType) {
 			case Types.BIT:
@@ -139,7 +147,7 @@ public class Structure implements Keywords {
 		}
 
 		if (Types.OTHER == sqlDataType) {
-			switch (StringUtils.upperCase(sqlTypeName)) {
+			switch (sqlTypeName) {
 				case "ROWID": // Oracle
 					return LONG;
 				case "NCLOB": // Oracle
@@ -147,8 +155,6 @@ public class Structure implements Keywords {
 				case "NCHAR": // Oracle
 				case "NVARCHAR2": // Oracle
 					return NSTRING;
-				case "UUID": // Postgres
-					return UUID;
 			}
 		}
 		if (101 == sqlDataType && "BINARY_DOUBLE".equals(sqlTypeName)) { // Oracle

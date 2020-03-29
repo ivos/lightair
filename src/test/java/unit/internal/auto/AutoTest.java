@@ -88,7 +88,9 @@ public class AutoTest implements Keywords {
 		assertEquals("nclob_column 1234501598", Auto.generate(index, "p1", "t1", "nclob_column", 98, NCLOB, 100, null));
 		assertEquals("YmxvYl9jb2x1bW4gMTIzNDUwMTY5OA==",
 				Auto.generate(index, "p1", "t1", "blob_column", 98, BLOB, 100, null));
-		assertEquals("d41d8cd9-8f00-3204-a980-0998ecf8427e",
+		assertEquals("af3077f9-779d-338c-bc2c-97b405f7a02a", // not a sequence...
+				Auto.generate(index, "p1", "t1", "uuid_column", 97, UUID, 0, null));
+		assertEquals("5ab9d6e9-43f2-3d2b-a8d2-22244cbd7a08",
 				Auto.generate(index, "p1", "t1", "uuid_column", 98, UUID, 0, null));
 	}
 }

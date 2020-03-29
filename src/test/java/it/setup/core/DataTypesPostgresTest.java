@@ -98,7 +98,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				LocalDateTime.parse("1900-01-05T04:53:24.004"),
 				false,
 				"YmxvYl90eXBlIDEzODQ2NzU0MDQ=",
-				"acec9dca-7e2e-36ba-a4e6-8a9df3e52e4b");
+				"988543c3-b42c-3ce1-8da5-9bad5175fd20");
 	}
 
 	private void verifyRowPostgres(

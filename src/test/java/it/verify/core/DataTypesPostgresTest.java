@@ -81,6 +81,6 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " '1976-12-12', '08:26:44', '1900-01-05T04:53:24.004',"
 				+ " false,"
 				+ " '\\x626c6f625f747970652031333834363735343034'," // = hexa(blob_type 1384675404)
-				+ " 'acec9dca-7e2e-36ba-a4e6-8a9df3e52e4b')");
+				+ " '988543c3-b42c-3ce1-8da5-9bad5175fd20')");
 	}
 }
