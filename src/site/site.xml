@@ -16,6 +16,7 @@
 				<item name="XSD generation" href="features/generate-xsd.html" />
 				<item name="API" href="features/api.html" />
 			</item>
+			<item name="Database support" href="database-support.html" />
 			<item name="Development" href="development.html" />
 			<item name="Maven plugin" href="http://lightairmp.sourceforge.net/" />
 		</menu>
