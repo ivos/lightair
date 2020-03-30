@@ -202,7 +202,8 @@ public class ExecuteQueryTest implements Keywords {
 				"nclob_type=nclob1,\n" +
 				"blob_type=REPLACED,\n" +
 				"uuid_type=a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11,\n" +
-				"json_type=\"{\\\"key1\\\":\\\"value1\\\"}\"},\n" +
+				"json_type=\"{\\\"key1\\\":\\\"value1\\\"}\"" +
+				"},\n" +
 				"{id=2,\n" +
 				"bit_type=null,\n" +
 				"boolean_type=null,\n" +
@@ -231,7 +232,8 @@ public class ExecuteQueryTest implements Keywords {
 				"nclob_type=null,\n" +
 				"blob_type=null,\n" +
 				"uuid_type=null,\n" +
-				"json_type=null}]}";
+				"json_type=null" +
+				"}]}";
 		assertEquals(expected, data.toString()
 				.replaceAll("\\[B@[^,}]+", "REPLACED")
 				.replace(", ", ",\n"));

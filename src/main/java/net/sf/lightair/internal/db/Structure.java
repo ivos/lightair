@@ -104,6 +104,9 @@ public class Structure implements Keywords {
 		if ("JSON".equals(sqlTypeName)) {
 			return JSON; // Postgres
 		}
+		if ("JSONB".equals(sqlTypeName)) {
+			return JSONB; // Postgres
+		}
 
 		// generic:
 		switch (sqlDataType) {

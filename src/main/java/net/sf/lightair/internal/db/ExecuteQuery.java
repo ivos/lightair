@@ -101,6 +101,7 @@ public class ExecuteQuery implements Keywords {
 			case FIXED_STRING:
 			case UUID:
 			case JSON:
+			case JSONB:
 				return rs.getString(columnName);
 			case NSTRING:
 			case FIXED_NSTRING:

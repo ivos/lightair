@@ -122,6 +122,7 @@ public class ExecuteUpdate implements Keywords {
 				statement.setObject(index, java.util.UUID.fromString((String) value));
 				return;
 			case JSON:
+			case JSONB:
 				statement.setObject(index, value, Types.OTHER);
 				return;
 		}

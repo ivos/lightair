@@ -141,7 +141,8 @@ public class Auto implements Keywords {
 			case UUID:
 				return java.util.UUID.nameUUIDFromBytes(autoNumber.getBytes()).toString();
 			case JSON:
-				return "{\"" + columnName + "\":" + autoNumber + "}";
+			case JSONB:
+				return "{\"" + columnName + "\": " + autoNumber + "}";
 		}
 		log.error("Unknown type {} on column {}, returning integer value {}.", dataType, columnName, autoNumber);
 		return autoNumber;

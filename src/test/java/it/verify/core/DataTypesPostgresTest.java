@@ -43,7 +43,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " blob_type bytea,"
 				+ " uuid_type uuid,"
 				+ " enum_type enum_t,"
-				+ " json_type json)");
+				+ " json_type json, jsonb_type jsonb)");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -61,7 +61,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " '\\x31323334353637383930616263646532'," // = hexa(1234567890abcde2)
 				+ " 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',"
 				+ " 'camelValue',"
-				+ " '{\"key1\":\"value1\"}')");
+				+ " '{\"key1\":\"value1\"}', '{\"key3\": \"value3\", \"key2\": \"value2\", \"key1\": \"value1\"}')");
 		// empty
 		db.update("insert into data_types values (1,"
 				+ " '', '', '',"
@@ -73,7 +73,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " '',"
 				+ " '00000000-0000-0000-0000-000000000000',"
 				+ " 'snake_value',"
-				+ " '\"\"')");
+				+ " '\"\"', '\"\"')");
 		// null
 		db.update("insert into data_types values (2,"
 				+ " null, null, null,"
@@ -85,7 +85,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " null,"
 				+ " null,"
 				+ " null,"
-				+ " null)");
+				+ " null, null)");
 		// auto
 		db.update("insert into data_types values (3,"
 				+ " 'char_type 1384656904', 'varchar_type 1384684104', 'text_type 1384616204',"
@@ -97,6 +97,6 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " '\\x626c6f625f747970652031333834363735343034'," // = hexa(blob_type 1384675404)
 				+ " '988543c3-b42c-3ce1-8da5-9bad5175fd20',"
 				+ " null,"
-				+ " '{\"json_type\":1384687704}')");
+				+ " '{\"json_type\": 1384687704}', '{\"jsonb_type\":1384669404}')");
 	}
 }

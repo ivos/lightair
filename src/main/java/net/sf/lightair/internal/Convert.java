@@ -254,6 +254,7 @@ public class Convert implements Keywords {
 			case NCLOB:
 			case UUID:
 			case JSON:
+			case JSONB:
 				return value;
 			case BYTES:
 			case BLOB:

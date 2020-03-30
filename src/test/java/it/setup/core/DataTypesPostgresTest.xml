@@ -12,7 +12,7 @@
 	            blob_type="EjRWeJCrzeI="
 	            uuid_type="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
 	            enum_type="camelValue"
-	            json_type='{"key1":"value1"}'
+	            json_type='{"key1":"value1"}' jsonb_type='{"key3":"value3","key1":"value1","key2":"value2"}'
 	/>
 	<!--empty-->
 	<data_types id="1"
@@ -25,7 +25,7 @@
 	            blob_type=""
 	            uuid_type="00000000-0000-0000-0000-000000000000"
 	            enum_type="snake_value"
-	            json_type='""'
+	            json_type='""' jsonb_type='""'
 	/>
 	<!--null-->
 	<data_types id="2"
@@ -38,7 +38,7 @@
 	            blob_type="@null"
 	            uuid_type="@null"
 	            enum_type="@null"
-	            json_type="@null"
+	            json_type="@null" jsonb_type="@null"
 	/>
 	<!--auto-->
 	<data_types id="3"
@@ -51,6 +51,6 @@
 	            blob_type="@auto"
 	            uuid_type="@auto"
 	            enum_type="@null"
-	            json_type="@auto"
+	            json_type="@auto" jsonb_type="@auto"
 	/>
 </dataset>

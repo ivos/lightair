@@ -62,6 +62,7 @@ public interface Keywords {
 	String BLOB = "BLOB";
 	String UUID = "UUID";
 	String JSON = "JSON";
+	String JSONB = "JSONB";
 
 	String NULL_TOKEN = "@null";
 	String DATE_TOKEN = "@date";
