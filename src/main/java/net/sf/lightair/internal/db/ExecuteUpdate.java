@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 
@@ -119,6 +120,10 @@ public class ExecuteUpdate implements Keywords {
 				return;
 			case UUID:
 				statement.setObject(index, java.util.UUID.fromString((String) value));
+				return;
+			case JSON:
+			case JSONB:
+				statement.setObject(index, value, Types.OTHER);
 				return;
 		}
 		log.error("Unknown type {}, trying to set it as STRING. Parameter index {} with value {}.", type, index, value);

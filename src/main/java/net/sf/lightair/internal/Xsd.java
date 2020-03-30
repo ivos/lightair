@@ -10,7 +10,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Generate XSD files from database structure.
@@ -90,15 +94,17 @@ public class Xsd implements Keywords {
 		}
 	}
 
+	private static final Set<String> stringTypes = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+			FIXED_STRING, NSTRING, FIXED_NSTRING, BYTES, BLOB, CLOB, NCLOB, UUID, JSON, JSONB
+	)));
+
 	private static void writeColumn(StringBuilder sb, String columnName, Map<String, Map<String, Object>> columns) {
 		Map<String, Object> column = columns.get(columnName);
 		String dataType = (String) column.get(DATA_TYPE);
 		if (FLOAT.equals(dataType) || DOUBLE.equals(dataType)) {
 			dataType = BIGDECIMAL;
 		}
-		if (FIXED_STRING.equals(dataType) || NSTRING.equals(dataType) || FIXED_NSTRING.equals(dataType)
-				|| BYTES.equals(dataType) || BLOB.equals(dataType) || CLOB.equals(dataType) || NCLOB.equals(dataType)
-				|| UUID.equals(dataType)) {
+		if (stringTypes.contains(dataType)) {
 			dataType = STRING;
 		}
 		boolean notNull = (boolean) column.get(NOT_NULL);

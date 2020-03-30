@@ -51,7 +51,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				+ " boolean_type boolean,"
 				+ " blob_type bytea,"
 				+ " uuid_type uuid,"
-				+ " enum_type enum_t)");
+				+ " enum_type enum_t,"
+				+ " json_type json, jsonb_type jsonb)");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -74,7 +75,9 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				true,
 				"EjRWeJCrzeI=",
 				"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
-				"camelValue");
+				"camelValue",
+				"{\"key1\":\"value1\"}",
+				"{\"key1\": \"value1\", \"key2\": \"value2\", \"key3\": \"value3\"}");
 		// empty
 		verifyRowPostgres(1,
 				"                         ", "", "",
@@ -86,7 +89,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				false,
 				"",
 				"00000000-0000-0000-0000-000000000000",
-				"snake_value");
+				"snake_value",
+				"\"\"", "\"\"");
 		// null
 		verifyRowPostgres(2,
 				null, null, null,
@@ -97,7 +101,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				null,
 				null,
 				null,
-				null);
+				null,
+				null, null);
 		// auto
 		verifyRowPostgres(3,
 				"char_type 1384656904     ", "varchar_type 1384684104", "text_type 1384616204",
@@ -109,7 +114,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				false,
 				"YmxvYl90eXBlIDEzODQ2NzU0MDQ=",
 				"988543c3-b42c-3ce1-8da5-9bad5175fd20",
-				null);
+				null,
+				"{\"json_type\": 1384687704}", "{\"jsonb_type\": 1384669404}");
 	}
 
 	private void verifyRowPostgres(
@@ -122,7 +128,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			Boolean boolean_type,
 			String blob_type,
 			String uuid_type,
-			String enum_type
+			String enum_type,
+			String json_type, String jsonb_type
 	) {
 		assertEquals("id " + id, id, values.get(id).get("id"));
 		// char
@@ -171,6 +178,18 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			assertNull("enum_type type " + id, values.get(id).get("enum_type"));
 		} else {
 			assertEquals("enum_type type " + id, enum_type, values.get(id).get("enum_type"));
+		}
+		// json
+		if (json_type == null) {
+			assertNull("json_type type " + id, values.get(id).get("json_type"));
+		} else {
+			assertEquals("json_type type " + id, json_type, values.get(id).get("json_type").toString());
+		}
+		// jsonb
+		if (jsonb_type == null) {
+			assertNull("jsonb_type type " + id, values.get(id).get("jsonb_type"));
+		} else {
+			assertEquals("jsonb_type type " + id, jsonb_type, values.get(id).get("jsonb_type").toString());
 		}
 	}
 }

@@ -65,5 +65,9 @@
 		<xsd:attribute name="blob_type" use="optional" type="la:StringType"/>
 		<xsd:attribute name="uuid_nullable_type" use="optional" type="la:StringNullableType"/>
 		<xsd:attribute name="uuid_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="json_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="json_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="jsonb_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="jsonb_type" use="optional" type="la:StringType"/>
 	</xsd:complexType>
 </xsd:schema>
