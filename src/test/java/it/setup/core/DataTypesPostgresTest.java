@@ -35,6 +35,12 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 
 	public static void createTable() {
 		db.execute("drop table if exists data_types;");
+		// enum
+		db.execute("drop cast if exists (varchar as enum_t);");
+		db.execute("drop type if exists enum_t;");
+		db.execute("create type enum_t as enum ('snake_value','camelValue','SCREAMING_SNAKE');");
+		db.execute("create cast (varchar as enum_t) with inout as implicit;");
+
 		db.execute("create table data_types ("
 				+ " id int primary key,"
 				+ " char_type char(25), varchar_type varchar(50), text_type text,"
@@ -44,7 +50,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				+ " date_type date, time_type time, timestamp_type timestamp,"
 				+ " boolean_type boolean,"
 				+ " blob_type bytea,"
-				+ " uuid_type uuid)");
+				+ " uuid_type uuid,"
+				+ " enum_type enum_t)");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -66,7 +73,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				LocalDateTime.parse("2998-11-30T22:57:56.789"),
 				true,
 				"EjRWeJCrzeI=",
-				"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11");
+				"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+				"camelValue");
 		// empty
 		verifyRowPostgres(1,
 				"                         ", "", "",
@@ -77,7 +85,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				LocalDateTime.parse("2000-01-02T03:04:05.678"),
 				false,
 				"",
-				"00000000-0000-0000-0000-000000000000");
+				"00000000-0000-0000-0000-000000000000",
+				"snake_value");
 		// null
 		verifyRowPostgres(2,
 				null, null, null,
@@ -85,6 +94,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				null, null,
 				null, null,
 				null, null, null,
+				null,
 				null,
 				null,
 				null);
@@ -98,7 +108,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				LocalDateTime.parse("1900-01-05T04:53:24.004"),
 				false,
 				"YmxvYl90eXBlIDEzODQ2NzU0MDQ=",
-				"988543c3-b42c-3ce1-8da5-9bad5175fd20");
+				"988543c3-b42c-3ce1-8da5-9bad5175fd20",
+				null);
 	}
 
 	private void verifyRowPostgres(
@@ -110,7 +121,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			LocalDate date_type, LocalTime time_type, LocalDateTime timestamp_type,
 			Boolean boolean_type,
 			String blob_type,
-			String uuid_type
+			String uuid_type,
+			String enum_type
 	) {
 		assertEquals("id " + id, id, values.get(id).get("id"));
 		// char
@@ -153,6 +165,12 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			assertNull("uuid_type type " + id, values.get(id).get("uuid_type"));
 		} else {
 			assertEquals("uuid_type type " + id, uuid_type, values.get(id).get("uuid_type").toString());
+		}
+		// enum
+		if (enum_type == null) {
+			assertNull("enum_type type " + id, values.get(id).get("enum_type"));
+		} else {
+			assertEquals("enum_type type " + id, enum_type, values.get(id).get("enum_type"));
 		}
 	}
 }

@@ -26,6 +26,12 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 
 	public static void createTable() {
 		db.execute("drop table if exists data_types;");
+		// enum
+		db.execute("drop cast if exists (varchar as enum_t);");
+		db.execute("drop type if exists enum_t;");
+		db.execute("create type enum_t as enum ('snake_value','camelValue','SCREAMING_SNAKE');");
+		db.execute("create cast (varchar as enum_t) with inout as implicit;");
+
 		db.execute("create table data_types ("
 				+ " id int primary key,"
 				+ " char_type char(25), varchar_type varchar(50), text_type text,"
@@ -35,7 +41,8 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " date_type date, time_type time, timestamp_type timestamp,"
 				+ " boolean_type boolean,"
 				+ " blob_type bytea,"
-				+ " uuid_type uuid)");
+				+ " uuid_type uuid,"
+				+ " enum_type enum_t)");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -51,7 +58,8 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " '2999-12-31', '23:59:58', '2998-11-30 22:57:56.789',"
 				+ " true,"
 				+ " '\\x31323334353637383930616263646532'," // = hexa(1234567890abcde2)
-				+ " 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11')");
+				+ " 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',"
+				+ " 'camelValue')");
 		// empty
 		db.update("insert into data_types values (1,"
 				+ " '', '', '',"
@@ -61,7 +69,8 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " '2000-01-02', '00:00:00', '2000-01-02 03:04:05.678',"
 				+ " false,"
 				+ " '',"
-				+ " '00000000-0000-0000-0000-000000000000')");
+				+ " '00000000-0000-0000-0000-000000000000',"
+				+ " 'snake_value')");
 		// null
 		db.update("insert into data_types values (2,"
 				+ " null, null, null,"
@@ -69,6 +78,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " null, null,"
 				+ " null, null,"
 				+ " null, null, null,"
+				+ " null,"
 				+ " null,"
 				+ " null,"
 				+ " null)");
@@ -81,6 +91,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " '1976-12-12', '08:26:44', '1900-01-05T04:53:24.004',"
 				+ " false,"
 				+ " '\\x626c6f625f747970652031333834363735343034'," // = hexa(blob_type 1384675404)
-				+ " '988543c3-b42c-3ce1-8da5-9bad5175fd20')");
+				+ " '988543c3-b42c-3ce1-8da5-9bad5175fd20',"
+				+ " null)");
 	}
 }

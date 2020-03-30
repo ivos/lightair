@@ -79,6 +79,15 @@ public class Structure implements Keywords {
 
 	private static Map<String, Object> createColumn(ResultSet rs) throws SQLException {
 		Map<String, Object> column = new LinkedHashMap<>();
+
+//		log.trace("Resolving, DATA_TYPE: {}, TYPE_NAME: [{}], COLUMN_DEF: [{}], SQL_DATA_TYPE: [{}], SOURCE_DATA_TYPE: [{}]",
+//				rs.getInt(5), // DATA_TYPE
+//				rs.getString(6), // TYPE_NAME
+//				rs.getString(13), // COLUMN_DEF
+//				rs.getString(14), // SQL_DATA_TYPE
+//				rs.getString(22) // SOURCE_DATA_TYPE
+//		);
+
 		String dataType = resolveDataType(rs.getInt(5), StringUtils.upperCase(rs.getString(6)));
 		column.put(DATA_TYPE, dataType);
 		column.put(JDBC_DATA_TYPE, rs.getInt(5));
@@ -89,8 +98,6 @@ public class Structure implements Keywords {
 	}
 
 	private static String resolveDataType(int sqlDataType, String sqlTypeName) {
-//		log.trace("Resolving data type {}, [{}]", sqlDataType, sqlTypeName);
-
 		if ("UUID".equals(sqlTypeName)) {
 			return UUID; // Postgres, H2, HSQL
 		}
