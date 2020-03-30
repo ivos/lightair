@@ -34,7 +34,8 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " real_type real, double_type double precision,"
 				+ " date_type date, time_type time, timestamp_type timestamp,"
 				+ " boolean_type boolean,"
-				+ " blob_type bytea)");
+				+ " blob_type bytea,"
+				+ " uuid_type uuid)");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -49,7 +50,8 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " 876.543, 8765.4321,"
 				+ " '2999-12-31', '23:59:58', '2998-11-30 22:57:56.789',"
 				+ " true,"
-				+ " '\\x31323334353637383930616263646532')"); // = hexa(1234567890abcde2)
+				+ " '\\x31323334353637383930616263646532'," // = hexa(1234567890abcde2)
+				+ " 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11')");
 		// empty
 		db.update("insert into data_types values (1,"
 				+ " '', '', '',"
@@ -58,7 +60,8 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " 0, 0,"
 				+ " '2000-01-02', '00:00:00', '2000-01-02 03:04:05.678',"
 				+ " false,"
-				+ " '')");
+				+ " '',"
+				+ " '00000000-0000-0000-0000-000000000000')");
 		// null
 		db.update("insert into data_types values (2,"
 				+ " null, null, null,"
@@ -66,6 +69,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " null, null,"
 				+ " null, null,"
 				+ " null, null, null,"
+				+ " null,"
 				+ " null,"
 				+ " null)");
 		// auto
@@ -76,6 +80,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " 13846530, 13846684.04,"
 				+ " '1976-12-12', '08:26:44', '1900-01-05T04:53:24.004',"
 				+ " false,"
-				+ " '\\x626c6f625f747970652031333834363735343034')"); // = hexa(blob_type 1384675404)
+				+ " '\\x626c6f625f747970652031333834363735343034'," // = hexa(blob_type 1384675404)
+				+ " '988543c3-b42c-3ce1-8da5-9bad5175fd20')");
 	}
 }

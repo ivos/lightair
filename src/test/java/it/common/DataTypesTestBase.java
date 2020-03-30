@@ -42,7 +42,8 @@ public class DataTypesTestBase {
 				+ "varchar_type varchar(50), integer_type integer, "
 				+ "date_type date, time_type time, timestamp_type timestamp, "
 				+ "double_type double, boolean_type boolean, bigint_type bigint, "
-				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(8))");
+				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(8), "
+				+ "uuid_type uuid)");
 		ApiTestSupport.reInitialize();
 	}
 

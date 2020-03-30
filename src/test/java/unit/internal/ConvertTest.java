@@ -136,7 +136,8 @@ public class ConvertTest implements Keywords {
 				"bytes_type", BYTES, Types.BINARY,
 				"clob_type", CLOB, Types.CLOB,
 				"nclob_type", NCLOB, Types.NCLOB,
-				"blob_type", BLOB, Types.BLOB
+				"blob_type", BLOB, Types.BLOB,
+				"uuid_type", UUID, Types.OTHER
 		));
 		structures.put(DEFAULT_PROFILE, profileStructure);
 
@@ -172,7 +173,8 @@ public class ConvertTest implements Keywords {
 						"bytes_type", "Ynl0ZXMgdmFsdWU=",
 						"clob_type", "clob value",
 						"nclob_type", "nclob value",
-						"blob_type", "YmxvYiB2YWx1ZQ=="
+						"blob_type", "YmxvYiB2YWx1ZQ==",
+						"uuid_type", "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
 				)
 		));
 
@@ -208,7 +210,8 @@ public class ConvertTest implements Keywords {
 				" bytes_type=REPLACED,\n" +
 				" clob_type=clob value,\n" +
 				" nclob_type=nclob value,\n" +
-				" blob_type=REPLACED}}]}";
+				" blob_type=REPLACED,\n" +
+				" uuid_type=a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11}}]}";
 		assertEquals(expected, result.toString()
 				.replace(", ", ",\n ")
 				.replaceAll("\\[B@[^,}]+", "REPLACED"));
@@ -234,6 +237,7 @@ public class ConvertTest implements Keywords {
 		assertEquals(String.class, dataTypes.get("clob_type").getClass());
 		assertEquals(String.class, dataTypes.get("nclob_type").getClass());
 		assertEquals(byte[].class, dataTypes.get("blob_type").getClass());
+		assertEquals(String.class, dataTypes.get("uuid_type").getClass());
 
 		assertEquals("bytes value", new String((byte[]) dataTypes.get("bytes_type"), StandardCharsets.UTF_8));
 		assertEquals("blob value", new String((byte[]) dataTypes.get("blob_type"), StandardCharsets.UTF_8));

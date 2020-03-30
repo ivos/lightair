@@ -26,7 +26,7 @@ public abstract class DataTypesSetupTestBase extends DataTypesTestBase {
 	                         Integer integer_type, DateMidnight date_type, LocalTime time_type,
 	                         DateTime timestamp_type, Double double_type, Boolean boolean_type,
 	                         Long bigint_type, BigDecimal decimal_type, String clob_type,
-	                         String blob_type, String binary_type) {
+	                         String blob_type, String binary_type, String uuid_type) {
 		assertEquals("id " + id, id, values.get(id).get("id"));
 		assertEquals("char_type " + id, char_type, values.get(id).get("char_type"));
 		assertEquals("varchar_type " + id, varchar_type, values.get(id).get("varchar_type"));
@@ -54,6 +54,11 @@ public abstract class DataTypesSetupTestBase extends DataTypesTestBase {
 		assertEquals("clob_type type " + id, clob_type, values.get(id).get("clob_type"));
 		assertEquals("blob_type type " + id, blob_type, convertBytesToString(values.get(id).get("blob_type")));
 		assertEquals("binary_type type " + id, binary_type, convertBytesToString(values.get(id).get("binary_type")));
+		if (uuid_type == null) {
+			assertNull("uuid_type " + id, values.get(id).get("uuid_type"));
+		} else {
+			assertEquals("uuid_type " + id, uuid_type, values.get(id).get("uuid_type").toString());
+		}
 	}
 
 	protected String convertBytesToString(Object bytes) {
