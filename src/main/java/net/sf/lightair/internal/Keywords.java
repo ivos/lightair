@@ -1,5 +1,8 @@
 package net.sf.lightair.internal;
 
+/**
+ * Constant keywords.
+ */
 public interface Keywords {
 
 	String DATABASE_DRIVER_CLASS_NAME = "database.driverClassName";
@@ -50,7 +53,9 @@ public interface Keywords {
 	String TIME = "TIME";
 	String TIMESTAMP = "TIMESTAMP";
 	String STRING = "STRING";
+	String FIXED_STRING = "FIXED_STRING";
 	String NSTRING = "NSTRING";
+	String FIXED_NSTRING = "FIXED_NSTRING";
 	String BYTES = "BYTES";
 	String CLOB = "CLOB";
 	String NCLOB = "NCLOB";
@@ -63,5 +68,4 @@ public interface Keywords {
 	String AUTO_TOKEN = "@auto";
 	String ANY_TOKEN = "@any";
 	String VARIABLE_PREFIX = "$";
-
 }

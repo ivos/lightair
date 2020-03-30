@@ -11,13 +11,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Helper functions for JDBC connections.
+ */
 public class Connections implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Connections.class);
 
 	public static Map<String, Connection> open(Map<String, Map<String, String>> properties) {
 		Map<String, Connection> connections = new LinkedHashMap<>();
-		properties.keySet().stream()
+		properties.keySet()
 				.forEach(profile -> {
 					connections.put(profile, openConnection(profile, properties.get(profile)));
 				});
@@ -26,8 +29,7 @@ public class Connections implements Keywords {
 
 	public static void close(Map<String, Connection> connections) {
 		if (null != connections) {
-			connections.entrySet().stream()
-					.forEach(entry -> closeConnection(entry.getKey(), entry.getValue()));
+			connections.forEach(Connections::closeConnection);
 		}
 	}
 

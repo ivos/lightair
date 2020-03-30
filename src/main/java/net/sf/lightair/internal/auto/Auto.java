@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Generate unique pseudo-random values for the <code>@auto</code> token.
+ */
 public class Auto implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Auto.class);
@@ -129,6 +132,9 @@ public class Auto implements Keywords {
 			case CLOB:
 			case NCLOB:
 				return stringValue;
+			case FIXED_STRING:
+			case FIXED_NSTRING:
+				return StringUtils.rightPad(stringValue, columnLength);
 			case BYTES:
 			case BLOB:
 				return Base64.encodeBase64String(stringValue.getBytes());

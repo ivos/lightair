@@ -17,6 +17,9 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Execute <code>delete</code> and <code>insert</code> SQL statements.
+ */
 public class ExecuteUpdate implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(ExecuteUpdate.class);
@@ -95,9 +98,11 @@ public class ExecuteUpdate implements Keywords {
 				statement.setTimestamp(index, (Timestamp) value);
 				return;
 			case STRING:
+			case FIXED_STRING:
 				statement.setString(index, (String) value);
 				return;
 			case NSTRING:
+			case FIXED_NSTRING:
 				statement.setNString(index, (String) value);
 				return;
 			case BYTES:

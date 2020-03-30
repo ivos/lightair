@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Create <code>insert</code> SQL statements from a dataset.
+ */
 public class Insert implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Insert.class);

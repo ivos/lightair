@@ -11,6 +11,9 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Load <code>light-air.properties</code> files.
+ */
 public class Properties implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Properties.class);

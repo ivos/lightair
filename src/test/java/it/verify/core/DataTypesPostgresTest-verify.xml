@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<!--full-->
+	<data_types id="0"
+	            char_type="efghijklmnopqrs          " varchar_type="abcdefghijklmnopqrstuvxyz"
+	            text_type="abcdefghijklmnopqrstuvxyz1234567890"
+	            smallint_type="5678" integer_type="12345678" bigint_type="9223372036854770000"
+	            decimal_type="123456789012345678.91" numeric_type="12345678.90123456"
+	            real_type="876.543" double_type="8765.4321"
+	            date_type="2999-12-31" time_type="23:59:58" timestamp_type="2998-11-30T22:57:56.789"
+	            boolean_type="TRUE"
+	            blob_type="MTIzNDU2Nzg5MGFiY2RlMg=="/>
+	<!--empty-->
+	<data_types id="1"
+	            char_type="                         " varchar_type="" text_type=""
+	            smallint_type="0" integer_type="0" bigint_type="0"
+	            decimal_type="0" numeric_type="0"
+	            real_type="0" double_type="0"
+	            date_type="2000-01-02" time_type="00:00:00" timestamp_type="2000-01-02T03:04:05.678"
+	            boolean_type="false"
+	            blob_type=""/>
+	<!--null-->
+	<data_types id="2"
+	            char_type="@null" varchar_type="@null" text_type="@null"
+	            smallint_type="@null" integer_type="@null" bigint_type="@null"
+	            decimal_type="@null" numeric_type="@null"
+	            real_type="@null" double_type="@null"
+	            date_type="@null" time_type="@null" timestamp_type="@null"
+	            boolean_type="@null"
+	            blob_type="@null"/>
+	<!--auto-->
+	<data_types id="3"
+	            char_type="@auto" varchar_type="@auto" text_type="@auto"
+	            smallint_type="@auto" integer_type="@auto" bigint_type="@auto"
+	            decimal_type="@auto" numeric_type="@auto"
+	            real_type="@auto" double_type="@auto"
+	            date_type="@auto" time_type="@auto" timestamp_type="@auto"
+	            boolean_type="@auto"
+	            blob_type="@auto"/>
+</dataset>

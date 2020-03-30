@@ -28,7 +28,9 @@ public class AutoTest implements Keywords {
 		index.put(Index.formatColumnKey("p1", "t1", TIME), "010");
 		index.put(Index.formatColumnKey("p1", "t1", TIMESTAMP), "010");
 		index.put(Index.formatColumnKey("p1", "t1", "string_column"), "765");
+		index.put(Index.formatColumnKey("p1", "t1", "fixed_string_column"), "764");
 		index.put(Index.formatColumnKey("p1", "t1", "nstring_column"), "012");
+		index.put(Index.formatColumnKey("p1", "t1", "fixed_nstring_column"), "763");
 		index.put(Index.formatColumnKey("p1", "t1", "bytes_column"), "013");
 		index.put(Index.formatColumnKey("p1", "t1", "clob_column"), "014");
 		index.put(Index.formatColumnKey("p1", "t1", "nclob_column"), "015");
@@ -65,8 +67,20 @@ public class AutoTest implements Keywords {
 				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 2, null));
 		assertEquals("8",
 				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 1, null));
+		assertEquals("fixed_string_column 1234576498          ",
+				Auto.generate(index, "p1", "t1", "fixed_string_column", 98, FIXED_STRING, 40, null));
+		assertEquals("fixed_string_column 1234576498",
+				Auto.generate(index, "p1", "t1", "fixed_string_column", 98, FIXED_STRING, 30, null));
+		assertEquals("fixed_stri1234576498",
+				Auto.generate(index, "p1", "t1", "fixed_string_column", 98, FIXED_STRING, 20, null));
 		assertEquals("nstring_column 1234501298",
 				Auto.generate(index, "p1", "t1", "nstring_column", 98, NSTRING, 100, null));
+		assertEquals("fixed_nstring_column 1234576398          ",
+				Auto.generate(index, "p1", "t1", "fixed_nstring_column", 98, FIXED_NSTRING, 41, null));
+		assertEquals("fixed_nstring_column 1234576398",
+				Auto.generate(index, "p1", "t1", "fixed_nstring_column", 98, FIXED_NSTRING, 31, null));
+		assertEquals("fixed_nstri1234576398",
+				Auto.generate(index, "p1", "t1", "fixed_nstring_column", 98, FIXED_NSTRING, 21, null));
 		assertEquals("Ynl0ZXNfY29sdW1uIDEyMzQ1MDEzOTg=",
 				Auto.generate(index, "p1", "t1", "bytes_column", 98, BYTES, 100, null));
 		assertEquals("clob_column 1234501498", Auto.generate(index, "p1", "t1", "clob_column", 98, CLOB, 100, null));

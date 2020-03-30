@@ -5,11 +5,13 @@
 		</encoder>
 	</appender>
 
+	<root level="error">
+		<appender-ref ref="stdout" />
+	</root>
+
+	<!--<logger name="net.sf.lightair" level="warning" />-->
 	<!--<logger name="net.sf.lightair" level="info" />-->
 	<!--<logger name="net.sf.lightair" level="debug" />-->
 	<!--<logger name="net.sf.lightair" level="trace" />-->
 
-	<root level="off">
-		<appender-ref ref="stdout" />
-	</root>
 </configuration>

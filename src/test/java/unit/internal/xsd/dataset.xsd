@@ -49,8 +49,12 @@
 		<xsd:attribute name="timestamp_type" use="optional" type="la:TimestampType"/>
 		<xsd:attribute name="string_nullable_type" use="optional" type="la:StringNullableType"/>
 		<xsd:attribute name="string_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="fixed_string_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="fixed_string_type" use="optional" type="la:StringType"/>
 		<xsd:attribute name="nstring_nullable_type" use="optional" type="la:StringNullableType"/>
 		<xsd:attribute name="nstring_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="fixed_nstring_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="fixed_nstring_type" use="optional" type="la:StringType"/>
 		<xsd:attribute name="bytes_nullable_type" use="optional" type="la:StringNullableType"/>
 		<xsd:attribute name="bytes_type" use="optional" type="la:StringType"/>
 		<xsd:attribute name="clob_nullable_type" use="optional" type="la:StringNullableType"/>

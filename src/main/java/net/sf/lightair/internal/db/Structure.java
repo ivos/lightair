@@ -13,6 +13,9 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Load database structure.
+ */
 public class Structure implements Keywords {
 
 	private static final Logger log = LoggerFactory.getLogger(Structure.class);
@@ -113,10 +116,12 @@ public class Structure implements Keywords {
 			case Types.TIMESTAMP_WITH_TIMEZONE:
 				return TIMESTAMP;
 			case Types.CHAR:
+				return FIXED_STRING;
 			case Types.VARCHAR:
 			case Types.LONGVARCHAR:
 				return STRING;
 			case Types.NCHAR:
+				return FIXED_NSTRING;
 			case Types.NVARCHAR:
 			case Types.LONGNVARCHAR:
 				return NSTRING;
