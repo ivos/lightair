@@ -1,0 +1,74 @@
+ ---
+ Database support
+ ---
+ Ivo Maixner
+ ---
+ 2020-03-30
+ ---
+
+Database support
+
+ The following databases are generally tested for, with specifics noted below:
+
+ * Postgres
+
+ * H2
+
+ * HSQL
+
+ * Oracle
+
+ []
+
+
+ Many of Light Air features are implemented in a generic way and should work on other databases as well.
+
+* Data types support
+
+*-----------+----------+---------+
+| Data\ type | Database | Support |
+*-----------+----------+---------+
+| SMALLINT, INTEGER, BIGINT |          | Fully supported. |
+*-----------+----------+---------+
+| DECIMAL, NUMERIC |          | Fully supported. |
+*-----------+----------+---------+
+| REAL, DOUBLE PRECISION |          | Fully supported. |
+*-----------+----------+---------+
+| VARCHAR |          | Fully supported. |
+*-----------+----------+---------+
+| TEXT | Postgres    | Fully supported. |
+*-----------+----------+---------+
+| CHAR      | H2        | <<<@auto>>> in Verify is not supported. |
+|           |           | H2 does not support proper CHAR data type.\
+|           |           | See {{https://groups.google.com/forum/#!topic/h2-database/oB3Wrv0obEQ}} |
+*-----------+----------+---------+
+|           | Other    | Fully supported. |
+*-----------+----------+---------+
+| DATE, TIMESTAMP |          | Fully supported. |
+*-----------+----------+---------+
+| TIME | Oracle | Is effectively <<<timestamp>>> with date set to <<<1970-01-01>>>. |
+*-----------+----------+---------+
+|      | Other  | Fully supported. |
+*-----------+----------+---------+
+| BOOLEAN | Oracle | In Verify use <<<0>>> and <<<1>>> instead of <<<false>>> and <<<true>>>.\
+|         |        | <<<@auto>>> is not supported. |
+*-----------+----------+---------+
+|         | Other | Fully supported. |
+*-----------+----------+---------+
+|  CLOB, BLOB, BINARY | H2, HSQL | Fully supported. |
+*-----------+----------+---------+
+|  CLOB, BLOB, RAW | Oracle | Fully supported. |
+*-----------+----------+---------+
+|  BYTEA | Postgres | Fully supported. |
+*-----------+----------+---------+
+|  UUID | H2, HSQL, Postgres | Fully supported. |
+*-----------+----------+---------+
+|  ENUM | Postgres | Create cast as follows:\
+|       |          | <<<create cast (varchar as my_enum_type) with inout as implicit;>>>\
+|       |          | <<<@auto>>> is not supported.
+*-----------+----------+---------+
+
+
+*--:
+ {{{./development.html}Next: Development >>}}
+*--:

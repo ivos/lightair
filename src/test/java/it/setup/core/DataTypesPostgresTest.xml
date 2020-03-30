@@ -10,7 +10,8 @@
 	            date_type="2999-12-31" time_type="23:59:58" timestamp_type="2998-11-30T22:57:56.789"
 	            boolean_type="TRUE"
 	            blob_type="EjRWeJCrzeI="
-	            uuid_type="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"/>
+	            uuid_type="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
+	            enum_type="camelValue"/>
 	<!--empty-->
 	<data_types id="1"
 	            char_type="" varchar_type="" text_type=""
@@ -20,7 +21,8 @@
 	            date_type="2000-01-02" time_type="00:00:00" timestamp_type="2000-01-02T03:04:05.678"
 	            boolean_type="false"
 	            blob_type=""
-	            uuid_type="00000000-0000-0000-0000-000000000000"/>
+	            uuid_type="00000000-0000-0000-0000-000000000000"
+	            enum_type="snake_value"/>
 	<!--null-->
 	<data_types id="2"
 	            char_type="@null" varchar_type="@null" text_type="@null"
@@ -30,7 +32,8 @@
 	            date_type="@null" time_type="@null" timestamp_type="@null"
 	            boolean_type="@null"
 	            blob_type="@null"
-	            uuid_type="@null"/>
+	            uuid_type="@null"
+	            enum_type="@null"/>
 	<!--auto-->
 	<data_types id="3"
 	            char_type="@auto" varchar_type="@auto" text_type="@auto"
@@ -40,5 +43,6 @@
 	            date_type="@auto" time_type="@auto" timestamp_type="@auto"
 	            boolean_type="@auto"
 	            blob_type="@auto"
-	            uuid_type="@auto"/>
+	            uuid_type="@auto"
+	            enum_type="@null"/>
 </dataset>
