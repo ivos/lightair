@@ -94,6 +94,8 @@ public class XsdTest extends TemplatingTestBase implements Keywords {
 		addColumn(columns, "BLOB_TYPE", "BLOB", true);
 		addColumn(columns, "UUID_NULLABLE_TYPE", "UUID", false);
 		addColumn(columns, "UUID_TYPE", "UUID", true);
+		addColumn(columns, "JSON_NULLABLE_TYPE", "JSON", false);
+		addColumn(columns, "JSON_TYPE", "JSON", true);
 		profile.put("DATA_TYPES", columns);
 
 		structure.put(DEFAULT_PROFILE, profile);

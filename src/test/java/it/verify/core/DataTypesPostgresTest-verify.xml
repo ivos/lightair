@@ -11,7 +11,9 @@
 	            boolean_type="TRUE"
 	            blob_type="MTIzNDU2Nzg5MGFiY2RlMg=="
 	            uuid_type="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
-	            enum_type="camelValue"/>
+	            enum_type="camelValue"
+	            json_type='{"key1":"value1"}'
+	/>
 	<!--empty-->
 	<data_types id="1"
 	            char_type="                         " varchar_type="" text_type=""
@@ -22,7 +24,9 @@
 	            boolean_type="false"
 	            blob_type=""
 	            uuid_type="00000000-0000-0000-0000-000000000000"
-	            enum_type="snake_value"/>
+	            enum_type="snake_value"
+	            json_type='""'
+	/>
 	<!--null-->
 	<data_types id="2"
 	            char_type="@null" varchar_type="@null" text_type="@null"
@@ -33,7 +37,9 @@
 	            boolean_type="@null"
 	            blob_type="@null"
 	            uuid_type="@null"
-	            enum_type="@null"/>
+	            enum_type="@null"
+	            json_type="@null"
+	/>
 	<!--auto-->
 	<data_types id="3"
 	            char_type="@auto" varchar_type="@auto" text_type="@auto"
@@ -44,5 +50,7 @@
 	            boolean_type="@auto"
 	            blob_type="@auto"
 	            uuid_type="@auto"
-	            enum_type="@null"/>
+	            enum_type="@null"
+	            json_type="@auto"
+	/>
 </dataset>

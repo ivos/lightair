@@ -65,7 +65,11 @@ Database support
 *-----------+----------+---------+
 |  ENUM | Postgres | Create cast as follows:\
 |       |          | <<<create cast (varchar as my_enum_type) with inout as implicit;>>>\
-|       |          | <<<@auto>>> is not supported.
+|       |          | <<<@auto>>> is not supported.\
+|       |          | Postgres JDBC driver does not inform that the data type is <<<ENUM>>>,
+|       |          | so Light Air has to treat it as <<<VARCHAR>>>. |
+*-----------+----------+---------+
+|  JSON | Postgres | Fully supported. |
 *-----------+----------+---------+
 
 

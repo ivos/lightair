@@ -36,6 +36,7 @@ public class AutoTest implements Keywords {
 		index.put(Index.formatColumnKey("p1", "t1", "nclob_column"), "015");
 		index.put(Index.formatColumnKey("p1", "t1", "blob_column"), "016");
 		index.put(Index.formatColumnKey("p1", "t1", "uuid_column"), "101");
+		index.put(Index.formatColumnKey("p1", "t1", "json_column"), "102");
 		assertEquals("false", Auto.generate(index, "p1", "t1", BOOLEAN, 98, BOOLEAN, 0, null));
 		assertEquals("true", Auto.generate(index, "p1", "t1", BOOLEAN, 99, BOOLEAN, 0, null));
 		assertEquals("98", Auto.generate(index, "p1", "t1", BYTE, 98, BYTE, 0, null));
@@ -92,5 +93,7 @@ public class AutoTest implements Keywords {
 				Auto.generate(index, "p1", "t1", "uuid_column", 97, UUID, 0, null));
 		assertEquals("5ab9d6e9-43f2-3d2b-a8d2-22244cbd7a08",
 				Auto.generate(index, "p1", "t1", "uuid_column", 98, UUID, 0, null));
+		assertEquals("{\"json_column\":1234510298}",
+				Auto.generate(index, "p1", "t1", "json_column", 98, JSON, 0, null));
 	}
 }

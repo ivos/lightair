@@ -101,6 +101,9 @@ public class Structure implements Keywords {
 		if ("UUID".equals(sqlTypeName)) {
 			return UUID; // Postgres, H2, HSQL
 		}
+		if ("JSON".equals(sqlTypeName)) {
+			return JSON; // Postgres
+		}
 
 		// generic:
 		switch (sqlDataType) {

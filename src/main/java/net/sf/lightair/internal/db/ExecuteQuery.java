@@ -99,6 +99,8 @@ public class ExecuteQuery implements Keywords {
 				return rs.getTimestamp(columnName);
 			case STRING:
 			case FIXED_STRING:
+			case UUID:
+			case JSON:
 				return rs.getString(columnName);
 			case NSTRING:
 			case FIXED_NSTRING:
@@ -111,8 +113,6 @@ public class ExecuteQuery implements Keywords {
 				return readClob(columnName, type, rs.getNClob(columnName));
 			case BLOB:
 				return readBlob(columnName, type, rs.getBlob(columnName));
-			case UUID:
-				return rs.getString(columnName);
 		}
 		log.error("Unknown type {} on column {}, trying to get it as Object.", type, columnName);
 		return rs.getObject(columnName);

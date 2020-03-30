@@ -98,7 +98,7 @@ public class Xsd implements Keywords {
 		}
 		if (FIXED_STRING.equals(dataType) || NSTRING.equals(dataType) || FIXED_NSTRING.equals(dataType)
 				|| BYTES.equals(dataType) || BLOB.equals(dataType) || CLOB.equals(dataType) || NCLOB.equals(dataType)
-				|| UUID.equals(dataType)) {
+				|| UUID.equals(dataType) || JSON.equals(dataType)) {
 			dataType = STRING;
 		}
 		boolean notNull = (boolean) column.get(NOT_NULL);

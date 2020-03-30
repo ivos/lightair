@@ -61,6 +61,7 @@ public interface Keywords {
 	String NCLOB = "NCLOB";
 	String BLOB = "BLOB";
 	String UUID = "UUID";
+	String JSON = "JSON";
 
 	String NULL_TOKEN = "@null";
 	String DATE_TOKEN = "@date";
