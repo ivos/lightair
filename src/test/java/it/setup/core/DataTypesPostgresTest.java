@@ -70,7 +70,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 	@Override
 	protected void verify() {
 		// full
-		verifyRowPostgres(0,
+		verifyRow(0,
 				"efghijklmnopqrs          ", "abcdefghijklmnopqrstuvxyz",
 				"abcdefghijklmnopqrstuvxyz1234567890",
 				5678, 12345678, 9223372036854770000L,
@@ -90,7 +90,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				new Long[]{2345678901L, 2345678902L, null, 2345678903L}
 		);
 		// empty
-		verifyRowPostgres(1,
+		verifyRow(1,
 				"                         ", "", "",
 				0, 0, 0L,
 				new BigDecimal("0.00"), new BigDecimal("0E-8"),
@@ -106,7 +106,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 
 		);
 		// null
-		verifyRowPostgres(2,
+		verifyRow(2,
 				null, null, null,
 				null, null, null,
 				null, null,
@@ -120,7 +120,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				null, null, null, null
 		);
 		// auto
-		verifyRowPostgres(3,
+		verifyRow(3,
 				"char_type 1384656904     ", "varchar_type 1384684104", "text_type 1384616204",
 				7904, 1384653604, 1384644904L,
 				new BigDecimal("13846469.04"), new BigDecimal("13.84612704"),
@@ -139,7 +139,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		);
 	}
 
-	private void verifyRowPostgres(
+	private void verifyRow(
 			int id,
 			String char_type, String varchar_type, String text_type,
 			Integer smallint_type, Integer integer_type, Long bigint_type,
@@ -189,17 +189,6 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		verifyArrayField(id, "varchar_array_type", varchar_array_type);
 		verifyArrayField(id, "integer_array_type", integer_array_type);
 		verifyArrayField(id, "bigint_array_type", bigint_array_type);
-	}
-
-	private <EV> void verifyField(
-			int id, String name, EV expectedValue,
-			Function<EV, ?> expectedConverter, Function<Object, ?> actualConverter) {
-		if (null == expectedValue) {
-			assertNull(name + " " + id, values.get(id).get(name));
-		} else {
-			assertEquals(name + " " + id, expectedConverter.apply(expectedValue),
-					actualConverter.apply(values.get(id).get(name)));
-		}
 	}
 
 	private void verifyArrayField(int id, String name, Object[] expectedValue) {

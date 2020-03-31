@@ -75,6 +75,9 @@ Database support
 *-----------+----------+---------+
 |  ARRAY | Postgres | 1-dimensional arrays of <<<VARCHAR>>>, <<<TEXT>>>, <<<INTEGER>>> and <<<BIGINT>>> are fully supported. |
 *-----------+----------+---------+
+|        | H2       | 1-dimensional arrays are treated as if the base type was unlimited <<<VARCHAR>>> (Java String in fact), |
+|        |          | but otherwise are fully supported. |
+*-----------+----------+---------+
 
 
 *--:
