@@ -48,7 +48,7 @@ Database support
 *-----------+----------+---------+
 | DATE, TIMESTAMP |          | Fully supported. |
 *-----------+----------+---------+
-| TIME | Oracle | Is effectively <<<timestamp>>> with date set to <<<1970-01-01>>>. |
+| TIME | Oracle | Not supported. Use <<<timestamp>>> instead. |
 *-----------+----------+---------+
 |      | Other  | Fully supported. |
 *-----------+----------+---------+
@@ -72,6 +72,8 @@ Database support
 |       |          | so Light Air has to treat it as <<<VARCHAR>>>. |
 *-----------+----------+---------+
 |  JSON, JSONB | Postgres | Fully supported. |
+*-----------+----------+---------+
+|  ARRAY | Postgres | 1-dimensional arrays of <<<VARCHAR>>>, <<<TEXT>>>, <<<INTEGER>>> and <<<BIGINT>>> are fully supported. |
 *-----------+----------+---------+
 
 

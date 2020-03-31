@@ -16,6 +16,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,6 +24,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Convert String values in datasets parsed from XML into proper data types based on database structure.
@@ -259,9 +262,25 @@ public class Convert implements Keywords {
 			case BYTES:
 			case BLOB:
 				return Base64.decodeBase64(value);
+			case ARRAY_STRING:
+				return convertArray(new String[0], Function.identity(), value);
+			case ARRAY_INTEGER:
+				return convertArray(new Integer[0], Integer::parseInt, value);
+			case ARRAY_LONG:
+				return convertArray(new Long[0], Long::parseLong, value);
 		}
 		log.error("Unknown type {} ({}) on [{}]/{}.{}, passing value {} through as String.",
 				dataType, jdbcDataType, profile, tableName, columnName, value);
 		return value;
+	}
+
+	private static Object convertArray(Object[] emptyValue, Function<String, ?> valueConverter, String value) {
+		if ("".equals(value)) { // treat empty string as an empty array, rather than array with an empty string
+			return emptyValue;
+		}
+		return Arrays.stream(value.split(ARRAY_ELEMENT_SEPARATOR))
+				.map(s -> NULL_TOKEN.equals(s) ? null : valueConverter.apply(s))
+				.collect(Collectors.toList())
+				.toArray(emptyValue);
 	}
 }

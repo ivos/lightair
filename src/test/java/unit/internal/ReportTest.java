@@ -32,7 +32,7 @@ public class ReportTest implements Keywords {
 		return Collections.unmodifiableMap(table);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private static Map<String, Map<String, List<?>>> createProfile(Object... data) {
 		assertTrue("Data in pairs", data.length % 2 == 0);
 		Map<String, Map<String, List<?>>> profile = new LinkedHashMap<>();
@@ -179,7 +179,9 @@ public class ReportTest implements Keywords {
 				"date", new Date(DateTime.parse("2015-12-31").getMillis()),
 				"time", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
 				"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
-				"bytes", "bytes1".getBytes());
+				"string", "value 1", "bytes", "bytes1".getBytes(), "blob", "blob1".getBytes(),
+				"array_string", new String[]{"value 1", "value 2", "", " ", null, "value 3"}
+		);
 		differences.put("p1", createProfile(
 				"t11", createTable(
 						Arrays.asList(row),
@@ -207,8 +209,14 @@ public class ReportTest implements Keywords {
 												createRow(COLUMN, "timestamp",
 														EXPECTED, new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 														ACTUAL, new Timestamp(DateTime.parse("2015-12-31T12:34:56.124").getMillis())),
+												createRow(COLUMN, "string", EXPECTED, "value 1", ACTUAL, "value 2"),
 												createRow(COLUMN, "bytes", EXPECTED, "bytes1".getBytes(),
-														ACTUAL, "bytes2".getBytes())
+														ACTUAL, "bytes2".getBytes()),
+												createRow(COLUMN, "blob", EXPECTED, "blob1".getBytes(),
+														ACTUAL, "bytes1".getBytes()),
+												createRow(COLUMN, "array_string",
+														EXPECTED, new String[]{"value 1", "value 2", "", " ", null, "value 3"},
+														ACTUAL, new String[]{"value 1", "value 2b", "", " ", null, "value 3"})
 										))
 						), Arrays.asList(row))
 		));
@@ -217,8 +225,8 @@ public class ReportTest implements Keywords {
 
 		String expected = "Differences found between the expected data set and actual database content.\n" +
 				"Found differences for table [p1]/t11:\n" +
-				"  Missing row: {null=null, boolean=true, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=12:34:56, timestamp=2015-12-31T12:34:56.123, bytes=Ynl0ZXMx}\n" +
-				"  Different row: {null=null, boolean=true, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=12:34:56, timestamp=2015-12-31T12:34:56.123, bytes=Ynl0ZXMx}\n" +
+				"  Missing row: {null=null, boolean=true, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=12:34:56, timestamp=2015-12-31T12:34:56.123, string=value 1, bytes=Ynl0ZXMx, blob=YmxvYjE=, array_string=value 1,value 2,, ,@null,value 3}\n" +
+				"  Different row: {null=null, boolean=true, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=12:34:56, timestamp=2015-12-31T12:34:56.123, string=value 1, bytes=Ynl0ZXMx, blob=YmxvYjE=, array_string=value 1,value 2,, ,@null,value 3}\n" +
 				"   Best matching differences: \n" +
 				"    null: expected [null], but was [null]\n" +
 				"    boolean: expected [true], but was [false]\n" +
@@ -232,8 +240,11 @@ public class ReportTest implements Keywords {
 				"    date: expected [2015-12-31], but was [2015-12-30]\n" +
 				"    time: expected [12:34:56], but was [12:34:57]\n" +
 				"    timestamp: expected [2015-12-31T12:34:56.123], but was [2015-12-31T12:34:56.124]\n" +
+				"    string: expected [value 1], but was [value 2]\n" +
 				"    bytes: expected [Ynl0ZXMx], but was [Ynl0ZXMy]\n" +
-				"  Unexpected row: {null=null, boolean=true, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=12:34:56, timestamp=2015-12-31T12:34:56.123, bytes=Ynl0ZXMx}\n";
+				"    blob: expected [YmxvYjE=], but was [Ynl0ZXMx]\n" +
+				"    array_string: expected [value 1,value 2,, ,@null,value 3], but was [value 1,value 2b,, ,@null,value 3]\n" +
+				"  Unexpected row: {null=null, boolean=true, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=12:34:56, timestamp=2015-12-31T12:34:56.123, string=value 1, bytes=Ynl0ZXMx, blob=YmxvYjE=, array_string=value 1,value 2,, ,@null,value 3}\n";
 		assertEquals(expected, report);
 	}
 }

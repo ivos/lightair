@@ -38,6 +38,7 @@ public class AutoTest implements Keywords {
 		index.put(Index.formatColumnKey("p1", "t1", "uuid_column"), "101");
 		index.put(Index.formatColumnKey("p1", "t1", "json_column"), "102");
 		index.put(Index.formatColumnKey("p1", "t1", "jsonb_column"), "103");
+		index.put(Index.formatColumnKey("p1", "t1", "array_column"), "111");
 		assertEquals("false", Auto.generate(index, "p1", "t1", BOOLEAN, 98, BOOLEAN, 0, null));
 		assertEquals("true", Auto.generate(index, "p1", "t1", BOOLEAN, 99, BOOLEAN, 0, null));
 		assertEquals("98", Auto.generate(index, "p1", "t1", BYTE, 98, BYTE, 0, null));
@@ -98,5 +99,17 @@ public class AutoTest implements Keywords {
 				Auto.generate(index, "p1", "t1", "json_column", 98, JSON, 0, null));
 		assertEquals("{\"jsonb_column\": 1234510398}",
 				Auto.generate(index, "p1", "t1", "jsonb_column", 98, JSONB, 0, null));
+		assertEquals("array_column 12345111981,array_column 12345111982,array_column 12345111983",
+				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 100, null));
+		assertEquals("arra12345111981,arra12345111982,arra12345111983",
+				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 15, null));
+		assertEquals("81,82,83",
+				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 2, null));
+		assertEquals("1,2,3",
+				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 1, null));
+		assertEquals("345111981,345111982,345111983",
+				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_INTEGER, 0, null));
+		assertEquals("12345111981,12345111982,12345111983",
+				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_LONG, 0, null));
 	}
 }

@@ -9,12 +9,16 @@ import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 
 import java.math.BigDecimal;
+import java.sql.Array;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.function.Function;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -52,7 +56,9 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				+ " blob_type bytea,"
 				+ " uuid_type uuid,"
 				+ " enum_type enum_t,"
-				+ " json_type json, jsonb_type jsonb)");
+				+ " json_type json, jsonb_type jsonb,"
+				+ " text_array_type text[], varchar_array_type varchar(25)[],"
+				+ " integer_array_type integer[], bigint_array_type bigint[])");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -77,7 +83,12 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
 				"camelValue",
 				"{\"key1\":\"value1\"}",
-				"{\"key1\": \"value1\", \"key2\": \"value2\", \"key3\": \"value3\"}");
+				"{\"key1\": \"value1\", \"key2\": \"value2\", \"key3\": \"value3\"}",
+				new String[]{"text 1", "text 2", "", " ", null, "text 3"},
+				new String[]{"varchar 1", "varchar 2", "", " ", null, "varchar 3"},
+				new Integer[]{2345, 3456, null, 4567},
+				new Long[]{2345678901L, 2345678902L, null, 2345678903L}
+		);
 		// empty
 		verifyRowPostgres(1,
 				"                         ", "", "",
@@ -90,7 +101,10 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				"",
 				"00000000-0000-0000-0000-000000000000",
 				"snake_value",
-				"\"\"", "\"\"");
+				"\"\"", "\"\"",
+				new String[0], new String[0], new Integer[0], new Long[0]
+
+		);
 		// null
 		verifyRowPostgres(2,
 				null, null, null,
@@ -102,7 +116,9 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				null,
 				null,
 				null,
-				null, null);
+				null, null,
+				null, null, null, null
+		);
 		// auto
 		verifyRowPostgres(3,
 				"char_type 1384656904     ", "varchar_type 1384684104", "text_type 1384616204",
@@ -115,7 +131,12 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				"YmxvYl90eXBlIDEzODQ2NzU0MDQ=",
 				"988543c3-b42c-3ce1-8da5-9bad5175fd20",
 				null,
-				"{\"json_type\": 1384687704}", "{\"jsonb_type\": 1384669404}");
+				"{\"json_type\": 1384687704}", "{\"jsonb_type\": 1384669404}",
+				new String[]{"text_array_type 13846759041", "text_array_type 13846759042", "text_array_type 13846759043"},
+				new String[]{"varchar_array_13846786041", "varchar_array_13846786042", "varchar_array_13846786043"},
+				new Integer[]{846767041, 846767042, 846767043},
+				new Long[]{13846934041L, 13846934042L, 13846934043L}
+		);
 	}
 
 	private void verifyRowPostgres(
@@ -129,7 +150,9 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			String blob_type,
 			String uuid_type,
 			String enum_type,
-			String json_type, String jsonb_type
+			String json_type, String jsonb_type,
+			Object[] text_array_type, Object[] varchar_array_type,
+			Object[] integer_array_type, Object[] bigint_array_type
 	) {
 		assertEquals("id " + id, id, values.get(id).get("id"));
 		// char
@@ -146,50 +169,49 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		assertEquals("real_type type " + id, real_type, values.get(id).get("real_type"));
 		assertEquals("double_type type " + id, double_type, values.get(id).get("double_type"));
 		// date/time
-		if (null == date_type) {
-			assertNull("date_type " + id, values.get(id).get("date_type"));
-		} else {
-			assertEquals("date_type " + id, date_type.toString(), values.get(id).get("date_type").toString());
-		}
-		if (null == time_type) {
-			assertNull("time_type " + id, values.get(id).get("time_type"));
-		} else {
-			assertEquals("time_type " + id, Time.valueOf(time_type).toString(),
-					values.get(id).get("time_type").toString());
-		}
-		if (null == timestamp_type) {
-			assertNull("timestamp_type " + id, values.get(id).get("timestamp_type"));
-		} else {
-			assertEquals("timestamp_type " + id, Timestamp.valueOf(timestamp_type).toString(),
-					values.get(id).get("timestamp_type").toString());
-		}
+		verifyField(id, "date_type", date_type, Object::toString, Object::toString);
+		verifyField(id, "time_type", time_type, v -> Time.valueOf(v).toString(), Object::toString);
+		verifyField(id, "timestamp_type", timestamp_type, v -> Timestamp.valueOf(v).toString(), Object::toString);
 		// boolean
 		assertEquals("boolean_type type " + id, boolean_type, values.get(id).get("boolean_type"));
 		// binary
 		assertEquals("blob_type type " + id, blob_type, convertBytesToString(values.get(id).get("blob_type")));
 		// uuid
-		if (uuid_type == null) {
-			assertNull("uuid_type type " + id, values.get(id).get("uuid_type"));
-		} else {
-			assertEquals("uuid_type type " + id, uuid_type, values.get(id).get("uuid_type").toString());
-		}
+		verifyField(id, "uuid_type", uuid_type, Function.identity(), Object::toString);
 		// enum
-		if (enum_type == null) {
-			assertNull("enum_type type " + id, values.get(id).get("enum_type"));
-		} else {
-			assertEquals("enum_type type " + id, enum_type, values.get(id).get("enum_type"));
-		}
+		verifyField(id, "enum_type", enum_type, Function.identity(), Function.identity());
 		// json
-		if (json_type == null) {
-			assertNull("json_type type " + id, values.get(id).get("json_type"));
-		} else {
-			assertEquals("json_type type " + id, json_type, values.get(id).get("json_type").toString());
-		}
+		verifyField(id, "json_type", json_type, Function.identity(), Object::toString);
 		// jsonb
-		if (jsonb_type == null) {
-			assertNull("jsonb_type type " + id, values.get(id).get("jsonb_type"));
+		verifyField(id, "jsonb_type", jsonb_type, Function.identity(), Object::toString);
+		// arrays
+		verifyArrayField(id, "text_array_type", text_array_type);
+		verifyArrayField(id, "varchar_array_type", varchar_array_type);
+		verifyArrayField(id, "integer_array_type", integer_array_type);
+		verifyArrayField(id, "bigint_array_type", bigint_array_type);
+	}
+
+	private <EV> void verifyField(
+			int id, String name, EV expectedValue,
+			Function<EV, ?> expectedConverter, Function<Object, ?> actualConverter) {
+		if (null == expectedValue) {
+			assertNull(name + " " + id, values.get(id).get(name));
 		} else {
-			assertEquals("jsonb_type type " + id, jsonb_type, values.get(id).get("jsonb_type").toString());
+			assertEquals(name + " " + id, expectedConverter.apply(expectedValue),
+					actualConverter.apply(values.get(id).get(name)));
+		}
+	}
+
+	private void verifyArrayField(int id, String name, Object[] expectedValue) {
+		if (null == expectedValue) {
+			assertNull(name + " " + id, values.get(id).get(name));
+		} else {
+			try {
+				assertArrayEquals(name + " " + id, expectedValue,
+						(Object[]) ((Array) values.get(id).get(name)).getArray());
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 }

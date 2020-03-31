@@ -249,6 +249,9 @@ public class Compare implements Keywords {
 		if (expectedValue instanceof byte[] && actualValue instanceof byte[]) {
 			return Arrays.equals((byte[]) expectedValue, (byte[]) actualValue);
 		}
+		if (expectedValue instanceof Object[] && actualValue instanceof Object[]) {
+			return Arrays.equals((Object[]) expectedValue, (Object[]) actualValue);
+		}
 		if (expectedValue instanceof BigDecimal && actualValue instanceof BigDecimal) {
 			return 0 == ((BigDecimal) expectedValue).compareTo(((BigDecimal) actualValue));
 		}

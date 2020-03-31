@@ -159,6 +159,18 @@ public class Structure implements Keywords {
 				return BLOB;
 		}
 
+		if (Types.ARRAY == sqlDataType) {
+			switch (sqlTypeName) {
+				case "ARRAY": // H2
+				case "_TEXT": // Postgres
+				case "_VARCHAR": // Postgres
+					return ARRAY_STRING;
+				case "_INT4": // Postgres
+					return ARRAY_INTEGER;
+				case "_INT8": // Postgres
+					return ARRAY_LONG;
+			}
+		}
 		if (Types.OTHER == sqlDataType) {
 			switch (sqlTypeName) {
 				case "ROWID": // Oracle

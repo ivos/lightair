@@ -69,5 +69,11 @@
 		<xsd:attribute name="json_type" use="optional" type="la:StringType"/>
 		<xsd:attribute name="jsonb_nullable_type" use="optional" type="la:StringNullableType"/>
 		<xsd:attribute name="jsonb_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="array_string_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="array_string_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="array_integer_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="array_integer_type" use="optional" type="la:StringType"/>
+		<xsd:attribute name="array_long_nullable_type" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="array_long_type" use="optional" type="la:StringType"/>
 	</xsd:complexType>
 </xsd:schema>

@@ -63,6 +63,9 @@ public interface Keywords {
 	String UUID = "UUID";
 	String JSON = "JSON";
 	String JSONB = "JSONB";
+	String ARRAY_STRING = "ARRAY_STRING";
+	String ARRAY_INTEGER = "ARRAY_INTEGER";
+	String ARRAY_LONG = "ARRAY_LONG";
 
 	String NULL_TOKEN = "@null";
 	String DATE_TOKEN = "@date";
@@ -71,4 +74,5 @@ public interface Keywords {
 	String AUTO_TOKEN = "@auto";
 	String ANY_TOKEN = "@any";
 	String VARIABLE_PREFIX = "$";
+	String ARRAY_ELEMENT_SEPARATOR = ",";
 }

@@ -95,7 +95,8 @@ public class Xsd implements Keywords {
 	}
 
 	private static final Set<String> stringTypes = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
-			FIXED_STRING, NSTRING, FIXED_NSTRING, BYTES, BLOB, CLOB, NCLOB, UUID, JSON, JSONB
+			FIXED_STRING, NSTRING, FIXED_NSTRING, BYTES, BLOB, CLOB, NCLOB, UUID, JSON, JSONB,
+			ARRAY_STRING, ARRAY_INTEGER, ARRAY_LONG
 	)));
 
 	private static void writeColumn(StringBuilder sb, String columnName, Map<String, Map<String, Object>> columns) {

@@ -107,18 +107,19 @@ public class ExecuteQueryTest implements Keywords {
 				" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
 				" nchar_type nchar(20), nvarchar_type nvarchar(50), longnvarchar_type longnvarchar(5000)," +
 				" binary_type binary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
-				" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, json_type json)");
+				" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, json_type json, array_type array)");
 		String columns = "(id," +
 				"bit_type,boolean_type,tinyint_type,smallint_type,integer_type,bigint_type," +
 				"real_type,float_type,double_type,numeric_type,decimal_type," +
 				"date_type,time_type,timestamp_type,char_type,varchar_type,longvarchar_type," +
 				"nchar_type,nvarchar_type,longnvarchar_type,binary_type,varbinary_type,longvarbinary_type," +
-				"clob_type,nclob_type,blob_type,uuid_type,json_type)";
+				"clob_type,nclob_type,blob_type,uuid_type,json_type,array_type)";
 		h2.db.update("insert into data_types " + columns +
 						" values (1,false,true,123,12345,1234567890,10000000000,123456.7890123,123456.7890123,123456.7890123," +
 						"123456.7890123,123456.7890123,'2015-12-31','12:34:56','2015-12-31T12:34:56'," +
 						"'char1','varchar1','longvarchar1','nchar1','nvarchar1','longnvarchar1'," +
-						"?,?,?,?,?,?,'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11','{\"key1\":\"value1\"}')",
+						"?,?,?,?,?,?,'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11','{\"key1\":\"value1\"}'," +
+						"array['value 1','value 2','value 3'])",
 				"binary1".getBytes(StandardCharsets.UTF_8),
 				"varbin1".getBytes(StandardCharsets.UTF_8),
 				"longvarbinary1".getBytes(StandardCharsets.UTF_8),
@@ -129,7 +130,7 @@ public class ExecuteQueryTest implements Keywords {
 				" values (2,null,null,null,null,null,null,null,null,null," +
 				"null,null,null,null,null," +
 				"null,null,null,null,null,null," +
-				"null,null,null,null,null,null,null,null)");
+				"null,null,null,null,null,null,null,null,null)");
 
 		Map<String, List<Map<String, Object>>> data = ExecuteQuery.run(h2.getConnection(),
 				createStatements(
@@ -140,7 +141,7 @@ public class ExecuteQueryTest implements Keywords {
 								"date_type,time_type,timestamp_type," +
 								"char_type,varchar_type,longvarchar_type,nchar_type,nvarchar_type,longnvarchar_type," +
 								"binary_type,varbinary_type,longvarbinary_type," +
-								"clob_type,nclob_type,blob_type,uuid_type,json_type from data_types",
+								"clob_type,nclob_type,blob_type,uuid_type,json_type,array_type from data_types",
 						createColumns("id", INTEGER, Types.INTEGER,
 								"bit_type", BOOLEAN, Types.BIT,
 								"boolean_type", BOOLEAN, Types.BOOLEAN,
@@ -169,7 +170,8 @@ public class ExecuteQueryTest implements Keywords {
 								"nclob_type", NCLOB, Types.NCLOB,
 								"blob_type", BLOB, Types.BLOB,
 								"uuid_type", UUID, Types.OTHER,
-								"json_type", JSON, Types.OTHER
+								"json_type", JSON, Types.OTHER,
+								"array_type", ARRAY_STRING, Types.ARRAY
 						)));
 
 		h2.db.execute("drop table data_types");
@@ -202,7 +204,8 @@ public class ExecuteQueryTest implements Keywords {
 				"nclob_type=nclob1,\n" +
 				"blob_type=REPLACED,\n" +
 				"uuid_type=a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11,\n" +
-				"json_type=\"{\\\"key1\\\":\\\"value1\\\"}\"" +
+				"json_type=\"{\\\"key1\\\":\\\"value1\\\"}\",\n" +
+				"array_type=[Ljava.lang.String;REPLACED" +
 				"},\n" +
 				"{id=2,\n" +
 				"bit_type=null,\n" +
@@ -232,10 +235,12 @@ public class ExecuteQueryTest implements Keywords {
 				"nclob_type=null,\n" +
 				"blob_type=null,\n" +
 				"uuid_type=null,\n" +
-				"json_type=null" +
+				"json_type=null,\n" +
+				"array_type=null" +
 				"}]}";
 		assertEquals(expected, data.toString()
 				.replaceAll("\\[B@[^,}]+", "REPLACED")
+				.replaceAll("@[0-9a-fA-F]+", "REPLACED")
 				.replace(", ", ",\n"));
 
 		Map<String, Object> row = data.get("data_types").get(0);
@@ -268,6 +273,7 @@ public class ExecuteQueryTest implements Keywords {
 		assertEquals("blob1", new String((byte[]) row.get("blob_type")));
 		assertEquals(String.class, row.get("uuid_type").getClass());
 		assertEquals(String.class, row.get("json_type").getClass());
+		assertEquals(String[].class, row.get("array_type").getClass());
 	}
 
 	@Test
