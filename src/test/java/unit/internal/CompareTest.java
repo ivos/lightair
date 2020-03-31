@@ -273,9 +273,14 @@ public class CompareTest implements Keywords {
 						"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 						"bytes", "bytes1".getBytes(),
 						"clob", "clob1",
-						"blob", "blob1".getBytes()
-				)
-		));
+						"blob", "blob1".getBytes(),
+						"array_string", new String[]{"value 1", "value 2", "", " ", null, "value 3"},
+						"array_string_empty", new String[0],
+						"array_integer", new Integer[]{2345, 3456, null, 4567},
+						"array_integer_empty", new Integer[0],
+						"array_long", new Long[]{2345678901L, 2345678902L, null, 2345678903L},
+						"array_long_empty", new Long[0]
+				)));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
 		actualDatasets.put("p1",
@@ -289,9 +294,14 @@ public class CompareTest implements Keywords {
 										"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 										"bytes", "bytes1".getBytes(),
 										"clob", "clob1",
-										"blob", "blob1".getBytes())
-						)
-				));
+										"blob", "blob1".getBytes(),
+										"array_string", new String[]{"value 1", "value 2", "", " ", null, "value 3"},
+										"array_string_empty", new String[0],
+										"array_integer", new Integer[]{2345, 3456, null, 4567},
+										"array_integer_empty", new Integer[0],
+										"array_long", new Long[]{2345678901L, 2345678902L, null, 2345678903L},
+										"array_long_empty", new Long[0]
+								))));
 
 		Map<String, Map<String, Map<String, List<?>>>> result =
 				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
@@ -317,9 +327,14 @@ public class CompareTest implements Keywords {
 						"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
 						"bytes", "bytes1".getBytes(),
 						"clob", "clob1",
-						"blob", "blob1".getBytes()
-				)
-		));
+						"blob", "blob1".getBytes(),
+						"array_string", new String[]{"value 1", "value 2a", "", " ", null, "value 3"},
+						"array_string_length", new String[]{"value 1", "value 2", "value 3"},
+						"array_integer", new Integer[]{2345, 3456, null, 4567},
+						"array_integer_length", new Integer[]{2345, 3456, 4567},
+						"array_long", new Long[]{2345678901L, 2345678902L, null, 2345678903L},
+						"array_long_length", new Long[]{2345678901L, 2345678902L, 2345678903L}
+				)));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
 		actualDatasets.put("p1",
@@ -333,35 +348,55 @@ public class CompareTest implements Keywords {
 										"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.124").getMillis()),
 										"bytes", "bytes2".getBytes(),
 										"clob", "clob2",
-										"blob", "blob2".getBytes())
-						)
-				));
+										"blob", "blob2".getBytes(),
+										"array_string", new String[]{"value 1", "value 2b", "", " ", null, "value 3"},
+										"array_string_length", new String[]{"value 1", "value 2"},
+										"array_integer", new Integer[]{2345, 3459, null, 4567},
+										"array_integer_length", new Integer[]{2345, 3457},
+										"array_long", new Long[]{2345678901L, 2345678909L, null, 2345678903L},
+										"array_long_length", new Long[]{2345678901L, 2345678902L}
+								))));
 
 		Map<String, Map<String, Map<String, List<?>>>> result =
 				Compare.compare(createProfileProperties(0), expectedDatasets, actualDatasets);
 
-		String expected = "{p1={t1={MISSING=[],\n" +
-				" DIFFERENT=[{EXPECTED={booltrue=true, boolfalse=false, byte=123, short=12345, integer=1234567890, long=12345678901, float=123.45, double=123.4567, bigdecimal=123456.789, date=2015-12-31, time=12:34:56, timestamp=2015-12-31 12:34:56.123, bytes=BYTEARRAY, clob=clob1, blob=BYTEARRAY},\n" +
-				" DIFFERENCES=[{COLUMN=booltrue, EXPECTED=true, ACTUAL=false},\n" +
-				" {COLUMN=boolfalse, EXPECTED=false, ACTUAL=true},\n" +
-				" {COLUMN=byte, EXPECTED=123, ACTUAL=124},\n" +
-				" {COLUMN=short, EXPECTED=12345, ACTUAL=12346},\n" +
-				" {COLUMN=integer, EXPECTED=1234567890, ACTUAL=1234567891},\n" +
-				" {COLUMN=long, EXPECTED=12345678901, ACTUAL=12345678902},\n" +
-				" {COLUMN=float, EXPECTED=123.45, ACTUAL=123.46},\n" +
-				" {COLUMN=double, EXPECTED=123.4567, ACTUAL=123.4568},\n" +
-				" {COLUMN=bigdecimal, EXPECTED=123456.789, ACTUAL=123456.781},\n" +
-				" {COLUMN=date, EXPECTED=2015-12-31, ACTUAL=2015-12-30},\n" +
-				" {COLUMN=time, EXPECTED=12:34:56, ACTUAL=12:34:57},\n" +
-				" {COLUMN=timestamp, EXPECTED=2015-12-31 12:34:56.123, ACTUAL=2015-12-31 12:34:56.124},\n" +
-				" {COLUMN=bytes, EXPECTED=BYTEARRAY, ACTUAL=BYTEARRAY},\n" +
-				" {COLUMN=clob, EXPECTED=clob1, ACTUAL=clob2},\n" +
-				" {COLUMN=blob, EXPECTED=BYTEARRAY, ACTUAL=BYTEARRAY}]}],\n" +
-				" UNEXPECTED=[]}}}";
+		String expected = "{p1={t1={MISSING=[],\n"
+				+ " DIFFERENT=[{EXPECTED={booltrue=true, boolfalse=false,"
+				+ " byte=123, short=12345, integer=1234567890, long=12345678901,"
+				+ " float=123.45, double=123.4567, bigdecimal=123456.789,"
+				+ " date=2015-12-31, time=12:34:56, timestamp=2015-12-31 12:34:56.123,"
+				+ " bytes=BYTEARRAY, clob=clob1, blob=BYTEARRAY,"
+				+ " array_string=[Ljava.lang.String;REPLACED, array_string_length=[Ljava.lang.String;REPLACED,"
+				+ " array_integer=[Ljava.lang.Integer;REPLACED, array_integer_length=[Ljava.lang.Integer;REPLACED,"
+				+ " array_long=[Ljava.lang.Long;REPLACED, array_long_length=[Ljava.lang.Long;REPLACED},\n"
+				+ " DIFFERENCES=[{COLUMN=booltrue, EXPECTED=true, ACTUAL=false},\n"
+				+ " {COLUMN=boolfalse, EXPECTED=false, ACTUAL=true},\n"
+				+ " {COLUMN=byte, EXPECTED=123, ACTUAL=124},\n"
+				+ " {COLUMN=short, EXPECTED=12345, ACTUAL=12346},\n"
+				+ " {COLUMN=integer, EXPECTED=1234567890, ACTUAL=1234567891},\n"
+				+ " {COLUMN=long, EXPECTED=12345678901, ACTUAL=12345678902},\n"
+				+ " {COLUMN=float, EXPECTED=123.45, ACTUAL=123.46},\n"
+				+ " {COLUMN=double, EXPECTED=123.4567, ACTUAL=123.4568},\n"
+				+ " {COLUMN=bigdecimal, EXPECTED=123456.789, ACTUAL=123456.781},\n"
+				+ " {COLUMN=date, EXPECTED=2015-12-31, ACTUAL=2015-12-30},\n"
+				+ " {COLUMN=time, EXPECTED=12:34:56, ACTUAL=12:34:57},\n"
+				+ " {COLUMN=timestamp, EXPECTED=2015-12-31 12:34:56.123, ACTUAL=2015-12-31 12:34:56.124},\n"
+				+ " {COLUMN=bytes, EXPECTED=BYTEARRAY, ACTUAL=BYTEARRAY},\n"
+				+ " {COLUMN=clob, EXPECTED=clob1, ACTUAL=clob2},\n"
+				+ " {COLUMN=blob, EXPECTED=BYTEARRAY, ACTUAL=BYTEARRAY},\n"
+				+ " {COLUMN=array_string, EXPECTED=[Ljava.lang.String;REPLACED, ACTUAL=[Ljava.lang.String;REPLACED},\n"
+				+ " {COLUMN=array_string_length, EXPECTED=[Ljava.lang.String;REPLACED, ACTUAL=[Ljava.lang.String;REPLACED},\n"
+				+ " {COLUMN=array_integer, EXPECTED=[Ljava.lang.Integer;REPLACED, ACTUAL=[Ljava.lang.Integer;REPLACED},\n"
+				+ " {COLUMN=array_integer_length, EXPECTED=[Ljava.lang.Integer;REPLACED, ACTUAL=[Ljava.lang.Integer;REPLACED},\n"
+				+ " {COLUMN=array_long, EXPECTED=[Ljava.lang.Long;REPLACED, ACTUAL=[Ljava.lang.Long;REPLACED},\n"
+				+ " {COLUMN=array_long_length, EXPECTED=[Ljava.lang.Long;REPLACED, ACTUAL=[Ljava.lang.Long;REPLACED}"
+				+ "]}],\n"
+				+ " UNEXPECTED=[]}}}";
 		assertEquals(expected, result.toString()
 				.replace("}, ", "},\n ")
 				.replace("], ", "],\n ")
 				.replaceAll("\\[B@[^,}]+", "BYTEARRAY")
+				.replaceAll("@[0-9a-fA-F]+", "REPLACED")
 		);
 	}
 

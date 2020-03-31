@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -139,7 +140,10 @@ public class ConvertTest implements Keywords {
 				"blob_type", BLOB, Types.BLOB,
 				"uuid_type", UUID, Types.OTHER,
 				"json_type", JSON, Types.OTHER,
-				"jsonb_type", JSONB, Types.OTHER
+				"jsonb_type", JSONB, Types.OTHER,
+				"array_varchar_type", ARRAY_STRING, Types.ARRAY,
+				"array_integer_type", ARRAY_INTEGER, Types.ARRAY,
+				"array_long_type", ARRAY_LONG, Types.ARRAY
 		));
 		structures.put(DEFAULT_PROFILE, profileStructure);
 
@@ -178,7 +182,10 @@ public class ConvertTest implements Keywords {
 						"blob_type", "YmxvYiB2YWx1ZQ==",
 						"uuid_type", "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
 						"json_type", "{\"key1\":\"value1\"}",
-						"jsonb_type", "{\"key2\":\"value2\"}"
+						"jsonb_type", "{\"key2\":\"value2\"}",
+						"array_varchar_type", "value 1,value 2,, ,@null,value 3",
+						"array_integer_type", "2345,3456,@null,4567",
+						"array_long_type", "3456789012,3456789013,@null,3456789014"
 				)
 		));
 
@@ -217,10 +224,15 @@ public class ConvertTest implements Keywords {
 				" blob_type=REPLACED,\n" +
 				" uuid_type=a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11,\n" +
 				" json_type={\"key1\":\"value1\"},\n" +
-				" jsonb_type={\"key2\":\"value2\"}}}]}";
+				" jsonb_type={\"key2\":\"value2\"},\n" +
+				" array_varchar_type=[Ljava.lang.String;REPLACED,\n" +
+				" array_integer_type=[Ljava.lang.Integer;REPLACED,\n" +
+				" array_long_type=[Ljava.lang.Long;REPLACED" +
+				"}}]}";
 		assertEquals(expected, result.toString()
 				.replace(", ", ",\n ")
-				.replaceAll("\\[B@[^,}]+", "REPLACED"));
+				.replaceAll("\\[B@[^,}]+", "REPLACED")
+				.replaceAll("@[0-9a-fA-F]+", "REPLACED"));
 
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
@@ -246,9 +258,52 @@ public class ConvertTest implements Keywords {
 		assertEquals(String.class, dataTypes.get("uuid_type").getClass());
 		assertEquals(String.class, dataTypes.get("json_type").getClass());
 		assertEquals(String.class, dataTypes.get("jsonb_type").getClass());
+		assertEquals(String[].class, dataTypes.get("array_varchar_type").getClass());
+		assertEquals(Integer[].class, dataTypes.get("array_integer_type").getClass());
+		assertEquals(Long[].class, dataTypes.get("array_long_type").getClass());
 
 		assertEquals("bytes value", new String((byte[]) dataTypes.get("bytes_type"), StandardCharsets.UTF_8));
 		assertEquals("blob value", new String((byte[]) dataTypes.get("blob_type"), StandardCharsets.UTF_8));
+		assertArrayEquals("array_varchar_type value", new String[]{"value 1", "value 2", "", " ", null, "value 3"},
+				(String[]) dataTypes.get("array_varchar_type"));
+		assertArrayEquals("array_integer_type value", new Integer[]{2345, 3456, null, 4567},
+				(Integer[]) dataTypes.get("array_integer_type"));
+		assertArrayEquals("array_long_type value", new Long[]{3456789012L, 3456789013L, null, 3456789014L},
+				(Long[]) dataTypes.get("array_long_type"));
+	}
+
+
+	@Test
+	public void emptyArrays() throws IOException {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
+		profileStructure.put("data_types", InsertTest.createTableStructure(
+				"array_string_type", ARRAY_STRING, Types.ARRAY,
+				"array_integer_type", ARRAY_INTEGER, Types.ARRAY,
+				"array_long_type", ARRAY_LONG, Types.ARRAY
+		));
+		structures.put(DEFAULT_PROFILE, profileStructure);
+
+		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
+		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+				InsertTest.createRow("data_types",
+						"array_string_type", "",
+						"array_integer_type", "",
+						"array_long_type", ""
+				)
+		));
+
+		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
+
+		assertArrayEquals("array_string_type value", new String[0],
+				(String[]) dataTypes.get("array_string_type"));
+		assertArrayEquals("array_integer_type value", new Integer[0],
+				(Integer[]) dataTypes.get("array_integer_type"));
+		assertArrayEquals("array_long_type value", new Long[0],
+				(Long[]) dataTypes.get("array_long_type"));
 	}
 
 	@Test

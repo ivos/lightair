@@ -13,6 +13,10 @@
 	            uuid_type="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
 	            enum_type="camelValue"
 	            json_type='{"key1":"value1"}' jsonb_type='{"key3":"value3","key1":"value1","key2":"value2"}'
+	            text_array_type="text 1,text 2,, ,@null,text 3"
+	            varchar_array_type="varchar 1,varchar 2,, ,@null,varchar 3"
+	            integer_array_type="2345,3456,@null,4567"
+	            bigint_array_type="2345678901,2345678902,@null,2345678903"
 	/>
 	<!--empty-->
 	<data_types id="1"
@@ -26,6 +30,7 @@
 	            uuid_type="00000000-0000-0000-0000-000000000000"
 	            enum_type="snake_value"
 	            json_type='""' jsonb_type='""'
+	            text_array_type="" varchar_array_type="" integer_array_type="" bigint_array_type=""
 	/>
 	<!--null-->
 	<data_types id="2"
@@ -39,6 +44,7 @@
 	            uuid_type="@null"
 	            enum_type="@null"
 	            json_type="@null" jsonb_type="@null"
+	            text_array_type="@null" varchar_array_type="@null" integer_array_type="@null" bigint_array_type="@null"
 	/>
 	<!--auto-->
 	<data_types id="3"
@@ -52,5 +58,6 @@
 	            uuid_type="@auto"
 	            enum_type="@null"
 	            json_type="@auto" jsonb_type="@auto"
+	            text_array_type="@auto" varchar_array_type="@auto" integer_array_type="@auto" bigint_array_type="@auto"
 	/>
 </dataset>

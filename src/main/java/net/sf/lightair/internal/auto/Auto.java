@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Generate unique pseudo-random values for the <code>@auto</code> token.
@@ -143,8 +146,21 @@ public class Auto implements Keywords {
 			case JSON:
 			case JSONB:
 				return "{\"" + columnName + "\": " + autoNumber + "}";
+			case ARRAY_STRING:
+				return generateArray(index ->
+						formatStringValue(columnName, autoNumber + index, columnLength));
+			case ARRAY_INTEGER:
+				return generateArray(index -> String.valueOf((number % 100_000_000) * 10 + index));
+			case ARRAY_LONG:
+				return generateArray(index -> autoNumber + index);
 		}
 		log.error("Unknown type {} on column {}, returning integer value {}.", dataType, columnName, autoNumber);
 		return autoNumber;
+	}
+
+	private static String generateArray(IntFunction<String> itemConverter) {
+		return IntStream.range(1, 4)
+				.mapToObj(itemConverter)
+				.collect(Collectors.joining(ARRAY_ELEMENT_SEPARATOR));
 	}
 }

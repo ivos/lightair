@@ -160,7 +160,7 @@ public class ExecuteUpdateTest implements Keywords {
 				" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
 				" nchar_type nchar(20), nvarchar_type nvarchar(50), longnvarchar_type longnvarchar(5000)," +
 				" binary_type binary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
-				" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid)");
+				" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, array_type array)");
 
 		List<Map<String, Object>> data;
 		data = h2.db.queryForList("select * from data_types");
@@ -171,8 +171,8 @@ public class ExecuteUpdateTest implements Keywords {
 				"real_type,float_type,double_type,numeric_type,decimal_type," +
 				"date_type,time_type,timestamp_type,char_type,varchar_type,longvarchar_type," +
 				"nchar_type,nvarchar_type,longnvarchar_type,binary_type,varbinary_type,longvarbinary_type," +
-				"clob_type,nclob_type,blob_type,uuid_type)" +
-				" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				"clob_type,nclob_type,blob_type,uuid_type,array_type)" +
+				" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		ExecuteUpdate.run(h2.getConnection(),
 				createStatements(
 						sql,
@@ -203,7 +203,8 @@ public class ExecuteUpdateTest implements Keywords {
 								CLOB, Types.CLOB, "clob1",
 								NCLOB, Types.NCLOB, "nclob1",
 								BLOB, Types.BLOB, "blob1".getBytes(StandardCharsets.UTF_8),
-								UUID, Types.OTHER, "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
+								UUID, Types.OTHER, "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+								ARRAY_STRING, Types.ARRAY, new String[]{"value 1", "value 2", "value 3"}
 						),
 						sql,
 						createParameters(INTEGER, Types.INTEGER, 2,
@@ -233,7 +234,8 @@ public class ExecuteUpdateTest implements Keywords {
 								CLOB, Types.CLOB, null,
 								NCLOB, Types.NCLOB, null,
 								BLOB, Types.BLOB, null,
-								UUID, Types.OTHER, null
+								UUID, Types.OTHER, null,
+								ARRAY_STRING, Types.ARRAY, null
 						)
 				));
 
@@ -247,7 +249,9 @@ public class ExecuteUpdateTest implements Keywords {
 				" NCHAR_TYPE=nchar1, NVARCHAR_TYPE=nvarchar1, LONGNVARCHAR_TYPE=longnvarchar1," +
 				" BINARY_TYPE=REPLACED, VARBINARY_TYPE=REPLACED, LONGVARBINARY_TYPE=REPLACED," +
 				" CLOB_TYPE=clob1, NCLOB_TYPE=nclob1, BLOB_TYPE=REPLACED," +
-				" UUID_TYPE=a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11}," +
+				" UUID_TYPE=a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11," +
+				" ARRAY_TYPE=[Ljava.lang.String;REPLACED" +
+				"}," +
 				" {ID=2, BIT_TYPE=null, BOOLEAN_TYPE=null," +
 				" TINYINT_TYPE=null, SMALLINT_TYPE=null, INTEGER_TYPE=null, BIGINT_TYPE=null," +
 				" REAL_TYPE=null, FLOAT_TYPE=null, DOUBLE_TYPE=null, NUMERIC_TYPE=null, DECIMAL_TYPE=null," +
@@ -255,9 +259,12 @@ public class ExecuteUpdateTest implements Keywords {
 				" CHAR_TYPE=null, VARCHAR_TYPE=null, LONGVARCHAR_TYPE=null," +
 				" NCHAR_TYPE=null, NVARCHAR_TYPE=null, LONGNVARCHAR_TYPE=null," +
 				" BINARY_TYPE=null, VARBINARY_TYPE=null, LONGVARBINARY_TYPE=null," +
-				" CLOB_TYPE=null, NCLOB_TYPE=null, BLOB_TYPE=null, UUID_TYPE=null}]";
+				" CLOB_TYPE=null, NCLOB_TYPE=null, BLOB_TYPE=null, UUID_TYPE=null, ARRAY_TYPE=null}]";
 		assertEquals("After", expected.replace(", ", ",\n "),
-				data.toString().replaceAll("\\[B@[^,}]+", "REPLACED").replace(", ", ",\n "));
+				data.toString()
+						.replaceAll("\\[B@[^,}]+", "REPLACED")
+						.replaceAll("@[0-9a-fA-F]+", "REPLACED")
+						.replace(", ", ",\n "));
 
 		h2.db.execute("drop table data_types");
 	}

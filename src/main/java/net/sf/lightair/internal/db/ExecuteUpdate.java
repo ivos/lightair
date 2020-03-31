@@ -40,7 +40,7 @@ public class ExecuteUpdate implements Keywords {
 				Map<String, Object> parameter = parameters.get(index);
 				String type = (String) parameter.get(DATA_TYPE);
 				int sqlDataType = (int) parameter.get(JDBC_DATA_TYPE);
-				setParameter(statement, index + 1, type, sqlDataType, parameter.get(VALUE));
+				setParameter(connection, statement, index + 1, type, sqlDataType, parameter.get(VALUE));
 			}
 			int updateCount = statement.executeUpdate();
 			log.debug("Updated {} rows executing sql: {}", updateCount, sql);
@@ -50,7 +50,8 @@ public class ExecuteUpdate implements Keywords {
 	}
 
 	private static void setParameter(
-			PreparedStatement statement, int index, String type, int sqlDataType, Object value)
+			Connection connection, PreparedStatement statement,
+			int index, String type, int sqlDataType, Object value)
 			throws SQLException {
 		if (log.isTraceEnabled()) {
 			if (null != value && value instanceof byte[]) {
@@ -124,6 +125,15 @@ public class ExecuteUpdate implements Keywords {
 			case JSON:
 			case JSONB:
 				statement.setObject(index, value, Types.OTHER);
+				return;
+			case ARRAY_STRING:
+				statement.setArray(index, connection.createArrayOf("VARCHAR", (Object[]) value));
+				return;
+			case ARRAY_INTEGER:
+				statement.setArray(index, connection.createArrayOf("INTEGER", (Object[]) value));
+				return;
+			case ARRAY_LONG:
+				statement.setArray(index, connection.createArrayOf("BIGINT", (Object[]) value));
 				return;
 		}
 		log.error("Unknown type {}, trying to set it as STRING. Parameter index {} with value {}.", type, index, value);

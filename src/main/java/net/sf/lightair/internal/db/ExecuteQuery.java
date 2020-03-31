@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
@@ -15,10 +16,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Execute <code>select</code> SQL statements, producing a dataset.
@@ -64,6 +68,7 @@ public class ExecuteQuery implements Keywords {
 			String type = (String) column.get(DATA_TYPE);
 			int sqlDataType = (int) column.get(JDBC_DATA_TYPE);
 			Object value = getValue(rs, columnName, type, sqlDataType);
+//			log.trace("Resolved value as type {}, value: [{}]", value == null ? null : value.getClass(), value);
 			if (rs.wasNull()) {
 				value = null;
 			}
@@ -114,12 +119,20 @@ public class ExecuteQuery implements Keywords {
 				return readClob(columnName, type, rs.getNClob(columnName));
 			case BLOB:
 				return readBlob(columnName, type, rs.getBlob(columnName));
+			case ARRAY_STRING:
+				return readArray(rs, columnName, new String[0], String::valueOf);
+			case ARRAY_INTEGER:
+				return readArray(rs, columnName, new Integer[0],
+						object -> object instanceof Integer ? object : Integer.parseInt(String.valueOf(object)));
+			case ARRAY_LONG:
+				return readArray(rs, columnName, new Long[0],
+						object -> object instanceof Long ? object : Long.parseLong(String.valueOf(object)));
 		}
 		log.error("Unknown type {} on column {}, trying to get it as Object.", type, columnName);
 		return rs.getObject(columnName);
 	}
 
-	public static Object readClob(String columnName, String type, Clob clob) throws SQLException {
+	private static String readClob(String columnName, String type, Clob clob) throws SQLException {
 		if (null == clob) {
 			return null;
 		}
@@ -134,7 +147,7 @@ public class ExecuteQuery implements Keywords {
 		}
 	}
 
-	public static Object readBlob(String columnName, String type, Blob blob) throws SQLException {
+	private static byte[] readBlob(String columnName, String type, Blob blob) throws SQLException {
 		if (null == blob) {
 			return null;
 		}
@@ -147,5 +160,23 @@ public class ExecuteQuery implements Keywords {
 		} catch (IOException e) {
 			throw new RuntimeException("Error reading " + type + " column " + columnName + " from database.", e);
 		}
+	}
+
+	private static Object[] readArray(
+			ResultSet rs, String columnName, Object[] emptyValue, Function<Object, ?> valueConverter)
+			throws SQLException {
+		Array array = rs.getArray(columnName);
+		if (array == null) {
+			return null;
+		}
+		return Arrays.stream((Object[]) array.getArray())
+				.map(object -> {
+					if (object == null) {
+						return null;
+					}
+					return valueConverter.apply(object);
+				})
+				.collect(Collectors.toList())
+				.toArray(emptyValue);
 	}
 }
