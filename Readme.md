@@ -24,4 +24,6 @@ not only simplifies the tests, but as a result:
     * it is extremely easy to verify more database columns, so more data gets actually verified,
     * it is easy to write a new test, so more tests get written.
 
-Go to [Light Air website](http://lightair.sourceforge.net/).
+### Web site
+
+Go to [Light Air website](http://lightair.sourceforge.net/) for full documentation.

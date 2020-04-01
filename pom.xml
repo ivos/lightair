@@ -63,8 +63,10 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
 		<junit-version>4.11</junit-version>
 		<testng-version>6.8.13</testng-version>
+
 		<h2-version>1.4.200</h2-version>
 		<hsql-version>2.5.0</hsql-version>
 	</properties>
@@ -99,7 +101,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<!-- ! version extracted to ${junit-version} for project-setup.apt.vm -->
-			<version>4.11</version>
+			<version>${junit-version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>junit</groupId>
@@ -117,6 +119,15 @@
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>6.8.13</version>
+			<optional>true</optional>
+		</dependency>
+
+		<!--Spring test runner-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>3.2.3.RELEASE</version>
+			<!--<scope>compile</scope> -->
 			<optional>true</optional>
 		</dependency>
 
@@ -183,6 +194,7 @@
 			<version>1.1</version>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- test (runtime): -->
 		<dependency>
 			<groupId>org.jmock</groupId>
@@ -212,6 +224,7 @@
 			<groupId>com.opentable.components</groupId>
 			<artifactId>otj-pg-embedded</artifactId>
 			<version>0.13.3</version>
+			<scope>test</scope>
 		</dependency>
 		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the JDK. -->
 		<dependency>
@@ -225,14 +238,6 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.0.13</version>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>3.2.3.RELEASE</version>
-			<!--<scope>compile</scope> -->
-			<optional>true</optional>
 		</dependency>
 
 	</dependencies>
