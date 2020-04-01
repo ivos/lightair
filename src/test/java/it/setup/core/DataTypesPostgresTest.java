@@ -53,7 +53,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				+ " real_type real, double_type double precision,"
 				+ " date_type date, time_type time, timestamp_type timestamp,"
 				+ " boolean_type boolean,"
-				+ " blob_type bytea,"
+				+ " bytea_type bytea,"
 				+ " uuid_type uuid,"
 				+ " enum_type enum_t,"
 				+ " json_type json, jsonb_type jsonb,"
@@ -128,7 +128,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 				LocalDate.parse("1976-12-12"), LocalTime.parse("08:26:44"),
 				LocalDateTime.parse("1900-01-05T04:53:24.004"),
 				false,
-				"YmxvYl90eXBlIDEzODQ2NzU0MDQ=",
+				"Ynl0ZWFfdHlwZSAxMzg0NjYwMzA0",
 				"988543c3-b42c-3ce1-8da5-9bad5175fd20",
 				null,
 				"{\"json_type\": 1384687704}", "{\"jsonb_type\": 1384669404}",
@@ -147,7 +147,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			Float real_type, Double double_type,
 			LocalDate date_type, LocalTime time_type, LocalDateTime timestamp_type,
 			Boolean boolean_type,
-			String blob_type,
+			String bytea_type,
 			String uuid_type,
 			String enum_type,
 			String json_type, String jsonb_type,
@@ -175,7 +175,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		// boolean
 		assertEquals("boolean_type type " + id, boolean_type, values.get(id).get("boolean_type"));
 		// binary
-		assertEquals("blob_type type " + id, blob_type, convertBytesToString(values.get(id).get("blob_type")));
+		assertEquals("bytea_type type " + id, bytea_type, convertBytesToString(values.get(id).get("bytea_type")));
 		// uuid
 		verifyField(id, "uuid_type", uuid_type, Function.identity(), Object::toString);
 		// enum

@@ -40,7 +40,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " real_type real, double_type double precision,"
 				+ " date_type date, time_type time, timestamp_type timestamp,"
 				+ " boolean_type boolean,"
-				+ " blob_type bytea,"
+				+ " bytea_type bytea,"
 				+ " uuid_type uuid,"
 				+ " enum_type enum_t,"
 				+ " json_type json, jsonb_type jsonb,"
@@ -103,7 +103,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " 13846530, 13846684.04,"
 				+ " '1976-12-12', '08:26:44', '1900-01-05T04:53:24.004',"
 				+ " false,"
-				+ " '\\x626c6f625f747970652031333834363735343034'," // = hexa(blob_type 1384675404)
+				+ " '\\x62797465615f747970652031333834363630333034'," // = hexa(bytea_type 1384660304)
 				+ " '988543c3-b42c-3ce1-8da5-9bad5175fd20',"
 				+ " null,"
 				+ " '{\"json_type\": 1384687704}', '{\"jsonb_type\":1384669404}',"

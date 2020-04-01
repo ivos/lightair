@@ -65,6 +65,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<junit-version>4.11</junit-version>
 		<testng-version>6.8.13</testng-version>
+		<h2-version>1.4.200</h2-version>
+		<hsql-version>2.5.0</hsql-version>
 	</properties>
 	<scm>
 		<connection>scm:git:git@github.com:ivos/lightair.git</connection>
@@ -191,13 +193,13 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.4.200</version>
+			<version>${h2-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
-			<version>2.5.0</version>
+			<version>${hsql-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

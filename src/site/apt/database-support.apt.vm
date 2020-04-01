@@ -8,15 +8,15 @@
 
 Database support
 
- The following databases are generally tested for, with specifics noted below:
+ The following databases were tested for, with specifics noted below:
 
- * Postgres
+ * <<Postgres>> v. 10
 
- * H2
+ * <<H2>> v. ${h2-version}
 
- * HSQL
+ * <<HSQL>> v. ${hsql-version}
 
- * Oracle
+ * <<Oracle>> v. 18.4.0.0.0 (18c)
 
  []
 
@@ -32,6 +32,8 @@ Database support
 *-----------+----------+---------+
 | DECIMAL, NUMERIC |          | Fully supported. |
 *-----------+----------+---------+
+| NUMBER, FLOAT | Oracle   | Fully supported. |
+*-----------+----------+---------+
 | REAL, DOUBLE PRECISION |          | Fully supported. |
 *-----------+----------+---------+
 | BINARY_FLOAT, BINARY_DOUBLE | Oracle   | Fully supported. |
@@ -40,30 +42,36 @@ Database support
 *-----------+----------+---------+
 | TEXT | Postgres    | Fully supported. |
 *-----------+----------+---------+
+| VARCHAR2, NVARCHAR2 | Oracle    | Fully supported. |
+*-----------+----------+---------+
 | CHAR      | H2        | <<<@auto>>> in Verify is not supported. |
 |           |           | H2 does not support proper CHAR data type.\
-|           |           | See {{https://groups.google.com/forum/#!topic/h2-database/oB3Wrv0obEQ}} |
+|           |           | See {{{https://groups.google.com/forum/#!topic/h2-database/oB3Wrv0obEQ}this topic}}. |
 *-----------+----------+---------+
 |           | Other    | Fully supported. |
 *-----------+----------+---------+
-| DATE, TIMESTAMP |          | Fully supported. |
+| NCHAR | Oracle    | Fully supported. |
 *-----------+----------+---------+
-| TIME | Oracle | Not supported. Use <<<timestamp>>> instead. |
+| DATE, TIMESTAMP |          | Fully supported. Use ISO format <<<2020-12-31>>> and <<<2021-11-30T22:57:56.789>>>. |
 *-----------+----------+---------+
-|      | Other  | Fully supported. |
+| TIME | Oracle | Does not exist. Use <<<TIMESTAMP>>> instead. |
 *-----------+----------+---------+
-| BOOLEAN | Oracle | In Verify use <<<0>>> and <<<1>>> instead of <<<false>>> and <<<true>>>.\
+|      | Other  | Fully supported. Use ISO format <<<23:59:58>>>. |
+*-----------+----------+---------+
+| BOOLEAN | Oracle | Does not exist. Use <<<NUMBER(1)>>> and <<<0>>> and <<<1>>> instead of <<<false>>> and <<<true>>>.\
 |         |        | <<<@auto>>> is not supported. |
 *-----------+----------+---------+
-|         | Other | Fully supported. |
+|         | Other | Fully supported. Use <<<true>>> and <<<false>>>. |
 *-----------+----------+---------+
-|  CLOB, BLOB, BINARY | H2, HSQL | Fully supported. |
+|  CLOB, BLOB, BINARY | H2, HSQL | Fully supported. Use Base64 encoding. |
 *-----------+----------+---------+
-|  CLOB, BLOB, RAW | Oracle | Fully supported. |
+|  CLOB, NCLOB | Oracle | Fully supported. Use plain text. |
 *-----------+----------+---------+
-|  BYTEA | Postgres | Fully supported. |
+|  BLOB, RAW | Oracle | Fully supported. Use Base64 encoding. |
 *-----------+----------+---------+
-|  UUID | H2, HSQL, Postgres | Fully supported. |
+|  BYTEA | Postgres | Fully supported. Use Base64 encoding. |
+*-----------+----------+---------+
+|  UUID | H2, HSQL, Postgres | Fully supported. Use standard textual representation <<<a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11>>>. |
 *-----------+----------+---------+
 |  ENUM | Postgres | Create cast as follows:\
 |       |          | <<<create cast (varchar as my_enum_type) with inout as implicit;>>>\
@@ -73,7 +81,9 @@ Database support
 *-----------+----------+---------+
 |  JSON, JSONB | Postgres | Fully supported. |
 *-----------+----------+---------+
-|  ARRAY | Postgres | 1-dimensional arrays of <<<VARCHAR>>>, <<<TEXT>>>, <<<INTEGER>>> and <<<BIGINT>>> are fully supported. |
+|  ARRAY | Postgres | 1-dimensional arrays of <<<VARCHAR>>>, <<<TEXT>>>, <<<INTEGER>>> and <<<BIGINT>>> are fully supported.\
+|        |          | Use comma <<<,>>> to separate array elements. Use <<<@null>>> token to indicate <<<NULL>>> array element.\
+|        |          | Empty string value represents empty array. |
 *-----------+----------+---------+
 |        | H2       | 1-dimensional arrays are treated as if the base type was unlimited <<<VARCHAR>>> (Java String in fact), |
 |        |          | but otherwise are fully supported. |

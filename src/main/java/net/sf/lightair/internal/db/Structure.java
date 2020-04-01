@@ -80,19 +80,25 @@ public class Structure implements Keywords {
 	private static Map<String, Object> createColumn(ResultSet rs) throws SQLException {
 		Map<String, Object> column = new LinkedHashMap<>();
 
-//		log.trace("Resolving, DATA_TYPE: {}, TYPE_NAME: [{}], COLUMN_DEF: [{}], SQL_DATA_TYPE: [{}], SOURCE_DATA_TYPE: [{}]",
-//				rs.getInt(5), // DATA_TYPE
-//				rs.getString(6), // TYPE_NAME
+		int sqlDataType = rs.getInt(5);
+		int size = rs.getInt(7);
+		String sqlTypeName = StringUtils.upperCase(rs.getString(6));
+
+//		log.trace("Resolving, DATA_TYPE: {}, TYPE_NAME: [{}], SIZE: [{}], COLUMN_DEF: [{}],"
+//						+ " SQL_DATA_TYPE: [{}], SOURCE_DATA_TYPE: [{}]",
+//				sqlDataType, // DATA_TYPE
+//				sqlTypeName, // TYPE_NAME
+//				size, // SIZE
 //				rs.getString(13), // COLUMN_DEF
 //				rs.getString(14), // SQL_DATA_TYPE
 //				rs.getString(22) // SOURCE_DATA_TYPE
 //		);
 
-		String dataType = resolveDataType(rs.getInt(5), StringUtils.upperCase(rs.getString(6)));
+		String dataType = resolveDataType(sqlDataType, sqlTypeName);
 		column.put(DATA_TYPE, dataType);
-		column.put(JDBC_DATA_TYPE, rs.getInt(5));
+		column.put(JDBC_DATA_TYPE, sqlDataType);
 		column.put(NOT_NULL, 0 == rs.getInt(11));
-		column.put(SIZE, rs.getInt(7));
+		column.put(SIZE, size);
 		column.put(DECIMAL_DIGITS, rs.getInt(9));
 		return Collections.unmodifiableMap(column);
 	}
@@ -106,6 +112,10 @@ public class Structure implements Keywords {
 		}
 		if ("JSONB".equals(sqlTypeName)) {
 			return JSONB; // Postgres
+		}
+
+		if (Types.TIMESTAMP == sqlDataType && "DATE".equals(sqlTypeName)) {
+			return DATE; // Oracle
 		}
 
 		// generic:
