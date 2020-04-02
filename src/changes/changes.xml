@@ -5,7 +5,7 @@
 		<title>Changes</title>
 	</properties>
 	<body>
-		<release date="??" version="3.1.0" description="Await. Extended data types">
+		<release date="2020-04-02" version="3.1.0" description="Await. Extended data types">
 			<action type="add">Support ARRAY data types.</action>
 			<action type="add">Support Postgres JSON and JSONB data types.</action>
 			<action type="add">Support Postgres ENUM data type.</action>
