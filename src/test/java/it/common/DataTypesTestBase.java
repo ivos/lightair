@@ -7,9 +7,9 @@ import org.junit.BeforeClass;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import test.support.ConfigSupport;
+import test.support.PostgresUtils;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class DataTypesTestBase {
 	public static void afterClass() {
 		dropTable();
 		ConfigSupport.restoreConfig();
-		closePostgresIfOpen();
+		PostgresUtils.closePostgresIfOpen(postgres);
 	}
 
 	public static void connect(String url, String username, String password) {
@@ -40,29 +40,5 @@ public class DataTypesTestBase {
 		db.execute("drop table data_types");
 	}
 
-	private static EmbeddedPostgres postgres;
-
-	protected static void initPostgres() {
-		try {
-			postgres = EmbeddedPostgres.builder()
-					.setPort(5432)
-					.setCleanDataDirectory(false)
-					.setDataDirectory("./target/embeddedpostgres")
-					.setServerConfig("max_connections", "10")
-					.setServerConfig("max_wal_senders", "0")
-					.start();
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot start embedded Postgres.", e);
-		}
-	}
-
-	private static void closePostgresIfOpen() {
-		if (postgres != null) {
-			try {
-				postgres.close();
-			} catch (IOException e) {
-				throw new RuntimeException("Cannot stop embedded Postgres.", e);
-			}
-		}
-	}
+	protected static EmbeddedPostgres postgres;
 }

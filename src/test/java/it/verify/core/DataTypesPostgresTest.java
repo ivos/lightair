@@ -8,13 +8,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
+import test.support.PostgresUtils;
 
 @RunWith(LightAir.class)
 @Verify
 public class DataTypesPostgresTest extends DataTypesTestBase {
 
 	static {
-		initPostgres();
+		postgres = PostgresUtils.initPostgres();
 		connect("jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres");
 		ConfigSupport.replaceConfig("postgres");
 	}

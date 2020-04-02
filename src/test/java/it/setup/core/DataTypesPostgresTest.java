@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
+import test.support.PostgresUtils;
 
 import java.math.BigDecimal;
 import java.sql.Array;
@@ -27,7 +28,7 @@ import static org.junit.Assert.assertNull;
 public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 
 	static {
-		initPostgres();
+		postgres = PostgresUtils.initPostgres();
 		connect("jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres");
 		ConfigSupport.replaceConfig("postgres");
 	}

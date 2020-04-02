@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:la="http://lightair.sourceforge.net/">
+	<xsd:import namespace="http://lightair.sourceforge.net/" schemaLocation="light-air-types.xsd"/>
+
+	<xsd:element name="dataset">
+		<xsd:complexType>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="a1" type="a1__Type"/>
+				<xsd:element name="a2" type="a2__Type"/>
+				<xsd:element name="a3" type="a3__Type"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="a1__Type">
+		<xsd:attribute name="id" use="optional" type="la:IntegerType"/>
+		<xsd:attribute name="a1a" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="a1b" use="optional" type="la:StringType"/>
+		<xsd:attribute name="a1c" use="optional" type="la:IntegerNullableType"/>
+	</xsd:complexType>
+	<xsd:complexType name="a2__Type">
+		<xsd:attribute name="id" use="optional" type="la:IntegerType"/>
+		<xsd:attribute name="a2a" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="a2b" use="optional" type="la:StringType"/>
+		<xsd:attribute name="a2c" use="optional" type="la:IntegerNullableType"/>
+	</xsd:complexType>
+	<xsd:complexType name="a3__Type">
+		<xsd:attribute name="id" use="optional" type="la:IntegerType"/>
+		<xsd:attribute name="a3a" use="optional" type="la:StringNullableType"/>
+		<xsd:attribute name="a3b" use="optional" type="la:StringType"/>
+		<xsd:attribute name="a3c" use="optional" type="la:IntegerNullableType"/>
+	</xsd:complexType>
+</xsd:schema>
