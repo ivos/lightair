@@ -44,7 +44,7 @@ public class Connections implements Keywords {
 		Objects.requireNonNull(userName, "Database user name is required.");
 		Objects.requireNonNull(password, "Database password is required.");
 
-		log.debug("Opening new connection for profile [{}] at [{}].", profile, url);
+		log.debug("Opening new connection for profile [{}] at [{}] as [{}/{}].", profile, url, userName, password);
 		try {
 			Class.forName(driverClassName);
 			Connection connection = DriverManager.getConnection(url, userName, password);
