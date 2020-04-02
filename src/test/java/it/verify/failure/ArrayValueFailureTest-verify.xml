@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<a id="0" a1="varchar 11,varchar 12,varchar 13"/>
+	<a id="1" a1="varchar 21,varchar 22b,, ,@null,varchar 23"/>
+	<a id="2" a1="varchar 31,varchar 32,, ,@null,varchar 33"/>
+</dataset>
