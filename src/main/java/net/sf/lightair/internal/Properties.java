@@ -20,6 +20,15 @@ public class Properties implements Keywords {
 
 	public static final String PROFILE_PREFIX = "profile.";
 
+	public static final Map<String, String> envOverrides = new LinkedHashMap<String, String>() {{
+		put(ENV_DATABASE_DRIVER_CLASS_NAME, DATABASE_DRIVER_CLASS_NAME);
+		put(ENV_DATABASE_CONNECTION_URL, DATABASE_CONNECTION_URL);
+		put(ENV_DATABASE_USER_NAME, DATABASE_USER_NAME);
+		put(ENV_DATABASE_PASSWORD, DATABASE_PASSWORD);
+		put(ENV_DATABASE_SCHEMA, DATABASE_SCHEMA);
+		put(ENV_TIME_DIFFERENCE_LIMIT_MILLIS, TIME_DIFFERENCE_LIMIT_MILLIS);
+	}};
+
 	public static Map<String, Map<String, String>> load(String fileName) {
 		log.debug("Loading properties.");
 		Map<String, Map<String, String>> properties = new LinkedHashMap<>();
@@ -51,19 +60,35 @@ public class Properties implements Keywords {
 				throw new RuntimeException("Properties file not found: " + fileName +
 						"\nShould be relative to: " + new File("").getAbsolutePath());
 			}
-			InputStream is = new FileInputStream(file);
-			try {
+			try (InputStream is = new FileInputStream(file)) {
 				java.util.Properties properties = new java.util.Properties();
 				properties.load(is);
-				@SuppressWarnings({"unchecked", "rawtypes"})
-				Map<String, String> map = (Map) properties;
 				log.debug("For profile [{}] loaded properties file {}.", profile, fileName);
+				@SuppressWarnings({"unchecked", "rawtypes"})
+				Map<String, String> map = overrideProfileProperties(profile, (Map) properties);
 				return Collections.unmodifiableMap(map);
-			} finally {
-				is.close();
 			}
 		} catch (IOException e) {
 			throw new RuntimeException("Properties file unreadable: " + fileName);
+		}
+	}
+
+	private static Map<String, String> overrideProfileProperties(String profile, Map<String, String> profileProperties) {
+		Map<String, String> result = new LinkedHashMap<>(profileProperties);
+		envOverrides.keySet().forEach(envName -> {
+			overrideProperty(profile, result, envName, envOverrides.get(envName));
+		});
+		return Collections.unmodifiableMap(result);
+	}
+
+	private static void overrideProperty(
+			String profile, Map<String, String> profileProperties, String envName, String propertyName) {
+		String value = System.getenv(envName);
+		if (value != null) {
+			log.debug("For profile [{}] overriding property \"{}\" using environment variable {}" +
+							" from value [{}] to value [{}].",
+					profile, propertyName, envName, profileProperties.get(propertyName), value);
+			profileProperties.put(propertyName, value);
 		}
 	}
 
@@ -72,6 +97,6 @@ public class Properties implements Keywords {
 		if (null == limit) {
 			return 0;
 		}
-		return Long.valueOf(limit);
+		return Long.parseLong(limit);
 	}
 }

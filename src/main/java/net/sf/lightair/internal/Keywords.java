@@ -5,18 +5,28 @@ package net.sf.lightair.internal;
  */
 public interface Keywords {
 
+	// Properties
+	//   DB
 	String DATABASE_DRIVER_CLASS_NAME = "database.driverClassName";
 	String DATABASE_CONNECTION_URL = "database.connectionUrl";
 	String DATABASE_USER_NAME = "database.userName";
 	String DATABASE_PASSWORD = "database.password";
-
 	String DATABASE_SCHEMA = "database.schema";
-
+	//   Functional
 	String TIME_DIFFERENCE_LIMIT_MILLIS = "time.difference.limit.millis";
-
+	//   Directories
 	String XSD_DIRECTORY = "xsd.directory";
 	String AUTO_INDEX_DIRECTORY = "auto.index.directory";
 
+	// Environment variable names
+	String ENV_DATABASE_DRIVER_CLASS_NAME = "LIGHT_AIR_DATABASE_DRIVER_CLASS_NAME";
+	String ENV_DATABASE_CONNECTION_URL = "LIGHT_AIR_DATABASE_CONNECTION_URL";
+	String ENV_DATABASE_USER_NAME = "LIGHT_AIR_DATABASE_USER_NAME";
+	String ENV_DATABASE_PASSWORD = "LIGHT_AIR_DATABASE_PASSWORD";
+	String ENV_DATABASE_SCHEMA = "LIGHT_AIR_DATABASE_SCHEMA";
+	String ENV_TIME_DIFFERENCE_LIMIT_MILLIS = "LIGHT_AIR_TIME_DIFFERENCE_LIMIT_MILLIS";
+
+	// Default values
 	String DEFAULT_PROPERTIES_FILE_NAME = "target/test-classes/light-air.properties";
 	String DEFAULT_XSD_DIRECTORY = "src/test/java";
 	String DEFAULT_AUTO_INDEX_DIRECTORY = "src/test/resources";

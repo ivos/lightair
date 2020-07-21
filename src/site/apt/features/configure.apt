@@ -74,6 +74,27 @@ xsd.directory=my/xsd/directory
 auto.index.directory=my/auto/index/directory
 +---+
 
+* Override properties using environment variables
+
+ You can override the following Light Air properties using environment variables:
+
+*-----------+----------+
+| Light\ Air\ property | Environment\ variable |
+*-----------+----------+
+| database.driverClassName | LIGHT_AIR_DATABASE_DRIVER_CLASS_NAME |
+*-----------+----------+
+| database.connectionUrl | LIGHT_AIR_DATABASE_CONNECTION_URL |
+*-----------+----------+
+| database.userName | LIGHT_AIR_DATABASE_USER_NAME |
+*-----------+----------+
+| database.password | LIGHT_AIR_DATABASE_PASSWORD |
+*-----------+----------+
+| database.schema | LIGHT_AIR_DATABASE_SCHEMA |
+*-----------+----------+
+| time.difference.limit.millis | LIGHT_AIR_TIME_DIFFERENCE_LIMIT_MILLIS |
+*-----------+----------+
+
+
 *--:
  {{{./generate-xsd.html}Next: Generate XSD >>}}
 *--:

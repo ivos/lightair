@@ -5,6 +5,9 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="2020-07-21" version="3.2.0" description="Override properties from env.vars">
+			<action type="add">Support overriding properties by env.vars</action>
+		</release>
 		<release date="2020-04-02" version="3.1.0" description="Await. Extended data types">
 			<action type="add">Support ARRAY data types.</action>
 			<action type="add">Support Postgres JSON and JSONB data types.</action>
