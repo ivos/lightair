@@ -3,7 +3,7 @@
 
 	<groupId>net.sf.lightair</groupId>
 	<artifactId>light-air</artifactId>
-	<version>3.1.1-SNAPSHOT</version>
+	<version>3.2.0</version>
 	<packaging>jar</packaging>
 
 	<name>Light Air</name>
@@ -73,7 +73,7 @@
 		<connection>scm:git:git@github.com:ivos/lightair.git</connection>
 		<developerConnection>scm:git:git@github.com:ivos/lightair.git</developerConnection>
 		<url>https://github.com/ivos/lightair</url>
-		<tag>HEAD</tag>
+		<tag>light-air-3.2.0</tag>
 	</scm>
 	<distributionManagement>
 		<snapshotRepository>
