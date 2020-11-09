@@ -26,6 +26,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 	}
 
 	public static void createTable() {
+		db.execute("create extension if not exists \"citext\";");
 		db.execute("drop table if exists data_types;");
 		// enum
 		db.execute("drop cast if exists (varchar as enum_t);");
@@ -35,7 +36,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 
 		db.execute("create table data_types ("
 				+ " id int primary key,"
-				+ " char_type char(25), varchar_type varchar(50), text_type text,"
+				+ " char_type char(25), varchar_type varchar(50), text_type text, citext_type citext,"
 				+ " smallint_type smallint, integer_type integer, bigint_type bigint,"
 				+ " decimal_type decimal(20, 2), numeric_type numeric(16, 8),"
 				+ " real_type real, double_type double precision,"
@@ -55,7 +56,8 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 		db.execute("delete from data_types");
 		// full
 		db.update("insert into data_types values (0,"
-				+ " 'efghijklmnopqrs', 'abcdefghijklmnopqrstuvxyz', 'abcdefghijklmnopqrstuvxyz1234567890',"
+				+ " 'efghijklmnopqrs', 'abcdefghijklmnopqrstuvxyz',"
+				+ " 'abcdefghijklmnopqrstuvxyz1234567890', 'CIabcdefghijklmnopqrstuvxyz1234567890',"
 				+ " 5678, 12345678, 9223372036854770000,"
 				+ " 123456789012345678.91, 12345678.90123456,"
 				+ " 876.543, 8765.4321,"
@@ -72,7 +74,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ ")");
 		// empty
 		db.update("insert into data_types values (1,"
-				+ " '', '', '',"
+				+ " '', '', '', '',"
 				+ " 0, 0, 0,"
 				+ " 0, 0,"
 				+ " 0, 0,"
@@ -85,7 +87,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " '{}', '{}', '{}', '{}')");
 		// null
 		db.update("insert into data_types values (2,"
-				+ " null, null, null,"
+				+ " null, null, null, null,"
 				+ " null, null, null,"
 				+ " null, null,"
 				+ " null, null,"
@@ -98,7 +100,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 				+ " null, null, null, null)");
 		// auto
 		db.update("insert into data_types values (3,"
-				+ " 'char_type 1384656904', 'varchar_type 1384684104', 'text_type 1384616204',"
+				+ " 'char_type 1384656904', 'varchar_type 1384684104', 'text_type 1384616204', 'citext_type 1384682704',"
 				+ " 7904, 1384653604, 1384644904,"
 				+ " 13846469.04, 13.84612704,"
 				+ " 13846530, 13846684.04,"

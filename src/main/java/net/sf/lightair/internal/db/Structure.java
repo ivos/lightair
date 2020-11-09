@@ -190,6 +190,8 @@ public class Structure implements Keywords {
 				case "NCHAR": // Oracle
 				case "NVARCHAR2": // Oracle
 					return NSTRING;
+				case "CITEXT": // Postgres
+					return STRING;
 			}
 		}
 		if (101 == sqlDataType && "BINARY_DOUBLE".equals(sqlTypeName)) { // Oracle

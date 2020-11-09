@@ -5,6 +5,7 @@ import net.sf.lightair.annotation.Setup;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.postgresql.util.PGobject;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 import test.support.PostgresUtils;
@@ -39,6 +40,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 	}
 
 	public static void createTable() {
+		db.execute("create extension if not exists \"citext\";");
 		db.execute("drop table if exists data_types;");
 		// enum
 		db.execute("drop cast if exists (varchar as enum_t);");
@@ -48,7 +50,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 
 		db.execute("create table data_types ("
 				+ " id int primary key,"
-				+ " char_type char(25), varchar_type varchar(50), text_type text,"
+				+ " char_type char(25), varchar_type varchar(50), text_type text, citext_type citext,"
 				+ " smallint_type smallint, integer_type integer, bigint_type bigint,"
 				+ " decimal_type decimal(20, 2), numeric_type numeric(16, 8),"
 				+ " real_type real, double_type double precision,"
@@ -73,7 +75,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		// full
 		verifyRow(0,
 				"efghijklmnopqrs          ", "abcdefghijklmnopqrstuvxyz",
-				"abcdefghijklmnopqrstuvxyz1234567890",
+				"abcdefghijklmnopqrstuvxyz1234567890", "CIabcdefghijklmnopqrstuvxyz1234567890",
 				5678, 12345678, 9223372036854770000L,
 				new BigDecimal("123456789012345678.91"), new BigDecimal("12345678.90123456"),
 				876.543f, 8765.4321,
@@ -92,7 +94,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		);
 		// empty
 		verifyRow(1,
-				"                         ", "", "",
+				"                         ", "", "", "",
 				0, 0, 0L,
 				new BigDecimal("0.00"), new BigDecimal("0E-8"),
 				0f, 0.,
@@ -108,7 +110,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		);
 		// null
 		verifyRow(2,
-				null, null, null,
+				null, null, null, null,
 				null, null, null,
 				null, null,
 				null, null,
@@ -122,7 +124,8 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		);
 		// auto
 		verifyRow(3,
-				"char_type 1384656904     ", "varchar_type 1384684104", "text_type 1384616204",
+				"char_type 1384656904     ", "varchar_type 1384684104",
+				"text_type 1384616204", "citext_type 1384682704",
 				7904, 1384653604, 1384644904L,
 				new BigDecimal("13846469.04"), new BigDecimal("13.84612704"),
 				13846530f, 13846684.04,
@@ -142,7 +145,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 
 	private void verifyRow(
 			int id,
-			String char_type, String varchar_type, String text_type,
+			String char_type, String varchar_type, String text_type, String citext_type,
 			Integer smallint_type, Integer integer_type, Long bigint_type,
 			BigDecimal decimal_type, BigDecimal numeric_type,
 			Float real_type, Double double_type,
@@ -160,6 +163,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		assertEquals("char_type " + id, char_type, values.get(id).get("char_type"));
 		assertEquals("varchar_type " + id, varchar_type, values.get(id).get("varchar_type"));
 		assertEquals("text_type " + id, text_type, values.get(id).get("text_type"));
+		verifyField(id, "citext_type", citext_type, Function.identity(), t -> ((PGobject) t).getValue());
 		// integer
 		assertEquals("smallint_type " + id, smallint_type, values.get(id).get("smallint_type"));
 		assertEquals("integer_type " + id, integer_type, values.get(id).get("integer_type"));

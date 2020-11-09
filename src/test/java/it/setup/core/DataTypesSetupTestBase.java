@@ -3,11 +3,8 @@ package it.setup.core;
 import it.common.DataTypesTestBase;
 import org.apache.commons.codec.binary.Base64;
 
-import java.sql.Array;
-import java.sql.SQLException;
 import java.util.function.Function;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -32,11 +29,12 @@ public abstract class DataTypesSetupTestBase extends DataTypesTestBase {
 	protected <EV> void verifyField(
 			int id, String name, EV expectedValue,
 			Function<EV, ?> expectedConverter, Function<Object, ?> actualConverter) {
+		Object rawActualValue = values.get(id).get(name);
 		if (null == expectedValue) {
-			assertNull(name + " " + id, values.get(id).get(name));
+			assertNull(name + " " + id, rawActualValue);
 		} else {
 			assertEquals(name + " " + id, expectedConverter.apply(expectedValue),
-					actualConverter.apply(values.get(id).get(name)));
+					actualConverter.apply(rawActualValue));
 		}
 	}
 }

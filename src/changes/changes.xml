@@ -5,6 +5,9 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="2020-11-09" version="3.3.0" description="Postgres CITEXT support">
+			<action type="add">Support Postgres CITEXT explicitly.</action>
+		</release>
 		<release date="2020-07-21" version="3.2.0" description="Override properties from env.vars">
 			<action type="add">Support overriding properties by env.vars</action>
 		</release>

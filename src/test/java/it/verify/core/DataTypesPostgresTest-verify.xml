@@ -4,6 +4,7 @@
 	<data_types id="0"
 	            char_type="efghijklmnopqrs          " varchar_type="abcdefghijklmnopqrstuvxyz"
 	            text_type="abcdefghijklmnopqrstuvxyz1234567890"
+	            citext_type="CIabcdefghijklmnopqrstuvxyz1234567890"
 	            smallint_type="5678" integer_type="12345678" bigint_type="9223372036854770000"
 	            decimal_type="123456789012345678.91" numeric_type="12345678.90123456"
 	            real_type="876.543" double_type="8765.4321"
@@ -20,7 +21,7 @@
 	/>
 	<!--empty-->
 	<data_types id="1"
-	            char_type="                         " varchar_type="" text_type=""
+	            char_type="                         " varchar_type="" text_type="" citext_type=""
 	            smallint_type="0" integer_type="0" bigint_type="0"
 	            decimal_type="0" numeric_type="0"
 	            real_type="0" double_type="0"
@@ -34,7 +35,7 @@
 	/>
 	<!--null-->
 	<data_types id="2"
-	            char_type="@null" varchar_type="@null" text_type="@null"
+	            char_type="@null" varchar_type="@null" text_type="@null" citext_type="@null"
 	            smallint_type="@null" integer_type="@null" bigint_type="@null"
 	            decimal_type="@null" numeric_type="@null"
 	            real_type="@null" double_type="@null"
@@ -48,7 +49,7 @@
 	/>
 	<!--auto-->
 	<data_types id="3"
-	            char_type="@auto" varchar_type="@auto" text_type="@auto"
+	            char_type="@auto" varchar_type="@auto" text_type="@auto" citext_type="@auto"
 	            smallint_type="@auto" integer_type="@auto" bigint_type="@auto"
 	            decimal_type="@auto" numeric_type="@auto"
 	            real_type="@auto" double_type="@auto"

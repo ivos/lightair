@@ -40,7 +40,7 @@ Database support
 *-----------+----------+---------+
 | VARCHAR |          | Fully supported. |
 *-----------+----------+---------+
-| TEXT | Postgres    | Fully supported. |
+| TEXT, CITEXT | Postgres    | Fully supported. |
 *-----------+----------+---------+
 | VARCHAR2, NVARCHAR2 | Oracle    | Fully supported. |
 *-----------+----------+---------+
