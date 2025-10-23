@@ -6,7 +6,9 @@
  2011-09-26
  ---
 
-Test database applications declaratively
+Light Air
+
+* Test database applications declaratively
 
  Light Air is a tool that supports <<black-box system (integration) tests of database applications
  for developers in a declarative style>>.
@@ -34,8 +36,6 @@ Test database applications declaratively
  []
 
  Proceed to {{{./motivation.html}motivation}} to find out more about Light Air.
-
- \ 
 
 ===
 

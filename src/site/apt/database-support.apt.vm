@@ -10,11 +10,11 @@ Database support
 
  The following databases were tested for, with specifics noted below:
 
- * <<Postgres>> v. 10
+ * <<Postgres>> v. 16
 
- * <<H2>> v. ${h2-version}
+ * <<H2>> v. ${h2Version}
 
- * <<HSQL>> v. ${hsql-version}
+ * <<HSQL>> v. ${hsqlVersion}
 
  * <<Oracle>> v. 18.4.0.0.0 (18c)
 
@@ -26,7 +26,7 @@ Database support
 * Data types support
 
 *-----------+----------+---------+
-| Data\ type | Database | Support |
+|| Data\ type || Database || Support ||
 *-----------+----------+---------+
 | SMALLINT, INTEGER, BIGINT |          | Fully supported. |
 *-----------+----------+---------+

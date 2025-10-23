@@ -19,7 +19,7 @@ Project setup
 <dependency>
  <groupId>junit</groupId>
  <artifactId>junit</artifactId>
- <version>${junit-version}</version>
+ <version>${junitVersion}</version>
  <scope>test</scope>
 </dependency>
 +---+
@@ -30,7 +30,7 @@ Project setup
 <dependency>
  <groupId>org.testng</groupId>
  <artifactId>testng</artifactId>
- <version>${testng-version}</version>
+ <version>${testngVersion}</version>
  <scope>test</scope>
 </dependency>
 +---+
@@ -61,11 +61,11 @@ Project setup
 ** Test resources
 
  The XML dataset files are expected to be next to the test class, in the same package.
- This way you are not required to chase them all over the project 
+ This way you are not required to chase them all over the project
  or switch regularly between the test class directory and test resources directory.
- 
+
  To support this properly in Maven, use the following:
- 
+
 +---+
 <build>
  <testResources>
@@ -88,12 +88,12 @@ Project setup
 ** Integration tests profile
 
  As Light Air tests require the application to be deployed and running
- on an application server, 
- it is typically not desirable that they be run as unit tests in 
+ on an application server,
+ it is typically not desirable that they be run as unit tests in
  the Maven <<<test>>> lifecycle phase.
- 
+
  A way to approach this issue is to name the tests with "*IT.java" suffix
- (as opposed to "*Test.java"). 
+ (as opposed to "*Test.java").
  This excludes them from the Maven <<<test>>> lifecycle phase
  and makes sure such tests are picked up by the Maven Failsafe plugin
  which is designed to run this type of tests.
@@ -150,15 +150,15 @@ mvn clean install -Pit
 +---+
 
  where <<<-Pit>>> activates the "integration tests" profile.
- 
- After that, you can open any test in your IDE and run it as an ordinary unit test 
+
+ After that, you can open any test in your IDE and run it as an ordinary unit test
  to take advantage of IDE support.
 
 * Properties file
 
  Create <<<light-air.properties>>> file in <<<src/test/resources>>>
  with the following content (example for H2 database):
- 
+
 +---+
 # Database connection
 database.driverClassName=org.h2.Driver
@@ -176,10 +176,10 @@ time.difference.limit.millis=5000
 
  Be aware, that Light Air tests must connect to <<the same database instance>>
  as the application running within the application server.\
- Therefore you are looking to access the database in a "server mode", 
+ Therefore you are looking to access the database in a "server mode",
  or via "TCP connection", as opposed to "in-memory mode" or "embedded mode".
- 
- The same connection URL must be configured for the data source of the application 
+
+ The same connection URL must be configured for the data source of the application
  in the application server.
 
 * Generate XSD files
@@ -190,12 +190,12 @@ time.difference.limit.millis=5000
 
 * Logback test configuration file
 
- If you use Logback as the slf4j runtime, 
+ If you use Logback as the slf4j runtime,
  create a file named <<<logback-test.xml>>> in <<<src/test/resources>>>
  with content recommended on the Logback site.
- 
+
  This file lets you manage logging in tests, including log output from Light Air.
- 
+
  (Note: When another dependency overrides slf4j API with a conflicting incompatible version
  you may have to override it explicitly in POM.)
 

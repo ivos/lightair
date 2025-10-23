@@ -1,6 +1,6 @@
 package it.common;
 
-import com.opentable.db.postgres.embedded.EmbeddedPostgres;
+import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import net.sf.lightair.internal.junit.util.Factory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

@@ -1,6 +1,6 @@
 package test.support;
 
-import com.opentable.db.postgres.embedded.EmbeddedPostgres;
+import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 
 import java.io.IOException;
 

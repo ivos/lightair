@@ -1,6 +1,6 @@
 package it.xsd;
 
-import com.opentable.db.postgres.embedded.EmbeddedPostgres;
+import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
