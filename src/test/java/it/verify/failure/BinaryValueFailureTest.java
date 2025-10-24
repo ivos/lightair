@@ -17,7 +17,7 @@ public class BinaryValueFailureTest extends CommonTestBase {
 
 	@BeforeClass
 	public static void beforeClass() {
-		db.execute("create table a(id int primary key, a1 binary)");
+		db.execute("create table a(id int primary key, a1 binary(16))");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -37,10 +37,9 @@ public class BinaryValueFailureTest extends CommonTestBase {
 	public void testVerifyException(Throwable error) {
 		String msg = "Differences found between the expected data set and actual database content.\n" +
 				"Found differences for table a:\n" +
-				"  Different row: {id=1, a1=/ty6CYdlQyI=}\n" +
+				"  Different row: {id=1, a1=ZmVkY2JhMDk4NzY1NDMyAQ==}\n" +
 				"   Best matching differences: \n" +
-				"    a1: expected [/ty6CYdlQyI=], but was [/ty6CYdlQy8=]\n";
+				"    a1: expected [ZmVkY2JhMDk4NzY1NDMyAQ==], but was [ZmVkY2JhMDk4NzY1NDMyZg==]\n";
 		assertEquals(msg, error.getMessage());
 	}
-
 }

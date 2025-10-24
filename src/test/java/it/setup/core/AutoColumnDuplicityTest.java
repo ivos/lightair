@@ -4,6 +4,7 @@ import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.internal.auto.Hash;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -73,7 +74,7 @@ public class AutoColumnDuplicityTest extends CommonTestBase {
 
 	private void verifyValue(String test, String column, String columnHash, int row) {
 		assertEquals(test + " " + row,
-				column + " 10421" + columnHash + "0" + row,
+				StringUtils.rightPad(column + " 10421" + columnHash + "0" + row, 20, ' '),
 				values.get(row - 1).get(column));
 	}
 }

@@ -2,6 +2,7 @@ package it.setup.core;
 
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
+import org.h2.jdbc.JdbcArray;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -13,6 +14,7 @@ import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -40,7 +42,7 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 				+ "date_type date, time_type time, timestamp_type timestamp, "
 				+ "double_type double, boolean_type boolean, bigint_type bigint, "
 				+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(8), "
-				+ "uuid_type uuid, varchar_array_type array)");
+				+ "uuid_type uuid, varchar_array_type varchar(100) array)");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -52,7 +54,7 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 	@Override
 	protected void verify() {
 		// full
-		verifyRow(0, "efghijklmnopqrs", "abcdefghijklmnopqrstuvxyz",
+		verifyRow(0, "efghijklmnopqrs          ", "abcdefghijklmnopqrstuvxyz",
 				12345678, new DateMidnight(2999, 12, 31),
 				new LocalTime(23, 59, 58),
 				new DateTime(2998, 11, 30, 22, 57, 56, 789),
@@ -116,7 +118,11 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 		if (null == expectedValue) {
 			assertNull(name + " " + id, values.get(id).get(name));
 		} else {
-			assertArrayEquals(name + " " + id, expectedValue, (String[]) values.get(id).get(name));
+			try {
+				assertArrayEquals(name + " " + id, expectedValue, ((Object[]) ((JdbcArray) values.get(id).get(name)).getArray()));
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 }
