@@ -30,8 +30,8 @@ import org.junit.runners.model.Statement;
 public class LightAir extends BlockJUnit4ClassRunner implements Keywords {
 
 	static {
-		Api.initialize(Api.getPropertiesFileName());
-		Runtime.getRuntime().addShutdownHook(new Thread(Api::shutdown));
+		LightAirApi.initialize(LightAirApi.getPropertiesFileName());
+		Runtime.getRuntime().addShutdownHook(new Thread(LightAirApi::shutdown));
 	}
 
 	public LightAir(Class<?> clazz) throws InitializationError {
@@ -46,5 +46,8 @@ public class LightAir extends BlockJUnit4ClassRunner implements Keywords {
 	protected Statement methodInvoker(FrameworkMethod method, Object test) {
 		Statement statement = super.methodInvoker(method, test);
 		return new RunRules(statement, Factory.getInstance().getAllTestRules(method), describeChild(method));
+	}
+
+	public static class Api extends LightAirApi {
 	}
 }

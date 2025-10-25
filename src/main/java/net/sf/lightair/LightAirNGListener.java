@@ -22,15 +22,15 @@ import java.lang.reflect.Method;
  * public class MyTest {
  * }
  * </pre>
- *
+ * <p>
  * Then use annotations @{@link Setup}, @{@link Verify} to define actions Light
  * air should take on the test.
  */
 public class LightAirNGListener implements IInvokedMethodListener, ITestListener {
 
 	static {
-		Api.initialize(Api.getPropertiesFileName());
-		Runtime.getRuntime().addShutdownHook(new Thread(Api::shutdown));
+		LightAirApi.initialize(LightAirApi.getPropertiesFileName());
+		Runtime.getRuntime().addShutdownHook(new Thread(LightAirApi::shutdown));
 	}
 
 	/**

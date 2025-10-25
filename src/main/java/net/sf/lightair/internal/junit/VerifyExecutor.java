@@ -1,6 +1,6 @@
 package net.sf.lightair.internal.junit;
 
-import net.sf.lightair.Api;
+import net.sf.lightair.LightAirApi;
 import net.sf.lightair.annotation.Verify;
 import net.sf.lightair.internal.junit.util.DataSetResolver;
 import org.apache.commons.lang3.time.StopWatch;
@@ -24,7 +24,7 @@ public class VerifyExecutor {
 
 		Map<String, List<String>> apiFileNames = ExecutorUtils.getApiFileNames(
 				dataSetResolver, profile, testMethod, fileNames, "-verify");
-		Api.verify(apiFileNames);
+		LightAirApi.verify(apiFileNames);
 
 		if (null != stopWatch) {
 			stopWatch.stop();

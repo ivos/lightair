@@ -7,10 +7,10 @@
  ---
 
 Generate XSD
- 
+
  <<Generate XSD from database to enable writing dataset files>>\
- Use the {{{http://lightairmp.sourceforge.net/} LightAir Maven plugin}} 
- (or call {{{../apidocs/net/sf/lightair/Api.html#generateXsd--}Api.generateXsd}})
+ Use the {{{http://lightairmp.sourceforge.net/} LightAir Maven plugin}}
+ (or call {{{../apidocs/net/sf/lightair/LightAirApi.html#generateXsd--}LightAirApi.generateXsd}})
  to generate XSD files from the database
  that will help you write the XML dataset files.
 

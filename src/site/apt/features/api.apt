@@ -8,21 +8,22 @@
 
 Programmatic API
 
- Light Air provides programmatic API with the {{{../apidocs/net/sf/lightair/Api.html}net.sf.lightair.Api class}}.
+ Light Air provides programmatic API with
+ the {{{../apidocs/net/sf/lightair/LightAirApi.html}net.sf.lightair.LightAirApi class}}.
 
- The general contract is to {{{../apidocs/net/sf/lightair/Api.html#initialize-java.lang.String-}initialize}}
- and {{{../apidocs/net/sf/lightair/Api.html#shutdown--}shutdown}}
- and in between perform either {{{../apidocs/net/sf/lightair/Api.html#generateXsd--}generateXsd}} call
- or (a series of) {{{../apidocs/net/sf/lightair/Api.html#setup-java.util.Map-}setup}}
- and {{{../apidocs/net/sf/lightair/Api.html#verify-java.util.Map-}verify}}
- or {{{../apidocs/net/sf/lightair/Api.html#await-java.util.Map-}await}} calls.
+ The general contract is to {{{../apidocs/net/sf/lightair/LightAirApi.html#initialize-java.lang.String-}initialize}}
+ and {{{../apidocs/net/sf/lightair/LightAirApi.html#shutdown--}shutdown}}
+ and in between perform either {{{../apidocs/net/sf/lightair/LightAirApi.html#generateXsd--}generateXsd}} call
+ or (a series of) {{{../apidocs/net/sf/lightair/LightAirApi.html#setup-java.util.Map-}setup}}
+ and {{{../apidocs/net/sf/lightair/LightAirApi.html#verify-java.util.Map-}verify}}
+ or {{{../apidocs/net/sf/lightair/LightAirApi.html#await-java.util.Map-}await}} calls.
 
  To generate XSD files:
 
 +---+
-Api.initialize(Api.getPropertiesFileName());
-Api.generateXsd();
-Api.shutdown();
+LightAirApi.initialize(LightAirApi.getPropertiesFileName());
+LightAirApi.generateXsd();
+LightAirApi.shutdown();
 +---+
 
  To setup and verify database:
@@ -31,14 +32,14 @@ Api.shutdown();
 Map<String, List<String>> fileNames = new HashMap<>();
 fileNames.put(Keywords.DEFAULT_PROFILE, Arrays.asList("my-dataset-1.xml", "my-dataset-2.xml"));
 
-Api.initialize(Api.getPropertiesFileName());
-Api.setup(fileNames);
+LightAirApi.initialize(LightAirApi.getPropertiesFileName());
+LightAirApi.setup(fileNames);
 // ...execute function under test...
-Api.verify(fileNames);
+LightAirApi.verify(fileNames);
 // ...or for asynchronous functionality:
-Api.await(fileNames);
+LightAirApi.await(fileNames);
 // ...possibly repeat setup and verify / await for other tests...
-Api.shutdown();
+LightAirApi.shutdown();
 +---+
 
 *--:

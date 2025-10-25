@@ -185,7 +185,7 @@ time.difference.limit.millis=5000
 * Generate XSD files
 
  Use the {{{http://lightairmp.sourceforge.net/} LightAir Maven plugin}}
- (or call {{{./apidocs/net/sf/lightair/Api.html#generateXsd--}Api.generateXsd}})
+ (or call {{{./apidocs/net/sf/lightair/LightAirApi.html#generateXsd--}LightAirApi.generateXsd}})
  to generate XSD files from the database.
 
 * Logback test configuration file
