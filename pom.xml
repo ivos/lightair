@@ -184,6 +184,13 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!--CLI-->
+		<dependency>
+			<groupId>info.picocli</groupId>
+			<artifactId>picocli</artifactId>
+			<version>4.7.7</version>
+		</dependency>
+
 		<!-- test (compile): -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -291,6 +298,29 @@
 					<configuration>
 						<source>${maven.compiler.source}</source>
 						<target>${maven.compiler.target}</target>
+						<!--Picocli setup-->
+						<annotationProcessorPaths>
+							<path>
+								<groupId>info.picocli</groupId>
+								<artifactId>picocli-codegen</artifactId>
+								<version>4.7.7</version>
+							</path>
+						</annotationProcessorPaths>
+						<compilerArgs>
+							<arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
+						</compilerArgs>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.4.1</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+						</archive>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -337,8 +367,38 @@
 						</properties>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>3.6.1</version>
+					<configuration>
+						<transformers>
+							<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								<mainClass>net.sf.lightair.internal.cli.LightAirCliCommand</mainClass>
+							</transformer>
+						</transformers>
+						<shadedArtifactAttached>true</shadedArtifactAttached>
+						<shadedClassifierName>uber</shadedClassifierName>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 
 	<reporting>
