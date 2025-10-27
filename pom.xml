@@ -199,6 +199,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>5.3.39</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>net.sf.seaf</groupId>
 			<artifactId>seaf-test-commons</artifactId>
 			<version>1.6</version>
@@ -224,25 +230,43 @@
 			<version>2.5.1</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!--Log provider-->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.5.20</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!--JDBC drivers-->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2Version}</version>
-			<scope>test</scope>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>${hsqlVersion}</version>
 			<classifier>jdk8</classifier>
-			<scope>test</scope>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>42.7.7</version>
-			<scope>test</scope>
+			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>23.9.0.25.07</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!--Database engines-->
 		<dependency>
 			<groupId>io.zonky.test</groupId>
 			<artifactId>embedded-postgres</artifactId>
@@ -259,20 +283,6 @@
 			<artifactId>embedded-postgres-binaries-darwin-arm64v8</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the JDK. -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>5.3.39</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.5.13</version>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -377,10 +387,42 @@
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 								<mainClass>net.sf.lightair.internal.cli.LightAirCliCommand</mainClass>
 							</transformer>
+							<transformer
+									implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+								<resource>logback.xml</resource>
+								<file>src/test/resources/logback-test.xml</file>
+							</transformer>
 						</transformers>
 						<shadedArtifactAttached>true</shadedArtifactAttached>
-						<shadedClassifierName>uber</shadedClassifierName>
+						<shadedClassifierName>fat</shadedClassifierName>
+						<artifactSet>
+							<includes>
+								<include>*:*</include>
+								<include>org.postgresql:postgresql:jar</include>
+								<include>com.h2database:h2:jar</include>
+								<include>org.hsqldb:hsqldb:jar:jdk8</include>
+								<include>com.oracle.database.jdbc:ojdbc8:jar</include>
+								<include>ch.qos.logback:logback-classic:jar</include>
+							</includes>
+						</artifactSet>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>3.1.0</version>
+					<configuration>
+						<target>
+							<copy tofile="${basedir}/target/light-air-fat.jar">
+								<fileset dir="${basedir}/target" includes="light-air-*-fat.jar"/>
+							</copy>
+						</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>3.5.4</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -394,6 +436,30 @@
 						<phase>package</phase>
 						<goals>
 							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
 						</goals>
 					</execution>
 				</executions>

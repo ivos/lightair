@@ -9,26 +9,38 @@ public class LightAirCli {
 
 	public static void generateXsd(String propertiesFileName) {
 		LightAirApi.initialize(propertiesFileName);
-		LightAirApi.generateXsd();
-		LightAirApi.shutdown();
+		try {
+			LightAirApi.generateXsd();
+		} finally {
+			LightAirApi.shutdown();
+		}
 	}
 
 	public static void setup(String propertiesFileName, Map<String, List<String>> fileNames) {
 		LightAirApi.initialize(propertiesFileName);
-		LightAirApi.setup(fileNames);
-		LightAirApi.shutdown();
+		try {
+			LightAirApi.setup(fileNames);
+		} finally {
+			LightAirApi.shutdown();
+		}
 	}
 
 	public static void verify(String propertiesFileName, Map<String, List<String>> fileNames) {
 		LightAirApi.initialize(propertiesFileName);
-		LightAirApi.verify(fileNames);
-		LightAirApi.shutdown();
+		try {
+			LightAirApi.verify(fileNames);
+		} finally {
+			LightAirApi.shutdown();
+		}
 	}
 
 	public static void await(String propertiesFileName, Map<String, List<String>> fileNames) {
 		LightAirApi.initialize(propertiesFileName);
-		LightAirApi.await(fileNames);
-		LightAirApi.shutdown();
+		try {
+			LightAirApi.await(fileNames);
+		} finally {
+			LightAirApi.shutdown();
+		}
 	}
 
 }

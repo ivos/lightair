@@ -17,7 +17,7 @@ import java.io.IOException;
 @Ignore
 public class GenerateXsdOracleTest extends GenerateXsdTestBase {
 
-	private static boolean replaceTemplates = false;
+	private static final boolean replaceTemplates = false;
 
 	private static final String DB = "oracle";
 	private static final String PROPERTIES_FILE_NAME = "target/test-classes/it/xsd/light-air-" + DB + ".properties";

@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class GenerateXsdTestBase extends TemplatingTestBase {
 
-	private static final String GENERATED_DIR = "target/generated-xsd/light-air-xsd/";
+	public static final String GENERATED_DIR = "target/generated-xsd/light-air-xsd/";
 
 	protected static JdbcTemplate db;
 

@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class GenerateXsdHsqlTest extends GenerateXsdTestBase {
 
-	private static boolean replaceTemplates = false;
+	private static final boolean replaceTemplates = false;
 
 	private static final String DB = "hsql";
 	private static final String PROPERTIES_FILE_NAME = "target/test-classes/it/xsd/light-air-" + DB + ".properties";
