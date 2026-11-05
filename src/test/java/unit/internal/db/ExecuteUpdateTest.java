@@ -2,9 +2,6 @@ package unit.internal.db;
 
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.db.ExecuteUpdate;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.junit.Test;
 import test.support.DbTemplate;
 
@@ -14,6 +11,9 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -136,16 +136,15 @@ public class ExecuteUpdateTest implements Keywords {
 	}
 
 	private Date getDate(String data) {
-		return new Date(LocalDate.parse(data).toDateMidnight().getMillis());
+		return Date.valueOf(LocalDate.parse(data));
 	}
 
 	private Time getTime(String data) {
-		return new Time(LocalTime.parse(data).toDateTimeToday().withDate(1970, 1, 1)
-				.withMillisOfSecond(0).getMillis());
+		return Time.valueOf(LocalTime.parse(data));
 	}
 
 	private Timestamp getTimestamp(String data) {
-		return new Timestamp(DateTime.parse(data).getMillis());
+		return Timestamp.valueOf(LocalDateTime.parse(data));
 	}
 
 	@Test

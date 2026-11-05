@@ -2,13 +2,15 @@ package unit.internal;
 
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.Report;
-import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -176,9 +178,9 @@ public class ReportTest implements Keywords {
 		Map<String, Object> row = createRow("null", null, "boolean", true,
 				"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 				"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
-				"date", new Date(DateTime.parse("2015-12-31").getMillis()),
-				"time", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
-				"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
+				"date", Date.valueOf(LocalDate.parse("2015-12-31")),
+				"time", Time.valueOf(LocalTime.parse("12:34:56")),
+				"timestamp", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:34:56.123")),
 				"string", "value 1", "bytes", "bytes1".getBytes(), "blob", "blob1".getBytes(),
 				"array_string", new String[]{"value 1", "value 2", "", " ", null, "value 3"}
 		);
@@ -201,14 +203,14 @@ public class ReportTest implements Keywords {
 												createRow(COLUMN, "bigdecimal", EXPECTED, new BigDecimal("123456.789"),
 														ACTUAL, new BigDecimal("123456.781")),
 												createRow(COLUMN, "date",
-														EXPECTED, new Date(DateTime.parse("2015-12-31").getMillis()),
-														ACTUAL, new Date(DateTime.parse("2015-12-30").getMillis())),
+														EXPECTED, Date.valueOf(LocalDate.parse("2015-12-31")),
+														ACTUAL, Date.valueOf(LocalDate.parse("2015-12-30"))),
 												createRow(COLUMN, "time",
-														EXPECTED, new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
-														ACTUAL, new Time(DateTime.parse("1970-01-01T12:34:57").getMillis())),
+														EXPECTED, Time.valueOf(LocalTime.parse("12:34:56")),
+														ACTUAL, Time.valueOf(LocalTime.parse("12:34:57"))),
 												createRow(COLUMN, "timestamp",
-														EXPECTED, new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
-														ACTUAL, new Timestamp(DateTime.parse("2015-12-31T12:34:56.124").getMillis())),
+														EXPECTED, Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:34:56.123")),
+														ACTUAL, Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:34:56.124"))),
 												createRow(COLUMN, "string", EXPECTED, "value 1", ACTUAL, "value 2"),
 												createRow(COLUMN, "bytes", EXPECTED, "bytes1".getBytes(),
 														ACTUAL, "bytes2".getBytes()),

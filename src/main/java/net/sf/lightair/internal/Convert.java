@@ -4,17 +4,20 @@ import net.sf.lightair.internal.auto.Auto;
 import net.sf.lightair.internal.auto.Index;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-import org.joda.time.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.threeten.extra.PeriodDuration;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +38,7 @@ public class Convert implements Keywords {
 	private static final Logger log = LoggerFactory.getLogger(Convert.class);
 
 	public static Map<String, List<Map<String, Object>>> convert(
+			Clock clock,
 			Map<String, Map<String, Map<String, Map<String, Object>>>> structures,
 			Map<String, String> index,
 			Map<String, List<Map<String, Object>>> datasets) {
@@ -47,12 +51,13 @@ public class Convert implements Keywords {
 				throw new NullPointerException("Structure for profile [" + profile + "] is missing.");
 			}
 			List<Map<String, Object>> dataset = datasets.get(profile);
-			result.put(profile, convertDataset(index, autoValues, profile, profileStructure, dataset));
+			result.put(profile, convertDataset(clock, index, autoValues, profile, profileStructure, dataset));
 		}
 		return Collections.unmodifiableMap(result);
 	}
 
 	private static List<Map<String, Object>> convertDataset(
+			Clock clock,
 			Map<String, String> index, Set<String> autoValues,
 			String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
 			List<Map<String, Object>> dataset) {
@@ -71,7 +76,8 @@ public class Convert implements Keywords {
 				Integer rowId = rowIds.get(tableName);
 				rowId = (null == rowId) ? 1 : rowId + 1;
 				rowIds.put(tableName, rowId);
-				convertedColumns = convertColumns(index, autoValues, profile, profileStructure, tableName, columns, rowId);
+				convertedColumns = convertColumns(clock, index, autoValues, profile, profileStructure, tableName,
+						columns, rowId);
 			}
 			convertedRow.put(COLUMNS, convertedColumns);
 			convertedDataset.add(Collections.unmodifiableMap(convertedRow));
@@ -80,6 +86,7 @@ public class Convert implements Keywords {
 	}
 
 	private static Map<String, Object> convertColumns(
+			Clock clock,
 			Map<String, String> index, Set<String> autoValues,
 			String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
 			String tableName, Map<String, String> columns, int rowId) {
@@ -95,7 +102,7 @@ public class Convert implements Keywords {
 				continue;
 			}
 			Map<String, Object> column = table.get(columnName);
-			Object convertedValue = convertValue(index, autoValues,
+			Object convertedValue = convertValue(clock, index, autoValues,
 					profile, tableName, columnName, rowId,
 					(String) column.get(DATA_TYPE), (Integer) column.get(JDBC_DATA_TYPE),
 					(Integer) column.get(SIZE), (Integer) column.get(DECIMAL_DIGITS),
@@ -112,6 +119,7 @@ public class Convert implements Keywords {
 	}
 
 	private static Object convertValue(
+			Clock clock,
 			Map<String, String> index, Set<String> autoValues,
 			String profile, String tableName, String columnName, int rowId,
 			String dataType, int jdbcDataType, Integer columnLength, Integer decimalDigits, String value) {
@@ -121,20 +129,20 @@ public class Convert implements Keywords {
 		} else if (ANY_TOKEN.equals(value) || StringUtils.startsWith(value, VARIABLE_PREFIX)) {
 			result = value;
 		} else if (DATE_TOKEN.equals(value)) {
-			result = convertTemporal(getTokenDate(), dataType);
+			result = convertTemporal(getTokenDate(clock), dataType);
 		} else if (TIME_TOKEN.equals(value)) {
-			result = convertTemporal(getTokenTime(), dataType);
+			result = convertTemporal(getTokenTime(clock), dataType);
 		} else if (TIMESTAMP_TOKEN.equals(value)) {
-			result = convertTemporal(getTokenTimestamp(), dataType);
+			result = convertTemporal(getTokenTimestamp(clock), dataType);
 		} else if (isDuration(value, DATE_TOKEN)) {
-			Period period = parsePeriod(value.substring(DATE_TOKEN.length()));
-			result = convertTemporal(getTokenDate().plus(period), dataType);
+			TemporalAmount period = parsePeriod(value, DATE_TOKEN);
+			result = convertTemporal(getTokenDate(clock).plus(period), dataType);
 		} else if (isDuration(value, TIME_TOKEN)) {
-			Period period = parsePeriod(value.substring(TIME_TOKEN.length()));
-			result = convertTemporal(getTokenTime().plus(period), dataType);
+			TemporalAmount period = parsePeriod(value, TIME_TOKEN);
+			result = convertTemporal(getTokenTime(clock).plus(period), dataType);
 		} else if (isDuration(value, TIMESTAMP_TOKEN)) {
-			Period period = parsePeriod(value.substring(TIMESTAMP_TOKEN.length()));
-			result = convertTemporal(getTokenTimestamp().plus(period), dataType);
+			TemporalAmount period = parsePeriod(value, TIMESTAMP_TOKEN);
+			result = convertTemporal(getTokenTimestamp(clock).plus(period), dataType);
 		} else {
 			if (AUTO_TOKEN.equals(value)) {
 				value = Auto.generate(index, profile, tableName, columnName, rowId,
@@ -162,45 +170,47 @@ public class Convert implements Keywords {
 		return result;
 	}
 
-	private static DateTime getTokenDate() {
-		return coerceToDate(DateTime.now());
+	private static LocalDateTime getTokenDate(Clock clock) {
+		return coerceToDate(LocalDateTime.now(clock));
 	}
 
-	private static DateTime getTokenTime() {
-		return coerceToTime(DateTime.now());
+	private static LocalDateTime getTokenTime(Clock clock) {
+		return coerceToTime(LocalDateTime.now(clock));
 	}
 
-	private static DateTime getTokenTimestamp() {
-		return DateTime.now();
+	private static LocalDateTime getTokenTimestamp(Clock clock) {
+		return LocalDateTime.now(clock);
 	}
 
-	private static DateTime coerceToTime(DateTime value) {
-		return value.withDate(1970, 1, 1).withMillisOfSecond(0);
+	private static LocalDateTime coerceToDate(LocalDateTime value) {
+		return value.truncatedTo(ChronoUnit.DAYS);
 	}
 
-	private static DateTime coerceToDate(DateTime value) {
-		return value.withTime(0, 0, 0, 0);
+	private static LocalDateTime coerceToTime(LocalDateTime value) {
+		return value
+				.withYear(1970)
+				.withMonth(1)
+				.withDayOfMonth(1)
+				.truncatedTo(ChronoUnit.SECONDS);
 	}
 
-	private static java.util.Date convertTemporal(DateTime value, String dataType) {
+	private static java.util.Date convertTemporal(LocalDateTime value, String dataType) {
 		if (DATE.equals(dataType)) {
-			return new Date(coerceToDate(value).getMillis());
+			return Date.valueOf(coerceToDate(value).toLocalDate());
 		}
 		if (TIME.equals(dataType)) {
-			return new Time(coerceToTime(value).getMillis());
+			return Time.valueOf(coerceToTime(value).toLocalTime());
 		}
-		return new Timestamp(value.getMillis());
+		return Timestamp.valueOf(value);
 	}
 
 	private static boolean isDuration(String value, String temporalType) {
 		return value.startsWith(temporalType + "+") || value.startsWith(temporalType + "-");
 	}
 
-	private static Period parsePeriod(String value) {
-		if (value.startsWith("-")) {
-			return Period.parse(value.substring(1)).negated();
-		}
-		return Period.parse(value.substring(1));
+	private static PeriodDuration parsePeriod(String value, String token) {
+		String period = value.substring(token.length());
+		return PeriodDuration.parse(period.startsWith("+") ? period.substring(1) : period);
 	}
 
 	private static boolean isTrue(String value) {
@@ -243,12 +253,11 @@ public class Convert implements Keywords {
 			case BIGDECIMAL:
 				return new BigDecimal(value);
 			case DATE:
-				return new Date(LocalDate.parse(value).toDateMidnight().getMillis());
+				return Date.valueOf(LocalDate.parse(value));
 			case TIME:
-				return new Time(LocalTime.parse(value).toDateTimeToday().withDate(1970, 1, 1)
-						.withMillisOfSecond(0).getMillis());
+				return Time.valueOf(LocalTime.parse(value));
 			case TIMESTAMP:
-				return new Timestamp(DateTime.parse(value).getMillis());
+				return Timestamp.valueOf(LocalDateTime.parse(value));
 			case STRING:
 			case FIXED_STRING:
 			case NSTRING:

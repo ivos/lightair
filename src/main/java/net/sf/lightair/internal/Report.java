@@ -2,11 +2,11 @@ package net.sf.lightair.internal;
 
 import net.sf.lightair.internal.auto.Index;
 import org.apache.commons.codec.binary.Base64;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -101,7 +101,7 @@ public class Report implements Keywords {
 
 	private static Object convertValue(Object value) {
 		if (value instanceof Timestamp) {
-			return new DateTime(value).toString("yyyy-MM-dd'T'HH:mm:ss.SSS");
+			return ((Timestamp) value).toLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 		}
 		if (value instanceof byte[]) {
 			return Base64.encodeBase64String((byte[]) value);

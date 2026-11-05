@@ -57,6 +57,7 @@
 	</issueManagement>
 
 	<properties>
+		<java.version>1.8</java.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -163,11 +164,11 @@
 			<version>1.18.0</version>
 		</dependency>
 
-		<!-- Joda time -->
+		<!-- Time -->
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.2</version>
+			<groupId>org.threeten</groupId>
+			<artifactId>threeten-extra</artifactId>
+			<version>1.11.0</version>
 		</dependency>
 
 		<!-- Logging, SLF4J -->
@@ -269,6 +270,7 @@
 	</dependencies>
 
 	<build>
+		<defaultGoal>clean install</defaultGoal>
 		<testResources>
 			<testResource>
 				<directory>src/test/resources</directory>

@@ -2,8 +2,8 @@ package it.verify.core;
 
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
+import net.sf.lightair.LightAirApi;
 import net.sf.lightair.annotation.Verify;
-import org.joda.time.DateTimeUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class ReplaceNewTimestampTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, time1 time, timestamp1 timestamp)");
-		DateTimeUtils.setCurrentMillisSystem();
+		LightAirApi.resetClock();
 		ConfigSupport.replaceConfig("diff1");
 	}
 
@@ -37,8 +37,7 @@ public class ReplaceNewTimestampTest extends CommonTestBase {
 		Thread.sleep(1_000L);
 		db.execute("delete from a");
 		db.update("insert into a (id,time1,timestamp1) values " + "(1,'"
-				+ new Time(new Date().getTime()).toString() + "','"
-				+ new Timestamp(new Date().getTime()).toString() + "')");
+				+ new Time(new Date().getTime()) + "','"
+				+ new Timestamp(new Date().getTime()) + "')");
 	}
-
 }

@@ -3,12 +3,13 @@ package net.sf.lightair.internal.auto;
 import net.sf.lightair.internal.Keywords;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.IntFunction;
@@ -117,19 +118,19 @@ public class Auto implements Keywords {
 			case DATE:
 				// Add number days from local date 1900-01-01, wrapping approximately around 2100.
 				// Date from 1900-01-01 to 2099-11-12
-				return new LocalDate(1900, 1, 1).plusDays(number % 73_000).toString();
+				return LocalDate.of(1900, 1, 1).plusDays(number % 73_000).toString();
 			case TIME:
 				// Add number of seconds to local time 0:00:00.
-				return new LocalTime(0, 0, 0).plusSeconds(number).toString("HH:mm:ss");
+				return LocalTime.of(0, 0, 0).plusSeconds(number).format(DateTimeFormatter.ISO_LOCAL_TIME);
 			case TIMESTAMP:
 				// Add number days from local date 1900-01-01, wrapping approximately around 2100.
 				// Add number of seconds to local time 0:00:00, wrapping at 1 day.
 				// Add number of milliseconds, wrapping at 1 second.
-				return new LocalDateTime(1900, 1, 1, 0, 0, 0)
+				return LocalDateTime.of(1900, 1, 1, 0, 0, 0)
 						.plusDays(number % 73_000)
 						.plusSeconds(number % 86_400)
-						.plusMillis(number % 1_000)
-						.toString("yyyy-MM-dd'T'HH:mm:ss.SSS");
+						.plusNanos((number % 1_000) * 1_000_000)
+						.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 			case STRING:
 			case NSTRING:
 			case CLOB:

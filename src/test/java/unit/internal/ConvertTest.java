@@ -1,12 +1,9 @@
 package unit.internal;
 
+import net.sf.lightair.LightAirApi;
 import net.sf.lightair.internal.Convert;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Index;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +16,11 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,17 +32,27 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static test.support.TimeUtils.toLocalDate;
+import static test.support.TimeUtils.toLocalDateTime;
+import static test.support.TimeUtils.toLocalTime;
 
 public class ConvertTest implements Keywords {
 
+	Clock clock = Clock.fixed(
+			LocalDateTime.parse("2015-12-31T12:34:56.123")
+					.atZone(ZoneId.systemDefault())
+					.toInstant(),
+			ZoneId.systemDefault()
+	);
+
 	@Before
 	public void setUp() {
-		DateTimeUtils.setCurrentMillisFixed(DateTime.parse("2015-12-31T12:34:56.123").getMillis());
+		LightAirApi.setClock(clock);
 	}
 
 	@After
 	public void tearDown() {
-		DateTimeUtils.setCurrentMillisSystem();
+		LightAirApi.resetClock();
 	}
 
 	@Test
@@ -82,7 +94,7 @@ public class ConvertTest implements Keywords {
 				InsertTest.createRow("t21", "t21a", "1232102", "t21b", "v21b02")
 		));
 
-		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(clock, structures, null, datasets);
 
 		String expected = "{profile1=[{TABLE=t11,\n" +
 				" COLUMNS={t11a=1231101,\n" +
@@ -189,7 +201,7 @@ public class ConvertTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(clock, structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={boolean_type=true,\n" +
@@ -293,7 +305,7 @@ public class ConvertTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(clock, structures, null, datasets);
 
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
@@ -324,7 +336,7 @@ public class ConvertTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(clock, structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={integer_type=null,\n" +
@@ -357,7 +369,7 @@ public class ConvertTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(clock, structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={date_type=2015-12-31,\n" +
@@ -372,10 +384,10 @@ public class ConvertTest implements Keywords {
 		assertEquals(Time.class, dataTypes.get("time_type").getClass());
 		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
 		// values
-		assertEquals(LocalDate.parse("2015-12-31").toDateMidnight().toDateTime(), new DateTime(dataTypes.get("date_type")));
-		assertEquals(new LocalTime("00:00:00").toDateTime(DateTime.parse("1970-01-01")),
-				new DateTime(dataTypes.get("time_type")));
-		assertEquals(DateTime.parse("2015-12-31T00:00:00.0"), new DateTime(dataTypes.get("timestamp_type")));
+		assertEquals(LocalDate.parse("2015-12-31"), toLocalDate(dataTypes.get("date_type")));
+		assertEquals(LocalTime.parse("00:00:00"), toLocalTime(dataTypes.get("time_type")));
+		assertEquals(LocalDateTime.parse("2015-12-31T00:00:00.0"),
+				toLocalDateTime(dataTypes.get("timestamp_type")));
 	}
 
 	@Test
@@ -398,7 +410,7 @@ public class ConvertTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(clock, structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={date_type=1970-01-01,\n" +
@@ -413,10 +425,10 @@ public class ConvertTest implements Keywords {
 		assertEquals(Time.class, dataTypes.get("time_type").getClass());
 		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
 		// values
-		assertEquals(LocalDate.parse("1970-01-01").toDateMidnight().toDateTime(), new DateTime(dataTypes.get("date_type")));
-		assertEquals(new LocalTime("12:34:56").toDateTime(DateTime.parse("1970-01-01")),
-				new DateTime(dataTypes.get("time_type")));
-		assertEquals(DateTime.parse("1970-01-01T12:34:56.0"), new DateTime(dataTypes.get("timestamp_type")));
+		assertEquals(LocalDate.parse("1970-01-01"), toLocalDate(dataTypes.get("date_type")));
+		assertEquals(LocalTime.parse("12:34:56"), toLocalTime(dataTypes.get("time_type")));
+		assertEquals(LocalDateTime.parse("1970-01-01T12:34:56.0"),
+				toLocalDateTime(dataTypes.get("timestamp_type")));
 	}
 
 	@Test
@@ -439,7 +451,7 @@ public class ConvertTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(clock, structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={date_type=2015-12-31,\n" +
@@ -454,10 +466,10 @@ public class ConvertTest implements Keywords {
 		assertEquals(Time.class, dataTypes.get("time_type").getClass());
 		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
 		// values
-		assertEquals(LocalDate.parse("2015-12-31").toDateMidnight().toDateTime(), new DateTime(dataTypes.get("date_type")));
-		assertEquals(new LocalTime("12:34:56").toDateTime(DateTime.parse("1970-01-01")),
-				new DateTime(dataTypes.get("time_type")));
-		assertEquals(DateTime.parse("2015-12-31T12:34:56.123"), new DateTime(dataTypes.get("timestamp_type")));
+		assertEquals(LocalDate.parse("2015-12-31"), toLocalDate(dataTypes.get("date_type")));
+		assertEquals(LocalTime.parse("12:34:56"), toLocalTime(dataTypes.get("time_type")));
+		assertEquals(LocalDateTime.parse("2015-12-31T12:34:56.123"),
+				toLocalDateTime(dataTypes.get("timestamp_type")));
 	}
 
 	@Test
@@ -485,7 +497,7 @@ public class ConvertTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(clock, structures, null, datasets);
 
 		// now: 2015-12-31 12:34:56.123
 		String expected = "{=[{TABLE=data_types,\n" +
@@ -567,7 +579,7 @@ public class ConvertTest implements Keywords {
 				InsertTest.createRow("t1", "t1i", "@auto", "t1s", "@auto")
 		));
 
-		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, index, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(clock, structures, index, datasets);
 
 		String expected = "{p1=[\n" +
 				" {TABLE=t1, COLUMNS={t1i=1100110101, t1s=t1s 1100110201}}, \n" +
@@ -621,7 +633,7 @@ public class ConvertTest implements Keywords {
 		));
 
 		try {
-			Convert.convert(structures, index, datasets);
+			Convert.convert(clock, structures, index, datasets);
 			fail("Should throw.");
 		} catch (IllegalStateException e) {
 			assertEquals("Duplicate auto value [1] in [p1]/t1.t1s.", e.getMessage());
@@ -653,7 +665,7 @@ public class ConvertTest implements Keywords {
 		));
 
 		try {
-			Convert.convert(structures, index, datasets);
+			Convert.convert(clock, structures, index, datasets);
 			fail("Should throw.");
 		} catch (IllegalStateException e) {
 			assertEquals("Duplicate auto value [1] in [p1]/t2.t2s.", e.getMessage());
@@ -692,7 +704,7 @@ public class ConvertTest implements Keywords {
 		));
 
 		try {
-			Convert.convert(structures, index, datasets);
+			Convert.convert(clock, structures, index, datasets);
 			fail("Should throw.");
 		} catch (IllegalStateException e) {
 			assertEquals("Duplicate auto value [1] in [p2]/t1.t1s.", e.getMessage());
@@ -721,7 +733,7 @@ public class ConvertTest implements Keywords {
 				)
 		));
 
-		Map<String, List<Map<String, Object>>> result = Convert.convert(structures, null, datasets);
+		Map<String, List<Map<String, Object>>> result = Convert.convert(clock, structures, null, datasets);
 
 		String expected = "{=[{TABLE=data_types,\n" +
 				" COLUMNS={integer_any=@any,\n" +

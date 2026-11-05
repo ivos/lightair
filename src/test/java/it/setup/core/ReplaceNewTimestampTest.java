@@ -2,14 +2,15 @@ package it.setup.core;
 
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
+import net.sf.lightair.LightAirApi;
 import net.sf.lightair.annotation.Setup;
-import org.joda.time.DateTimeUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import test.support.ApiTestSupport;
 
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ReplaceNewTimestampTest extends CommonTestBase {
 		bothValues = new ArrayList<>();
 		db.execute("create table a (id int primary key, timestamp1 timestamp)");
 		ApiTestSupport.reInitialize();
-		DateTimeUtils.setCurrentMillisSystem();
+		LightAirApi.setClock(Clock.systemDefaultZone());
 	}
 
 	@AfterClass

@@ -2,7 +2,6 @@ package unit.internal;
 
 import net.sf.lightair.internal.Compare;
 import net.sf.lightair.internal.Keywords;
-import org.joda.time.DateTime;
 import org.junit.Test;
 import unit.internal.db.InsertTest;
 
@@ -10,6 +9,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -268,9 +270,9 @@ public class CompareTest implements Keywords {
 				InsertTest.createRow("t1", "booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
 						"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 						"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
-						"date", new Date(DateTime.parse("2015-12-31").getMillis()),
-						"time", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
-						"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
+						"date", Date.valueOf(LocalDate.parse("2015-12-31")),
+						"time", Time.valueOf(LocalTime.parse("12:34:56")),
+						"timestamp", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:34:56.123")),
 						"bytes", "bytes1".getBytes(),
 						"clob", "clob1",
 						"blob", "blob1".getBytes(),
@@ -289,9 +291,9 @@ public class CompareTest implements Keywords {
 								createRow("booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
 										"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 										"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.78900"),
-										"date", new Date(DateTime.parse("2015-12-31").getMillis()),
-										"time", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
-										"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
+										"date", Date.valueOf(LocalDate.parse("2015-12-31")),
+										"time", Time.valueOf(LocalTime.parse("12:34:56")),
+										"timestamp", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:34:56.123")),
 										"bytes", "bytes1".getBytes(),
 										"clob", "clob1",
 										"blob", "blob1".getBytes(),
@@ -322,9 +324,9 @@ public class CompareTest implements Keywords {
 				InsertTest.createRow("t1", "booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
 						"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 						"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
-						"date", new Date(DateTime.parse("2015-12-31").getMillis()),
-						"time", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
-						"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
+						"date", Date.valueOf(LocalDate.parse("2015-12-31")),
+						"time", Time.valueOf(LocalTime.parse("12:34:56")),
+						"timestamp", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:34:56.123")),
 						"bytes", "bytes1".getBytes(),
 						"clob", "clob1",
 						"blob", "blob1".getBytes(),
@@ -343,9 +345,9 @@ public class CompareTest implements Keywords {
 								createRow("booltrue", Boolean.FALSE, "boolfalse", Boolean.TRUE,
 										"byte", (byte) 124, "short", (short) 12346, "integer", 1234567891, "long", 12345678902L,
 										"float", (float) 123.46, "double", 123.4568, "bigdecimal", new BigDecimal("123456.781"),
-										"date", new Date(DateTime.parse("2015-12-30").getMillis()),
-										"time", new Time(DateTime.parse("1970-01-01T12:34:57").getMillis()),
-										"timestamp", new Timestamp(DateTime.parse("2015-12-31T12:34:56.124").getMillis()),
+										"date", Date.valueOf(LocalDate.parse("2015-12-30")),
+										"time", Time.valueOf(LocalTime.parse("12:34:57")),
+										"timestamp", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:34:56.124")),
 										"bytes", "bytes2".getBytes(),
 										"clob", "clob2",
 										"blob", "blob2".getBytes(),
@@ -472,10 +474,10 @@ public class CompareTest implements Keywords {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
 		expectedDatasets.put("p1", Arrays.asList(
 				InsertTest.createRow("t1",
-						"time_match", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
-						"timestamp_match", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis()),
-						"time_nonmatch", new Time(DateTime.parse("1970-01-01T12:34:56").getMillis()),
-						"timestamp_nonmatch", new Timestamp(DateTime.parse("2015-12-31T12:34:56.123").getMillis())
+						"time_match", Time.valueOf(LocalTime.parse("12:34:56")),
+						"timestamp_match", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:34:56.123")),
+						"time_nonmatch", Time.valueOf(LocalTime.parse("12:34:56")),
+						"timestamp_nonmatch", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:34:56.123"))
 				)));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
@@ -483,10 +485,10 @@ public class CompareTest implements Keywords {
 				createTables(
 						"t1", Arrays.asList(
 								createRow(
-										"time_match", new Time(DateTime.parse("1970-01-01T12:35:01").getMillis()),
-										"timestamp_match", new Timestamp(DateTime.parse("2015-12-31T12:35:01.123").getMillis()),
-										"time_nonmatch", new Time(DateTime.parse("1970-01-01T12:35:02").getMillis()),
-										"timestamp_nonmatch", new Timestamp(DateTime.parse("2015-12-31T12:35:01.124").getMillis())
+										"time_match", Time.valueOf(LocalTime.parse("12:35:01")),
+										"timestamp_match", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:35:01.123")),
+										"time_nonmatch", Time.valueOf(LocalTime.parse("12:35:02")),
+										"timestamp_nonmatch", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:35:01.124"))
 								))));
 
 		Map<String, Map<String, Map<String, List<?>>>> result =

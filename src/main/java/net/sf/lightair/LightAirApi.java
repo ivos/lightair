@@ -20,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
+import java.time.Clock;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -66,6 +68,7 @@ public class LightAirApi implements Keywords {
 	private static Map<String, Connection> connections;
 	private static Map<String, Map<String, Map<String, Map<String, Object>>>> structures;
 	private static Map<String, String> index;
+	private static Clock clock = Clock.systemDefaultZone();
 
 	/**
 	 * Get the file name of the main properties file.
@@ -167,7 +170,7 @@ public class LightAirApi implements Keywords {
 	public static void setup(Map<String, List<String>> fileNames) {
 		log.info("Performing setup for files {}.", fileNames);
 		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
-		Map<String, List<Map<String, Object>>> datasets = Convert.convert(structures, index, xmlDatasets);
+		Map<String, List<Map<String, Object>>> datasets = Convert.convert(clock, structures, index, xmlDatasets);
 
 		for (String profile : datasets.keySet()) {
 			Map<String, String> profileProperties = properties.get(profile);
@@ -222,7 +225,8 @@ public class LightAirApi implements Keywords {
 
 	private static String generateReport(Map<String, List<String>> fileNames) {
 		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
-		Map<String, List<Map<String, Object>>> expectedDatasets = Convert.convert(structures, index, xmlDatasets);
+		Map<String, List<Map<String, Object>>> expectedDatasets =
+				Convert.convert(clock, structures, index, xmlDatasets);
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
 		for (String profile : expectedDatasets.keySet()) {
@@ -240,5 +244,31 @@ public class LightAirApi implements Keywords {
 		Map<String, Map<String, Map<String, List<?>>>> differences =
 				Compare.compare(defaultProfileProperties, expectedDatasets, actualDatasets);
 		return Report.report(differences);
+	}
+
+	/**
+	 * Set the clock to be used for time-based data types processing.
+	 *
+	 * @param clock Clock instance to be used
+	 */
+	public static void setClock(Clock clock) {
+		LightAirApi.clock = clock;
+	}
+
+	/**
+	 * Set a fixed time to be used for time-based data types processing.
+	 *
+	 * @param fixedTime Time to fix
+	 */
+	public static void setFixedTime(ZonedDateTime fixedTime) {
+		setClock(Clock.fixed(fixedTime.toInstant(), fixedTime.getZone()));
+	}
+
+	/**
+	 * Reset the clock to be used for time-based data types processing
+	 * to system time in the system default time zone.
+	 */
+	public static void resetClock() {
+		setClock(Clock.systemDefaultZone());
 	}
 }
