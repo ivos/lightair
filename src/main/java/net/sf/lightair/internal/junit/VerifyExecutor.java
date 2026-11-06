@@ -19,11 +19,11 @@ public class VerifyExecutor {
 		String[] fileNames = verify.value();
 		String profile = verify.profile();
 		log.info("Verifying database for test method {} and profile {} with configured file names {}.",
-				testMethod, profile, fileNames);
+			testMethod, profile, fileNames);
 		StopWatch stopWatch = ExecutorUtils.startStopWatch(log);
 
 		Map<String, List<String>> apiFileNames = ExecutorUtils.getApiFileNames(
-				dataSetResolver, profile, testMethod, fileNames, "-verify");
+			dataSetResolver, profile, testMethod, fileNames, "-verify");
 		LightAirApi.verify(apiFileNames);
 
 		if (null != stopWatch) {

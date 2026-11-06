@@ -27,10 +27,10 @@ public class SetupTestBase extends CommonTestBase {
 
 	protected void verifyPersons(String... names) {
 		assertEquals("Count", names.length,
-				db.queryForObject("select count(*) from person", Integer.class)
-						.intValue());
+			db.queryForObject("select count(*) from person", Integer.class)
+				.intValue());
 		List<Map<String, Object>> values = db
-				.queryForList("select * from person");
+			.queryForList("select * from person");
 		for (int i = 0; i < names.length; i++) {
 			assertEquals("" + i + ". name", names[i], values.get(i).get("name"));
 		}

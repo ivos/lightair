@@ -22,7 +22,7 @@ public class ForeignKeyVerificationTest extends CommonTestBase {
 		db.execute("create table master (id int primary key, m1 varchar(50))");
 		db.execute("create table detail (id int primary key, master_id int, d1 varchar(50))");
 		db.execute("alter table detail add constraint fk_detail_master "
-				+ "foreign key (master_id) references master (id)");
+			+ "foreign key (master_id) references master (id)");
 		ApiTestSupport.reInitialize();
 	}
 

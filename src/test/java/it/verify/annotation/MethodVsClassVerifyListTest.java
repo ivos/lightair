@@ -13,7 +13,7 @@ import org.testng.annotations.Listeners;
  */
 @RunWith(LightAir.class)
 @Listeners(LightAirNGListener.class)
-@Verify.List({ @Verify("ignored-1.xml"), @Verify("ignored-2.xml") })
+@Verify.List({@Verify("ignored-1.xml"), @Verify("ignored-2.xml")})
 public class MethodVsClassVerifyListTest extends VerifyTestBase {
 
 	/**
@@ -21,7 +21,7 @@ public class MethodVsClassVerifyListTest extends VerifyTestBase {
 	 */
 	@Test
 	@org.testng.annotations.Test
-	@Verify({ "custom-verify-1.xml", "custom-verify-2.xml" })
+	@Verify({"custom-verify-1.xml", "custom-verify-2.xml"})
 	public void classNameXml() {
 		fillPersons(2);
 	}
@@ -31,8 +31,8 @@ public class MethodVsClassVerifyListTest extends VerifyTestBase {
 	 */
 	@Test
 	@org.testng.annotations.Test
-	@Verify.List({ @Verify({ "custom-verify-1.xml", "custom-verify-2.xml" }),
-			@Verify({ "custom-verify-1.xml", "custom-verify-2.xml" }) })
+	@Verify.List({@Verify({"custom-verify-1.xml", "custom-verify-2.xml"}),
+		@Verify({"custom-verify-1.xml", "custom-verify-2.xml"})})
 	public void methodSetupList() {
 		fillPersons(2);
 	}

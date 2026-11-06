@@ -22,12 +22,13 @@ public class Structure implements Keywords {
 	private static final Logger log = LoggerFactory.getLogger(Structure.class);
 
 	public static Map<String, Map<String, Map<String, Map<String, Object>>>> loadAll(
-			Map<String, Map<String, String>> properties,
-			Map<String, Connection> connections) {
+		Map<String, Map<String, String>> properties,
+		Map<String, Connection> connections
+	) {
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new LinkedHashMap<>();
 		for (String profile : properties.keySet()) {
 			structures.put(profile,
-					loadProfile(profile, properties.get(profile), connections.get(profile)));
+				loadProfile(profile, properties.get(profile), connections.get(profile)));
 		}
 		return Collections.unmodifiableMap(structures);
 	}
@@ -37,7 +38,8 @@ public class Structure implements Keywords {
 	}
 
 	private static Map<String, Map<String, Map<String, Object>>> loadProfile(
-			String profile, Map<String, String> profileProperties, Connection connection) {
+		String profile, Map<String, String> profileProperties, Connection connection
+	) {
 		String schema = profileProperties.get(DATABASE_SCHEMA);
 
 		log.debug("Loading structure for profile [{}].", profile);
@@ -69,7 +71,7 @@ public class Structure implements Keywords {
 			log.debug("Loaded {} tables in profile [{}].", data.size(), profile);
 			if (data.isEmpty()) {
 				log.warn("NO TABLES LOADED in profile [{}]! URL: [{}], user name [{}], schema [{}].",
-						profile, meta.getURL(), meta.getUserName(), schema);
+					profile, meta.getURL(), meta.getUserName(), schema);
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException("Cannot load database metadata.", e);

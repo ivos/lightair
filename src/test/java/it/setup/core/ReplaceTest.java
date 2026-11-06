@@ -28,7 +28,7 @@ public class ReplaceTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a (id int primary key, a1 varchar(50), "
-				+ "date1 date, time1 time, timestamp1 timestamp)");
+			+ "date1 date, time1 time, timestamp1 timestamp)");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -40,21 +40,21 @@ public class ReplaceTest extends CommonTestBase {
 	@Test
 	public void test() {
 		assertEquals("Count", Integer.valueOf(5),
-				db.queryForObject("select count(*) from a", Integer.class));
+			db.queryForObject("select count(*) from a", Integer.class));
 		values = db.queryForList("select * from a");
 		verifyRow(0, "01", LocalDate.of(2011, 10, 21), LocalTime.of(22, 49, 48),
-				LocalDateTime.of(2011, 11, 21, 23, 59, 58, 123000000));
+			LocalDateTime.of(2011, 11, 21, 23, 59, 58, 123000000));
 		// @date:
 		verifyRow(1, null, LocalDate.of(2009, 8, 28), LocalTime.of(0, 0, 0),
-				LocalDateTime.of(2009, 8, 28, 0, 0, 0, 0));
+			LocalDateTime.of(2009, 8, 28, 0, 0, 0, 0));
 		// @time:
 		verifyRow(2, null, LocalDate.of(1970, 1, 1), LocalTime.of(19, 49, 59),
-				LocalDateTime.of(1970, 1, 1, 19, 49, 59));
+			LocalDateTime.of(1970, 1, 1, 19, 49, 59));
 		// @timestamp:
 		verifyRow(3, null, LocalDate.of(2009, 8, 28), LocalTime.of(19, 49, 59),
-				LocalDateTime.of(2009, 8, 28, 19, 49, 59, 987000000));
+			LocalDateTime.of(2009, 8, 28, 19, 49, 59, 987000000));
 		verifyRow(4, "21", LocalDate.of(2011, 10, 22), LocalTime.of(22, 49, 49),
-				LocalDateTime.of(2011, 11, 22, 23, 59, 59, 124000000));
+			LocalDateTime.of(2011, 11, 22, 23, 59, 59, 124000000));
 	}
 
 	private void verifyRow(int id, String a1, LocalDate date1, LocalTime time1, LocalDateTime timestamp1) {

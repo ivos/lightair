@@ -13,7 +13,7 @@ public class PropertiesTest {
 	@Test
 	public void test() {
 		Map<String, Map<String, String>> properties =
-				Properties.load("target/test-classes/light-air-profiles.properties");
+			Properties.load("target/test-classes/light-air-profiles.properties");
 
 		Map<String, String> def = properties.get("");
 		assertNotNull("Profile default loaded", def);

@@ -15,8 +15,8 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(LightAir.class)
-@Setup({ "MergeColumnsAcrossFiles.1.xml", "MergeColumnsAcrossFiles.2.xml",
-		"MergeColumnsAcrossFiles.3.xml" })
+@Setup({"MergeColumnsAcrossFiles.1.xml", "MergeColumnsAcrossFiles.2.xml",
+	"MergeColumnsAcrossFiles.3.xml"})
 public class MergeColumnsAcrossFilesTest extends CommonTestBase {
 
 	List<Map<String, Object>> values;
@@ -24,8 +24,8 @@ public class MergeColumnsAcrossFilesTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a (id int primary key, "
-				+ "a1 varchar(50), a2 varchar(50), "
-				+ "a3 varchar(50), a4 varchar(50))");
+			+ "a1 varchar(50), a2 varchar(50), "
+			+ "a3 varchar(50), a4 varchar(50))");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -37,7 +37,7 @@ public class MergeColumnsAcrossFilesTest extends CommonTestBase {
 	@Test
 	public void test() {
 		assertEquals("Count", Integer.valueOf(5),
-				db.queryForObject("select count(*) from a", Integer.class));
+			db.queryForObject("select count(*) from a", Integer.class));
 		values = db.queryForList("select * from a");
 		// file 1:
 		verifyRow(0, "01", null, null, null);

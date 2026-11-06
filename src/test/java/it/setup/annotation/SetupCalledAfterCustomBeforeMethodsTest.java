@@ -1,13 +1,13 @@
 package it.setup.annotation;
 
-import static org.junit.Assert.*;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Verify that the database {@link Setup} is performed AFTER all the
@@ -26,7 +26,7 @@ public class SetupCalledAfterCustomBeforeMethodsTest extends SetupTestBase {
 	@Before
 	public void customBeforeMethod() {
 		assertEquals("beforeSetup",
-				db.queryForObject("select name from person", String.class));
+			db.queryForObject("select name from person", String.class));
 	}
 
 	@Test

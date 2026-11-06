@@ -39,8 +39,9 @@ public class Report implements Keywords {
 	}
 
 	private static void appendTableDifferences(
-			String profile, String tableName,
-			StringBuilder sb, Map<String, List<?>> tableDifferences) {
+		String profile, String tableName,
+		StringBuilder sb, Map<String, List<?>> tableDifferences
+	) {
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		List<Map<String, Object>> missing = (List) tableDifferences.get(MISSING);
 		@SuppressWarnings({"unchecked", "rawtypes"})
@@ -108,8 +109,8 @@ public class Report implements Keywords {
 		}
 		if (value instanceof Object[]) {
 			return Arrays.stream((Object[]) value)
-					.map(object -> object == null ? NULL_TOKEN : String.valueOf(object))
-					.collect(Collectors.joining(ARRAY_ELEMENT_SEPARATOR));
+				.map(object -> object == null ? NULL_TOKEN : String.valueOf(object))
+				.collect(Collectors.joining(ARRAY_ELEMENT_SEPARATOR));
 		}
 		return value;
 	}

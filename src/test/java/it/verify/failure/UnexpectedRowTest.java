@@ -39,8 +39,8 @@ public class UnexpectedRowTest extends CommonTestBase {
 
 	public void onlyUnexpectedVerifyException(Throwable error) {
 		String msg = "Differences found between the expected data set and actual database content.\n" +
-				"Found differences for table a:\n" +
-				"  Unexpected row: {id=1, a1=11}\n";
+			"Found differences for table a:\n" +
+			"  Unexpected row: {id=1, a1=11}\n";
 		assertEquals(msg, error.getMessage());
 	}
 
@@ -57,11 +57,11 @@ public class UnexpectedRowTest extends CommonTestBase {
 
 	public void unexpectedAndOtherDifVerifyException(Throwable error) {
 		String msg = "Differences found between the expected data set and actual database content.\n" +
-				"Found differences for table a:\n" +
-				"  Different row: {id=2, a1=21}\n" +
-				"   Best matching differences: \n" +
-				"    a1: expected [21], but was [21w]\n" +
-				"  Unexpected row: {id=1, a1=11}\n";
+			"Found differences for table a:\n" +
+			"  Different row: {id=2, a1=21}\n" +
+			"   Best matching differences: \n" +
+			"    a1: expected [21], but was [21w]\n" +
+			"  Unexpected row: {id=1, a1=11}\n";
 		assertEquals(msg, error.getMessage());
 	}
 

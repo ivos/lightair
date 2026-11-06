@@ -16,9 +16,9 @@ public class AutoKeepRowIdTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a (id int primary key, "
-				+ "startsAuto varchar(20), startsManual varchar(20))");
+			+ "startsAuto varchar(20), startsManual varchar(20))");
 		db.execute("create table b (id int primary key, "
-				+ "startsAuto varchar(20), startsManual varchar(20))");
+			+ "startsAuto varchar(20), startsManual varchar(20))");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -37,11 +37,11 @@ public class AutoKeepRowIdTest extends CommonTestBase {
 	private void fillTable(String table, String prefix) {
 		db.execute("delete from " + table);
 		db.update("insert into " + table + " (id,startsAuto,startsManual) " +
-				"values (1,'startsauto" + prefix + "67501','sm1')");
+			"values (1,'startsauto" + prefix + "67501','sm1')");
 		db.update("insert into " + table + " (id,startsAuto,startsManual) " +
-				"values (2,'sa2','startsmanu" + prefix + "39502')");
+			"values (2,'sa2','startsmanu" + prefix + "39502')");
 		db.update("insert into " + table + " (id,startsAuto,startsManual) values (3,'sa3','sm3')");
 		db.update("insert into " + table + " (id,startsAuto,startsManual) " +
-				"values (4,'startsauto" + prefix + "67504','startsmanu" + prefix + "39504')");
+			"values (4,'startsauto" + prefix + "67504','startsmanu" + prefix + "39504')");
 	}
 }

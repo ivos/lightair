@@ -24,7 +24,7 @@ public class GenerateXsdOracleTest extends GenerateXsdTestBase {
 
 	static {
 		SingleConnectionDataSource dataSource = new SingleConnectionDataSource(
-				"jdbc:oracle:thin:@localhost:1521:xe", "SYSTEM", "password", true);
+			"jdbc:oracle:thin:@localhost:1521:xe", "SYSTEM", "password", true);
 		db = new JdbcTemplate(dataSource);
 	}
 

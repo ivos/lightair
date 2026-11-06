@@ -50,13 +50,17 @@ public class ExecuteUpdate implements Keywords {
 	}
 
 	private static void setParameter(
-			Connection connection, PreparedStatement statement,
-			int index, String type, int sqlDataType, Object value)
-			throws SQLException {
+		Connection connection,
+		PreparedStatement statement,
+		int index,
+		String type,
+		int sqlDataType,
+		Object value
+	) throws SQLException {
 		if (log.isTraceEnabled()) {
 			if (value instanceof byte[]) {
 				log.trace("Setting parameter {} with type {} to bytes {}.", index, type,
-						Base64.encodeBase64String((byte[]) value));
+					Base64.encodeBase64String((byte[]) value));
 			} else {
 				log.trace("Setting parameter {} with type {} to value {}.", index, type, value);
 			}
@@ -150,7 +154,8 @@ public class ExecuteUpdate implements Keywords {
 				statement.setArray(index, connection.createArrayOf("BIGINT", (Object[]) value));
 				return;
 		}
-		log.error("Unknown type {}, trying to set it as STRING. Parameter index {} with value {}.", type, index, value);
+		log.error("Unknown type {}, trying to set it as STRING. Parameter index {} with value {}.", type, index,
+			value);
 		assert value instanceof String;
 		statement.setString(index, (String) value);
 	}

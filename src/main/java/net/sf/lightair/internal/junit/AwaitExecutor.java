@@ -18,12 +18,13 @@ public class AwaitExecutor {
 	public void execute(Await await, Method testMethod) {
 		String[] fileNames = await.value();
 		String profile = await.profile();
-		log.info("Awaiting verification of the database for test method {} and profile {} with configured file names {}.",
-				testMethod, profile, fileNames);
+		log.info(
+			"Awaiting verification of the database for test method {} and profile {} with configured file names {}.",
+			testMethod, profile, fileNames);
 		StopWatch stopWatch = ExecutorUtils.startStopWatch(log);
 
 		Map<String, List<String>> apiFileNames = ExecutorUtils.getApiFileNames(
-				dataSetResolver, profile, testMethod, fileNames, "-verify");
+			dataSetResolver, profile, testMethod, fileNames, "-verify");
 		LightAirApi.await(apiFileNames);
 
 		if (null != stopWatch) {

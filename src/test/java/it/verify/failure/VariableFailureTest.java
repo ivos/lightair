@@ -35,10 +35,10 @@ public class VariableFailureTest extends CommonTestBase {
 
 	public void testVerifyException(Throwable error) {
 		String msg = "Differences found between the expected data set and actual database content.\n" +
-				"Found differences for table a:\n" +
-				"  Different row: {id=1, a1=$var1}\n" +
-				"   Best matching differences: \n" +
-				"    a1: expected [value1], but was [value2]\n";
+			"Found differences for table a:\n" +
+			"  Different row: {id=1, a1=$var1}\n" +
+			"   Best matching differences: \n" +
+			"    a1: expected [value1], but was [value2]\n";
 		assertEquals(msg, error.getMessage());
 	}
 

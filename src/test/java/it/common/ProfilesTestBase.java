@@ -14,13 +14,14 @@ public class ProfilesTestBase {
 
 	static JdbcTemplate connect(String url, String username, String password) {
 		DataSource dataSource = new SingleConnectionDataSource(url, username,
-				password, false);
+			password, false);
 		return new JdbcTemplate(dataSource);
 	}
 
 	public static JdbcTemplate dbDefaultH2;
 	public static JdbcTemplate dbHsqldb;
 	public static JdbcTemplate dbCustom;
+
 	static {
 		dbDefaultH2 = connect("jdbc:h2:mem:test", "sa", "");
 		dbHsqldb = connect("jdbc:hsqldb:mem:test", "sa", "");

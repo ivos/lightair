@@ -13,7 +13,7 @@ import org.testng.annotations.Listeners;
  */
 @RunWith(LightAir.class)
 @Listeners(LightAirNGListener.class)
-@Setup({ "custom-setup-1.xml", "custom-setup-2.xml", "custom-setup-3.xml" })
+@Setup({"custom-setup-1.xml", "custom-setup-2.xml", "custom-setup-3.xml"})
 public class CustomSetupTest extends SetupTestBase {
 
 	@Test

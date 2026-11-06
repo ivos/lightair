@@ -21,7 +21,7 @@ public class GenerateXsdPostgresTest extends GenerateXsdTestBase {
 
 	static {
 		SingleConnectionDataSource dataSource = new SingleConnectionDataSource(
-				"jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres", true);
+			"jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres", true);
 		db = new JdbcTemplate(dataSource);
 	}
 

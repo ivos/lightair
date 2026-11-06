@@ -43,8 +43,8 @@ public class ExpectedEmptyTableWithRowTest extends CommonTestBase {
 
 	public void testVerifyException(Throwable error) {
 		String msg = "Differences found between the expected data set and actual database content.\n" +
-				"Found differences for table empty_:\n" +
-				"  Unexpected row: {id=0, b1=b01}\n";
+			"Found differences for table empty_:\n" +
+			"  Unexpected row: {id=0, b1=b01}\n";
 		assertEquals(msg, error.getMessage());
 	}
 

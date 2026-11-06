@@ -78,8 +78,8 @@ public class HashTest {
 		}
 		Map<Integer, Integer> sorted = new LinkedHashMap<>();
 		counts.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue())
-				.forEachOrdered(entry -> sorted.put(entry.getKey(), entry.getValue()));
+			.sorted(Map.Entry.comparingByValue())
+			.forEachOrdered(entry -> sorted.put(entry.getKey(), entry.getValue()));
 //		System.out.println(sorted);
 		ArrayList<Integer> values = new ArrayList<>(sorted.values());
 		Integer min = values.get(0);

@@ -18,7 +18,7 @@ public class AutoFailureTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, a1 varchar(255), "
-				+ "a2 varchar(255), a3 varchar(255))");
+			+ "a2 varchar(255), a3 varchar(255))");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -37,10 +37,10 @@ public class AutoFailureTest extends CommonTestBase {
 
 	public void testVerifyException(Throwable error) {
 		String msg = "Differences found between the expected data set and actual database content.\n" +
-				"Found differences for table a:\n" +
-				"  Different row: {id=1042184902, a1=a1 1042127302, a2=a2 1042103102, a3=a3 1042136602}\n" +
-				"   Best matching differences: \n" +
-				"    a2: expected [a2 1042103102], but was [a2 1042103102x]\n";
+			"Found differences for table a:\n" +
+			"  Different row: {id=1042184902, a1=a1 1042127302, a2=a2 1042103102, a3=a3 1042136602}\n" +
+			"   Best matching differences: \n" +
+			"    a2: expected [a2 1042103102], but was [a2 1042103102x]\n";
 		assertEquals(msg, error.getMessage());
 	}
 

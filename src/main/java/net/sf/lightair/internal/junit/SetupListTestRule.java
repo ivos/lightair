@@ -13,8 +13,7 @@ public class SetupListTestRule extends AbstractTestRule<Setup.List> {
 	/**
 	 * Constructor.
 	 *
-	 * @param frameworkMethod
-	 *            JUnit framework method on which the test rule is being applied
+	 * @param frameworkMethod JUnit framework method on which the test rule is being applied
 	 */
 	public SetupListTestRule(FrameworkMethod frameworkMethod) {
 		super(frameworkMethod, Setup.List.class, Setup.class);

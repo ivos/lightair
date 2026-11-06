@@ -31,7 +31,7 @@ public class MethodVsClassAwaitListTest extends AwaitTestBase {
 	@Test
 	@org.testng.annotations.Test
 	@Await.List({@Await({"custom-verify-1.xml", "custom-verify-2.xml"}),
-			@Await({"custom-verify-1.xml", "custom-verify-2.xml"})})
+		@Await({"custom-verify-1.xml", "custom-verify-2.xml"})})
 	public void methodSetupList() {
 		scheduleFillPersons(2);
 	}

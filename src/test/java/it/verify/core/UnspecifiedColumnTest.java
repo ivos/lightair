@@ -20,7 +20,7 @@ public class UnspecifiedColumnTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, expected varchar(255), "
-				+ "unspecified varchar(255))");
+			+ "unspecified varchar(255))");
 		ApiTestSupport.reInitialize();
 	}
 

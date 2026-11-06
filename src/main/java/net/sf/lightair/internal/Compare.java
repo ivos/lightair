@@ -27,14 +27,15 @@ public class Compare implements Keywords {
 	private static final Logger log = LoggerFactory.getLogger(Compare.class);
 
 	public static Map<String, Map<String, Map<String, List<?>>>> compare(
-			Map<String, String> profileProperties,
-			Map<String, List<Map<String, Object>>> expectedDatasets,
-			Map<String, Map<String, List<Map<String, Object>>>> actualDatasets) {
+		Map<String, String> profileProperties,
+		Map<String, List<Map<String, Object>>> expectedDatasets,
+		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets
+	) {
 		long limit = Properties.getLimit(profileProperties);
 		Map<String, Object> variables = new HashMap<>();
 
 		Map<String, Map<String, List<Map<String, Object>>>> processedExpectedDatasets =
-				processExpectedDatasets(expectedDatasets);
+			processExpectedDatasets(expectedDatasets);
 
 		Map<String, Map<String, Map<String, List<?>>>> differences = new LinkedHashMap<>();
 		for (String profile : processedExpectedDatasets.keySet()) {
@@ -44,17 +45,17 @@ public class Compare implements Keywords {
 			Map<String, List<Map<String, Object>>> actualDataset = actualDatasets.get(profile);
 			if (null == actualDataset) {
 				throw new NullPointerException(
-						"Missing profile " + profile + " in actual datasets.");
+					"Missing profile " + profile + " in actual datasets.");
 			}
 			for (String tableName : expectedDataset.keySet()) {
 				log.debug("Comparing table {}.", tableName);
 				List<Map<String, Object>> actualRows = actualDataset.get(tableName);
 				if (null == actualRows) {
 					throw new NullPointerException(
-							"Missing table " + Index.formatTableKey(profile, tableName) + " in actual dataset.");
+						"Missing table " + Index.formatTableKey(profile, tableName) + " in actual dataset.");
 				}
 				Map<String, List<?>> tableDifferences =
-						compareTable(limit, variables, expectedDataset.get(tableName), actualRows);
+					compareTable(limit, variables, expectedDataset.get(tableName), actualRows);
 				profileDifferences.put(tableName, tableDifferences);
 			}
 			differences.put(profile, Collections.unmodifiableMap(profileDifferences));
@@ -70,7 +71,8 @@ public class Compare implements Keywords {
 	 * </ol>
 	 */
 	private static Map<String, Map<String, List<Map<String, Object>>>> processExpectedDatasets(
-			Map<String, List<Map<String, Object>>> expectedDatasets) {
+		Map<String, List<Map<String, Object>>> expectedDatasets
+	) {
 		Map<String, Map<String, List<Map<String, Object>>>> data = new LinkedHashMap<>();
 		for (String profile : expectedDatasets.keySet()) {
 			List<Map<String, Object>> expectedDataset = expectedDatasets.get(profile);
@@ -80,13 +82,13 @@ public class Compare implements Keywords {
 				@SuppressWarnings({"unchecked", "rawtypes"})
 				Map<String, Object> columns = (Map) row.get(COLUMNS);
 				List<Map<String, Object>> table = processedDataset
-						.computeIfAbsent(tableName, k -> new ArrayList<>());
+					.computeIfAbsent(tableName, k -> new ArrayList<>());
 				table.add(columns);
 			}
 			for (String tableName : processedDataset.keySet()) {
 				List<Map<String, Object>> table = processedDataset.get(tableName);
 				table.sort((Map<String, Object> o1, Map<String, Object> o2) ->
-								-Integer.compare(o1.size(), o2.size()));
+					-Integer.compare(o1.size(), o2.size()));
 				processedDataset.put(tableName, Collections.unmodifiableList(table));
 			}
 			data.put(profile, Collections.unmodifiableMap(processedDataset));
@@ -96,17 +98,18 @@ public class Compare implements Keywords {
 	}
 
 	private static Map<String, List<?>> compareTable(
-			long limit, Map<String, Object> variables,
-			List<Map<String, Object>> expectedRows,
-			List<Map<String, Object>> actualRows) {
+		long limit, Map<String, Object> variables,
+		List<Map<String, Object>> expectedRows,
+		List<Map<String, Object>> actualRows
+	) {
 		List<Map<String, Object>> sortedActualRows = sortActualRows(limit, expectedRows, actualRows);
 
 		List<Map<String, Object>> different = new ArrayList<>();
 		List<Map<String, Object>> unexpected = new ArrayList<>();
 		List<Integer> unmatchedExpectedRowIds = IntStream
-				.rangeClosed(0, expectedRows.size() - 1).boxed()
-				.filter(i -> !expectedRows.get(i).isEmpty()) // skip empty expected rows
-				.collect(Collectors.toList());
+			.rangeClosed(0, expectedRows.size() - 1).boxed()
+			.filter(i -> !expectedRows.get(i).isEmpty()) // skip empty expected rows
+			.collect(Collectors.toList());
 
 		for (Map<String, Object> actualRow : sortedActualRows) {
 			if (unmatchedExpectedRowIds.isEmpty()) {
@@ -114,12 +117,12 @@ public class Compare implements Keywords {
 				continue;
 			}
 			List<Map<String, Object>> unmatchedExpectedRows =
-					getUnmatchedExpectedRows(expectedRows, unmatchedExpectedRowIds);
+				getUnmatchedExpectedRows(expectedRows, unmatchedExpectedRowIds);
 			int bestMatchingRowId = findBestMatchingRowId(limit, variables, actualRow, unmatchedExpectedRows);
 			unmatchedExpectedRowIds.remove(bestMatchingRowId);
 			Map<String, Object> expectedRow = unmatchedExpectedRows.get(bestMatchingRowId);
 			List<Map<String, Object>> rowDifferences =
-					getRowDifferences(limit, variables, true, expectedRow, actualRow);
+				getRowDifferences(limit, variables, true, expectedRow, actualRow);
 			if (rowDifferences.isEmpty()) {
 				log.trace("Perfect match for row {}.", expectedRow);
 			} else {
@@ -142,17 +145,19 @@ public class Compare implements Keywords {
 	}
 
 	private static List<Map<String, Object>> getUnmatchedExpectedRows(
-			List<Map<String, Object>> expectedRows,
-			List<Integer> unmatchedExpectedRowIds) {
+		List<Map<String, Object>> expectedRows,
+		List<Integer> unmatchedExpectedRowIds
+	) {
 		return unmatchedExpectedRowIds.stream()
-				.map(expectedRows::get)
-				.collect(Collectors.toList());
+			.map(expectedRows::get)
+			.collect(Collectors.toList());
 	}
 
 	private static List<Map<String, Object>> sortActualRows(
-			long limit,
-			List<Map<String, Object>> expectedRows,
-			List<Map<String, Object>> actualRows) {
+		long limit,
+		List<Map<String, Object>> expectedRows,
+		List<Map<String, Object>> actualRows
+	) {
 		if (expectedRows.isEmpty()) {
 			return actualRows;
 		}
@@ -162,7 +167,7 @@ public class Compare implements Keywords {
 			int bestMatchingRowId = findBestMatchingRowId(limit, null, actualRow, expectedRows);
 			data[actualRowId][0] = actualRowId;
 			data[actualRowId][1] =
-					getRowDifferences(limit, null, false, expectedRows.get(bestMatchingRowId), actualRow).size();
+				getRowDifferences(limit, null, false, expectedRows.get(bestMatchingRowId), actualRow).size();
 		}
 		Arrays.sort(data, Comparator.comparingInt((int[] o) -> o[1]).thenComparingInt(o -> o[0]));
 		List<Map<String, Object>> sortedActualRows = new ArrayList<>();
@@ -173,15 +178,16 @@ public class Compare implements Keywords {
 	}
 
 	private static Integer findBestMatchingRowId(
-			long limit, Map<String, Object> variables,
-			Map<String, Object> actualRow,
-			List<Map<String, Object>> expectedRows) {
+		long limit, Map<String, Object> variables,
+		Map<String, Object> actualRow,
+		List<Map<String, Object>> expectedRows
+	) {
 		List<Map<String, Object>> bestRowDifferences = null;
 		Integer bestExpectedRowId = null;
 		for (int expectedRowId = 0; expectedRowId < expectedRows.size(); expectedRowId++) {
 			Map<String, Object> expectedRow = expectedRows.get(expectedRowId);
 			List<Map<String, Object>> rowDifferences =
-					getRowDifferences(limit, variables, false, expectedRow, actualRow);
+				getRowDifferences(limit, variables, false, expectedRow, actualRow);
 			if (null == bestRowDifferences || rowDifferences.size() < bestRowDifferences.size()) {
 				bestRowDifferences = rowDifferences;
 				bestExpectedRowId = expectedRowId;
@@ -191,9 +197,10 @@ public class Compare implements Keywords {
 	}
 
 	private static List<Map<String, Object>> getRowDifferences(
-			long limit, Map<String, Object> variables, boolean finalMatch,
-			Map<String, Object> expectedRow,
-			Map<String, Object> actualRow) {
+		long limit, Map<String, Object> variables, boolean finalMatch,
+		Map<String, Object> expectedRow,
+		Map<String, Object> actualRow
+	) {
 		List<Map<String, Object>> data = new ArrayList<>();
 		for (String columnName : expectedRow.keySet()) {
 			Object expectedValue = expectedRow.get(columnName);
@@ -206,8 +213,9 @@ public class Compare implements Keywords {
 	}
 
 	private static Map<String, Object> createDifference(
-			Map<String, Object> variables,
-			String columnName, Object expectedValue, Object actualValue) {
+		Map<String, Object> variables,
+		String columnName, Object expectedValue, Object actualValue
+	) {
 		if (isVariable(variables, expectedValue)) {
 			expectedValue = variables.get(expectedValue);
 		}
@@ -219,8 +227,9 @@ public class Compare implements Keywords {
 	}
 
 	private static boolean valueMatches(
-			long limit, Map<String, Object> variables, boolean finalMatch,
-			Object expectedValue, Object actualValue) {
+		long limit, Map<String, Object> variables, boolean finalMatch,
+		Object expectedValue, Object actualValue
+	) {
 		if (ANY_TOKEN.equals(expectedValue) && null != actualValue) {
 			return true;
 		}
@@ -251,7 +260,7 @@ public class Compare implements Keywords {
 
 	private static boolean isVariable(Map<String, Object> variables, Object expectedValue) {
 		return null != variables
-				&& expectedValue instanceof String
-				&& Strings.CS.startsWith((String) expectedValue, VARIABLE_PREFIX);
+			&& expectedValue instanceof String
+			&& Strings.CS.startsWith((String) expectedValue, VARIABLE_PREFIX);
 	}
 }

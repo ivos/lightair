@@ -23,7 +23,8 @@ public class XsdTest extends TemplatingTestBase implements Keywords {
 	}
 
 	private static void addColumn(
-			Map<String, Map<String, Object>> table, String name, String dataType, boolean notNull) {
+		Map<String, Map<String, Object>> table, String name, String dataType, boolean notNull
+	) {
 		Map<String, Object> data = new LinkedHashMap<>();
 		data.put("DATA_TYPE", dataType);
 		data.put("NOT_NULL", notNull);

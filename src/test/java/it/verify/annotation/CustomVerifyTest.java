@@ -13,7 +13,7 @@ import org.testng.annotations.Listeners;
  */
 @RunWith(LightAir.class)
 @Listeners(LightAirNGListener.class)
-@Verify({ "custom-verify-1.xml", "custom-verify-2.xml", "custom-verify-3.xml" })
+@Verify({"custom-verify-1.xml", "custom-verify-2.xml", "custom-verify-3.xml"})
 public class CustomVerifyTest extends VerifyTestBase {
 
 	@Test

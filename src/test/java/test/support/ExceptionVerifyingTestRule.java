@@ -17,11 +17,11 @@ public class ExceptionVerifyingTestRule implements TestRule {
 		this.testObject = testObject;
 		try {
 			verifyMethod = testMethod.getDeclaringClass().getMethod(
-					testMethod.getName() + "VerifyException", Throwable.class);
+				testMethod.getName() + "VerifyException", Throwable.class);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(
-					"Exception verification method not found for test method "
-							+ testMethod, e);
+				"Exception verification method not found for test method "
+					+ testMethod, e);
 		}
 	}
 
@@ -49,8 +49,8 @@ public class ExceptionVerifyingTestRule implements TestRule {
 				throw (AssertionError) cause;
 			}
 			throw new RuntimeException(
-					"Error invoking exception verification method "
-							+ verifyMethod, e);
+				"Error invoking exception verification method "
+					+ verifyMethod, e);
 		}
 	}
 }

@@ -27,14 +27,15 @@ public abstract class DataTypesSetupTestBase extends DataTypesTestBase {
 	}
 
 	protected <EV> void verifyField(
-			int id, String name, EV expectedValue,
-			Function<EV, ?> expectedConverter, Function<Object, ?> actualConverter) {
+		int id, String name, EV expectedValue,
+		Function<EV, ?> expectedConverter, Function<Object, ?> actualConverter
+	) {
 		Object rawActualValue = values.get(id).get(name);
 		if (null == expectedValue) {
 			assertNull(name + " " + id, rawActualValue);
 		} else {
 			assertEquals(name + " " + id, expectedConverter.apply(expectedValue),
-					actualConverter.apply(rawActualValue));
+				actualConverter.apply(rawActualValue));
 		}
 	}
 }

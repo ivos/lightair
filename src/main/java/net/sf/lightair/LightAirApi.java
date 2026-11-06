@@ -33,7 +33,8 @@ import java.util.Map;
  * <p>
  * The general contract is to {@link LightAirApi#initialize(String)} and {@link LightAirApi#shutdown()}
  * and in between perform either {@link LightAirApi#generateXsd()} call
- * or (a series of) {@link LightAirApi#setup(Map)} and {@link LightAirApi#verify(Map)} or {@link LightAirApi#await(Map)} calls.
+ * or (a series of) {@link LightAirApi#setup(Map)} and {@link LightAirApi#verify(Map)} or
+ * {@link LightAirApi#await(Map)} calls.
  * <p>
  * To generate XSD files:
  * <pre>
@@ -226,7 +227,7 @@ public class LightAirApi implements Keywords {
 	private static String generateReport(Map<String, List<String>> fileNames) {
 		Map<String, List<Map<String, Object>>> xmlDatasets = Xml.read(fileNames);
 		Map<String, List<Map<String, Object>>> expectedDatasets =
-				Convert.convert(clock, structures, index, xmlDatasets);
+			Convert.convert(clock, structures, index, xmlDatasets);
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
 		for (String profile : expectedDatasets.keySet()) {
@@ -242,7 +243,7 @@ public class LightAirApi implements Keywords {
 
 		Map<String, String> defaultProfileProperties = properties.get(DEFAULT_PROFILE);
 		Map<String, Map<String, Map<String, List<?>>>> differences =
-				Compare.compare(defaultProfileProperties, expectedDatasets, actualDatasets);
+			Compare.compare(defaultProfileProperties, expectedDatasets, actualDatasets);
 		return Report.report(differences);
 	}
 

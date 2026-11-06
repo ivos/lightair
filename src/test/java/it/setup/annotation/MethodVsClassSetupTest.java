@@ -13,7 +13,7 @@ import org.testng.annotations.Listeners;
  */
 @RunWith(LightAir.class)
 @Listeners(LightAirNGListener.class)
-@Setup({ "ignored-1.xml", "ignored-2.xml" })
+@Setup({"ignored-1.xml", "ignored-2.xml"})
 public class MethodVsClassSetupTest extends SetupTestBase {
 
 	/**
@@ -21,7 +21,7 @@ public class MethodVsClassSetupTest extends SetupTestBase {
 	 */
 	@Test
 	@org.testng.annotations.Test
-	@Setup({ "custom-setup-1.xml", "custom-setup-2.xml" })
+	@Setup({"custom-setup-1.xml", "custom-setup-2.xml"})
 	public void methodSetup() {
 		verifyPersons("Joe", "Jane", "Sue");
 	}
@@ -31,7 +31,7 @@ public class MethodVsClassSetupTest extends SetupTestBase {
 	 */
 	@Test
 	@org.testng.annotations.Test
-	@Setup.List({ @Setup("custom-setup-1.xml"), @Setup("custom-setup-2.xml") })
+	@Setup.List({@Setup("custom-setup-1.xml"), @Setup("custom-setup-2.xml")})
 	public void methodSetupList() {
 		verifyPersons("Jane", "Sue");
 	}

@@ -17,7 +17,7 @@ public class GenerateXsdHsqlTest extends GenerateXsdTestBase {
 
 	static {
 		SingleConnectionDataSource dataSource = new SingleConnectionDataSource(
-				"jdbc:hsqldb:mem:test", "sa", "", true);
+			"jdbc:hsqldb:mem:test", "sa", "", true);
 		db = new JdbcTemplate(dataSource);
 	}
 

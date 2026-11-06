@@ -21,9 +21,9 @@ public class Connections implements Keywords {
 	public static Map<String, Connection> open(Map<String, Map<String, String>> properties) {
 		Map<String, Connection> connections = new LinkedHashMap<>();
 		properties.keySet()
-				.forEach(profile -> {
-					connections.put(profile, openConnection(profile, properties.get(profile)));
-				});
+			.forEach(profile -> {
+				connections.put(profile, openConnection(profile, properties.get(profile)));
+			});
 		return Collections.unmodifiableMap(connections);
 	}
 

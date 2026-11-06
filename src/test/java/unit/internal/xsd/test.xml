@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="dataset.xsd">
-	<ta ca="cav1" cb="cbv1" cc="ccv1"/>
-	<ta cb="cbv2" cc="ccv2" cd="cdv2"/>
-	<tb cc="ccv3" cd="cdv3" ce="cev3"/>
+	<ta ca="cav1" cb="cbv1" cc="ccv1" />
+	<ta cb="cbv2" cc="ccv2" cd="cdv2" />
+	<tb cc="ccv3" cd="cdv3" ce="cev3" />
 	<data_types boolean_nullable_type="@null" boolean_type="true"
 	            byte_nullable_type="255" byte_type="-128"
 	            short_nullable_type="@auto" short_type="65000"

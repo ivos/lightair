@@ -21,7 +21,7 @@ public class DataSetResolver {
 
 	public List<URL> resolve(String profile, Method testMethod, String suffix, String... fileNames) {
 		log.debug("Resolving dataset for method {} with suffix [{}] and configured file names {}.",
-				testMethod, suffix, fileNames);
+			testMethod, suffix, fileNames);
 		try {
 			List<URL> resources = new ArrayList<>();
 			if (fileNames.length == 0) {
@@ -46,7 +46,7 @@ public class DataSetResolver {
 	 */
 	private String getDefaultClassMethodFileName(Method testMethod, Class<?> testClass, String suffix) {
 		return testClass.getSimpleName() + '.' + testMethod.getName() + suffix
-				+ DATA_SET_FILE_EXTENSION;
+			+ DATA_SET_FILE_EXTENSION;
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class DataSetResolver {
 	private String[] addDefaultFile(Method testMethod, String suffix, List<URL> resources) {
 		Class<?> testClass = testMethod.getDeclaringClass();
 		String dataSetName = getDefaultClassMethodFileName(testMethod,
-				testClass, suffix);
+			testClass, suffix);
 		URL url = resolveIfExists(testMethod, dataSetName);
 		if (null == url) {
 			dataSetName = getDefaultMethodFileName(testMethod, suffix);

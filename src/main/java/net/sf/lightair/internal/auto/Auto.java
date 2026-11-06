@@ -26,25 +26,27 @@ public class Auto implements Keywords {
 	private static final String AUTO_NUMBER_PREFIX = "1";
 
 	public static String generate(
-			Map<String, String> index,
-			String profile, String tableName, String columnName, int rowId,
-			String dataType, Integer columnLength, Integer decimalDigits) {
+		Map<String, String> index,
+		String profile, String tableName, String columnName, int rowId,
+		String dataType, Integer columnLength, Integer decimalDigits
+	) {
 		Objects.requireNonNull(index, "Index is required.");
 		if (null == columnLength) {
 			throw new NullPointerException("Column length missing for column " +
-					Index.formatColumnKey(profile, tableName, columnName) + ".");
+				Index.formatColumnKey(profile, tableName, columnName) + ".");
 		}
 		String autoNumber = formatAutoNumber(index, profile, tableName, columnName, rowId);
 		String value = convert(autoNumber, columnName, dataType, columnLength, decimalDigits);
 
 		log.debug("Generated auto value for [{}]/{}.{} of data type {} as [{}].",
-				profile, tableName, columnName, dataType, value);
+			profile, tableName, columnName, dataType, value);
 		return value;
 	}
 
 	private static String formatAutoNumber(
-			Map<String, String> index,
-			String profile, String tableName, String columnName, int rowId) {
+		Map<String, String> index,
+		String profile, String tableName, String columnName, int rowId
+	) {
 		String tableKey = Index.formatTableKey(profile, tableName);
 		String columnKey = Index.formatColumnKey(profile, tableName, columnName);
 		String tableHash = index.get(tableKey);
@@ -52,11 +54,11 @@ public class Auto implements Keywords {
 
 		if (null == tableHash) {
 			throw new NullPointerException("Table " +
-					Index.formatTableKey(profile, tableName) + " is missing in index.");
+				Index.formatTableKey(profile, tableName) + " is missing in index.");
 		}
 		if (null == columnHash) {
 			throw new NullPointerException("Column " +
-					Index.formatColumnKey(profile, tableName, columnName) + " is missing in index.");
+				Index.formatColumnKey(profile, tableName, columnName) + " is missing in index.");
 		}
 
 		String rowHash = StringUtils.leftPad(String.valueOf(rowId), 2, '0');
@@ -93,12 +95,13 @@ public class Auto implements Keywords {
 	}
 
 	private static String convert(
-			String autoNumber, String columnName,
-			String dataType, int columnLength, Integer decimalDigits) {
+		String autoNumber, String columnName,
+		String dataType, int columnLength, Integer decimalDigits
+	) {
 		String stringValue = formatStringValue(columnName, autoNumber, columnLength);
 		log.trace("Generating auto value for data type {}, column name {}, "
-						+ "auto number {}, column length {}, decimal digits {}, string value {}.",
-				dataType, columnName, autoNumber, columnLength, decimalDigits, stringValue);
+				+ "auto number {}, column length {}, decimal digits {}, string value {}.",
+			dataType, columnName, autoNumber, columnLength, decimalDigits, stringValue);
 		int number = Integer.parseInt(autoNumber);
 		switch (dataType) {
 			case BOOLEAN:
@@ -127,10 +130,10 @@ public class Auto implements Keywords {
 				// Add the number of seconds to local time 0:00:00, wrapping at 1 day.
 				// Add the number of milliseconds, wrapping at 1 second.
 				return LocalDateTime.of(1900, 1, 1, 0, 0, 0)
-						.plusDays(number % 73_000)
-						.plusSeconds(number % 86_400)
-						.plusNanos((number % 1_000) * 1_000_000)
-						.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+					.plusDays(number % 73_000)
+					.plusSeconds(number % 86_400)
+					.plusNanos((number % 1_000) * 1_000_000)
+					.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 			case STRING:
 			case NSTRING:
 			case CLOB:
@@ -149,7 +152,7 @@ public class Auto implements Keywords {
 				return "{\"" + columnName + "\": " + autoNumber + "}";
 			case ARRAY_STRING:
 				return generateArray(index ->
-						formatStringValue(columnName, autoNumber + index, columnLength));
+					formatStringValue(columnName, autoNumber + index, columnLength));
 			case ARRAY_INTEGER:
 				return generateArray(index -> String.valueOf((number % 100_000_000) * 10 + index));
 			case ARRAY_LONG:
@@ -161,7 +164,7 @@ public class Auto implements Keywords {
 
 	private static String generateArray(IntFunction<String> itemConverter) {
 		return IntStream.range(1, 4)
-				.mapToObj(itemConverter)
-				.collect(Collectors.joining(ARRAY_ELEMENT_SEPARATOR));
+			.mapToObj(itemConverter)
+			.collect(Collectors.joining(ARRAY_ELEMENT_SEPARATOR));
 	}
 }

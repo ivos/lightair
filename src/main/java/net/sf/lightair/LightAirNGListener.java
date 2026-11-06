@@ -74,10 +74,10 @@ public class LightAirNGListener implements IInvokedMethodListener, ITestListener
 	}
 
 	/**
-	 * Get Setup for executing before a given method. If no @Setup or @Setup.List is present on the method, class annotations are used.
+	 * Get Setup for executing before a given method. If no @Setup or @Setup.List is present on the method, class
+	 * annotations are used.
 	 */
-	private Setup[] getActiveSetupAnnotation(
-			Method method) {
+	private Setup[] getActiveSetupAnnotation(Method method) {
 		Setup methodSetupAnnotation = method.getAnnotation(Setup.class);
 		Setup.List methodListAnnotation = method.getAnnotation(Setup.List.class);
 		Setup[] setups = null;
@@ -99,10 +99,10 @@ public class LightAirNGListener implements IInvokedMethodListener, ITestListener
 	}
 
 	/**
-	 * Get Setup for executing before a given method. If no @Verify or @Verify.List is present on the method, class annotations are used.
+	 * Get Setup for executing before a given method. If no @Verify or @Verify.List is present on the method, class
+	 * annotations are used.
 	 */
-	private Verify[] getActiveVerifyAnnotation(
-			Method method) {
+	private Verify[] getActiveVerifyAnnotation(Method method) {
 		Verify methodVerifyAnnotation = method.getAnnotation(Verify.class);
 		Verify.List methodListAnnotation = method.getAnnotation(Verify.List.class);
 		Verify[] verifies = null;

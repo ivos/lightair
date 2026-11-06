@@ -38,10 +38,11 @@ public class Convert implements Keywords {
 	private static final Logger log = LoggerFactory.getLogger(Convert.class);
 
 	public static Map<String, List<Map<String, Object>>> convert(
-			Clock clock,
-			Map<String, Map<String, Map<String, Map<String, Object>>>> structures,
-			Map<String, String> index,
-			Map<String, List<Map<String, Object>>> datasets) {
+		Clock clock,
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures,
+		Map<String, String> index,
+		Map<String, List<Map<String, Object>>> datasets
+	) {
 		Map<String, List<Map<String, Object>>> result = new LinkedHashMap<>();
 		Set<String> autoValues = new HashSet<>();
 		for (String profile : datasets.keySet()) {
@@ -57,10 +58,11 @@ public class Convert implements Keywords {
 	}
 
 	private static List<Map<String, Object>> convertDataset(
-			Clock clock,
-			Map<String, String> index, Set<String> autoValues,
-			String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
-			List<Map<String, Object>> dataset) {
+		Clock clock,
+		Map<String, String> index, Set<String> autoValues,
+		String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
+		List<Map<String, Object>> dataset
+	) {
 		Map<String, Integer> rowIds = new HashMap<>();
 		List<Map<String, Object>> convertedDataset = new ArrayList<>();
 		for (Map<String, Object> row : dataset) {
@@ -77,7 +79,7 @@ public class Convert implements Keywords {
 				rowId = (null == rowId) ? 1 : rowId + 1;
 				rowIds.put(tableName, rowId);
 				convertedColumns = convertColumns(clock, index, autoValues, profile, profileStructure, tableName,
-						columns, rowId);
+					columns, rowId);
 			}
 			convertedRow.put(COLUMNS, convertedColumns);
 			convertedDataset.add(Collections.unmodifiableMap(convertedRow));
@@ -86,14 +88,15 @@ public class Convert implements Keywords {
 	}
 
 	private static Map<String, Object> convertColumns(
-			Clock clock,
-			Map<String, String> index, Set<String> autoValues,
-			String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
-			String tableName, Map<String, String> columns, int rowId) {
+		Clock clock,
+		Map<String, String> index, Set<String> autoValues,
+		String profile, Map<String, Map<String, Map<String, Object>>> profileStructure,
+		String tableName, Map<String, String> columns, int rowId
+	) {
 		Map<String, Map<String, Object>> table = profileStructure.get(tableName);
 		if (null == table) {
 			throw new NullPointerException("Structure for table " +
-					Index.formatTableKey(profile, tableName) + " is missing.");
+				Index.formatTableKey(profile, tableName) + " is missing.");
 		}
 		Map<String, Object> convertedColumns = new LinkedHashMap<>();
 		Set<String> datasetColumnNames = columns.keySet();
@@ -103,26 +106,27 @@ public class Convert implements Keywords {
 			}
 			Map<String, Object> column = table.get(columnName);
 			Object convertedValue = convertValue(clock, index, autoValues,
-					profile, tableName, columnName, rowId,
-					(String) column.get(DATA_TYPE), (Integer) column.get(JDBC_DATA_TYPE),
-					(Integer) column.get(SIZE), (Integer) column.get(DECIMAL_DIGITS),
-					columns.get(columnName));
+				profile, tableName, columnName, rowId,
+				(String) column.get(DATA_TYPE), (Integer) column.get(JDBC_DATA_TYPE),
+				(Integer) column.get(SIZE), (Integer) column.get(DECIMAL_DIGITS),
+				columns.get(columnName));
 			convertedColumns.put(columnName, convertedValue);
 		}
 		for (String columnName : datasetColumnNames) { // verify no other column in dataset
 			if (!table.containsKey(columnName)) {
 				throw new NullPointerException("Structure for column " +
-						Index.formatColumnKey(profile, tableName, columnName) + " is missing.");
+					Index.formatColumnKey(profile, tableName, columnName) + " is missing.");
 			}
 		}
 		return Collections.unmodifiableMap(convertedColumns);
 	}
 
 	private static Object convertValue(
-			Clock clock,
-			Map<String, String> index, Set<String> autoValues,
-			String profile, String tableName, String columnName, int rowId,
-			String dataType, int jdbcDataType, Integer columnLength, Integer decimalDigits, String value) {
+		Clock clock,
+		Map<String, String> index, Set<String> autoValues,
+		String profile, String tableName, String columnName, int rowId,
+		String dataType, int jdbcDataType, Integer columnLength, Integer decimalDigits, String value
+	) {
 		Object result;
 		if (NULL_TOKEN.equals(value)) {
 			result = null;
@@ -146,10 +150,10 @@ public class Convert implements Keywords {
 		} else {
 			if (AUTO_TOKEN.equals(value)) {
 				value = Auto.generate(index, profile, tableName, columnName, rowId,
-						dataType, columnLength, decimalDigits);
+					dataType, columnLength, decimalDigits);
 				if (autoValues.contains(value)) {
 					throw new IllegalStateException("Duplicate auto value [" + value + "] in "
-							+ Index.formatColumnKey(profile, tableName, columnName) + ".");
+						+ Index.formatColumnKey(profile, tableName, columnName) + ".");
 				}
 				if (!BOOLEAN.equals(dataType)) {
 					autoValues.add(value);
@@ -160,11 +164,11 @@ public class Convert implements Keywords {
 		if (log.isTraceEnabled()) {
 			if (result instanceof byte[]) {
 				log.trace("Converted [{}]/{}.{} value {} of type {} ({}) bytes {}.",
-						profile, tableName, columnName, value, dataType, jdbcDataType,
-						Base64.encodeBase64String((byte[]) result));
+					profile, tableName, columnName, value, dataType, jdbcDataType,
+					Base64.encodeBase64String((byte[]) result));
 			} else {
 				log.trace("Converted [{}]/{}.{} value {} of type {} ({}) to {}.",
-						profile, tableName, columnName, value, dataType, jdbcDataType, result);
+					profile, tableName, columnName, value, dataType, jdbcDataType, result);
 			}
 		}
 		return result;
@@ -188,10 +192,10 @@ public class Convert implements Keywords {
 
 	private static LocalDateTime coerceToTime(LocalDateTime value) {
 		return value
-				.withYear(1970)
-				.withMonth(1)
-				.withDayOfMonth(1)
-				.truncatedTo(ChronoUnit.SECONDS);
+			.withYear(1970)
+			.withMonth(1)
+			.withDayOfMonth(1)
+			.truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	private static java.util.Date convertTemporal(LocalDateTime value, String dataType) {
@@ -222,7 +226,8 @@ public class Convert implements Keywords {
 	}
 
 	private static Object convertDataType(
-			String profile, String tableName, String columnName, String dataType, int jdbcDataType, String value) {
+		String profile, String tableName, String columnName, String dataType, int jdbcDataType, String value
+	) {
 		switch (dataType) {
 			case BYTE:
 			case SHORT:
@@ -279,7 +284,7 @@ public class Convert implements Keywords {
 				return convertArray(new Long[0], Long::parseLong, value);
 		}
 		log.error("Unknown type {} ({}) on [{}]/{}.{}, passing value {} through as String.",
-				dataType, jdbcDataType, profile, tableName, columnName, value);
+			dataType, jdbcDataType, profile, tableName, columnName, value);
 		return value;
 	}
 
@@ -288,8 +293,8 @@ public class Convert implements Keywords {
 			return emptyValue;
 		}
 		return Arrays.stream(value.split(ARRAY_ELEMENT_SEPARATOR))
-				.map(s -> NULL_TOKEN.equals(s) ? null : valueConverter.apply(s))
-				.collect(Collectors.toList())
-				.toArray(emptyValue);
+			.map(s -> NULL_TOKEN.equals(s) ? null : valueConverter.apply(s))
+			.collect(Collectors.toList())
+			.toArray(emptyValue);
 	}
 }

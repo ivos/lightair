@@ -28,8 +28,9 @@ public class Xsd implements Keywords {
 	private static final String BASE_TYPES_FILE_NAME = "light-air-types.xsd";
 
 	public static void generate(
-			Map<String, Map<String, String>> properties,
-			Map<String, Map<String, Map<String, Map<String, Object>>>> structure) {
+		Map<String, Map<String, String>> properties,
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structure
+	) {
 		log.info("Generating XSD files.");
 		String xsdDirectory = properties.get(DEFAULT_PROFILE).get(XSD_DIRECTORY);
 		if (null == xsdDirectory) {
@@ -54,8 +55,12 @@ public class Xsd implements Keywords {
 	private static String createContent(Map<String, Map<String, Map<String, Object>>> profileStructure) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
-		sb.append("<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:la=\"http://lightair.sourceforge.net/\">\n");
-		sb.append("\t<xsd:import namespace=\"http://lightair.sourceforge.net/\" schemaLocation=\"light-air-types.xsd\"/>\n\n");
+		sb.append(
+			"<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:la=\"http://lightair.sourceforge"
+				+ ".net/\">\n");
+		sb.append(
+			"\t<xsd:import namespace=\"http://lightair.sourceforge.net/\" schemaLocation=\"light-air-types"
+				+ ".xsd\" />\n\n");
 		writeDatasetElement(sb, profileStructure);
 		sb.append("\n");
 		writeTableTypes(sb, profileStructure);
@@ -64,7 +69,8 @@ public class Xsd implements Keywords {
 	}
 
 	private static void writeDatasetElement(
-			StringBuilder sb, Map<String, Map<String, Map<String, Object>>> profileStructure) {
+		StringBuilder sb, Map<String, Map<String, Map<String, Object>>> profileStructure
+	) {
 		sb.append("\t<xsd:element name=\"dataset\">\n");
 		sb.append("\t\t<xsd:complexType>\n");
 		sb.append("\t\t\t<xsd:choice minOccurs=\"0\" maxOccurs=\"unbounded\">\n");
@@ -73,7 +79,7 @@ public class Xsd implements Keywords {
 			sb.append(convert(tableName));
 			sb.append("\" type=\"");
 			sb.append(convert(tableName));
-			sb.append("__Type\"/>\n");
+			sb.append("__Type\" />\n");
 		}
 		sb.append("\t\t\t</xsd:choice>\n");
 		sb.append("\t\t</xsd:complexType>\n");
@@ -81,7 +87,8 @@ public class Xsd implements Keywords {
 	}
 
 	private static void writeTableTypes(
-			StringBuilder sb, Map<String, Map<String, Map<String, Object>>> profileStructure) {
+		StringBuilder sb, Map<String, Map<String, Map<String, Object>>> profileStructure
+	) {
 		for (String tableName : profileStructure.keySet()) {
 			sb.append("\t<xsd:complexType name=\"");
 			sb.append(convert(tableName));
@@ -95,8 +102,8 @@ public class Xsd implements Keywords {
 	}
 
 	private static final Set<String> stringTypes = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
-			FIXED_STRING, NSTRING, FIXED_NSTRING, BYTES, BLOB, CLOB, NCLOB, UUID, JSON, JSONB,
-			ARRAY_STRING, ARRAY_INTEGER, ARRAY_LONG
+		FIXED_STRING, NSTRING, FIXED_NSTRING, BYTES, BLOB, CLOB, NCLOB, UUID, JSON, JSONB,
+		ARRAY_STRING, ARRAY_INTEGER, ARRAY_LONG
 	)));
 
 	private static void writeColumn(StringBuilder sb, String columnName, Map<String, Map<String, Object>> columns) {
@@ -116,7 +123,7 @@ public class Xsd implements Keywords {
 		if (!notNull) {
 			sb.append("Nullable");
 		}
-		sb.append("Type\"/>\n");
+		sb.append("Type\" />\n");
 	}
 
 	private static void writeProfileXsd(File directory, String profile, String content) {

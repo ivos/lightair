@@ -57,20 +57,22 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * on the same element.
  *
  * <p>
- * See <a href="http://lightair.sourceforge.net/features/verify.html">http://lightair.sourceforge.net/features/verify.html</a>
+ * See
+ * <a href="http://lightair.sourceforge.net/features/verify.html">http://lightair.sourceforge.net/features/verify.html</a>
  * for more info.
  * </p>
  *
  * @see Await
  * @see Verify.List
  */
-@Target({ TYPE, METHOD })
+@Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @Documented
 public @interface Verify {
 
 	/**
 	 * Names of files with datasets.
+	 *
 	 * @return datasets
 	 */
 	String[] value() default {};
@@ -81,6 +83,7 @@ public @interface Verify {
 	 * A profile lets you connect to a different database. A profile must be
 	 * defined in the LightAir properties file and must have its own properties file
 	 * which defines the connection to the profile database.
+	 *
 	 * @return profile
 	 */
 	String profile() default "";
@@ -90,7 +93,7 @@ public @interface Verify {
 	 *
 	 * @see Verify
 	 */
-	@Target({ TYPE, METHOD })
+	@Target({TYPE, METHOD})
 	@Retention(RUNTIME)
 	@Documented
 	@interface List {

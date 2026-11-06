@@ -27,12 +27,13 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 	 * @param <A>                       Generic support param
 	 */
 	public <A extends Annotation> AbstractTestRule(
-			FrameworkMethod frameworkMethod, Class<T> annotationType, Class<A> alternativeAnnotationType) {
+		FrameworkMethod frameworkMethod, Class<T> annotationType, Class<A> alternativeAnnotationType
+	) {
 		testMethod = frameworkMethod.getMethod();
 		T methodAnnotation = testMethod.getAnnotation(annotationType);
 		final boolean hasAlternativeAnnotation =
-				null != alternativeAnnotationType
-						&& null != testMethod.getAnnotation(alternativeAnnotationType);
+			null != alternativeAnnotationType
+				&& null != testMethod.getAnnotation(alternativeAnnotationType);
 		if (hasAlternativeAnnotation) {
 			annotation = null;
 		} else if (null != methodAnnotation) {

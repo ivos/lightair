@@ -22,7 +22,7 @@ public class FirstRowMissingColumnTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, expected varchar(255), "
-				+ "unspecified varchar(255))");
+			+ "unspecified varchar(255))");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -41,10 +41,10 @@ public class FirstRowMissingColumnTest extends CommonTestBase {
 
 	public void testVerifyException(Throwable error) {
 		String msg = "Differences found between the expected data set and actual database content.\n" +
-				"Found differences for table a:\n" +
-				"  Different row: {id=1, expected=e1, unspecified=u1}\n" +
-				"   Best matching differences: \n" +
-				"    unspecified: expected [u1], but was [wrong]\n";
+			"Found differences for table a:\n" +
+			"  Different row: {id=1, expected=e1, unspecified=u1}\n" +
+			"   Best matching differences: \n" +
+			"    unspecified: expected [u1], but was [wrong]\n";
 		assertEquals(msg, error.getMessage());
 	}
 

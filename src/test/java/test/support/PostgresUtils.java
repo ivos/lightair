@@ -9,12 +9,12 @@ public class PostgresUtils {
 	public static EmbeddedPostgres initPostgres() {
 		try {
 			return EmbeddedPostgres.builder()
-					.setPort(5432)
-					.setCleanDataDirectory(false)
-					.setDataDirectory("./target/embeddedpostgres")
-					.setServerConfig("max_connections", "10")
-					.setServerConfig("max_wal_senders", "0")
-					.start();
+				.setPort(5432)
+				.setCleanDataDirectory(false)
+				.setDataDirectory("./target/embeddedpostgres")
+				.setServerConfig("max_connections", "10")
+				.setServerConfig("max_wal_senders", "0")
+				.start();
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot start embedded Postgres.", e);
 		}

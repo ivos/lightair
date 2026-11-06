@@ -22,8 +22,8 @@ public class CommonTestBase {
 	@org.testng.annotations.BeforeClass
 	public static void initCommonTestBase() {
 		LightAirApi.setFixedTime(
-				LocalDateTime.of(2009, 8, 28, 19, 49, 59, 987000000)
-						.atZone(ZoneId.systemDefault())
+			LocalDateTime.of(2009, 8, 28, 19, 49, 59, 987000000)
+				.atZone(ZoneId.systemDefault())
 		);
 		Factory.getInstance().init();
 	}

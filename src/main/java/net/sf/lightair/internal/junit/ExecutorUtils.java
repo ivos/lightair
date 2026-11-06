@@ -17,18 +17,19 @@ import java.util.stream.Collectors;
 public class ExecutorUtils {
 
 	public static Map<String, List<String>> getApiFileNames(
-			DataSetResolver dataSetResolver, String profile, Method testMethod, String[] fileNames, String suffix) {
+		DataSetResolver dataSetResolver, String profile, Method testMethod, String[] fileNames, String suffix
+	) {
 		Map<String, List<String>> apiFileNames = new LinkedHashMap<>();
 		List<URL> urls = dataSetResolver.resolve(profile, testMethod, suffix, fileNames);
 		List<String> filePaths = urls.stream()
-				.map(url -> {
-					try {
-						return new File(url.toURI()).getPath();
-					} catch (URISyntaxException e) {
-						throw new RuntimeException("Data set not found " + Arrays.toString(fileNames) + ".", e);
-					}
-				})
-				.collect(Collectors.toList());
+			.map(url -> {
+				try {
+					return new File(url.toURI()).getPath();
+				} catch (URISyntaxException e) {
+					throw new RuntimeException("Data set not found " + Arrays.toString(fileNames) + ".", e);
+				}
+			})
+			.collect(Collectors.toList());
 		apiFileNames.put(profile, filePaths);
 		return apiFileNames;
 	}

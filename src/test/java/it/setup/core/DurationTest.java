@@ -41,18 +41,18 @@ public class DurationTest extends CommonTestBase {
 		assertEquals("Count", Integer.valueOf(5), db.queryForObject("select count(*) from a", Integer.class));
 		values = db.queryForList("select * from a");
 		verifyRow(0, LocalDate.of(2011, 10, 21), LocalTime.of(22, 49, 48),
-				LocalDateTime.of(2011, 11, 21, 23, 59, 58, 123000000));
+			LocalDateTime.of(2011, 11, 21, 23, 59, 58, 123000000));
 		// @date:
 		verifyRow(1, LocalDate.of(2009, 8, 26), LocalTime.of(0, 0, 3),
-				LocalDateTime.of(2009, 12, 28, 0, 5, 0, 0));
+			LocalDateTime.of(2009, 12, 28, 0, 5, 0, 0));
 		// @time:
 		verifyRow(2, LocalDate.of(1970, 3, 1), LocalTime.of(16, 49, 59),
-				LocalDateTime.of(1974, 1, 6, 19, 56, 6));
+			LocalDateTime.of(1974, 1, 6, 19, 56, 6));
 		// @timestamp:
 		verifyRow(3, LocalDate.of(2007, 5, 24), LocalTime.of(21, 53, 3),
-				LocalDateTime.of(2007, 5, 24, 14, 43, 52, 987000000));
+			LocalDateTime.of(2007, 5, 24, 14, 43, 52, 987000000));
 		verifyRow(4, LocalDate.of(2011, 10, 22), LocalTime.of(22, 49, 49),
-				LocalDateTime.of(2011, 11, 22, 23, 59, 59, 124000000));
+			LocalDateTime.of(2011, 11, 22, 23, 59, 59, 124000000));
 	}
 
 	private void verifyRow(int id, LocalDate date1, LocalTime time1, LocalDateTime timestamp1) {

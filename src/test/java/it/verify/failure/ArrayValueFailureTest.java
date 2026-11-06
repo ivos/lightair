@@ -36,10 +36,11 @@ public class ArrayValueFailureTest extends CommonTestBase {
 
 	public void testVerifyException(Throwable error) {
 		String msg = "Differences found between the expected data set and actual database content.\n" +
-				"Found differences for table a:\n" +
-				"  Different row: {id=1, a1=varchar 21,varchar 22b,, ,@null,varchar 23}\n" +
-				"   Best matching differences: \n" +
-				"    a1: expected [varchar 21,varchar 22b,, ,@null,varchar 23], but was [varchar 21,varchar 22a,, ,@null,varchar 23]\n";
+			"Found differences for table a:\n" +
+			"  Different row: {id=1, a1=varchar 21,varchar 22b,, ,@null,varchar 23}\n" +
+			"   Best matching differences: \n" +
+			"    a1: expected [varchar 21,varchar 22b,, ,@null,varchar 23],"
+			+ " but was [varchar 21,varchar 22a,, ,@null,varchar 23]\n";
 		assertEquals(msg, error.getMessage());
 	}
 }

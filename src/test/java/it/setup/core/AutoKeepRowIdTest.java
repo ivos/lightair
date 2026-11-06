@@ -23,9 +23,9 @@ public class AutoKeepRowIdTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a (id int primary key, "
-				+ "startsAuto varchar(20), startsManual varchar(20))");
+			+ "startsAuto varchar(20), startsManual varchar(20))");
 		db.execute("create table b (id int primary key, "
-				+ "startsAuto varchar(20), startsManual varchar(20))");
+			+ "startsAuto varchar(20), startsManual varchar(20))");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -47,18 +47,18 @@ public class AutoKeepRowIdTest extends CommonTestBase {
 		verifyRow(table, 1, 2, "sa2", "startsmanu1" + prefix + "39502");
 		verifyRow(table, 2, 3, "sa3", "sm3");
 		verifyRow(table, 3, 4, "startsauto1" + prefix + "67504", "startsmanu1"
-				+ prefix + "39504");
+			+ prefix + "39504");
 		assertEquals("Count " + table, Integer.valueOf(4), db.queryForObject(
-				"select count(*) from " + table, Integer.class));
+			"select count(*) from " + table, Integer.class));
 	}
 
 	private void verifyRow(String table, int row, int id, String startsAuto,
-			String startsManual) {
+		String startsManual) {
 		assertEquals(table + " id, " + row, id, values.get(row).get("id"));
 		assertEquals(table + " startsAuto, " + row, startsAuto, values.get(row)
-				.get("startsAuto"));
+			.get("startsAuto"));
 		assertEquals(table + " startsManual, " + row, startsManual,
-				values.get(row).get("startsManual"));
+			values.get(row).get("startsManual"));
 	}
 
 }

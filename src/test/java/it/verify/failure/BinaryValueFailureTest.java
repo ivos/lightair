@@ -36,10 +36,10 @@ public class BinaryValueFailureTest extends CommonTestBase {
 
 	public void testVerifyException(Throwable error) {
 		String msg = "Differences found between the expected data set and actual database content.\n" +
-				"Found differences for table a:\n" +
-				"  Different row: {id=1, a1=/ty6CYdlQyI=}\n" +
-				"   Best matching differences: \n" +
-				"    a1: expected [/ty6CYdlQyI=], but was [/ty6CYdlQy8=]\n";
+			"Found differences for table a:\n" +
+			"  Different row: {id=1, a1=/ty6CYdlQyI=}\n" +
+			"   Best matching differences: \n" +
+			"    a1: expected [/ty6CYdlQyI=], but was [/ty6CYdlQy8=]\n";
 		assertEquals(msg, error.getMessage());
 	}
 

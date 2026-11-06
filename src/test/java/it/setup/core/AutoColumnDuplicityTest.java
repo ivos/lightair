@@ -73,7 +73,7 @@ public class AutoColumnDuplicityTest extends CommonTestBase {
 
 	private void verifyValue(String test, String column, String columnHash, int row) {
 		assertEquals(test + " " + row,
-				column + " 10421" + columnHash + "0" + row,
-				values.get(row - 1).get(column));
+			column + " 10421" + columnHash + "0" + row,
+			values.get(row - 1).get(column));
 	}
 }

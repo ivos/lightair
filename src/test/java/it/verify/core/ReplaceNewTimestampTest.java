@@ -37,7 +37,7 @@ public class ReplaceNewTimestampTest extends CommonTestBase {
 		Thread.sleep(1_000L);
 		db.execute("delete from a");
 		db.update("insert into a (id,time1,timestamp1) values " + "(1,'"
-				+ new Time(new Date().getTime()) + "','"
-				+ new Timestamp(new Date().getTime()) + "')");
+			+ new Time(new Date().getTime()) + "','"
+			+ new Timestamp(new Date().getTime()) + "')");
 	}
 }

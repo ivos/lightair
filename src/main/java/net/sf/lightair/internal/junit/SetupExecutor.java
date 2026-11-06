@@ -19,11 +19,11 @@ public class SetupExecutor {
 		String[] fileNames = setup.value();
 		String profile = setup.profile();
 		log.info("Setting up database for test method {} and profile {} with configured file names {}.",
-				testMethod, profile, fileNames);
+			testMethod, profile, fileNames);
 		StopWatch stopWatch = ExecutorUtils.startStopWatch(log);
 
 		Map<String, List<String>> apiFileNames = ExecutorUtils.getApiFileNames(
-				dataSetResolver, profile, testMethod, fileNames, "");
+			dataSetResolver, profile, testMethod, fileNames, "");
 		LightAirApi.setup(apiFileNames);
 
 		if (null != stopWatch) {

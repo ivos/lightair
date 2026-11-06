@@ -54,7 +54,7 @@ public class MultipleTablesTest extends CommonTestBase {
 	private void verifyTable(String tableName) {
 		Integer count = 3;
 		assertEquals("Count", count, db.queryForObject("select count(*) from "
-				+ tableName, Integer.class));
+			+ tableName, Integer.class));
 		values = db.queryForList("select * from " + tableName);
 		for (int i = 0; i < count; i++) {
 			verifyRow(i, tableName + "1", tableName + "1" + i);

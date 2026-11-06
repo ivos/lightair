@@ -27,8 +27,9 @@ public class Index implements Keywords {
 	private static final char COLUMN_SEPARATOR = '.';
 
 	public static Map<String, String> readAndUpdate(
-			Map<String, Map<String, String>> properties,
-			Map<String, Map<String, Map<String, Map<String, Object>>>> structures) {
+		Map<String, Map<String, String>> properties,
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures
+	) {
 		log.debug("Reading index.");
 		String autoIndexDirectory = getAutoIndexDirectory(properties);
 		File file = new File(autoIndexDirectory, AUTO_INDEX_FILE);
@@ -65,10 +66,10 @@ public class Index implements Keywords {
 		log.debug("Reading index file {}.", file.getPath());
 		try {
 			FileUtils.readLines(file, StandardCharsets.UTF_8)
-					.forEach(line -> {
-						String[] parts = line.split("=");
-						indexFile.put(parts[0].trim(), parts[1].trim());
-					});
+				.forEach(line -> {
+					String[] parts = line.split("=");
+					indexFile.put(parts[0].trim(), parts[1].trim());
+				});
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot load auto index file " + file.getPath(), e);
 		}
@@ -88,33 +89,36 @@ public class Index implements Keywords {
 
 	private static void prepareTableIndex(Map<String, String> indexFile, Set<Integer> tableIndex) {
 		indexFile.keySet().stream()
-				.filter(Index::isTableKey)
-				.forEachOrdered(key -> tableIndex.add(Integer.valueOf(indexFile.get(key))));
+			.filter(Index::isTableKey)
+			.forEachOrdered(key -> tableIndex.add(Integer.valueOf(indexFile.get(key))));
 	}
 
 	private static void verifyTableOverflow(
-			String profile,
-			Map<String, Map<String, Map<String, Object>>> profileStructure) {
+		String profile,
+		Map<String, Map<String, Map<String, Object>>> profileStructure
+	) {
 		if (profileStructure.size() > 10_000) {
 			throw new RuntimeException("Profile [" + profile + "] contains more than 10.000 tables," +
-					" which is the maximum allowed limit (required by @auto functionality).");
+				" which is the maximum allowed limit (required by @auto functionality).");
 		}
 	}
 
 	private static void verifyColumnOverflow(
-			String profile,
-			String tableName,
-			Map<String, Map<String, Map<String, Object>>> profileStructure) {
+		String profile,
+		String tableName,
+		Map<String, Map<String, Map<String, Object>>> profileStructure
+	) {
 		if (profileStructure.get(tableName).size() > 1_000) {
 			throw new RuntimeException("Table [" + profile + "]/" + tableName + " contains more than 1.000 columns," +
-					" which is the maximum allowed limit (required by @auto functionality).");
+				" which is the maximum allowed limit (required by @auto functionality).");
 		}
 	}
 
 	private static void prepareColumnIndex(
-			Map<String, Map<String, Map<String, Map<String, Object>>>> structures,
-			Map<String, String> indexFile,
-			Map<String, Set<Integer>> columnIndex) {
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures,
+		Map<String, String> indexFile,
+		Map<String, Set<Integer>> columnIndex
+	) {
 		for (String profile : structures.keySet()) {
 			Map<String, Map<String, Map<String, Object>>> profileStructure = structures.get(profile);
 			verifyTableOverflow(profile, profileStructure);
@@ -124,18 +128,19 @@ public class Index implements Keywords {
 			}
 		}
 		indexFile.keySet().stream()
-				.filter(Index::isColumnKey) // only process columns from index file
-				.filter(key -> columnIndex.containsKey(getTableKeyFromColumnKey(key))) // skip columns deleted from DB
-				.forEachOrdered(key ->
-						columnIndex.get(getTableKeyFromColumnKey(key))
-								.add(Integer.valueOf(indexFile.get(key))));
+			.filter(Index::isColumnKey) // only process columns from index file
+			.filter(key -> columnIndex.containsKey(getTableKeyFromColumnKey(key))) // skip columns deleted from DB
+			.forEachOrdered(key ->
+				columnIndex.get(getTableKeyFromColumnKey(key))
+					.add(Integer.valueOf(indexFile.get(key))));
 	}
 
 	private static void updateTable(
-			Map<String, String> indexFile,
-			Set<Integer> tableIndex,
-			String profile, String tableName,
-			Map<String, String> updates) {
+		Map<String, String> indexFile,
+		Set<Integer> tableIndex,
+		String profile, String tableName,
+		Map<String, String> updates
+	) {
 		String tableKey = formatTableKey(profile, tableName);
 		if (indexFile.containsKey(tableKey)) {
 			return;
@@ -154,10 +159,11 @@ public class Index implements Keywords {
 	}
 
 	private static void updateColumn(
-			Map<String, String> indexFile,
-			Map<String, Set<Integer>> columnIndex,
-			String profile, String tableName, String columnName,
-			Map<String, String> updates) {
+		Map<String, String> indexFile,
+		Map<String, Set<Integer>> columnIndex,
+		String profile, String tableName, String columnName,
+		Map<String, String> updates
+	) {
 		String tableKey = formatTableKey(profile, tableName);
 		String columnKey = formatColumnKey(profile, tableName, columnName);
 		if (indexFile.containsKey(columnKey)) {
@@ -177,8 +183,9 @@ public class Index implements Keywords {
 	}
 
 	private static Map<String, String> getUpdates(
-			Map<String, String> indexFile,
-			Map<String, Map<String, Map<String, Map<String, Object>>>> structures) {
+		Map<String, String> indexFile,
+		Map<String, Map<String, Map<String, Map<String, Object>>>> structures
+	) {
 		Set<Integer> tableIndex = new HashSet<>();
 		prepareTableIndex(indexFile, tableIndex);
 
@@ -206,12 +213,12 @@ public class Index implements Keywords {
 		log.debug("Writing updates to index file {}.", file.getPath());
 		StringBuilder sb = new StringBuilder();
 		updates.keySet()
-				.forEach(key -> {
-					sb.append(key);
-					sb.append('=');
-					sb.append(updates.get(key));
-					sb.append(System.lineSeparator());
-				});
+			.forEach(key -> {
+				sb.append(key);
+				sb.append('=');
+				sb.append(updates.get(key));
+				sb.append(System.lineSeparator());
+			});
 		try {
 			FileUtils.writeStringToFile(file, sb.toString(), StandardCharsets.UTF_8, true);
 		} catch (IOException e) {

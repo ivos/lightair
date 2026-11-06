@@ -25,7 +25,7 @@ public class ReservedSqlWordsTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table \"SELECT\" (id int primary key," +
-				" \"VARCHAR\" varchar(50), \"INTEGER\" integer, \"DATE\" date, \"ORDER\" varchar(50))");
+			" \"VARCHAR\" varchar(50), \"INTEGER\" integer, \"DATE\" date, \"ORDER\" varchar(50))");
 		ApiTestSupport.reInitialize();
 	}
 

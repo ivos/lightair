@@ -16,7 +16,7 @@ public class TimeDifferenceLimitTest extends CommonTestBase {
 	@BeforeClass
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, "
-				+ "date1 date, time1 time, timestamp1 timestamp)");
+			+ "date1 date, time1 time, timestamp1 timestamp)");
 		ConfigSupport.replaceConfig("diff60");
 	}
 
@@ -30,20 +30,20 @@ public class TimeDifferenceLimitTest extends CommonTestBase {
 	public void test() {
 		db.execute("delete from a");
 		db.update("insert into a (id,date1,time1,timestamp1) values "
-				+ "(0,'2011-10-21','22:49:48','2011-11-21 23:59:58.123')");
+			+ "(0,'2011-10-21','22:49:48','2011-11-21 23:59:58.123')");
 
 		// @date:
 		db.update("insert into a (id,date1,time1,timestamp1) values "
-				+ "(1,'2009-08-28','00:00:00','2009-08-28 00:00:00.000')");
+			+ "(1,'2009-08-28','00:00:00','2009-08-28 00:00:00.000')");
 		// @time:
 		db.update("insert into a (id,date1,time1,timestamp1) values "
-				+ "(2,'1970-01-01','19:49:00','1970-01-01 19:50:58.000')");
+			+ "(2,'1970-01-01','19:49:00','1970-01-01 19:50:58.000')");
 		// @timestamp:
 		db.update("insert into a (id,date1,time1,timestamp1) values "
-				+ "(3,'2009-08-28','19:50:58','2009-08-28 19:48:59.988')");
+			+ "(3,'2009-08-28','19:50:58','2009-08-28 19:48:59.988')");
 
 		db.update("insert into a (id,date1,time1,timestamp1) values "
-				+ "(4,'2011-10-22','22:48:50','2011-11-23 00:00:01.123')");
+			+ "(4,'2011-10-22','22:48:50','2011-11-23 00:00:01.123')");
 	}
 
 }

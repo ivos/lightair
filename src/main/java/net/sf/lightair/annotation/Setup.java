@@ -59,19 +59,21 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * the same element.
  *
  * <p>
- * See <a href="http://lightair.sourceforge.net/features/setup.html">http://lightair.sourceforge.net/features/setup.html</a>
+ * See
+ * <a href="http://lightair.sourceforge.net/features/setup.html">http://lightair.sourceforge.net/features/setup.html</a>
  * for more info.
  * </p>
  *
  * @see Setup.List
  */
-@Target({ TYPE, METHOD })
+@Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @Documented
 public @interface Setup {
 
 	/**
 	 * Names of files with datasets.
+	 *
 	 * @return datasets
 	 */
 	String[] value() default {};
@@ -82,6 +84,7 @@ public @interface Setup {
 	 * A profile lets you connect to a different database. A profile must be
 	 * defined in the LightAir properties file and must have its own properties file
 	 * which defines the connection to the profile database.
+	 *
 	 * @return profile
 	 */
 	String profile() default "";
@@ -91,7 +94,7 @@ public @interface Setup {
 	 *
 	 * @see Setup
 	 */
-	@Target({ TYPE, METHOD })
+	@Target({TYPE, METHOD})
 	@Retention(RUNTIME)
 	@Documented
 	@interface List {

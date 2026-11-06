@@ -37,7 +37,7 @@ public class DeleteAllTest extends CommonTestBase {
 	@Test
 	public void test() {
 		assertEquals("Count", Integer.valueOf(2),
-				db.queryForObject("select count(*) from a", Integer.class));
+			db.queryForObject("select count(*) from a", Integer.class));
 		values = db.queryForList("select * from a");
 		verifyRow(0, "a10");
 		verifyRow(1, "a11");

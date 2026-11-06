@@ -36,10 +36,10 @@ public class AnyValueIsNullTest extends CommonTestBase {
 
 	public void testVerifyException(Throwable error) {
 		String msg = "Differences found between the expected data set and actual database content.\n" +
-				"Found differences for table a:\n" +
-				"  Different row: {id=1, a1=@any}\n" +
-				"   Best matching differences: \n" +
-				"    a1: expected [@any], but was [null]\n";
+			"Found differences for table a:\n" +
+			"  Different row: {id=1, a1=@any}\n" +
+			"   Best matching differences: \n" +
+			"    a1: expected [@any], but was [null]\n";
 		assertEquals(msg, error.getMessage());
 	}
 
