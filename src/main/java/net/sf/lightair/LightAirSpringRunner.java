@@ -22,8 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * {@link net.sf.lightair.annotation.Verify} to define actions Light air should
  * take on the test.
  * <p>
- * Requires dependency org.springframework:spring-test version 2.5 or higher in
- * order to work.
+ * Requires dependency org.springframework:spring-test version 2.5 or higher to work.
  */
 public class LightAirSpringRunner extends SpringJUnit4ClassRunner {
 
