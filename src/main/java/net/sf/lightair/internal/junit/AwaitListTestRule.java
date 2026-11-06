@@ -4,7 +4,7 @@ import net.sf.lightair.annotation.Await;
 import org.junit.runners.model.FrameworkMethod;
 
 /**
- * JUnit test rule to verify database with multiple <code>@Await</code>
+ * JUnit test rule to verify the database with multiple <code>@Await</code>
  * annotations after test method execution with asynchronous functionality.
  */
 public class AwaitListTestRule extends AbstractTestRule<Await.List> {

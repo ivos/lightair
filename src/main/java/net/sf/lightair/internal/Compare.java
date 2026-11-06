@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -78,18 +79,14 @@ public class Compare implements Keywords {
 				String tableName = (String) row.get(TABLE);
 				@SuppressWarnings({"unchecked", "rawtypes"})
 				Map<String, Object> columns = (Map) row.get(COLUMNS);
-				List<Map<String, Object>> table = processedDataset.get(tableName);
-				if (null == table) {
-					table = new ArrayList<>();
-					processedDataset.put(tableName, table);
-				}
+				List<Map<String, Object>> table = processedDataset
+						.computeIfAbsent(tableName, k -> new ArrayList<>());
 				table.add(columns);
 			}
 			for (String tableName : processedDataset.keySet()) {
 				List<Map<String, Object>> table = processedDataset.get(tableName);
-				Collections.sort(table,
-						(Map<String, Object> o1, Map<String, Object> o2) ->
-								-Integer.compare(o1.keySet().size(), o2.keySet().size()));
+				table.sort((Map<String, Object> o1, Map<String, Object> o2) ->
+								-Integer.compare(o1.size(), o2.size()));
 				processedDataset.put(tableName, Collections.unmodifiableList(table));
 			}
 			data.put(profile, Collections.unmodifiableMap(processedDataset));
@@ -108,7 +105,7 @@ public class Compare implements Keywords {
 		List<Map<String, Object>> unexpected = new ArrayList<>();
 		List<Integer> unmatchedExpectedRowIds = IntStream
 				.rangeClosed(0, expectedRows.size() - 1).boxed()
-				.filter(i -> !expectedRows.get(i).keySet().isEmpty()) // skip empty expected rows
+				.filter(i -> !expectedRows.get(i).isEmpty()) // skip empty expected rows
 				.collect(Collectors.toList());
 
 		for (Map<String, Object> actualRow : sortedActualRows) {
@@ -135,7 +132,7 @@ public class Compare implements Keywords {
 		}
 
 		List<Map<String, Object>> missing = getUnmatchedExpectedRows(expectedRows, unmatchedExpectedRowIds);
-		missing.stream().forEachOrdered(row -> log.debug("Missing row {}.", row));
+		missing.forEach(row -> log.debug("Missing row {}.", row));
 
 		Map<String, List<?>> data = new LinkedHashMap<>();
 		data.put(MISSING, Collections.unmodifiableList(missing));
@@ -167,13 +164,7 @@ public class Compare implements Keywords {
 			data[actualRowId][1] =
 					getRowDifferences(limit, null, false, expectedRows.get(bestMatchingRowId), actualRow).size();
 		}
-		Arrays.sort(data, (int[] o1, int[] o2) -> {
-			int matchingColumnsComparison = Integer.compare(o1[1], o2[1]);
-			if (0 != matchingColumnsComparison) {
-				return matchingColumnsComparison;
-			}
-			return Integer.compare(o1[0], o2[0]);
-		});
+		Arrays.sort(data, Comparator.comparingInt((int[] o) -> o[1]).thenComparingInt(o -> o[0]));
 		List<Map<String, Object>> sortedActualRows = new ArrayList<>();
 		for (int actualRowId = 0; actualRowId < actualRows.size(); actualRowId++) {
 			sortedActualRows.add(actualRows.get(data[actualRowId][0]));

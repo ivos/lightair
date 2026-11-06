@@ -4,7 +4,7 @@ import net.sf.lightair.annotation.Await;
 import org.junit.runners.model.FrameworkMethod;
 
 /**
- * JUnit test rule to verify database after test method execution with asynchronous functionality.
+ * JUnit test rule to verify the database after test method execution with asynchronous functionality.
  */
 public class AwaitTestRule extends AbstractTestRule<Await> {
 

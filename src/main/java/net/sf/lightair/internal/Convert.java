@@ -31,7 +31,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Convert String values in datasets parsed from XML into proper data types based on database structure.
+ * Convert String values in datasets parsed from XML into proper data types based on the database structure.
  */
 public class Convert implements Keywords {
 
@@ -158,7 +158,7 @@ public class Convert implements Keywords {
 			result = convertDataType(profile, tableName, columnName, dataType, jdbcDataType, value);
 		}
 		if (log.isTraceEnabled()) {
-			if (null != result && result instanceof byte[]) {
+			if (result instanceof byte[]) {
 				log.trace("Converted [{}]/{}.{} value {} of type {} ({}) bytes {}.",
 						profile, tableName, columnName, value, dataType, jdbcDataType,
 						Base64.encodeBase64String((byte[]) result));
@@ -284,7 +284,7 @@ public class Convert implements Keywords {
 	}
 
 	private static Object convertArray(Object[] emptyValue, Function<String, ?> valueConverter, String value) {
-		if ("".equals(value)) { // treat empty string as an empty array, rather than array with an empty string
+		if ("".equals(value)) { // treat empty string as an empty array rather than array with an empty string
 			return emptyValue;
 		}
 		return Arrays.stream(value.split(ARRAY_ELEMENT_SEPARATOR))

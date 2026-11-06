@@ -46,7 +46,7 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 
 	/**
 	 * JUnit test rule contract. Applies the rule to a statement, returning
-	 * wrapped statement.
+	 * a wrapped statement.
 	 * <p>
 	 * Calls {@link AbstractTestRule#before()}, then the wrapped statement, then
 	 * {@link AbstractTestRule#after()}.
@@ -65,7 +65,7 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 	// hook methods for descendants:
 
 	/**
-	 * Called before wrapped statement.
+	 * Called before a wrapped statement.
 	 *
 	 * @throws Throwable Anything
 	 */
@@ -73,7 +73,7 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 	}
 
 	/**
-	 * Called after wrapped statement.
+	 * Called after a wrapped statement.
 	 *
 	 * @throws Throwable Anything
 	 */

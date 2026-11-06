@@ -5,13 +5,13 @@ import net.sf.lightair.annotation.Setup;
 import org.junit.runners.model.FrameworkMethod;
 
 /**
- * JUnit test rule to setup database before test method execution.
+ * JUnit test rule to set up the database before test method execution.
  */
 public class SetupTestRule extends AbstractTestRule<Setup> {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param frameworkMethod
 	 *            JUnit framework method on which the test rule is being applied
 	 */
@@ -34,8 +34,8 @@ public class SetupTestRule extends AbstractTestRule<Setup> {
 	private SetupExecutor setupExecutor;
 
 	/**
-	 * Set setup executor.
-	 * 
+	 * Set the setup executor.
+	 *
 	 * @param setupExecutor executor
 	 */
 	public void setSetupExecutor(SetupExecutor setupExecutor) {

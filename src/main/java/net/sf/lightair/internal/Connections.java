@@ -63,7 +63,7 @@ public class Connections implements Keywords {
 				connection.close();
 				log.info("Closed connection for profile [{}].", profile);
 			} catch (SQLException e) {
-				log.error("Cannot close connection for profile [" + profile + "].", e);
+				log.error("Cannot close connection for profile [{}].", profile, e);
 			}
 		}
 	}

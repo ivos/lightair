@@ -4,7 +4,7 @@ import net.sf.lightair.annotation.Verify;
 import org.junit.runners.model.FrameworkMethod;
 
 /**
- * JUnit test rule to verify database after test method execution.
+ * JUnit test rule to verify the database after test method execution.
  */
 public class VerifyTestRule extends AbstractTestRule<Verify> {
 
@@ -32,7 +32,7 @@ public class VerifyTestRule extends AbstractTestRule<Verify> {
 	private VerifyExecutor verifyExecutor;
 
 	/**
-	 * Set verify executor.
+	 * Set the verify executor.
 	 *
 	 * @param verifyExecutor executor
 	 */

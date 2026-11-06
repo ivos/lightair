@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -60,13 +60,13 @@ public class Properties implements Keywords {
 				throw new RuntimeException("Properties file not found: " + fileName +
 						"\nShould be relative to: " + new File("").getAbsolutePath());
 			}
-			try (InputStream is = new FileInputStream(file)) {
+			try (InputStream is = Files.newInputStream(file.toPath())) {
 				java.util.Properties properties = new java.util.Properties();
 				properties.load(is);
 				log.debug("For profile [{}] loaded properties file {}.", profile, fileName);
 				@SuppressWarnings({"unchecked", "rawtypes"})
 				Map<String, String> map = overrideProfileProperties(profile, (Map) properties);
-				return Collections.unmodifiableMap(map);
+				return map;
 			}
 		} catch (IOException e) {
 			throw new RuntimeException("Properties file unreadable: " + fileName);

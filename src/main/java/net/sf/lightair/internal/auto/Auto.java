@@ -99,7 +99,7 @@ public class Auto implements Keywords {
 		log.trace("Generating auto value for data type {}, column name {}, "
 						+ "auto number {}, column length {}, decimal digits {}, string value {}.",
 				dataType, columnName, autoNumber, columnLength, decimalDigits, stringValue);
-		int number = Integer.valueOf(autoNumber);
+		int number = Integer.parseInt(autoNumber);
 		switch (dataType) {
 			case BOOLEAN:
 				return String.valueOf(0 != number % 2);
@@ -124,8 +124,8 @@ public class Auto implements Keywords {
 				return LocalTime.of(0, 0, 0).plusSeconds(number).format(DateTimeFormatter.ISO_LOCAL_TIME);
 			case TIMESTAMP:
 				// Add number days from local date 1900-01-01, wrapping approximately around 2100.
-				// Add number of seconds to local time 0:00:00, wrapping at 1 day.
-				// Add number of milliseconds, wrapping at 1 second.
+				// Add the number of seconds to local time 0:00:00, wrapping at 1 day.
+				// Add the number of milliseconds, wrapping at 1 second.
 				return LocalDateTime.of(1900, 1, 1, 0, 0, 0)
 						.plusDays(number % 73_000)
 						.plusSeconds(number % 86_400)

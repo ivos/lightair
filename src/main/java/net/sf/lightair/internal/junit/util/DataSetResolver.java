@@ -23,7 +23,7 @@ public class DataSetResolver {
 		log.debug("Resolving dataset for method {} with suffix [{}] and configured file names {}.",
 				testMethod, suffix, fileNames);
 		try {
-			List<URL> resources = new ArrayList<URL>();
+			List<URL> resources = new ArrayList<>();
 			if (fileNames.length == 0) {
 				fileNames = addDefaultFile(testMethod, suffix, resources);
 			} else {
@@ -36,7 +36,7 @@ public class DataSetResolver {
 	}
 
 	/**
-	 * Get default test class and test method file name of the form
+	 * Get the default test class and test method file name of the form
 	 * <code>[TestClassName].[testMethodName][suffix].xml</code>.
 	 *
 	 * @param testMethod Test method
@@ -50,7 +50,7 @@ public class DataSetResolver {
 	}
 
 	/**
-	 * Get default test method file name of the form
+	 * Get the default test method file name of the form
 	 * <code>[TestClassName].[testMethodName][suffix].xml</code>.
 	 *
 	 * @param testMethod Test method
@@ -62,7 +62,7 @@ public class DataSetResolver {
 	}
 
 	/**
-	 * Get default test class file name of the form
+	 * Get the default test class file name of the form
 	 * <code>[TestClassName][suffix].xml</code>.
 	 *
 	 * @param testClass Test class
@@ -74,10 +74,10 @@ public class DataSetResolver {
 	}
 
 	/**
-	 * Add resolved default test method file to resources list.
+	 * Add the resolved default test method file to the list of resources.
 	 * <p>
-	 * Resolve default test method dataset file, if it exists. If it does not
-	 * exist, resolve default class dataset file.
+	 * Resolve the default test method dataset file if it exists. If it does not
+	 * exist, resolve the default class dataset file.
 	 *
 	 * @param testMethod Test method
 	 * @param suffix     File name suffix
@@ -102,7 +102,7 @@ public class DataSetResolver {
 	}
 
 	/**
-	 * Add resolved explicit files to files list.
+	 * Add resolved explicit files to the list of files.
 	 *
 	 * @param testMethod Test method
 	 * @param fileNames  Names of explicit files
@@ -139,11 +139,6 @@ public class DataSetResolver {
 	 */
 	public URL resolveIfExists(Method testMethod, String fileName) {
 		Class<?> testClass = testMethod.getDeclaringClass();
-		URL url = testClass.getResource(fileName);
-
-		if (null == url) {
-			return null;
-		}
-		return url;
+		return testClass.getResource(fileName);
 	}
 }

@@ -127,7 +127,8 @@ public class Xsd implements Keywords {
 	private static void copyBaseTypes(File directory) {
 		InputStream inputStream = Xsd.class.getClassLoader().getResourceAsStream(BASE_TYPES_FILE_NAME);
 		try {
-			String content = IOUtils.toString(inputStream, "UTF-8");
+			assert inputStream != null;
+			String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
 			writeFile(directory, BASE_TYPES_FILE_NAME, content);
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot load base Light Air XSD types file.", e);

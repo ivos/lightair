@@ -4,7 +4,7 @@ import net.sf.lightair.annotation.Verify;
 import org.junit.runners.model.FrameworkMethod;
 
 /**
- * JUnit test rule to verify database with multiple <code>@Verify</code>
+ * JUnit test rule to verify the database with multiple <code>@Verify</code>
  * annotations after test method execution.
  */
 public class VerifyListTestRule extends AbstractTestRule<Verify.List> {
@@ -36,7 +36,7 @@ public class VerifyListTestRule extends AbstractTestRule<Verify.List> {
 	private VerifyExecutor verifyExecutor;
 
 	/**
-	 * Set verify executor.
+	 * Set the verify executor.
 	 *
 	 * @param verifyExecutor executor
 	 */

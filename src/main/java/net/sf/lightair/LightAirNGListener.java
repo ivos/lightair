@@ -74,7 +74,7 @@ public class LightAirNGListener implements IInvokedMethodListener, ITestListener
 	}
 
 	/**
-	 * Get Setup for executing before given method. If no @Setup or @Setup.List is present on the method, class annotations are used.
+	 * Get Setup for executing before a given method. If no @Setup or @Setup.List is present on the method, class annotations are used.
 	 */
 	private Setup[] getActiveSetupAnnotation(
 			Method method) {
@@ -99,7 +99,7 @@ public class LightAirNGListener implements IInvokedMethodListener, ITestListener
 	}
 
 	/**
-	 * Get Setup for executing before given method. If no @Verify or @Verify.List is present on the method, class annotations are used.
+	 * Get Setup for executing before a given method. If no @Verify or @Verify.List is present on the method, class annotations are used.
 	 */
 	private Verify[] getActiveVerifyAnnotation(
 			Method method) {

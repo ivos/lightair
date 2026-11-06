@@ -67,7 +67,7 @@ public class Structure implements Keywords {
 				}
 			}
 			log.debug("Loaded {} tables in profile [{}].", data.size(), profile);
-			if (0 == data.size()) {
+			if (data.isEmpty()) {
 				log.warn("NO TABLES LOADED in profile [{}]! URL: [{}], user name [{}], schema [{}].",
 						profile, meta.getURL(), meta.getUserName(), schema);
 			}

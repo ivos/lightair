@@ -64,8 +64,8 @@ public class Index implements Keywords {
 		}
 		log.debug("Reading index file {}.", file.getPath());
 		try {
-			FileUtils.readLines(file, StandardCharsets.UTF_8).stream()
-					.forEachOrdered(line -> {
+			FileUtils.readLines(file, StandardCharsets.UTF_8)
+					.forEach(line -> {
 						String[] parts = line.split("=");
 						indexFile.put(parts[0].trim(), parts[1].trim());
 					});
@@ -95,7 +95,7 @@ public class Index implements Keywords {
 	private static void verifyTableOverflow(
 			String profile,
 			Map<String, Map<String, Map<String, Object>>> profileStructure) {
-		if (profileStructure.keySet().size() > 10_000) {
+		if (profileStructure.size() > 10_000) {
 			throw new RuntimeException("Profile [" + profile + "] contains more than 10.000 tables," +
 					" which is the maximum allowed limit (required by @auto functionality).");
 		}
@@ -105,7 +105,7 @@ public class Index implements Keywords {
 			String profile,
 			String tableName,
 			Map<String, Map<String, Map<String, Object>>> profileStructure) {
-		if (profileStructure.get(tableName).keySet().size() > 1_000) {
+		if (profileStructure.get(tableName).size() > 1_000) {
 			throw new RuntimeException("Table [" + profile + "]/" + tableName + " contains more than 1.000 columns," +
 					" which is the maximum allowed limit (required by @auto functionality).");
 		}
@@ -205,8 +205,8 @@ public class Index implements Keywords {
 		}
 		log.debug("Writing updates to index file {}.", file.getPath());
 		StringBuilder sb = new StringBuilder();
-		updates.keySet().stream()
-				.forEachOrdered(key -> {
+		updates.keySet()
+				.forEach(key -> {
 					sb.append(key);
 					sb.append('=');
 					sb.append(updates.get(key));

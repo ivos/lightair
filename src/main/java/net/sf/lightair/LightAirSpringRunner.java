@@ -37,8 +37,7 @@ public class LightAirSpringRunner extends SpringJUnit4ClassRunner {
 	}
 
 	/**
-	 * Overriding methodInvoker in order to place LightAir's test rules as the
-	 * leading ones.
+	 * Overriding methodInvoker to place LightAir's test rules as the leading ones.
 	 */
 	@Override
 	protected Statement methodInvoker(FrameworkMethod method, Object test) {

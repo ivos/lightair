@@ -99,12 +99,12 @@ public class Factory {
 	}
 
 	public List<TestRule> getAllTestRules(FrameworkMethod method) {
-		return Arrays.asList((TestRule) getSetupTestRule(method),
-				(TestRule) getSetupListTestRule(method),
-				(TestRule) getVerifyTestRule(method),
-				(TestRule) getVerifyListTestRule(method),
-				(TestRule) getAwaitTestRule(method),
-				(TestRule) getAwaitListTestRule(method));
+		return Arrays.asList(getSetupTestRule(method),
+				getSetupListTestRule(method),
+				getVerifyTestRule(method),
+				getVerifyListTestRule(method),
+				getAwaitTestRule(method),
+				getAwaitListTestRule(method));
 	}
 
 	// access as singleton

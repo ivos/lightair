@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Generate textual report from structured differences between datasets.
+ * Generate the textual report from structured differences between datasets.
  */
 public class Report implements Keywords {
 
