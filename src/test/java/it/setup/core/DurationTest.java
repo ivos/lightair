@@ -38,7 +38,7 @@ public class DurationTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		assertEquals("Count", new Integer(5), db.queryForObject("select count(*) from a", Integer.class));
+		assertEquals("Count", Integer.valueOf(5), db.queryForObject("select count(*) from a", Integer.class));
 		values = db.queryForList("select * from a");
 		verifyRow(0, LocalDate.of(2011, 10, 21), LocalTime.of(22, 49, 48),
 				LocalDateTime.of(2011, 11, 21, 23, 59, 58, 123000000));

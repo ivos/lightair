@@ -28,8 +28,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class LightAirSpringRunner extends SpringJUnit4ClassRunner {
 
 	static {
-		Api.initialize(Api.getPropertiesFileName());
-		Runtime.getRuntime().addShutdownHook(new Thread(Api::shutdown));
+		LightAirApi.initialize(LightAirApi.getPropertiesFileName());
+		Runtime.getRuntime().addShutdownHook(new Thread(LightAirApi::shutdown));
 	}
 
 	public LightAirSpringRunner(Class<?> clazz) throws InitializationError {

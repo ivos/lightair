@@ -38,12 +38,12 @@ public class ForeignKeysTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		assertEquals("Count master", new Integer(2),
+		assertEquals("Count master", Integer.valueOf(2),
 				db.queryForObject("select count(*) from master", Integer.class));
 		values = db.queryForList("select * from master");
 		verifyMaster(0, "01");
 		verifyMaster(1, "11");
-		assertEquals("Count detail", new Integer(6),
+		assertEquals("Count detail", Integer.valueOf(6),
 				db.queryForObject("select count(*) from detail", Integer.class));
 		values = db.queryForList("select * from detail");
 		verifyDetail(0, 0, 0, "001");

@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNull;
 public abstract class DataTypesSetupTestBase extends DataTypesTestBase {
 
 	protected void perform() {
-		assertEquals("Count", new Integer(4), db.queryForObject("select count(*) from data_types", Integer.class));
+		assertEquals("Count", Integer.valueOf(4), db.queryForObject("select count(*) from data_types", Integer.class));
 		values = db.queryForList("select * from data_types");
 		verify();
 	}

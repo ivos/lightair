@@ -59,7 +59,7 @@ public class AutoTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		assertEquals("Count", new Integer(5),
+		assertEquals("Count", Integer.valueOf(5),
 				db.queryForObject("select count(*) from a1", Integer.class));
 		values = db.queryForList("select * from a1");
 
@@ -88,7 +88,7 @@ public class AutoTest extends CommonTestBase {
 				1327344904L, new BigDecimal("1327346.904"), "clob_type 1327303204",
 				"blob_type 1327375404", "binary_typ1327352304");
 
-		assertEquals("Count", new Integer(4),
+		assertEquals("Count", Integer.valueOf(4),
 				db.queryForObject("select count(*) from a2", Integer.class));
 		values = db.queryForList("select * from a2");
 
@@ -117,7 +117,7 @@ public class AutoTest extends CommonTestBase {
 				1603144904L, new BigDecimal("1603146.904"), "clob_type 1603103204",
 				"blob_type 1603175404", "binary_typ1603152304");
 
-		assertEquals("Count", new Integer(1),
+		assertEquals("Count", Integer.valueOf(1),
 				db.queryForObject("select count(*) from a3", Integer.class));
 		values = db.queryForList("select * from a3");
 
@@ -132,7 +132,7 @@ public class AutoTest extends CommonTestBase {
 	@Test
 	@Setup("AutoTest2.xml")
 	public void rowIndexStartsFrom0InNewTest() {
-		assertEquals("Count", new Integer(2),
+		assertEquals("Count", Integer.valueOf(2),
 				db.queryForObject("select count(*) from a1", Integer.class));
 		values = db.queryForList("select * from a1");
 

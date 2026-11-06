@@ -1,7 +1,7 @@
 package net.sf.lightair.internal;
 
 import net.sf.lightair.internal.auto.Index;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -261,6 +261,6 @@ public class Compare implements Keywords {
 	private static boolean isVariable(Map<String, Object> variables, Object expectedValue) {
 		return null != variables
 				&& expectedValue instanceof String
-				&& StringUtils.startsWith((String) expectedValue, VARIABLE_PREFIX);
+				&& Strings.CS.startsWith((String) expectedValue, VARIABLE_PREFIX);
 	}
 }

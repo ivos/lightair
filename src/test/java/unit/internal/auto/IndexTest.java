@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -74,7 +75,7 @@ public class IndexTest implements Keywords {
 				expected.replace("{", "")
 						.replace(",\n ", "\n")
 						.replace("}", "\n"),
-				FileUtils.readFileToString(new File(FILE)));
+				FileUtils.readFileToString(new File(FILE), Charset.defaultCharset()));
 	}
 
 	@Test
@@ -112,7 +113,7 @@ public class IndexTest implements Keywords {
 				expected.replace("{", "")
 						.replace(",\n ", "\n")
 						.replace("}", "\n"),
-				FileUtils.readFileToString(new File(FILE)));
+				FileUtils.readFileToString(new File(FILE), Charset.defaultCharset()));
 	}
 
 	@Test

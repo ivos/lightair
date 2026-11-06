@@ -48,7 +48,7 @@ public class AutoKeepRowIdTest extends CommonTestBase {
 		verifyRow(table, 2, 3, "sa3", "sm3");
 		verifyRow(table, 3, 4, "startsauto1" + prefix + "67504", "startsmanu1"
 				+ prefix + "39504");
-		assertEquals("Count " + table, new Integer(4), db.queryForObject(
+		assertEquals("Count " + table, Integer.valueOf(4), db.queryForObject(
 				"select count(*) from " + table, Integer.class));
 	}
 

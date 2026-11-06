@@ -37,7 +37,7 @@ public class ReservedSqlWordsTest extends CommonTestBase {
 	@Ignore // TODO resolve
 	@Test
 	public void test() {
-		assertEquals("Count", new Integer(1), db.queryForObject("select count(*) from \"SELECT\"", Integer.class));
+		assertEquals("Count", Integer.valueOf(1), db.queryForObject("select count(*) from \"SELECT\"", Integer.class));
 		values = db.queryForList("select * from \"SELECT\"");
 		verifyRow(0, "abcdefghijklmnopqrstuvxyz", 12345678, LocalDate.of(2999, 12, 31), "order1");
 	}
