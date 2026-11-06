@@ -17,10 +17,10 @@ import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.annotation.Verify;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup
 @Verify
 public class ProfileUpdateIT {
@@ -34,9 +34,11 @@ public class ProfileUpdateIT {
 }
 +---+
 
- With TestNG, use the Listeners annotation instead of the RunWith annotation:
- 
+ With TestNG, use the Listeners annotation instead of the ExtendWith annotation:
+
 +---+
+import org.testng.annotations.Listeners;
+
 @Listeners(LightAirNGListener.class)
 @Setup
 @Verify
@@ -46,7 +48,7 @@ public class ProfileUpdateIT {
 
  Next to the class (in the same package), create <<<ProfileUpdateIT.xml>>> file
  to setup the database before the test:
- 
+
 +---+
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -57,7 +59,7 @@ public class ProfileUpdateIT {
 
  Finally, create <<<ProfileUpdateIT-verify.xml>>> file to verify database
  was properly updated:
- 
+
 +---+
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

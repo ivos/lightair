@@ -2,7 +2,7 @@ package unit.internal.db;
 
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.db.ExecuteUpdate;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import test.support.DbTemplate;
 
 import java.math.BigDecimal;
@@ -20,13 +20,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ExecuteUpdateTest implements Keywords {
 
 	private List<Map<String, Object>> createStatements(Object... data) {
-		assertTrue("Data in pairs", data.length % 2 == 0);
+		assertTrue(data.length % 2 == 0, "Data in pairs");
 		List<Map<String, Object>> statements = new ArrayList<>();
 		for (int i = 0; i < data.length; i = i + 2) {
 			Map<String, Object> statement = new LinkedHashMap<>();
@@ -39,7 +39,7 @@ public class ExecuteUpdateTest implements Keywords {
 
 	private List<Map<String, Object>> createParameters(Object... data) {
 		List<Map<String, Object>> parameters = new ArrayList<>();
-		assertTrue("Data in triples", data.length % 3 == 0);
+		assertTrue(data.length % 3 == 0, "Data in triples");
 		for (int i = 0; i < data.length; i = i + 3) {
 			Map<String, Object> parameter = new LinkedHashMap<>();
 			parameter.put(DATA_TYPE, data[i]);
@@ -61,12 +61,12 @@ public class ExecuteUpdateTest implements Keywords {
 
 		int count;
 		count = h2.db.queryForList("select * from s1.t1").size();
-		assertEquals("Before", 3, count);
+		assertEquals(3, count, "Before");
 
 		ExecuteUpdate.run(h2.getConnection(), createStatements("delete from s1.t1", Collections.emptyList()));
 
 		count = h2.db.queryForList("select * from s1.t1").size();
-		assertEquals("After", 0, count);
+		assertEquals(0, count, "After");
 
 		h2.db.execute("drop table s1.t1");
 		h2.db.execute("drop schema s1");
@@ -80,7 +80,7 @@ public class ExecuteUpdateTest implements Keywords {
 
 		List<Map<String, Object>> data;
 		data = h2.db.queryForList("select * from t1");
-		assertEquals("Before", "[{T1A=1, T1B=b1, T1C=c1}]", data.toString());
+		assertEquals("[{T1A=1, T1B=b1, T1C=c1}]", data.toString(), "Before");
 
 		ExecuteUpdate.run(h2.getConnection(),
 			createStatements(
@@ -95,8 +95,8 @@ public class ExecuteUpdateTest implements Keywords {
 			));
 
 		data = h2.db.queryForList("select * from t1");
-		assertEquals("After", "[{T1A=1, T1B=b1, T1C=c1}, {T1A=2, T1B=b2, T1C=null}, {T1A=3, T1B=b3, T1C=c3}]",
-			data.toString());
+		assertEquals("[{T1A=1, T1B=b1, T1C=c1}, {T1A=2, T1B=b2, T1C=null}, {T1A=3, T1B=b3, T1C=c3}]",
+			data.toString(), "After");
 
 		h2.db.execute("drop table t1");
 	}
@@ -111,9 +111,9 @@ public class ExecuteUpdateTest implements Keywords {
 
 		List<Map<String, Object>> data;
 		data = h2.db.queryForList("select * from t1");
-		assertEquals("Before",
+		assertEquals(
 			"[{T1A=1, T1B=b1, T1C=c1}, {T1A=2, T1B=b2, T1C=null}, {T1A=3, T1B=b3, T1C=c3}]",
-			data.toString());
+			data.toString(), "Before");
 
 		ExecuteUpdate.run(h2.getConnection(),
 			createStatements(
@@ -130,7 +130,8 @@ public class ExecuteUpdateTest implements Keywords {
 			));
 
 		data = h2.db.queryForList("select * from t1");
-		assertEquals("After", "[{T1A=2, T1B=b2, T1C=null}, {T1A=3, T1B=b3, T1C=c3}]", data.toString());
+		assertEquals("[{T1A=2, T1B=b2, T1C=null}, {T1A=3, T1B=b3, T1C=c3}]", data.toString(),
+			"After");
 
 		h2.db.execute("drop table t1");
 	}
@@ -163,7 +164,7 @@ public class ExecuteUpdateTest implements Keywords {
 
 		List<Map<String, Object>> data;
 		data = h2.db.queryForList("select * from data_types");
-		assertEquals("Before", "[]", data.toString());
+		assertEquals("[]", data.toString(), "Before");
 
 		String sql = "insert into data_types (id," +
 			"bit_type,boolean_type,tinyint_type,smallint_type,integer_type,bigint_type," +
@@ -259,11 +260,13 @@ public class ExecuteUpdateTest implements Keywords {
 			" NCHAR_TYPE=null, NVARCHAR_TYPE=null, LONGNVARCHAR_TYPE=null," +
 			" BINARY_TYPE=null, VARBINARY_TYPE=null, LONGVARBINARY_TYPE=null," +
 			" CLOB_TYPE=null, NCLOB_TYPE=null, BLOB_TYPE=null, UUID_TYPE=null, ARRAY_TYPE=null}]";
-		assertEquals("After", expected.replace(", ", ",\n "),
+		assertEquals(
+			expected.replace(", ", ",\n "),
 			data.toString()
 				.replaceAll("\\[B@[^,}]+", "[REPLACED]")
 				.replaceAll("=ar[0-9]+: ARRAY", "=ar[REPLACED]: ARRAY")
-				.replace(", ", ",\n "));
+				.replace(", ", ",\n "),
+			"After");
 
 		h2.db.execute("drop table data_types");
 	}
@@ -283,7 +286,7 @@ public class ExecuteUpdateTest implements Keywords {
 
 		List<Map<String, Object>> data;
 		data = hsql.db.queryForList("select * from data_types");
-		assertEquals("Before", "[]", data.toString());
+		assertEquals("[]", data.toString(), "Before");
 
 		String sql = "insert into data_types (id," +
 			"bit_type,boolean_type,tinyint_type,smallint_type,integer_type,bigint_type," +
@@ -362,8 +365,10 @@ public class ExecuteUpdateTest implements Keywords {
 			" CHAR_TYPE=null, VARCHAR_TYPE=null, LONGVARCHAR_TYPE=null," +
 			" BINARY_TYPE=null, VARBINARY_TYPE=null, LONGVARBINARY_TYPE=null," +
 			" CLOB_TYPE=null, BLOB_TYPE=null}]";
-		assertEquals("After", expected.replace(", ", ",\n "),
-			data.toString().replaceAll("\\[B@[^,}]+", "REPLACED").replace(", ", ",\n "));
+		assertEquals(
+			expected.replace(", ", ",\n "),
+			data.toString().replaceAll("\\[B@[^,}]+", "REPLACED").replace(", ", ",\n "),
+			"After");
 
 		hsql.db.execute("drop table data_types");
 	}

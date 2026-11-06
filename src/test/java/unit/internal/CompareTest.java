@@ -2,7 +2,7 @@ package unit.internal;
 
 import net.sf.lightair.internal.Compare;
 import net.sf.lightair.internal.Keywords;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import unit.internal.db.InsertTest;
 
 import java.math.BigDecimal;
@@ -19,13 +19,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CompareTest implements Keywords {
 
 	public static Map<String, Object> createRow(Object... data) {
-		assertTrue("Data in pairs", data.length % 2 == 0);
+		assertTrue(data.length % 2 == 0, "Data in pairs");
 		Map<String, Object> row = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i = i + 2) {
 			row.put((String) data[i], data[i + 1]);
@@ -35,7 +35,7 @@ public class CompareTest implements Keywords {
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	private static Map<String, List<Map<String, Object>>> createTables(Object... data) {
-		assertTrue("Data in pairs", data.length % 2 == 0);
+		assertTrue(data.length % 2 == 0, "Data in pairs");
 		Map<String, List<Map<String, Object>>> tables = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i = i + 2) {
 			tables.put((String) data[i], (List) data[i + 1]);
@@ -69,7 +69,7 @@ public class CompareTest implements Keywords {
 					createRow("t11a", "1231101", "t11b", "v11b01"),
 					createRow("t11a", "1231102", "t11b", "v11b02")
 				),
-				"t12", Arrays.asList(
+				"t12", List.of(
 					createRow("t12a", "1231201", "t12b", "v12b01")
 				)
 			));
@@ -266,7 +266,7 @@ public class CompareTest implements Keywords {
 	@Test
 	public void dataTypesMatching() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
-		expectedDatasets.put("p1", Arrays.asList(
+		expectedDatasets.put("p1", List.of(
 			InsertTest.createRow("t1", "booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
 				"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 				"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
@@ -287,7 +287,7 @@ public class CompareTest implements Keywords {
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
 		actualDatasets.put("p1",
 			createTables(
-				"t1", Arrays.asList(
+				"t1", List.of(
 					createRow("booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
 						"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 						"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.78900"),
@@ -320,7 +320,7 @@ public class CompareTest implements Keywords {
 	@Test
 	public void dataTypesDiffs() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
-		expectedDatasets.put("p1", Arrays.asList(
+		expectedDatasets.put("p1", List.of(
 			InsertTest.createRow("t1", "booltrue", Boolean.TRUE, "boolfalse", Boolean.FALSE,
 				"byte", (byte) 123, "short", (short) 12345, "integer", 1234567890, "long", 12345678901L,
 				"float", (float) 123.45, "double", 123.4567, "bigdecimal", new BigDecimal("123456.789"),
@@ -341,7 +341,7 @@ public class CompareTest implements Keywords {
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
 		actualDatasets.put("p1",
 			createTables(
-				"t1", Arrays.asList(
+				"t1", List.of(
 					createRow("booltrue", Boolean.FALSE, "boolfalse", Boolean.TRUE,
 						"byte", (byte) 124, "short", (short) 12346, "integer", 1234567891, "long", 12345678902L,
 						"float", (float) 123.46, "double", 123.4568, "bigdecimal", new BigDecimal("123456.781"),
@@ -421,8 +421,8 @@ public class CompareTest implements Keywords {
 		actualDatasets.put("p1",
 			createTables(
 				"empty_match", Collections.emptyList(),
-				"empty_nonmatch", Arrays.asList(createRow("c1", "v1")),
-				"non_empty", Arrays.asList(createRow("c2", "v2"))
+				"empty_nonmatch", List.of(createRow("c1", "v1")),
+				"non_empty", List.of(createRow("c2", "v2"))
 			));
 
 		Map<String, Map<String, Map<String, List<?>>>> result =
@@ -446,14 +446,14 @@ public class CompareTest implements Keywords {
 	@Test
 	public void tokenAny() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
-		expectedDatasets.put("p1", Arrays.asList(
+		expectedDatasets.put("p1", List.of(
 			InsertTest.createRow("t1", "anystring", "@any", "anyint", "@any", "anynull", "@any")
 		));
 
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
 		actualDatasets.put("p1",
 			createTables(
-				"t1", Arrays.asList(
+				"t1", List.of(
 					createRow("anystring", "some string", "anyint", 123, "anynull", null)
 				)
 			));
@@ -474,7 +474,7 @@ public class CompareTest implements Keywords {
 	@Test
 	public void timeDifferenceLimit() {
 		Map<String, List<Map<String, Object>>> expectedDatasets = new LinkedHashMap<>();
-		expectedDatasets.put("p1", Arrays.asList(
+		expectedDatasets.put("p1", List.of(
 			InsertTest.createRow("t1",
 				"time_match", Time.valueOf(LocalTime.parse("12:34:56")),
 				"timestamp_match", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:34:56.123")),
@@ -485,7 +485,7 @@ public class CompareTest implements Keywords {
 		Map<String, Map<String, List<Map<String, Object>>>> actualDatasets = new LinkedHashMap<>();
 		actualDatasets.put("p1",
 			createTables(
-				"t1", Arrays.asList(
+				"t1", List.of(
 					createRow(
 						"time_match", Time.valueOf(LocalTime.parse("12:35:01")),
 						"timestamp_match", Timestamp.valueOf(LocalDateTime.parse("2015-12-31T12:35:01.123")),

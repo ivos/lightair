@@ -3,7 +3,7 @@ package unit.internal.db;
 import net.sf.lightair.internal.Connections;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.db.Structure;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import test.support.DbTemplate;
 import unit.internal.ConnectionsTest;
 
@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StructureTest implements Keywords {
 

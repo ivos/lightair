@@ -2,9 +2,9 @@ package unit.internal.xsd;
 
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.Xsd;
-import net.sf.seaf.test.util.TemplatingTestBase;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import test.support.TemplatingTestBase;
 
 import java.io.File;
 import java.io.IOException;

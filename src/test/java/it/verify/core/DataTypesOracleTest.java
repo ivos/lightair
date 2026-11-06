@@ -3,10 +3,10 @@ package it.verify.core;
 import it.common.DataTypesTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 
@@ -18,8 +18,8 @@ import test.support.ConfigSupport;
  * <li>Driver ojdbc8.jar copied into jre/lib/ext directory in the JDK.</li>
  * </ul>
  */
-@Ignore
-@RunWith(LightAir.class)
+@Disabled
+@ExtendWith(LightAir.class)
 @Verify
 public class DataTypesOracleTest extends DataTypesTestBase {
 
@@ -28,7 +28,7 @@ public class DataTypesOracleTest extends DataTypesTestBase {
 		ConfigSupport.replaceConfig("oracle");
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		createTable();
 	}

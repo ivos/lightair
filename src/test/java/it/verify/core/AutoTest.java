@@ -3,18 +3,17 @@ package it.verify.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Verify
 public class AutoTest extends CommonTestBase {
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		db.execute("create table a1 (id int primary key, char_type char(20), "
 			+ "varchar_type varchar(50), integer_type integer, "
@@ -29,7 +28,7 @@ public class AutoTest extends CommonTestBase {
 		ApiTestSupport.reInitialize();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("drop table a1");
 		db.execute("drop table a2");

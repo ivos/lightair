@@ -3,25 +3,25 @@ package it.setup.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup({"MergeColumnsAcrossFiles.1.xml", "MergeColumnsAcrossFiles.2.xml",
 	"MergeColumnsAcrossFiles.3.xml"})
 public class MergeColumnsAcrossFilesTest extends CommonTestBase {
 
 	List<Map<String, Object>> values;
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		db.execute("create table a (id int primary key, "
 			+ "a1 varchar(50), a2 varchar(50), "
@@ -29,15 +29,14 @@ public class MergeColumnsAcrossFilesTest extends CommonTestBase {
 		ApiTestSupport.reInitialize();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("drop table a");
 	}
 
 	@Test
 	public void test() {
-		assertEquals("Count", Integer.valueOf(5),
-			db.queryForObject("select count(*) from a", Integer.class));
+		assertEquals(Integer.valueOf(5), db.queryForObject("select count(*) from a", Integer.class), "Count");
 		values = db.queryForList("select * from a");
 		// file 1:
 		verifyRow(0, "01", null, null, null);
@@ -50,11 +49,10 @@ public class MergeColumnsAcrossFilesTest extends CommonTestBase {
 	}
 
 	private void verifyRow(int id, String a1, String a2, String a3, String a4) {
-		assertEquals("id " + id, id, values.get(id).get("id"));
-		assertEquals("a1 " + id, a1, values.get(id).get("a1"));
-		assertEquals("a2 " + id, a2, values.get(id).get("a2"));
-		assertEquals("a3 " + id, a3, values.get(id).get("a3"));
-		assertEquals("a4 " + id, a4, values.get(id).get("a4"));
+		assertEquals(id, values.get(id).get("id"), "id " + id);
+		assertEquals(a1, values.get(id).get("a1"), "a1 " + id);
+		assertEquals(a2, values.get(id).get("a2"), "a2 " + id);
+		assertEquals(a3, values.get(id).get("a3"), "a3 " + id);
+		assertEquals(a4, values.get(id).get("a4"), "a4 " + id);
 	}
-
 }

@@ -3,14 +3,14 @@ package it.await.annotation;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.LightAirNGListener;
 import net.sf.lightair.annotation.Await;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testng.annotations.Listeners;
 
 /**
  * Method annotation overrides Await.List annotation on class.
  */
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Listeners(LightAirNGListener.class)
 @Await.List({@Await("ignored-1.xml"), @Await("ignored-2.xml")})
 public class MethodVsClassAwaitListTest extends AwaitTestBase {

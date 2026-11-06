@@ -3,15 +3,14 @@ package it.setup.annotation;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.LightAirNGListener;
 import net.sf.lightair.annotation.Setup;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testng.annotations.Listeners;
 
 /**
  * Method annotation overrides Setup annotation on class.
  */
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Listeners(LightAirNGListener.class)
 @Setup.List({@Setup("ignored-1.xml"), @Setup("ignored-2.xml")})
 public class MethodVsClassSetupListTest extends SetupTestBase {
@@ -35,5 +34,4 @@ public class MethodVsClassSetupListTest extends SetupTestBase {
 	public void methodSetupList() {
 		verifyPersons("Jane", "Sue");
 	}
-
 }

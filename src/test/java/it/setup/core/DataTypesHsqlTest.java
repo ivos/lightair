@@ -2,9 +2,9 @@ package it.setup.core;
 
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 import test.support.TimeUtils;
@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.function.Function;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup
 public class DataTypesHsqlTest extends DataTypesSetupTestBase {
 
@@ -26,7 +26,7 @@ public class DataTypesHsqlTest extends DataTypesSetupTestBase {
 		ConfigSupport.replaceConfig("hsql");
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		createTable();
 	}
@@ -85,20 +85,20 @@ public class DataTypesHsqlTest extends DataTypesSetupTestBase {
 		Long bigint_type, BigDecimal decimal_type, String clob_type,
 		String blob_type, String binary_type, String uuid_type
 	) {
-		assertEquals("id " + id, id, values.get(id).get("id"));
-		assertEquals("char_type " + id, char_type, values.get(id).get("char_type"));
-		assertEquals("varchar_type " + id, varchar_type, values.get(id).get("varchar_type"));
-		assertEquals("integer_type " + id, integer_type, values.get(id).get("integer_type"));
+		assertEquals(id, values.get(id).get("id"), "id " + id);
+		assertEquals(char_type, values.get(id).get("char_type"), "char_type " + id);
+		assertEquals(varchar_type, values.get(id).get("varchar_type"), "varchar_type " + id);
+		assertEquals(integer_type, values.get(id).get("integer_type"), "integer_type " + id);
 		verifyField(id, "date_type", date_type, Function.identity(), TimeUtils::toLocalDate);
 		verifyField(id, "time_type", time_type, Function.identity(), TimeUtils::toLocalTime);
 		verifyField(id, "timestamp_type", timestamp_type, Function.identity(), TimeUtils::toLocalDateTime);
-		assertEquals("double_type type " + id, double_type, values.get(id).get("double_type"));
-		assertEquals("boolean_type type " + id, boolean_type, values.get(id).get("boolean_type"));
-		assertEquals("bigint_type type " + id, bigint_type, values.get(id).get("bigint_type"));
-		assertEquals("decimal_type type " + id, decimal_type, values.get(id).get("decimal_type"));
-		assertEquals("clob_type type " + id, clob_type, values.get(id).get("clob_type"));
-		assertEquals("blob_type type " + id, blob_type, convertBytesToString(values.get(id).get("blob_type")));
-		assertEquals("binary_type type " + id, binary_type, convertBytesToString(values.get(id).get("binary_type")));
+		assertEquals(double_type, values.get(id).get("double_type"), "double_type type " + id);
+		assertEquals(boolean_type, values.get(id).get("boolean_type"), "boolean_type type " + id);
+		assertEquals(bigint_type, values.get(id).get("bigint_type"), "bigint_type type " + id);
+		assertEquals(decimal_type, values.get(id).get("decimal_type"), "decimal_type type " + id);
+		assertEquals(clob_type, values.get(id).get("clob_type"), "clob_type type " + id);
+		assertEquals(blob_type, convertBytesToString(values.get(id).get("blob_type")), "blob_type type " + id);
+		assertEquals(binary_type, convertBytesToString(values.get(id).get("binary_type")), "binary_type type " + id);
 		verifyField(id, "uuid_type", uuid_type, Function.identity(), Object::toString);
 	}
 }

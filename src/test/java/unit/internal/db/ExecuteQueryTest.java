@@ -4,7 +4,7 @@ import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.db.ExecuteQuery;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import test.support.DbTemplate;
 
 import java.io.ByteArrayInputStream;
@@ -22,14 +22,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ExecuteQueryTest implements Keywords {
 
 	private List<Map<String, Object>> createStatements(Object... data) {
-		assertTrue("Data in triples", data.length % 3 == 0);
+		assertTrue(data.length % 3 == 0, "Data in triples");
 		List<Map<String, Object>> statements = new ArrayList<>();
 		for (int i = 0; i < data.length; i = i + 3) {
 			Map<String, Object> statement = new LinkedHashMap<>();
@@ -43,7 +43,7 @@ public class ExecuteQueryTest implements Keywords {
 
 	private Map<String, Map<String, Object>> createColumns(Object... data) {
 		Map<String, Map<String, Object>> parameters = new LinkedHashMap<>();
-		assertTrue("Data in triples", data.length % 3 == 0);
+		assertTrue(data.length % 3 == 0, "Data in triples");
 		for (int i = 0; i < data.length; i = i + 3) {
 			Map<String, Object> parameter = new LinkedHashMap<>();
 			parameter.put(DATA_TYPE, data[i + 1]);

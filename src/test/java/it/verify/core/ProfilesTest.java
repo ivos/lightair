@@ -3,11 +3,10 @@ package it.verify.core;
 import it.common.ProfilesTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Verify.List({
 	@Verify("../../common/profiles-defaulth2.xml"),
 	@Verify(value = "../../common/profiles-hsqldb.xml", profile = "hsqldb"),
@@ -18,5 +17,4 @@ public class ProfilesTest extends ProfilesTestBase {
 	public void profiles() {
 		fill("Hank");
 	}
-
 }

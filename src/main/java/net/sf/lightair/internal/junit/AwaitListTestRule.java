@@ -1,10 +1,11 @@
 package net.sf.lightair.internal.junit;
 
 import net.sf.lightair.annotation.Await;
-import org.junit.runners.model.FrameworkMethod;
+
+import java.lang.reflect.Method;
 
 /**
- * JUnit test rule to verify the database with multiple <code>@Await</code>
+ * Test rule helper to verify the database with multiple <code>@Await</code>
  * annotations after test method execution with asynchronous functionality.
  */
 public class AwaitListTestRule extends AbstractTestRule<Await.List> {
@@ -12,17 +13,17 @@ public class AwaitListTestRule extends AbstractTestRule<Await.List> {
 	/**
 	 * Constructor.
 	 *
-	 * @param frameworkMethod JUnit framework method on which the test rule is being applied
+	 * @param testMethod Method on which the test rule is being applied
 	 */
-	public AwaitListTestRule(FrameworkMethod frameworkMethod) {
-		super(frameworkMethod, Await.List.class, Await.class);
+	public AwaitListTestRule(Method testMethod) {
+		super(testMethod, Await.List.class, Await.class);
 	}
 
 	/**
-	 * If the method is annotated with @{@link Await}, set up the database.
+	 * If the method is annotated with @{@link Await}, verify the database asynchronously.
 	 */
 	@Override
-	protected void after() {
+	public void after() {
 		if (null != getAnnotation()) {
 			Await[] verifies = getAnnotation().value();
 			for (Await await : verifies) {

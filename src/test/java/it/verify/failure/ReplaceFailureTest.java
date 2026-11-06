@@ -1,28 +1,29 @@
 package it.verify.failure;
 
 import it.common.CommonTestBase;
+import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
-import test.support.ExceptionVerifyingJUnitRunner;
+import test.support.ExceptionVerifyingExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(ExceptionVerifyingJUnitRunner.class)
+@ExtendWith({ExceptionVerifyingExtension.class, LightAir.class})
 @Verify
 public class ReplaceFailureTest extends CommonTestBase {
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, a1 varchar(255), "
 			+ "date1 date, time1 time, timestamp1 timestamp)");
 		ApiTestSupport.reInitialize();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("drop table a");
 	}
@@ -50,5 +51,4 @@ public class ReplaceFailureTest extends CommonTestBase {
 			"    timestamp1: expected [2009-08-28T19:49:59.987], but was [2009-08-28T19:49:59.986]\n";
 		assertEquals(msg, error.getMessage());
 	}
-
 }

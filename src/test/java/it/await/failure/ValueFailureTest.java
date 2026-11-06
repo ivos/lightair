@@ -1,28 +1,29 @@
 package it.await.failure;
 
 import it.common.CommonTestBase;
+import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Await;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ConfigSupport;
-import test.support.ExceptionVerifyingJUnitRunner;
+import test.support.ExceptionVerifyingExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(ExceptionVerifyingJUnitRunner.class)
+@ExtendWith({ExceptionVerifyingExtension.class, LightAir.class})
 @Await
 public class ValueFailureTest extends CommonTestBase {
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, a1 varchar(255), "
 			+ "a2 varchar(255), a3 varchar(255))");
 		ConfigSupport.replaceConfig("diff1");
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("drop table a");
 		ConfigSupport.restoreConfig();

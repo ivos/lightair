@@ -4,12 +4,11 @@ import net.sf.lightair.LightAirApi;
 import net.sf.lightair.internal.Convert;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Index;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import unit.internal.db.InsertTest;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
@@ -27,11 +26,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static test.support.TimeUtils.toLocalDate;
 import static test.support.TimeUtils.toLocalDateTime;
 import static test.support.TimeUtils.toLocalTime;
@@ -45,12 +44,12 @@ public class ConvertTest implements Keywords {
 		ZoneId.systemDefault()
 	);
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		LightAirApi.setClock(clock);
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		LightAirApi.resetClock();
 	}
@@ -116,7 +115,7 @@ public class ConvertTest implements Keywords {
 	}
 
 	@Test
-	public void dataTypes() throws IOException {
+	public void dataTypes() {
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
 		profileStructure.put("data_types", InsertTest.createTableStructure(
@@ -160,7 +159,7 @@ public class ConvertTest implements Keywords {
 		structures.put(DEFAULT_PROFILE, profileStructure);
 
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
-		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+		datasets.put(DEFAULT_PROFILE, List.of(
 			InsertTest.createRow("data_types",
 				"boolean_type", "true",
 				"boolean_as_int", "1",
@@ -276,16 +275,16 @@ public class ConvertTest implements Keywords {
 
 		assertEquals("bytes value", new String((byte[]) dataTypes.get("bytes_type"), StandardCharsets.UTF_8));
 		assertEquals("blob value", new String((byte[]) dataTypes.get("blob_type"), StandardCharsets.UTF_8));
-		assertArrayEquals("array_varchar_type value", new String[]{"value 1", "value 2", "", " ", null, "value 3"},
-			(String[]) dataTypes.get("array_varchar_type"));
-		assertArrayEquals("array_integer_type value", new Integer[]{2345, 3456, null, 4567},
-			(Integer[]) dataTypes.get("array_integer_type"));
-		assertArrayEquals("array_long_type value", new Long[]{3456789012L, 3456789013L, null, 3456789014L},
-			(Long[]) dataTypes.get("array_long_type"));
+		assertArrayEquals(new String[]{"value 1", "value 2", "", " ", null, "value 3"},
+			(String[]) dataTypes.get("array_varchar_type"), "array_varchar_type value");
+		assertArrayEquals(new Integer[]{2345, 3456, null, 4567},
+			(Integer[]) dataTypes.get("array_integer_type"), "array_integer_type value");
+		assertArrayEquals(new Long[]{3456789012L, 3456789013L, null, 3456789014L},
+			(Long[]) dataTypes.get("array_long_type"), "array_long_type value");
 	}
 
 	@Test
-	public void emptyArrays() throws IOException {
+	public void emptyArrays() {
 		Map<String, Map<String, Map<String, Map<String, Object>>>> structures = new HashMap<>();
 		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
 		profileStructure.put("data_types", InsertTest.createTableStructure(
@@ -296,7 +295,7 @@ public class ConvertTest implements Keywords {
 		structures.put(DEFAULT_PROFILE, profileStructure);
 
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
-		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+		datasets.put(DEFAULT_PROFILE, List.of(
 			InsertTest.createRow("data_types",
 				"array_string_type", "",
 				"array_integer_type", "",
@@ -309,12 +308,12 @@ public class ConvertTest implements Keywords {
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
 
-		assertArrayEquals("array_string_type value", new String[0],
-			(String[]) dataTypes.get("array_string_type"));
-		assertArrayEquals("array_integer_type value", new Integer[0],
-			(Integer[]) dataTypes.get("array_integer_type"));
-		assertArrayEquals("array_long_type value", new Long[0],
-			(Long[]) dataTypes.get("array_long_type"));
+		assertArrayEquals(new String[0],
+			(String[]) dataTypes.get("array_string_type"), "array_string_type value");
+		assertArrayEquals(new Integer[0],
+			(Integer[]) dataTypes.get("array_integer_type"), "array_integer_type value");
+		assertArrayEquals(new Long[0],
+			(Long[]) dataTypes.get("array_long_type"), "array_long_type value");
 	}
 
 	@Test
@@ -328,7 +327,7 @@ public class ConvertTest implements Keywords {
 		structures.put(DEFAULT_PROFILE, profileStructure);
 
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
-		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+		datasets.put(DEFAULT_PROFILE, List.of(
 			InsertTest.createRow("data_types",
 				"integer_type", "@null",
 				"string_type", "@null"
@@ -344,8 +343,8 @@ public class ConvertTest implements Keywords {
 
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
-		assertNull("integer value", dataTypes.get("integer_type"));
-		assertNull("string value", dataTypes.get("string_type"));
+		assertNull(dataTypes.get("integer_type"), "integer value");
+		assertNull(dataTypes.get("string_type"), "string value");
 	}
 
 	@Test
@@ -360,7 +359,7 @@ public class ConvertTest implements Keywords {
 		structures.put(DEFAULT_PROFILE, profileStructure);
 
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
-		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+		datasets.put(DEFAULT_PROFILE, List.of(
 			InsertTest.createRow("data_types",
 				"date_type", "@date",
 				"time_type", "@date",
@@ -401,7 +400,7 @@ public class ConvertTest implements Keywords {
 		structures.put(DEFAULT_PROFILE, profileStructure);
 
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
-		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+		datasets.put(DEFAULT_PROFILE, List.of(
 			InsertTest.createRow("data_types",
 				"date_type", "@time",
 				"time_type", "@time",
@@ -442,7 +441,7 @@ public class ConvertTest implements Keywords {
 		structures.put(DEFAULT_PROFILE, profileStructure);
 
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
-		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+		datasets.put(DEFAULT_PROFILE, List.of(
 			InsertTest.createRow("data_types",
 				"date_type", "@timestamp",
 				"time_type", "@timestamp",
@@ -511,7 +510,7 @@ public class ConvertTest implements Keywords {
 	}
 
 	public static Map<String, Map<String, Object>> createTableStructure(Object... data) {
-		assertTrue("Data by fours", data.length % 4 == 0);
+		assertTrue(data.length % 4 == 0, "Data by fours");
 		Map<String, Map<String, Object>> table = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i = i + 4) {
 			Map<String, Object> column = new LinkedHashMap<>();
@@ -695,10 +694,10 @@ public class ConvertTest implements Keywords {
 		index.put(Index.formatColumnKey("p2", "t1", "t1s"), "501");
 
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
-		datasets.put("p1", Arrays.asList(
+		datasets.put("p1", List.of(
 			InsertTest.createRow("t1", "t1s", "@auto")
 		));
-		datasets.put("p2", Arrays.asList(
+		datasets.put("p2", List.of(
 			InsertTest.createRow("t1", "t1s", "@auto")
 		));
 
@@ -723,7 +722,7 @@ public class ConvertTest implements Keywords {
 		structures.put(DEFAULT_PROFILE, profileStructure);
 
 		Map<String, List<Map<String, Object>>> datasets = new LinkedHashMap<>();
-		datasets.put(DEFAULT_PROFILE, Arrays.asList(
+		datasets.put(DEFAULT_PROFILE, List.of(
 			InsertTest.createRow("data_types",
 				"integer_any", "@any",
 				"string_any", "@any",
@@ -743,9 +742,9 @@ public class ConvertTest implements Keywords {
 
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		Map<String, Object> dataTypes = (Map) result.get(DEFAULT_PROFILE).get(0).get(COLUMNS);
-		assertEquals("integer any", "@any", dataTypes.get("integer_any"));
-		assertEquals("string any", "@any", dataTypes.get("string_any"));
-		assertEquals("integer var", "$var1", dataTypes.get("integer_var"));
-		assertEquals("string var", "$var2", dataTypes.get("string_var"));
+		assertEquals("@any", dataTypes.get("integer_any"), "integer any");
+		assertEquals("@any", dataTypes.get("string_any"), "string any");
+		assertEquals("$var1", dataTypes.get("integer_var"), "integer var");
+		assertEquals("$var2", dataTypes.get("string_var"), "string var");
 	}
 }

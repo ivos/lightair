@@ -4,10 +4,10 @@ import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.LightAirApi;
 import net.sf.lightair.annotation.Setup;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
 import java.time.Clock;
@@ -16,16 +16,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup
 public class ReplaceNewTimestampTest extends CommonTestBase {
 	// on each test method setup, a new current time is used
 
 	static List<Map<String, Object>> bothValues;
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		bothValues = new ArrayList<>();
 		db.execute("create table a (id int primary key, timestamp1 timestamp)");
@@ -33,7 +33,7 @@ public class ReplaceNewTimestampTest extends CommonTestBase {
 		LightAirApi.setClock(Clock.systemDefaultZone());
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("drop table a");
 	}
@@ -61,6 +61,6 @@ public class ReplaceNewTimestampTest extends CommonTestBase {
 	private void verifyColumn() {
 		long timeA = ((Date) bothValues.get(0).get("timestamp1")).getTime();
 		long timeB = ((Date) bothValues.get(1).get("timestamp1")).getTime();
-		assertTrue("Timestamp increased on second run", timeB - timeA > 0);
+		assertTrue(timeB - timeA > 0, "Timestamp increased on second run");
 	}
 }

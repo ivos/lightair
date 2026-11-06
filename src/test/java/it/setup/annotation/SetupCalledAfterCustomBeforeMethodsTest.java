@@ -2,28 +2,28 @@ package it.setup.annotation;
 
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Verify that the database {@link Setup} is performed AFTER all the
- * user-defined {@link Before} methods are executed.
+ * user-defined {@link BeforeEach} methods are executed.
  */
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup
 public class SetupCalledAfterCustomBeforeMethodsTest extends SetupTestBase {
 
-	@BeforeClass
+	@BeforeAll
 	public static void setup() {
 		db.execute("delete from person");
 		db.execute("insert into person values ('beforeSetup')");
 	}
 
-	@Before
+	@BeforeEach
 	public void customBeforeMethod() {
 		assertEquals("beforeSetup",
 			db.queryForObject("select name from person", String.class));
@@ -32,5 +32,4 @@ public class SetupCalledAfterCustomBeforeMethodsTest extends SetupTestBase {
 	@Test
 	public void test() {
 	}
-
 }

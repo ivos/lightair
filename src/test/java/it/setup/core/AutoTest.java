@@ -3,10 +3,10 @@ package it.setup.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
 import java.math.BigDecimal;
@@ -16,13 +16,13 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static test.support.TimeUtils.toLocalDate;
 import static test.support.TimeUtils.toLocalDateTime;
 import static test.support.TimeUtils.toLocalTime;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup({"AutoTest.xml", "AutoTest2.xml"})
 public class AutoTest extends CommonTestBase {
 
@@ -30,7 +30,7 @@ public class AutoTest extends CommonTestBase {
 
 	// TODO add additional sql types (smallint, ...)
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		db.execute("create table a1 (id int primary key, char_type char(20), "
 			+ "varchar_type varchar(50), integer_type integer, "
@@ -50,7 +50,7 @@ public class AutoTest extends CommonTestBase {
 		ApiTestSupport.reInitialize();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("drop table a1");
 		db.execute("drop table a2");
@@ -59,8 +59,8 @@ public class AutoTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		assertEquals("Count", Integer.valueOf(5),
-			db.queryForObject("select count(*) from a1", Integer.class));
+		assertEquals(Integer.valueOf(5), db.queryForObject("select count(*) from a1", Integer.class),
+			"Count");
 		values = db.queryForList("select * from a1");
 
 		verifyRow(0, 1327384901, "char_type 1327356901", "varchar_type 1327384101",
@@ -88,8 +88,8 @@ public class AutoTest extends CommonTestBase {
 			1327344904L, new BigDecimal("1327346.904"), "clob_type 1327303204",
 			"blob_type 1327375404", "binary_typ1327352304");
 
-		assertEquals("Count", Integer.valueOf(4),
-			db.queryForObject("select count(*) from a2", Integer.class));
+		assertEquals(Integer.valueOf(4), db.queryForObject("select count(*) from a2", Integer.class),
+			"Count");
 		values = db.queryForList("select * from a2");
 
 		verifyRow(0, 1603184901, "char_type 1603156901", "varchar_type 1603184101",
@@ -117,8 +117,8 @@ public class AutoTest extends CommonTestBase {
 			1603144904L, new BigDecimal("1603146.904"), "clob_type 1603103204",
 			"blob_type 1603175404", "binary_typ1603152304");
 
-		assertEquals("Count", Integer.valueOf(1),
-			db.queryForObject("select count(*) from a3", Integer.class));
+		assertEquals(Integer.valueOf(1), db.queryForObject("select count(*) from a3", Integer.class),
+			"Count");
 		values = db.queryForList("select * from a3");
 
 		verifyRow(0, 1336684901, "char_type 1336656901", "varchar_type 1336684101",
@@ -132,8 +132,8 @@ public class AutoTest extends CommonTestBase {
 	@Test
 	@Setup("AutoTest2.xml")
 	public void rowIndexStartsFrom0InNewTest() {
-		assertEquals("Count", Integer.valueOf(2),
-			db.queryForObject("select count(*) from a1", Integer.class));
+		assertEquals(Integer.valueOf(2), db.queryForObject("select count(*) from a1", Integer.class),
+			"Count");
 		values = db.queryForList("select * from a1");
 
 		verifyRow(0, 1327384901, "char_type 1327356901", "varchar_type 1327384101",
@@ -156,33 +156,33 @@ public class AutoTest extends CommonTestBase {
 		Boolean boolean_type, Long bigint_type, BigDecimal decimal_type,
 		String clob_type, String blob_type, String binary_type
 	) {
-		assertEquals("id " + row, id, values.get(row).get("id"));
-		assertEquals("char_type " + row, char_type, values.get(row).get("char_type"));
-		assertEquals("varchar_type " + row, varchar_type, values.get(row).get("varchar_type"));
-		assertEquals("integer_type " + row, integer_type, values.get(row).get("integer_type"));
+		assertEquals(id, values.get(row).get("id"), "id " + row);
+		assertEquals(char_type, values.get(row).get("char_type"), "char_type " + row);
+		assertEquals(varchar_type, values.get(row).get("varchar_type"), "varchar_type " + row);
+		assertEquals(integer_type, values.get(row).get("integer_type"), "integer_type " + row);
 		if (null == date_type) {
-			assertNull("date_type " + row, values.get(row).get("date_type"));
+			assertNull(values.get(row).get("date_type"), "date_type " + row);
 		} else {
-			assertEquals("date_type " + row, date_type, toLocalDate(values.get(row).get("date_type")));
+			assertEquals(date_type, toLocalDate(values.get(row).get("date_type")), "date_type " + row);
 		}
 		if (null == time_type) {
-			assertNull("time_type " + row, values.get(row).get("time_type"));
+			assertNull(values.get(row).get("time_type"), "time_type " + row);
 		} else {
-			assertEquals("time_type " + row, time_type, toLocalTime(values.get(row).get("time_type")));
+			assertEquals(time_type, toLocalTime(values.get(row).get("time_type")), "time_type " + row);
 		}
 		if (null == timestamp_type) {
-			assertNull("timestamp_type " + row, values.get(row).get("timestamp_type"));
+			assertNull(values.get(row).get("timestamp_type"), "timestamp_type " + row);
 		} else {
-			assertEquals("timestamp_type " + row, timestamp_type,
-				toLocalDateTime(values.get(row).get("timestamp_type")));
+			assertEquals(timestamp_type,
+				toLocalDateTime(values.get(row).get("timestamp_type")), "timestamp_type " + row);
 		}
-		assertEquals("double_type type " + row, double_type, values.get(row).get("double_type"));
-		assertEquals("boolean_type type " + row, boolean_type, values.get(row).get("boolean_type"));
-		assertEquals("bigint_type type " + row, bigint_type, values.get(row).get("bigint_type"));
-		assertEquals("decimal_type type " + row, decimal_type, values.get(row).get("decimal_type"));
-		assertEquals("clob_type type " + row, clob_type, values.get(row).get("clob_type"));
-		assertEquals("blob_type type " + row, blob_type, convertBytesToString(values.get(row).get("blob_type")));
-		assertEquals("binary_type type " + row, binary_type, convertBytesToString(values.get(row).get("binary_type")));
+		assertEquals(double_type, values.get(row).get("double_type"), "double_type type " + row);
+		assertEquals(boolean_type, values.get(row).get("boolean_type"), "boolean_type type " + row);
+		assertEquals(bigint_type, values.get(row).get("bigint_type"), "bigint_type type " + row);
+		assertEquals(decimal_type, values.get(row).get("decimal_type"), "decimal_type type " + row);
+		assertEquals(clob_type, values.get(row).get("clob_type"), "clob_type type " + row);
+		assertEquals(blob_type, convertBytesToString(values.get(row).get("blob_type")), "blob_type type " + row);
+		assertEquals(binary_type, convertBytesToString(values.get(row).get("binary_type")), "binary_type type " + row);
 	}
 
 	protected String convertBytesToString(Object bytes) {

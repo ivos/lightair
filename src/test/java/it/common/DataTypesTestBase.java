@@ -1,8 +1,8 @@
 package it.common;
 
 import net.sf.lightair.internal.junit.util.Factory;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.testcontainers.postgresql.PostgreSQLContainer;
@@ -19,12 +19,12 @@ public class DataTypesTestBase {
 
 	public List<Map<String, Object>> values;
 
-	@BeforeClass
+	@BeforeAll
 	public static void initDataTypesTestBase() {
 		Factory.getInstance().init();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		dropTable();
 		ConfigSupport.restoreConfig();

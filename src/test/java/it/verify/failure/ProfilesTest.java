@@ -1,14 +1,15 @@
 package it.verify.failure;
 
 import it.common.ProfilesTestBase;
+import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import test.support.ExceptionVerifyingJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import test.support.ExceptionVerifyingExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(ExceptionVerifyingJUnitRunner.class)
+@ExtendWith({ExceptionVerifyingExtension.class, LightAir.class})
 @Verify.List({
 	@Verify("../../common/profiles-defaulth2.xml"),
 	@Verify(value = "../../common/profiles-hsqldb.xml", profile = "hsqldb"),

@@ -3,19 +3,22 @@ package net.sf.lightair;
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.annotation.Verify;
 import net.sf.lightair.internal.Keywords;
+import net.sf.lightair.internal.junit.AbstractTestRule;
 import net.sf.lightair.internal.junit.util.Factory;
-import org.junit.rules.RunRules;
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.Statement;
+import org.jspecify.annotations.NonNull;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.InvocationInterceptor;
+import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 /**
- * Light air JUnit runner.
+ * Light Air JUnit Jupiter Extension.
  * <p>
- * To enable Light air on a JUnit test, annotate it as follows:
+ * To enable Light Air on a JUnit test, annotate it as follows:
  * <pre>
- * &#064;RunWith(LightAir.class)
+ * &#064;ExtendWith(LightAir.class)
  * public class MyTest {
  * }
  * </pre>
@@ -27,25 +30,33 @@ import org.junit.runners.model.Statement;
  * for more info.
  * </p>
  */
-public class LightAir extends BlockJUnit4ClassRunner implements Keywords {
+public class LightAir implements InvocationInterceptor, Keywords {
 
 	static {
 		LightAirApi.initialize(LightAirApi.getPropertiesFileName());
 		Runtime.getRuntime().addShutdownHook(new Thread(LightAirApi::shutdown));
 	}
 
-	public LightAir(Class<?> clazz) throws InitializationError {
-		super(clazz);
-	}
-
-	/**
-	 * Overriding methodInvoker in order to place LightAir's test rules as the
-	 * leading ones.
-	 */
 	@Override
-	protected Statement methodInvoker(FrameworkMethod method, Object test) {
-		Statement statement = super.methodInvoker(method, test);
-		return new RunRules(statement, Factory.getInstance().getAllTestRules(method), describeChild(method));
+	public void interceptTestMethod(
+		@NonNull Invocation<Void> invocation,
+		ReflectiveInvocationContext<Method> invocationContext,
+		@NonNull ExtensionContext extensionContext
+	) throws Throwable {
+		Method method = invocationContext.getExecutable();
+		List<AbstractTestRule<?>> testRules = Factory.getInstance().getAllTestRules(method);
+
+		try {
+			testRules.forEach(AbstractTestRule::before);
+		} catch (Throwable t) {
+			invocation.skip(); // Mark invocation as skipped to prevent JUnit from complaining about tests not run.
+			throw t;
+		}
+		try {
+			invocation.proceed();
+		} finally {
+			testRules.forEach(AbstractTestRule::after);
+		}
 	}
 
 	public static class Api extends LightAirApi {

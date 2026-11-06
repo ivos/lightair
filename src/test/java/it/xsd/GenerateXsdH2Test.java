@@ -1,8 +1,8 @@
 package it.xsd;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
@@ -25,12 +25,12 @@ public class GenerateXsdH2Test extends GenerateXsdTestBase {
 		super(replaceTemplates);
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		createTables();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		dropTables();
 	}

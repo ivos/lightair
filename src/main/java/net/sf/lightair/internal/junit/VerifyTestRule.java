@@ -1,27 +1,28 @@
 package net.sf.lightair.internal.junit;
 
 import net.sf.lightair.annotation.Verify;
-import org.junit.runners.model.FrameworkMethod;
+
+import java.lang.reflect.Method;
 
 /**
- * JUnit test rule to verify the database after test method execution.
+ * Test rule helper to verify the database after test method execution.
  */
 public class VerifyTestRule extends AbstractTestRule<Verify> {
 
 	/**
 	 * Constructor.
 	 *
-	 * @param frameworkMethod JUnit framework method on which the test rule is being applied
+	 * @param testMethod Method on which the test rule is being applied
 	 */
-	public VerifyTestRule(FrameworkMethod frameworkMethod) {
-		super(frameworkMethod, Verify.class, Verify.List.class);
+	public VerifyTestRule(Method testMethod) {
+		super(testMethod, Verify.class, Verify.List.class);
 	}
 
 	/**
 	 * If the method is annotated with @{@link Verify}, verify the database.
 	 */
 	@Override
-	protected void after() {
+	public void after() {
 		if (null != getAnnotation()) {
 			verifyExecutor.execute(getAnnotation(), getTestMethod());
 		}

@@ -3,13 +3,13 @@ package it.verify.core;
 import it.common.DataTypesTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Verify
 public class DataTypesHsqlTest extends DataTypesTestBase {
 
@@ -18,7 +18,7 @@ public class DataTypesHsqlTest extends DataTypesTestBase {
 		ConfigSupport.replaceConfig("hsql");
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		createTable();
 	}

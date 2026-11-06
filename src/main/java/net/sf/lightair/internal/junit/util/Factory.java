@@ -1,5 +1,6 @@
 package net.sf.lightair.internal.junit.util;
 
+import net.sf.lightair.internal.junit.AbstractTestRule;
 import net.sf.lightair.internal.junit.AwaitExecutor;
 import net.sf.lightair.internal.junit.AwaitListTestRule;
 import net.sf.lightair.internal.junit.AwaitTestRule;
@@ -9,11 +10,10 @@ import net.sf.lightair.internal.junit.SetupTestRule;
 import net.sf.lightair.internal.junit.VerifyExecutor;
 import net.sf.lightair.internal.junit.VerifyListTestRule;
 import net.sf.lightair.internal.junit.VerifyTestRule;
-import org.junit.rules.TestRule;
-import org.junit.runners.model.FrameworkMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,49 +62,51 @@ public class Factory {
 
 	// getters for classes always newly instantiated
 
-	public SetupTestRule getSetupTestRule(FrameworkMethod frameworkMethod) {
-		SetupTestRule rule = new SetupTestRule(frameworkMethod);
+	public SetupTestRule getSetupTestRule(Method testMethod) {
+		SetupTestRule rule = new SetupTestRule(testMethod);
 		rule.setSetupExecutor(setupExecutor);
 		return rule;
 	}
 
-	public SetupListTestRule getSetupListTestRule(FrameworkMethod frameworkMethod) {
-		SetupListTestRule rule = new SetupListTestRule(frameworkMethod);
+	public SetupListTestRule getSetupListTestRule(Method testMethod) {
+		SetupListTestRule rule = new SetupListTestRule(testMethod);
 		rule.setSetupExecutor(setupExecutor);
 		return rule;
 	}
 
-	public VerifyTestRule getVerifyTestRule(FrameworkMethod frameworkMethod) {
-		VerifyTestRule rule = new VerifyTestRule(frameworkMethod);
+	public VerifyTestRule getVerifyTestRule(Method testMethod) {
+		VerifyTestRule rule = new VerifyTestRule(testMethod);
 		rule.setVerifyExecutor(verifyExecutor);
 		return rule;
 	}
 
-	public VerifyListTestRule getVerifyListTestRule(FrameworkMethod frameworkMethod) {
-		VerifyListTestRule rule = new VerifyListTestRule(frameworkMethod);
+	public VerifyListTestRule getVerifyListTestRule(Method testMethod) {
+		VerifyListTestRule rule = new VerifyListTestRule(testMethod);
 		rule.setVerifyExecutor(verifyExecutor);
 		return rule;
 	}
 
-	public AwaitTestRule getAwaitTestRule(FrameworkMethod frameworkMethod) {
-		AwaitTestRule rule = new AwaitTestRule(frameworkMethod);
+	public AwaitTestRule getAwaitTestRule(Method testMethod) {
+		AwaitTestRule rule = new AwaitTestRule(testMethod);
 		rule.setAwaitExecutor(awaitExecutor);
 		return rule;
 	}
 
-	public AwaitListTestRule getAwaitListTestRule(FrameworkMethod frameworkMethod) {
-		AwaitListTestRule rule = new AwaitListTestRule(frameworkMethod);
+	public AwaitListTestRule getAwaitListTestRule(Method testMethod) {
+		AwaitListTestRule rule = new AwaitListTestRule(testMethod);
 		rule.setAwaitExecutor(awaitExecutor);
 		return rule;
 	}
 
-	public List<TestRule> getAllTestRules(FrameworkMethod method) {
-		return Arrays.asList(getSetupTestRule(method),
-			getSetupListTestRule(method),
-			getVerifyTestRule(method),
-			getVerifyListTestRule(method),
-			getAwaitTestRule(method),
-			getAwaitListTestRule(method));
+	public List<AbstractTestRule<?>> getAllTestRules(Method testMethod) {
+		return Arrays.asList(
+			getSetupTestRule(testMethod),
+			getSetupListTestRule(testMethod),
+			getVerifyTestRule(testMethod),
+			getVerifyListTestRule(testMethod),
+			getAwaitTestRule(testMethod),
+			getAwaitListTestRule(testMethod)
+		);
 	}
 
 	// access as singleton

@@ -3,14 +3,14 @@ package it.verify.core;
 import it.common.DataTypesTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 import test.support.PostgresUtils;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Verify
 public class DataTypesPostgresTest extends DataTypesTestBase {
 
@@ -20,7 +20,7 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 		ConfigSupport.replaceConfig("postgres");
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		createTable();
 	}

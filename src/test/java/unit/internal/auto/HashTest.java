@@ -1,16 +1,16 @@
 package unit.internal.auto;
 
 import net.sf.lightair.internal.auto.Hash;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class HashTest {
 
@@ -84,7 +84,7 @@ public class HashTest {
 		ArrayList<Integer> values = new ArrayList<>(sorted.values());
 		Integer min = values.get(0);
 		Integer max = values.get(values.size() - 1);
-		assertTrue("Max should be between 300 and 500, but was " + max, max > 300 && max < 500);
-		assertTrue("Min should be between 250 and 400, but was " + min, min > 250 && min < 400);
+		assertTrue(max > 300 && max < 500, "Max should be between 300 and 500, but was " + max);
+		assertTrue(min > 250 && min < 400, "Min should be between 250 and 400, but was " + min);
 	}
 }

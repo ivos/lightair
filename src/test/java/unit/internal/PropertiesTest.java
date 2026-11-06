@@ -1,12 +1,12 @@
 package unit.internal;
 
 import net.sf.lightair.internal.Properties;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PropertiesTest {
 
@@ -16,18 +16,18 @@ public class PropertiesTest {
 			Properties.load("target/test-classes/light-air-profiles.properties");
 
 		Map<String, String> def = properties.get("");
-		assertNotNull("Profile default loaded", def);
+		assertNotNull(def, "Profile default loaded");
 
 		Map<String, String> hsqldb = properties.get("hsqldb");
-		assertNotNull("Profile hsqldb loaded", hsqldb);
+		assertNotNull(hsqldb, "Profile hsqldb loaded");
 
-		assertEquals("Default driver", "org.h2.Driver", def.get("database.driverClassName"));
-		assertEquals("Default url", "jdbc:h2:mem:test", def.get("database.connectionUrl"));
-		assertEquals("Default time diff", "0", def.get("time.difference.limit.millis"));
+		assertEquals("org.h2.Driver", def.get("database.driverClassName"), "Default driver");
+		assertEquals("jdbc:h2:mem:test", def.get("database.connectionUrl"), "Default url");
+		assertEquals("0", def.get("time.difference.limit.millis"), "Default time diff");
 
-		assertEquals("Hsqldb driver", "org.hsqldb.jdbc.JDBCDriver", hsqldb.get("database.driverClassName"));
-		assertEquals("Hsqldb url", "jdbc:hsqldb:mem:test", hsqldb.get("database.connectionUrl"));
+		assertEquals("org.hsqldb.jdbc.JDBCDriver", hsqldb.get("database.driverClassName"), "Hsqldb driver");
+		assertEquals("jdbc:hsqldb:mem:test", hsqldb.get("database.connectionUrl"), "Hsqldb url");
 
-		assertEquals("Profiles loaded", 3, properties.keySet().size());
+		assertEquals(3, properties.size(), "Profiles loaded");
 	}
 }

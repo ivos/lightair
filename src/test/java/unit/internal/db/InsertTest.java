@@ -2,7 +2,7 @@ package unit.internal.db;
 
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.db.Insert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Types;
 import java.util.Arrays;
@@ -12,14 +12,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class InsertTest implements Keywords {
 
 	public static Map<String, Object> createRow(String table, Object... data) {
-		assertTrue("Data in pairs", data.length % 2 == 0);
+		assertTrue(data.length % 2 == 0, "Data in pairs");
 		Map<String, Object> row = new LinkedHashMap<>();
 		row.put(TABLE, table);
 		Map<String, Object> columns = new LinkedHashMap<>();
@@ -31,7 +31,7 @@ public class InsertTest implements Keywords {
 	}
 
 	public static Map<String, Map<String, Object>> createTableStructure(Object... data) {
-		assertTrue("Data in triples", data.length % 3 == 0);
+		assertTrue(data.length % 3 == 0, "Data in triples");
 		Map<String, Map<String, Object>> table = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i = i + 3) {
 			Map<String, Object> column = new LinkedHashMap<>();
@@ -101,7 +101,7 @@ public class InsertTest implements Keywords {
 				"anytoken", STRING, Types.VARCHAR
 			));
 
-		List<Map<String, Object>> dataset = Arrays.asList(
+		List<Map<String, Object>> dataset = List.of(
 			createRow("t1", "anytoken", "@any")
 		);
 

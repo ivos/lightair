@@ -2,16 +2,16 @@ package unit.internal;
 
 import net.sf.lightair.internal.Connections;
 import net.sf.lightair.internal.Keywords;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ConnectionsTest implements Keywords {
 
@@ -35,16 +35,16 @@ public class ConnectionsTest implements Keywords {
 		Map<String, Connection> connections = Connections.open(properties);
 
 		Connection h2 = connections.get("profile1");
-		assertNotNull("H2 connected", h2);
-		assertFalse("H2 connection open", h2.isClosed());
+		assertNotNull(h2, "H2 connected");
+		assertFalse(h2.isClosed(), "H2 connection open");
 
 		Connection hsql = connections.get("profile2");
-		assertNotNull("HSQL connected", hsql);
-		assertFalse("HSQL connection open", hsql.isClosed());
+		assertNotNull(hsql, "HSQL connected");
+		assertFalse(hsql.isClosed(), "HSQL connection open");
 
 		Connections.close(connections);
 
-		assertTrue("H2 connection closed", h2.isClosed());
-		assertTrue("HSQL connection closed", hsql.isClosed());
+		assertTrue(h2.isClosed(), "H2 connection closed");
+		assertTrue(hsql.isClosed(), "HSQL connection closed");
 	}
 }

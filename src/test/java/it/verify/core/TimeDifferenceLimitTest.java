@@ -3,24 +3,24 @@ package it.verify.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ConfigSupport;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Verify
 public class TimeDifferenceLimitTest extends CommonTestBase {
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		db.execute("create table a(id int primary key, "
 			+ "date1 date, time1 time, timestamp1 timestamp)");
 		ConfigSupport.replaceConfig("diff60");
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("drop table a");
 		ConfigSupport.restoreConfig();
@@ -45,5 +45,4 @@ public class TimeDifferenceLimitTest extends CommonTestBase {
 		db.update("insert into a (id,date1,time1,timestamp1) values "
 			+ "(4,'2011-10-22','22:48:50','2011-11-23 00:00:01.123')");
 	}
-
 }

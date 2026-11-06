@@ -2,9 +2,9 @@ package it.setup.core;
 
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.postgresql.util.PGobject;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
@@ -20,11 +20,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.function.Function;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup
 public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 
@@ -34,7 +34,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		ConfigSupport.replaceConfig("postgres");
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		createTable();
 	}
@@ -158,29 +158,29 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		Object[] text_array_type, Object[] varchar_array_type,
 		Object[] integer_array_type, Object[] bigint_array_type
 	) {
-		assertEquals("id " + id, id, values.get(id).get("id"));
+		assertEquals(id, values.get(id).get("id"), "id " + id);
 		// char
-		assertEquals("char_type " + id, char_type, values.get(id).get("char_type"));
-		assertEquals("varchar_type " + id, varchar_type, values.get(id).get("varchar_type"));
-		assertEquals("text_type " + id, text_type, values.get(id).get("text_type"));
+		assertEquals(char_type, values.get(id).get("char_type"), "char_type " + id);
+		assertEquals(varchar_type, values.get(id).get("varchar_type"), "varchar_type " + id);
+		assertEquals(text_type, values.get(id).get("text_type"), "text_type " + id);
 		verifyField(id, "citext_type", citext_type, Function.identity(), t -> ((PGobject) t).getValue());
 		// integer
-		assertEquals("smallint_type " + id, smallint_type, values.get(id).get("smallint_type"));
-		assertEquals("integer_type " + id, integer_type, values.get(id).get("integer_type"));
-		assertEquals("bigint_type type " + id, bigint_type, values.get(id).get("bigint_type"));
+		assertEquals(smallint_type, values.get(id).get("smallint_type"), "smallint_type " + id);
+		assertEquals(integer_type, values.get(id).get("integer_type"), "integer_type " + id);
+		assertEquals(bigint_type, values.get(id).get("bigint_type"), "bigint_type type " + id);
 		// numeric
-		assertEquals("decimal_type type " + id, decimal_type, values.get(id).get("decimal_type"));
-		assertEquals("numeric_type type " + id, numeric_type, values.get(id).get("numeric_type"));
-		assertEquals("real_type type " + id, real_type, values.get(id).get("real_type"));
-		assertEquals("double_type type " + id, double_type, values.get(id).get("double_type"));
+		assertEquals(decimal_type, values.get(id).get("decimal_type"), "decimal_type type " + id);
+		assertEquals(numeric_type, values.get(id).get("numeric_type"), "numeric_type type " + id);
+		assertEquals(real_type, values.get(id).get("real_type"), "real_type type " + id);
+		assertEquals(double_type, values.get(id).get("double_type"), "double_type type " + id);
 		// date/time
 		verifyField(id, "date_type", date_type, Object::toString, Object::toString);
 		verifyField(id, "time_type", time_type, v -> Time.valueOf(v).toString(), Object::toString);
 		verifyField(id, "timestamp_type", timestamp_type, v -> Timestamp.valueOf(v).toString(), Object::toString);
 		// boolean
-		assertEquals("boolean_type type " + id, boolean_type, values.get(id).get("boolean_type"));
+		assertEquals(boolean_type, values.get(id).get("boolean_type"), "boolean_type type " + id);
 		// binary
-		assertEquals("bytea_type type " + id, bytea_type, convertBytesToString(values.get(id).get("bytea_type")));
+		assertEquals(bytea_type, convertBytesToString(values.get(id).get("bytea_type")), "bytea_type type " + id);
 		// uuid
 		verifyField(id, "uuid_type", uuid_type, Function.identity(), Object::toString);
 		// enum
@@ -198,11 +198,11 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 
 	private void verifyArrayField(int id, String name, Object[] expectedValue) {
 		if (null == expectedValue) {
-			assertNull(name + " " + id, values.get(id).get(name));
+			assertNull(values.get(id).get(name), name + " " + id);
 		} else {
 			try {
-				assertArrayEquals(name + " " + id, expectedValue,
-					(Object[]) ((Array) values.get(id).get(name)).getArray());
+				assertArrayEquals(expectedValue, (Object[]) ((Array) values.get(id).get(name)).getArray(),
+					name + " " + id);
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}

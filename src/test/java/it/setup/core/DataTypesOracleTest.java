@@ -2,17 +2,17 @@ package it.setup.core;
 
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
 
 import java.math.BigDecimal;
 import java.util.function.Function;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Requires:
@@ -22,8 +22,8 @@ import static org.junit.Assert.assertEquals;
  * <li>Driver ojdbc8.jar copied into jre/lib/ext directory in the JDK.</li>
  * </ul>
  */
-@Ignore
-@RunWith(LightAir.class)
+@Disabled
+@ExtendWith(LightAir.class)
 @Setup
 public class DataTypesOracleTest extends DataTypesSetupTestBase {
 
@@ -32,7 +32,7 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 		ConfigSupport.replaceConfig("oracle");
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		createTable();
 	}
@@ -122,26 +122,26 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 		Boolean boolean_type,
 		String clob_type, String nclob_type, String blob_type, String binary_type
 	) {
-		assertEquals("id " + id, id, ((BigDecimal) values.get(id).get("id")).intValue());
-		assertEquals("char_type " + id, char_type, values.get(id).get("char_type"));
-		assertEquals("varchar_type " + id, varchar_type, values.get(id).get("varchar_type"));
-		assertEquals("varchar2_type " + id, varchar2_type, values.get(id).get("varchar2_type"));
-		assertEquals("nchar_type " + id, nchar_type, values.get(id).get("nchar_type"));
-		assertEquals("nvarchar2_type " + id, nvarchar2_type, values.get(id).get("nvarchar2_type"));
+		assertEquals(id, ((BigDecimal) values.get(id).get("id")).intValue(), "id " + id);
+		assertEquals(char_type, values.get(id).get("char_type"), "char_type " + id);
+		assertEquals(varchar_type, values.get(id).get("varchar_type"), "varchar_type " + id);
+		assertEquals(varchar2_type, values.get(id).get("varchar2_type"), "varchar2_type " + id);
+		assertEquals(nchar_type, values.get(id).get("nchar_type"), "nchar_type " + id);
+		assertEquals(nvarchar2_type, values.get(id).get("nvarchar2_type"), "nvarchar2_type " + id);
 		verifyField(id, "integer_type", integer_type, Function.identity(), v -> ((BigDecimal) v).intValue());
 		verifyField(id, "bigint_type", bigint_type, Function.identity(), v -> ((BigDecimal) v).longValue());
-		assertEquals("decimal_type type " + id, decimal_type, values.get(id).get("decimal_type"));
-		assertEquals("number_type type " + id, number_type, values.get(id).get("number_type"));
-		assertEquals("float_type type " + id, float_type, values.get(id).get("float_type"));
-		assertEquals("binary_float_type type " + id, binary_float_type, values.get(id).get("binary_float_type"));
-		assertEquals("binary_double_type type " + id, binary_double_type, values.get(id).get("binary_double_type"));
+		assertEquals(decimal_type, values.get(id).get("decimal_type"), "decimal_type type " + id);
+		assertEquals(number_type, values.get(id).get("number_type"), "number_type type " + id);
+		assertEquals(float_type, values.get(id).get("float_type"), "float_type type " + id);
+		assertEquals(binary_float_type, values.get(id).get("binary_float_type"), "binary_float_type type " + id);
+		assertEquals(binary_double_type, values.get(id).get("binary_double_type"), "binary_double_type type " + id);
 		verifyField(id, "date_type", date_type, Function.identity(), Object::toString);
 		verifyField(id, "time_type", time_type, Function.identity(), Object::toString);
 		verifyField(id, "timestamp_type", timestamp_type, Function.identity(), Object::toString);
 		verifyField(id, "boolean_type", boolean_type, Function.identity(), v -> 1 == ((BigDecimal) v).intValue());
-		assertEquals("clob_type type " + id, clob_type, values.get(id).get("clob_type"));
-		assertEquals("nclob_type type " + id, nclob_type, values.get(id).get("nclob_type"));
-		assertEquals("blob_type type " + id, blob_type, convertBytesToString(values.get(id).get("blob_type")));
-		assertEquals("binary_type type " + id, binary_type, convertBytesToString(values.get(id).get("binary_type")));
+		assertEquals(clob_type, values.get(id).get("clob_type"), "clob_type type " + id);
+		assertEquals(nclob_type, values.get(id).get("nclob_type"), "nclob_type type " + id);
+		assertEquals(blob_type, convertBytesToString(values.get(id).get("blob_type")), "blob_type type " + id);
+		assertEquals(binary_type, convertBytesToString(values.get(id).get("binary_type")), "binary_type type " + id);
 	}
 }

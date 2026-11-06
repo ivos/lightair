@@ -3,12 +3,12 @@ package unit.internal.auto;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Auto;
 import net.sf.lightair.internal.auto.Index;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AutoTest implements Keywords {
 

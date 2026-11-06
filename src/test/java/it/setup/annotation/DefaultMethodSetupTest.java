@@ -3,15 +3,14 @@ package it.setup.annotation;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.LightAirNGListener;
 import net.sf.lightair.annotation.Setup;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testng.annotations.Listeners;
 
 /**
  * Test class is not annotated. Test methods are annotated @Setup.
  */
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Listeners(LightAirNGListener.class)
 public class DefaultMethodSetupTest extends SetupTestBase {
 
@@ -44,5 +43,4 @@ public class DefaultMethodSetupTest extends SetupTestBase {
 	public void methodNameXml() {
 		verifyPersons("Method", "Name", "Only");
 	}
-
 }

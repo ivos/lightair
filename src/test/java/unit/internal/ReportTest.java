@@ -2,7 +2,7 @@ package unit.internal;
 
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.Report;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -17,8 +17,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static unit.internal.CompareTest.createRow;
 
 public class ReportTest implements Keywords {
@@ -36,7 +36,7 @@ public class ReportTest implements Keywords {
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	private static Map<String, Map<String, List<?>>> createProfile(Object... data) {
-		assertTrue("Data in pairs", data.length % 2 == 0);
+		assertTrue(data.length % 2 == 0, "Data in pairs");
 		Map<String, Map<String, List<?>>> profile = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i = i + 2) {
 			profile.put((String) data[i], (Map) data[i + 1]);
@@ -98,41 +98,41 @@ public class ReportTest implements Keywords {
 					createRow("une112a", "une112av", "une112b", "une112bv", "une112c", "une112cv")
 				)),
 			"t12", createTable(
-				Arrays.asList(
+				List.of(
 					createRow("mis121a", "mis121av", "mis121b", "mis121bv", "mis121c", "mis121cv")
 				),
-				Arrays.asList(
+				List.of(
 					createRow(
 						EXPECTED, createRow("dif121a", "dif121av", "dif121b", "dif121bv", "dif121c", "dif121cv"),
 						DIFFERENCES,
-						Arrays.asList(
+						List.of(
 							createRow(COLUMN, "dif121a", EXPECTED, "dif121aexp", ACTUAL, "dif121aact")
 						))
 				),
-				Arrays.asList(
+				List.of(
 					createRow("une121a", "une121av", "une121b", "une121bv", "une121c", "une121cv")
 				))
 		));
 		differences.put("p2", createProfile(
 			"t21", createTable(
-				Arrays.asList(
+				List.of(
 					createRow("mis211a", "mis211av", "mis211b", "mis211bv", "mis211c", "mis211cv")
 				),
-				Arrays.asList(
+				List.of(
 					createRow(
 						EXPECTED, createRow("dif211a", "dif211av", "dif211b", "dif211bv", "dif211c", "dif211cv"),
 						DIFFERENCES,
-						Arrays.asList(
+						List.of(
 							createRow(COLUMN, "dif211a", EXPECTED, "dif211aexp", ACTUAL, "dif211aact")
 						))
 				),
-				Arrays.asList(
+				List.of(
 					createRow("une211a", "une211av", "une211b", "une211bv", "une211c", "une211cv")
 				))
 		));
 		differences.put(DEFAULT_PROFILE, createProfile(
 			"t31", createTable(
-				Arrays.asList(
+				List.of(
 					createRow("mis311a", "mis311av")
 				),
 				Collections.emptyList(),
@@ -186,8 +186,8 @@ public class ReportTest implements Keywords {
 		);
 		differences.put("p1", createProfile(
 			"t11", createTable(
-				Arrays.asList(row),
-				Arrays.asList(
+				List.of(row),
+				List.of(
 					createRow(
 						EXPECTED, row,
 						DIFFERENCES,
@@ -220,7 +220,7 @@ public class ReportTest implements Keywords {
 								EXPECTED, new String[]{"value 1", "value 2", "", " ", null, "value 3"},
 								ACTUAL, new String[]{"value 1", "value 2b", "", " ", null, "value 3"})
 						))
-				), Arrays.asList(row))
+				), List.of(row))
 		));
 
 		String report = Report.report(differences);

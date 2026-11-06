@@ -3,15 +3,14 @@ package it.verify.annotation;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.LightAirNGListener;
 import net.sf.lightair.annotation.Verify;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testng.annotations.Listeners;
 
 /**
  * Test class is annotated @Verify.
  */
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Listeners(LightAirNGListener.class)
 @Verify
 public class DefaultClassVerifyTest extends VerifyTestBase {
@@ -42,5 +41,4 @@ public class DefaultClassVerifyTest extends VerifyTestBase {
 	public void methodNameXml() {
 		fillPersons(4);
 	}
-
 }

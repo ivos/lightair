@@ -3,21 +3,20 @@ package it.verify.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
 /**
  * Table expected empty is empty in database.
  */
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Verify
 public class ForeignKeyVerificationTest extends CommonTestBase {
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		db.execute("create table master (id int primary key, m1 varchar(50))");
 		db.execute("create table detail (id int primary key, master_id int, d1 varchar(50))");
@@ -26,7 +25,7 @@ public class ForeignKeyVerificationTest extends CommonTestBase {
 		ApiTestSupport.reInitialize();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("alter table detail drop constraint fk_detail_master");
 		db.execute("drop table detail");
@@ -53,5 +52,4 @@ public class ForeignKeyVerificationTest extends CommonTestBase {
 		db.update("insert into detail (id,master_id,d1) values (7,2,'d127')");
 		db.update("insert into detail (id,master_id,d1) values (8,2,'d128')");
 	}
-
 }

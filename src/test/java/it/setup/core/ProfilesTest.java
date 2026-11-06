@@ -3,13 +3,13 @@ package it.setup.core;
 import it.common.ProfilesTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup.List({
 	@Setup("../../common/profiles-defaulth2.xml"),
 	@Setup(value = "../../common/profiles-hsqldb.xml", profile = "hsqldb"),
@@ -28,8 +28,7 @@ public class ProfilesTest extends ProfilesTestBase {
 		JdbcTemplate db, String tableName, String columnName, int size, int index, String value
 	) {
 		values = db.queryForList("select * from " + tableName);
-		assertEquals("Size of " + tableName, size, values.size());
-		assertEquals("Value of " + columnName, value, values.get(index).get(columnName));
+		assertEquals(size, values.size(), "Size of " + tableName);
+		assertEquals(value, values.get(index).get(columnName), "Value of " + columnName);
 	}
-
 }

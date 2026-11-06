@@ -3,7 +3,7 @@ package unit.internal.auto;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Index;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IndexTest implements Keywords {
 
@@ -70,12 +70,13 @@ public class IndexTest implements Keywords {
 			" [profile2]/t22=6760,\n" +
 			" [profile2]/t22.t22a=809,\n" +
 			" [profile2]/t22.t22b=729}";
-		assertEquals("Index", expected, index.toString().replace(", ", ",\n "));
-		assertEquals("File",
+		assertEquals(expected, index.toString().replace(", ", ",\n "), "Index");
+		assertEquals(
 			expected.replace("{", "")
 				.replace(",\n ", "\n")
 				.replace("}", "\n"),
-			FileUtils.readFileToString(new File(FILE), Charset.defaultCharset()));
+			FileUtils.readFileToString(new File(FILE), Charset.defaultCharset()),
+			"File");
 	}
 
 	@Test
@@ -108,12 +109,13 @@ public class IndexTest implements Keywords {
 			" [profile2]/t22=6760,\n" +
 			" [profile2]/t22.t22a=809,\n" +
 			" [profile2]/t22.t22b=729}";
-		assertEquals("Index", expected, index.toString().replace(", ", ",\n "));
-		assertEquals("File",
+		assertEquals(expected, index.toString().replace(", ", ",\n "), "Index");
+		assertEquals(
 			expected.replace("{", "")
 				.replace(",\n ", "\n")
 				.replace("}", "\n"),
-			FileUtils.readFileToString(new File(FILE), Charset.defaultCharset()));
+			FileUtils.readFileToString(new File(FILE), Charset.defaultCharset()),
+			"File");
 	}
 
 	@Test
