@@ -2,6 +2,7 @@ package it.setup.core;
 
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
+import org.h2.jdbc.JdbcArray;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,7 @@ import test.support.ConfigSupport;
 import test.support.TimeUtils;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -38,8 +40,8 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 			+ "varchar_type varchar(50), integer_type integer, "
 			+ "date_type date, time_type time, timestamp_type timestamp, "
 			+ "double_type double, boolean_type boolean, bigint_type bigint, "
-			+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type binary(8), "
-			+ "uuid_type uuid, varchar_array_type array)");
+			+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type varbinary(8), "
+			+ "uuid_type uuid, varchar_array_type varchar(100) array)");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -51,7 +53,7 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 	@Override
 	protected void verify() {
 		// full
-		verifyRow(0, "efghijklmnopqrs", "abcdefghijklmnopqrstuvxyz",
+		verifyRow(0, "efghijklmnopqrs          ", "abcdefghijklmnopqrstuvxyz",
 			12345678, LocalDate.of(2999, 12, 31),
 			LocalTime.of(23, 59, 58),
 			LocalDateTime.of(2998, 11, 30, 22, 57, 56, 789000000),
@@ -62,7 +64,7 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 			new String[]{"varchar 1", "varchar 2", "", " ", null, "varchar 3"}
 		);
 		// empty
-		verifyRow(1, "", "", 0,
+		verifyRow(1, "                         ", "", 0,
 			LocalDate.of(2000, 1, 2),
 			LocalTime.of(0, 0, 0),
 			LocalDateTime.of(2000, 1, 2, 3, 4, 5, 678000000),
@@ -77,7 +79,7 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 			null, null, null, null, null, null
 		);
 		// auto
-		verifyRow(3, "char_type 1384656904", "varchar_type 1384684104",
+		verifyRow(3, "char_type 1384656904     ", "varchar_type 1384684104",
 			1384653604, LocalDate.parse("1976-12-12"), LocalTime.parse("08:26:44"),
 			LocalDateTime.parse("1900-01-05T04:53:24.004"), 13846684.04, false,
 			1384644904L, new BigDecimal("13846469.04"), "clob_type 1384603204",
@@ -117,7 +119,12 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 		if (null == expectedValue) {
 			assertNull(name + " " + id, values.get(id).get(name));
 		} else {
-			assertArrayEquals(name + " " + id, expectedValue, (String[]) values.get(id).get(name));
+			try {
+				Object[] actual = (Object[]) ((JdbcArray) values.get(id).get(name)).getArray();
+				assertArrayEquals(name + " " + id, expectedValue, actual);
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 }

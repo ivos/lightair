@@ -106,8 +106,9 @@ public class ExecuteQueryTest implements Keywords {
 			" date_type date, time_type time, timestamp_type timestamp," +
 			" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
 			" nchar_type nchar(20), nvarchar_type nvarchar(50), longnvarchar_type longnvarchar(5000)," +
-			" binary_type binary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
-			" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, json_type json, array_type array)");
+			" binary_type binary(10), varbinary_type varbinary(10), longvarbinary_type longvarbinary(5000)," +
+			" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, json_type json," +
+			" array_type varchar(100) array)");
 		String columns = "(id," +
 			"bit_type,boolean_type,tinyint_type,smallint_type,integer_type,bigint_type," +
 			"real_type,float_type,double_type,numeric_type,decimal_type," +
@@ -191,10 +192,10 @@ public class ExecuteQueryTest implements Keywords {
 			"date_type=2015-12-31,\n" +
 			"time_type=12:34:56,\n" +
 			"timestamp_type=2015-12-31 12:34:56.0,\n" +
-			"char_type=char1,\n" +
+			"char_type=char1               ,\n" +
 			"varchar_type=varchar1,\n" +
 			"longvarchar_type=longvarchar1,\n" +
-			"nchar_type=nchar1,\n" +
+			"nchar_type=nchar1              ,\n" +
 			"nvarchar_type=nvarchar1,\n" +
 			"longnvarchar_type=longnvarchar1,\n" +
 			"binary_type=REPLACED,\n" +
@@ -265,7 +266,7 @@ public class ExecuteQueryTest implements Keywords {
 		assertEquals(String.class, row.get("nvarchar_type").getClass());
 		assertEquals(String.class, row.get("longnvarchar_type").getClass());
 		assertEquals(byte[].class, row.get("binary_type").getClass());
-		assertEquals("binary1", new String((byte[]) row.get("binary_type")));
+		assertEquals("binary1\u0000\u0000\u0000", new String((byte[]) row.get("binary_type")));
 		assertEquals(byte[].class, row.get("varbinary_type").getClass());
 		assertEquals("varbin1", new String((byte[]) row.get("varbinary_type")));
 		assertEquals(byte[].class, row.get("longvarbinary_type").getClass());

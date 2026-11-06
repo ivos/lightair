@@ -37,7 +37,7 @@ public class AutoColumnDuplicityTest extends CommonTestBase {
 
 	@BeforeClass
 	public static void beforeClass() {
-		db.execute("create table a (dld char(20),glx char(20),gps char(20),hff char(20))");
+		db.execute("create table a (dld varchar(20),glx varchar(20),gps varchar(20),hff varchar(20))");
 		ApiTestSupport.reInitialize();
 	}
 

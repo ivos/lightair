@@ -41,8 +41,9 @@ public class StructureTest implements Keywords {
 			" date_type date, time_type time, timestamp_type timestamp," +
 			" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
 			" nchar_type nchar(20), nvarchar_type nvarchar(50), longnvarchar_type longnvarchar(5000)," +
-			" binary_type binary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
-			" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, json_type json, array_type array)");
+			" binary_type varbinary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
+			" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, json_type json," +
+			" array_type varchar(100) array)");
 		h2.db.execute("create table t1 (t1a int, t1b varchar2(10) not null, t1c varchar2(20))");
 
 		DbTemplate hsql = new DbTemplate("jdbc:hsqldb:mem:test", "sa", "");
@@ -67,18 +68,18 @@ public class StructureTest implements Keywords {
 		hsql.db.execute("drop table t2");
 
 		String expected =
-			"{profile1={data_types={id={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=true, SIZE=10, "
+			"{profile1={data_types={id={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=true, SIZE=32, "
 				+ "DECIMAL_DIGITS=0},\n"
 				+ " bit_type={DATA_TYPE=BOOLEAN, JDBC_DATA_TYPE=16, NOT_NULL=false, SIZE=1, DECIMAL_DIGITS=0},\n" +
 				" boolean_type={DATA_TYPE=BOOLEAN, JDBC_DATA_TYPE=16, NOT_NULL=false, SIZE=1, DECIMAL_DIGITS=0},\n" +
-				" tinyint_type={DATA_TYPE=BYTE, JDBC_DATA_TYPE=-6, NOT_NULL=false, SIZE=3, DECIMAL_DIGITS=0},\n" +
-				" smallint_type={DATA_TYPE=SHORT, JDBC_DATA_TYPE=5, NOT_NULL=false, SIZE=5, DECIMAL_DIGITS=0},\n" +
-				" integer_type={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=false, SIZE=10, DECIMAL_DIGITS=0},\n" +
-				" bigint_type={DATA_TYPE=LONG, JDBC_DATA_TYPE=-5, NOT_NULL=false, SIZE=19, DECIMAL_DIGITS=0},\n" +
-				" real_type={DATA_TYPE=FLOAT, JDBC_DATA_TYPE=7, NOT_NULL=false, SIZE=7, DECIMAL_DIGITS=0},\n" +
-				" float_type={DATA_TYPE=DOUBLE, JDBC_DATA_TYPE=8, NOT_NULL=false, SIZE=17, DECIMAL_DIGITS=0},\n" +
-				" double_type={DATA_TYPE=DOUBLE, JDBC_DATA_TYPE=8, NOT_NULL=false, SIZE=17, DECIMAL_DIGITS=0},\n" +
-				" numeric_type={DATA_TYPE=BIGDECIMAL, JDBC_DATA_TYPE=3, NOT_NULL=false, SIZE=20,"
+				" tinyint_type={DATA_TYPE=BYTE, JDBC_DATA_TYPE=-6, NOT_NULL=false, SIZE=8, DECIMAL_DIGITS=0},\n" +
+				" smallint_type={DATA_TYPE=SHORT, JDBC_DATA_TYPE=5, NOT_NULL=false, SIZE=16, DECIMAL_DIGITS=0},\n" +
+				" integer_type={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=false, SIZE=32, DECIMAL_DIGITS=0},\n" +
+				" bigint_type={DATA_TYPE=LONG, JDBC_DATA_TYPE=-5, NOT_NULL=false, SIZE=64, DECIMAL_DIGITS=0},\n" +
+				" real_type={DATA_TYPE=FLOAT, JDBC_DATA_TYPE=7, NOT_NULL=false, SIZE=24, DECIMAL_DIGITS=0},\n" +
+				" float_type={DATA_TYPE=FLOAT, JDBC_DATA_TYPE=6, NOT_NULL=false, SIZE=53, DECIMAL_DIGITS=0},\n" +
+				" double_type={DATA_TYPE=DOUBLE, JDBC_DATA_TYPE=8, NOT_NULL=false, SIZE=53, DECIMAL_DIGITS=0},\n" +
+				" numeric_type={DATA_TYPE=BIGDECIMAL, JDBC_DATA_TYPE=2, NOT_NULL=false, SIZE=20,"
 				+ " DECIMAL_DIGITS=2},\n" +
 				" decimal_type={DATA_TYPE=BIGDECIMAL, JDBC_DATA_TYPE=3, NOT_NULL=false, SIZE=20,"
 				+ " DECIMAL_DIGITS=2},\n" +
@@ -106,11 +107,11 @@ public class StructureTest implements Keywords {
 				+ " blob_type={DATA_TYPE=BLOB, JDBC_DATA_TYPE=2004, NOT_NULL=false, SIZE=2147483647, "
 				+ "DECIMAL_DIGITS=0},\n"
 				+ " uuid_type={DATA_TYPE=UUID, JDBC_DATA_TYPE=-2, NOT_NULL=false, SIZE=16, DECIMAL_DIGITS=0},\n" +
-				" json_type={DATA_TYPE=JSON, JDBC_DATA_TYPE=1111, NOT_NULL=false, SIZE=2147483647, "
+				" json_type={DATA_TYPE=JSON, JDBC_DATA_TYPE=1111, NOT_NULL=false, SIZE=1000000000, "
 				+ "DECIMAL_DIGITS=0},\n"
-				+ " array_type={DATA_TYPE=ARRAY_STRING, JDBC_DATA_TYPE=2003, NOT_NULL=false, SIZE=2147483647, "
+				+ " array_type={DATA_TYPE=ARRAY_STRING, JDBC_DATA_TYPE=2003, NOT_NULL=false, SIZE=65536, "
 				+ "DECIMAL_DIGITS=0}},\n" +
-				" t1={t1a={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=false, SIZE=10, DECIMAL_DIGITS=0},\n" +
+				" t1={t1a={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=false, SIZE=32, DECIMAL_DIGITS=0},\n" +
 				" t1b={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=true, SIZE=10, DECIMAL_DIGITS=0},\n" +
 				" t1c={DATA_TYPE=STRING, JDBC_DATA_TYPE=12, NOT_NULL=false, SIZE=20, DECIMAL_DIGITS=0}}},\n" +
 				" profile2={data_types={id={DATA_TYPE=INTEGER, JDBC_DATA_TYPE=4, NOT_NULL=true, SIZE=32, "

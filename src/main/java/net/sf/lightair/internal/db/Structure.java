@@ -172,8 +172,10 @@ public class Structure implements Keywords {
 		}
 
 		if (Types.ARRAY == sqlDataType) {
+			if (sqlTypeName.endsWith("ARRAY")) { // H2
+				return ARRAY_STRING;
+			}
 			switch (sqlTypeName) {
-				case "ARRAY": // H2
 				case "_TEXT": // Postgres
 				case "_VARCHAR": // Postgres
 					return ARRAY_STRING;

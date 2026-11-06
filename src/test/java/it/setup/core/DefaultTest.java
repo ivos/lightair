@@ -39,8 +39,10 @@ public class DefaultTest extends CommonTestBase {
 			db.queryForObject("select count(*) from a", Integer.class));
 
 		values = db.queryForList("select * from a");
-		verifyRow(0, 1, "A", "autom 1042168101", "A", "autoo 1042128301");
-		verifyRow(1, 2, "D", "D", "D", "D");
+		verifyRow(0, 1, "A                   ", "autom 1042168101    ",
+				"A                   ", "autoo 1042128301    ");
+		verifyRow(1, 2, "D                   ", "D                   ",
+				"D                   ", "D                   ");
 	}
 
 	protected void verifyRow(int row, int id, String fixedm, String autom,
@@ -52,5 +54,4 @@ public class DefaultTest extends CommonTestBase {
 		assertEquals("fixedo " + row, fixedo, values.get(row).get("fixedo"));
 		assertEquals("autoo " + row, autoo, values.get(row).get("autoo"));
 	}
-
 }

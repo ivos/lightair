@@ -17,7 +17,7 @@ public class ArrayValueFailureTest extends CommonTestBase {
 
 	@BeforeClass
 	public static void beforeClass() {
-		db.execute("create table a(id int primary key, a1 array)");
+		db.execute("create table a(id int primary key, a1 varchar(100) array)");
 		ApiTestSupport.reInitialize();
 	}
 

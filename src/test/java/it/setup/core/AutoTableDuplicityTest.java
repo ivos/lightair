@@ -39,10 +39,10 @@ public class AutoTableDuplicityTest extends CommonTestBase {
 
 	@BeforeClass
 	public static void beforeClass() {
-		db.execute("create table ayck (a1 char(20))");
-		db.execute("create table cbij (a1 char(20))");
-		db.execute("create table cgom (a1 char(20))");
-		db.execute("create table ciho (a1 char(20))");
+		db.execute("create table ayck (a1 varchar(20))");
+		db.execute("create table cbij (a1 varchar(20))");
+		db.execute("create table cgom (a1 varchar(20))");
+		db.execute("create table ciho (a1 varchar(20))");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -71,5 +71,4 @@ public class AutoTableDuplicityTest extends CommonTestBase {
 	private void verifyValue(String test, String table, String tableHash, int id) {
 		assertEquals(test + " " + id, "a1 1" + tableHash + "2730" + id, values.get(id - 1).get("a1"));
 	}
-
 }

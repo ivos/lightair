@@ -159,7 +159,7 @@ public class ExecuteUpdateTest implements Keywords {
 			" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
 			" nchar_type nchar(20), nvarchar_type nvarchar(50), longnvarchar_type longnvarchar(5000)," +
 			" binary_type binary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
-			" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, array_type array)");
+			" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, array_type varchar(100) array)");
 
 		List<Map<String, Object>> data;
 		data = h2.db.queryForList("select * from data_types");
@@ -244,12 +244,12 @@ public class ExecuteUpdateTest implements Keywords {
 			" REAL_TYPE=123456.79, FLOAT_TYPE=123456.7890625, DOUBLE_TYPE=123456.7890123," +
 			" NUMERIC_TYPE=123456.79, DECIMAL_TYPE=234567.89," +
 			" DATE_TYPE=2015-12-31, TIME_TYPE=12:34:56, TIMESTAMP_TYPE=2015-12-31 12:34:56.0," +
-			" CHAR_TYPE=char1, VARCHAR_TYPE=varchar1, LONGVARCHAR_TYPE=longvarchar1," +
-			" NCHAR_TYPE=nchar1, NVARCHAR_TYPE=nvarchar1, LONGNVARCHAR_TYPE=longnvarchar1," +
-			" BINARY_TYPE=REPLACED, VARBINARY_TYPE=REPLACED, LONGVARBINARY_TYPE=REPLACED," +
-			" CLOB_TYPE=clob1, NCLOB_TYPE=nclob1, BLOB_TYPE=REPLACED," +
+			" CHAR_TYPE=char1               , VARCHAR_TYPE=varchar1, LONGVARCHAR_TYPE=longvarchar1," +
+			" NCHAR_TYPE=nchar1              , NVARCHAR_TYPE=nvarchar1, LONGNVARCHAR_TYPE=longnvarchar1," +
+			" BINARY_TYPE=[REPLACED], VARBINARY_TYPE=[REPLACED], LONGVARBINARY_TYPE=[REPLACED]," +
+			" CLOB_TYPE=clob1, NCLOB_TYPE=nclob1, BLOB_TYPE=[REPLACED]," +
 			" UUID_TYPE=a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11," +
-			" ARRAY_TYPE=[Ljava.lang.String;REPLACED" +
+			" ARRAY_TYPE=ar[REPLACED]: ARRAY ['value 1', 'value 2', 'value 3']" +
 			"}," +
 			" {ID=2, BIT_TYPE=null, BOOLEAN_TYPE=null," +
 			" TINYINT_TYPE=null, SMALLINT_TYPE=null, INTEGER_TYPE=null, BIGINT_TYPE=null," +
@@ -261,8 +261,8 @@ public class ExecuteUpdateTest implements Keywords {
 			" CLOB_TYPE=null, NCLOB_TYPE=null, BLOB_TYPE=null, UUID_TYPE=null, ARRAY_TYPE=null}]";
 		assertEquals("After", expected.replace(", ", ",\n "),
 			data.toString()
-				.replaceAll("\\[B@[^,}]+", "REPLACED")
-				.replaceAll("@[0-9a-fA-F]+", "REPLACED")
+				.replaceAll("\\[B@[^,}]+", "[REPLACED]")
+				.replaceAll("=ar[0-9]+: ARRAY", "=ar[REPLACED]: ARRAY")
 				.replace(", ", ",\n "));
 
 		h2.db.execute("drop table data_types");

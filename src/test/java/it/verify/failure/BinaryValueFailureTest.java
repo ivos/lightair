@@ -17,7 +17,7 @@ public class BinaryValueFailureTest extends CommonTestBase {
 
 	@BeforeClass
 	public static void beforeClass() {
-		db.execute("create table a(id int primary key, a1 binary)");
+		db.execute("create table a(id int primary key, a1 varbinary(100))");
 		ApiTestSupport.reInitialize();
 	}
 
@@ -29,9 +29,9 @@ public class BinaryValueFailureTest extends CommonTestBase {
 	@Test
 	public void test() {
 		db.execute("delete from a");
-		db.update("insert into a (id,a1) values (0,'fedcba0987654321')");
-		db.update("insert into a (id,a1) values (1,'fedcba098765432f')");
-		db.update("insert into a (id,a1) values (2,'fedcba0987654323')");
+		db.update("insert into a (id,a1) values (0,X'fedcba0987654321')");
+		db.update("insert into a (id,a1) values (1,X'fedcba098765432f')");
+		db.update("insert into a (id,a1) values (2,X'fedcba0987654323')");
 	}
 
 	public void testVerifyException(Throwable error) {
@@ -42,5 +42,4 @@ public class BinaryValueFailureTest extends CommonTestBase {
 			"    a1: expected [/ty6CYdlQyI=], but was [/ty6CYdlQy8=]\n";
 		assertEquals(msg, error.getMessage());
 	}
-
 }
