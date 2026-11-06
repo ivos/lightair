@@ -94,9 +94,9 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>io.zonky.test.postgres</groupId>
-				<artifactId>embedded-postgres-binaries-bom</artifactId>
-				<version>16.10.0</version>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>2.0.5</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -223,19 +223,13 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.zonky.test</groupId>
-			<artifactId>embedded-postgres</artifactId>
-			<version>2.1.1</version>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.zonky.test.postgres</groupId>
-			<artifactId>embedded-postgres-binaries-darwin-amd64</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.zonky.test.postgres</groupId>
-			<artifactId>embedded-postgres-binaries-darwin-arm64v8</artifactId>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-postgresql</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the JDK. -->

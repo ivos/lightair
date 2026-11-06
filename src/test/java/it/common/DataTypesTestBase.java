@@ -1,11 +1,11 @@
 package it.common;
 
-import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import net.sf.lightair.internal.junit.util.Factory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import test.support.ConfigSupport;
 import test.support.PostgresUtils;
 
@@ -40,5 +40,5 @@ public class DataTypesTestBase {
 		db.execute("drop table data_types");
 	}
 
-	protected static EmbeddedPostgres postgres;
+	protected static PostgreSQLContainer postgres;
 }

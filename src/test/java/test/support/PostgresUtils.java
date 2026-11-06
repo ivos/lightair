@@ -1,32 +1,24 @@
 package test.support;
 
-import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
-import java.io.IOException;
+import java.util.List;
 
 public class PostgresUtils {
 
-	public static EmbeddedPostgres initPostgres() {
-		try {
-			return EmbeddedPostgres.builder()
-				.setPort(5432)
-				.setCleanDataDirectory(false)
-				.setDataDirectory("./target/embeddedpostgres")
-				.setServerConfig("max_connections", "10")
-				.setServerConfig("max_wal_senders", "0")
-				.start();
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot start embedded Postgres.", e);
-		}
+	public static PostgreSQLContainer initPostgres() {
+		PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:16")
+			.withUsername("postgres")
+			.withPassword("postgres")
+			.withDatabaseName("postgres");
+		postgres.setPortBindings(List.of("5432:5432"));
+		postgres.start();
+		return postgres;
 	}
 
-	public static void closePostgresIfOpen(EmbeddedPostgres postgres) {
+	public static void closePostgresIfOpen(PostgreSQLContainer postgres) {
 		if (postgres != null) {
-			try {
-				postgres.close();
-			} catch (IOException e) {
-				throw new RuntimeException("Cannot stop embedded Postgres.", e);
-			}
+			postgres.stop();
 		}
 	}
 }
