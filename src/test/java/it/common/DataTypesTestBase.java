@@ -1,12 +1,14 @@
 package it.common;
 
-import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import net.sf.lightair.internal.junit.util.Factory;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.testcontainers.oracle.OracleContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import test.support.ConfigSupport;
+import test.support.OracleUtils;
 import test.support.PostgresUtils;
 
 import javax.sql.DataSource;
@@ -19,16 +21,19 @@ public class DataTypesTestBase {
 
 	public List<Map<String, Object>> values;
 
-	@BeforeClass
+	@BeforeAll
 	public static void initDataTypesTestBase() {
 		Factory.getInstance().init();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		dropTable();
 		ConfigSupport.restoreConfig();
 		PostgresUtils.closePostgresIfOpen(postgres);
+		postgres = null;
+		OracleUtils.closeOracleIfOpen(oracle);
+		oracle = null;
 	}
 
 	public static void connect(String url, String username, String password) {
@@ -40,5 +45,6 @@ public class DataTypesTestBase {
 		db.execute("drop table data_types");
 	}
 
-	protected static EmbeddedPostgres postgres;
+	protected static PostgreSQLContainer postgres;
+	protected static OracleContainer oracle;
 }

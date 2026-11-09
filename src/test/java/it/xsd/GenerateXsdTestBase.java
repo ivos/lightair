@@ -1,9 +1,10 @@
 package it.xsd;
 
-import net.sf.lightair.Api;
-import net.sf.seaf.test.util.TemplatingTestBase;
+import net.sf.lightair.LightAirApi;
 import org.apache.commons.io.FileUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
+import test.support.ConfigSupport;
+import test.support.TemplatingTestBase;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,11 +33,12 @@ public class GenerateXsdTestBase extends TemplatingTestBase {
 
 	protected void perform(String db, String propertiesFileName) throws IOException {
 		FileUtils.deleteDirectory(new File(GENERATED_DIR));
-		Api.initialize(propertiesFileName);
+		LightAirApi.initialize(propertiesFileName);
 		try {
-			Api.generateXsd();
+			LightAirApi.generateXsd();
 		} finally {
-			Api.shutdown();
+			LightAirApi.shutdown();
+			ConfigSupport.restoreConfig();
 		}
 
 		performTest("dataset-" + db + ".xsd", "dataset.xsd");

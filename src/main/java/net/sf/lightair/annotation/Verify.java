@@ -9,19 +9,19 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Verifies database after test.
+ * Verifies the database after test.
  * <p>
- * Annotate test method with @Verify to verify database after the test method
+ * Annotate a test method with @Verify to verify the database after the test method
  * executed. Annotate the whole test class to have all its test methods verify
- * database. For example:
- * 
+ * the database. For example:
+ *
  * <pre>
  * &#064;Test &#064;Verify
  * public void myTestMethod {
  * }
  * </pre>
  * <p>
- * By default, system locates sequentially the following files in the package of
+ * By default, the system locates sequentially the following files in the package of
  * the class, the first file found wins:
  * <ol>
  * <li>&lt;test class name&gt;.&lt;test method name&gt;-verify.xml</li>
@@ -30,9 +30,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * </ol>
  * <p>
  * Specify the names of files explicitly in the annotation to override the
- * default file name convention. Multiple files may be specified, system uses
+ * default file name convention. Multiple files may be specified, the system uses
  * all of them. The files are located in the package of the class. For example:
- * 
+ *
  * <pre>
  * &#064;Test
  * &#064;Verify({ "custom-verify-1.xml", "custom-verify-2.xml", "custom-verify-3.xml" })
@@ -44,7 +44,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * format, which means there is a root &lt;dataset /&gt; element, which contains
  * one element for each row, where the name of the row element specifies the
  * database table and its elements specify the table columns. So, for example:
- * 
+ *
  * <pre>
  * &lt;dataset&gt;
  * 	&lt;person name="Joe" /&gt;
@@ -57,20 +57,22 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * on the same element.
  *
  * <p>
- * See <a href="http://lightair.sourceforge.net/features/verify.html">http://lightair.sourceforge.net/features/verify.html</a>
+ * See
+ * <a href="http://lightair.sourceforge.net/features/verify.html">http://lightair.sourceforge.net/features/verify.html</a>
  * for more info.
  * </p>
  *
  * @see Await
  * @see Verify.List
  */
-@Target({ TYPE, METHOD })
+@Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @Documented
 public @interface Verify {
 
 	/**
 	 * Names of files with datasets.
+	 *
 	 * @return datasets
 	 */
 	String[] value() default {};
@@ -79,18 +81,19 @@ public @interface Verify {
 	 * Name of the profile.
 	 * <p>
 	 * A profile lets you connect to a different database. A profile must be
-	 * defined in LightAir properties file and must have its own properties file
+	 * defined in the LightAir properties file and must have its own properties file
 	 * which defines the connection to the profile database.
+	 *
 	 * @return profile
 	 */
 	String profile() default "";
 
 	/**
 	 * Defines several @{@link Verify} annotations on the same element.
-	 * 
+	 *
 	 * @see Verify
 	 */
-	@Target({ TYPE, METHOD })
+	@Target({TYPE, METHOD})
 	@Retention(RUNTIME)
 	@Documented
 	@interface List {

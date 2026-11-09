@@ -3,17 +3,16 @@ package it.verify.annotation;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.LightAirNGListener;
 import net.sf.lightair.annotation.Verify;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testng.annotations.Listeners;
 
 /**
  * Method annotation overrides Verify.List annotation on class.
  */
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Listeners(LightAirNGListener.class)
-@Verify.List({ @Verify("ignored-1.xml"), @Verify("ignored-2.xml") })
+@Verify.List({@Verify("ignored-1.xml"), @Verify("ignored-2.xml")})
 public class MethodVsClassVerifyListTest extends VerifyTestBase {
 
 	/**
@@ -21,7 +20,7 @@ public class MethodVsClassVerifyListTest extends VerifyTestBase {
 	 */
 	@Test
 	@org.testng.annotations.Test
-	@Verify({ "custom-verify-1.xml", "custom-verify-2.xml" })
+	@Verify({"custom-verify-1.xml", "custom-verify-2.xml"})
 	public void classNameXml() {
 		fillPersons(2);
 	}
@@ -31,10 +30,9 @@ public class MethodVsClassVerifyListTest extends VerifyTestBase {
 	 */
 	@Test
 	@org.testng.annotations.Test
-	@Verify.List({ @Verify({ "custom-verify-1.xml", "custom-verify-2.xml" }),
-			@Verify({ "custom-verify-1.xml", "custom-verify-2.xml" }) })
+	@Verify.List({@Verify({"custom-verify-1.xml", "custom-verify-2.xml"}),
+		@Verify({"custom-verify-1.xml", "custom-verify-2.xml"})})
 	public void methodSetupList() {
 		fillPersons(2);
 	}
-
 }

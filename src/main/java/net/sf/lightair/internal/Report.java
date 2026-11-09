@@ -2,11 +2,11 @@ package net.sf.lightair.internal;
 
 import net.sf.lightair.internal.auto.Index;
 import org.apache.commons.codec.binary.Base64;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Generate textual report from structured differences between datasets.
+ * Generate the textual report from structured differences between datasets.
  */
 public class Report implements Keywords {
 
@@ -39,8 +39,9 @@ public class Report implements Keywords {
 	}
 
 	private static void appendTableDifferences(
-			String profile, String tableName,
-			StringBuilder sb, Map<String, List<?>> tableDifferences) {
+		String profile, String tableName,
+		StringBuilder sb, Map<String, List<?>> tableDifferences
+	) {
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		List<Map<String, Object>> missing = (List) tableDifferences.get(MISSING);
 		@SuppressWarnings({"unchecked", "rawtypes"})
@@ -101,15 +102,15 @@ public class Report implements Keywords {
 
 	private static Object convertValue(Object value) {
 		if (value instanceof Timestamp) {
-			return new DateTime(value).toString("yyyy-MM-dd'T'HH:mm:ss.SSS");
+			return ((Timestamp) value).toLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 		}
 		if (value instanceof byte[]) {
 			return Base64.encodeBase64String((byte[]) value);
 		}
 		if (value instanceof Object[]) {
 			return Arrays.stream((Object[]) value)
-					.map(object -> object == null ? NULL_TOKEN : String.valueOf(object))
-					.collect(Collectors.joining(ARRAY_ELEMENT_SEPARATOR));
+				.map(object -> object == null ? NULL_TOKEN : String.valueOf(object))
+				.collect(Collectors.joining(ARRAY_ELEMENT_SEPARATOR));
 		}
 		return value;
 	}

@@ -57,15 +57,15 @@
 	</issueManagement>
 
 	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.release>17</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<junitVersion>4.13.2</junitVersion>
-		<testngVersion>6.14.3</testngVersion>
-
-		<h2Version>1.4.200</h2Version>
+		<!--Site docs-->
+		<junitVersion>6.1.3</junitVersion>
+		<testngVersion>7.12.0</testngVersion>
+		<logbackVersion>1.6.6</logbackVersion>
+		<h2Version>2.5.252</h2Version>
 		<hsqlVersion>2.7.4</hsqlVersion>
 	</properties>
 	<scm>
@@ -95,9 +95,16 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>io.zonky.test.postgres</groupId>
-				<artifactId>embedded-postgres-binaries-bom</artifactId>
-				<version>16.10.0</version>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>${junitVersion}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>2.0.5</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -108,20 +115,8 @@
 
 		<!-- JUnit -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<!-- ! version extracted to ${junitVersion} for project-setup.apt.vm -->
-			<version>${junitVersion}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit-dep</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.hamcrest</groupId>
-					<artifactId>hamcrest-core</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
 		</dependency>
 
 		<!-- TestNG -->
@@ -132,91 +127,69 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!--Spring test runner-->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>5.3.39</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-			<optional>true</optional>
-		</dependency>
-
 		<!-- Apache commons -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.18.0</version>
+			<version>3.21.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.16.1</version>
+			<version>2.22.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.18.0</version>
+			<version>1.23.0</version>
 		</dependency>
 
-		<!-- Joda time -->
+		<!-- Utils -->
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.2</version>
+			<groupId>org.threeten</groupId>
+			<artifactId>threeten-extra</artifactId>
+			<version>1.11.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jspecify</groupId>
+			<artifactId>jspecify</artifactId>
+			<version>1.0.1</version>
 		</dependency>
 
 		<!-- Logging, SLF4J -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
-		</dependency>
-		<dependency>
-			<!-- spring-jdbc in test logs via jcl, route to slf4j: -->
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.7.5</version>
-			<scope>runtime</scope>
+			<version>2.0.20</version>
 		</dependency>
 
 		<!-- test (compile): -->
 		<dependency>
 			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>7.0.9</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>7.0.9</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>5.3.39</version>
+			<version>7.0.9</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.seaf</groupId>
-			<artifactId>seaf-test-commons</artifactId>
-			<version>1.6</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock</artifactId>
-			<version>2.5.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-core</artifactId>
-			<version>1.1</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>7.0.9</version>
 			<scope>test</scope>
 		</dependency>
 
 		<!-- test (runtime): -->
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock-legacy</artifactId>
-			<version>2.5.1</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -227,48 +200,59 @@
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>${hsqlVersion}</version>
-			<classifier>jdk8</classifier>
+			<scope>test</scope>
+		</dependency>
+
+		<!--TestContainers-->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!--Postgres-->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-postgresql</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.7.7</version>
+			<version>42.7.14</version>
+			<scope>test</scope>
+		</dependency>
+		<!--Oracle-->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-oracle-free</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.zonky.test</groupId>
-			<artifactId>embedded-postgres</artifactId>
-			<version>2.1.1</version>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11</artifactId>
+			<version>23.26.4.0.0</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.zonky.test.postgres</groupId>
-			<artifactId>embedded-postgres-binaries-darwin-amd64</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.zonky.test.postgres</groupId>
-			<artifactId>embedded-postgres-binaries-darwin-arm64v8</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the JDK. -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>5.3.39</version>
-			<scope>test</scope>
-		</dependency>
+
+		<!--Test utils-->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.5.13</version>
+			<version>${logbackVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<!-- spring-jdbc in test logs via jcl, route to slf4j -->
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>2.0.20</version>
 			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
 
 	<build>
+		<defaultGoal>clean install</defaultGoal>
 		<testResources>
 			<testResource>
 				<directory>src/test/resources</directory>
@@ -286,14 +270,6 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.5.1</version>
-					<configuration>
-						<source>${maven.compiler.source}</source>
-						<target>${maven.compiler.target}</target>
-					</configuration>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
 					<version>3.21.0</version>
@@ -302,38 +278,20 @@
 					</configuration>
 					<dependencies>
 						<!-- add support for ssh/scp -->
-						<!--						<dependency>-->
-						<!--							<groupId>org.apache.maven.wagon</groupId>-->
-						<!--							<artifactId>wagon</artifactId>-->
-						<!--							<version>3.5.3</version>-->
-						<!--						</dependency>-->
+						<dependency>
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-ssh</artifactId>
+							<version>3.5.3</version>
+						</dependency>
 					</dependencies>
 				</plugin>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.19</version>
-					<dependencies>
-						<dependency>
-							<groupId>org.apache.maven.surefire</groupId>
-							<artifactId>surefire-testng</artifactId>
-							<version>2.19.1</version>
-						</dependency>
-						<dependency>
-							<groupId>org.apache.maven.surefire</groupId>
-							<artifactId>surefire-junit47</artifactId>
-							<version>2.19.1</version>
-						</dependency>
-					</dependencies>
+					<version>3.6.1</version>
 					<configuration>
-						<threadCount>1</threadCount>
-						<suiteXmlFiles>
-							<suiteXmlFile>src/test/resources/testng/testng.xml</suiteXmlFile>
-						</suiteXmlFiles>
 						<properties>
-							<property>
-								<name>surefire.testng.verbose</name>
-								<value>2</value>
-							</property>
+							<!--Uncomment to enable verbose output of TestNG tests-->
+							<!--<configurationParameters>testng.verbose = 3</configurationParameters>-->
 						</properties>
 					</configuration>
 				</plugin>
@@ -363,12 +321,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.11.2</version>
+				<version>3.12.0</version>
 				<configuration>
 					<quiet>true</quiet>
 					<links>
-						<link>https://docs.oracle.com/javase/8/docs/api/</link>
+						<link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
 					</links>
+					<doclint>all,-missing</doclint>
 				</configuration>
 				<reportSets>
 					<reportSet>
@@ -381,7 +340,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
-				<version>2.3</version>
+				<version>3.6.0</version>
 				<reportSets>
 					<reportSet>
 						<reports>
@@ -393,15 +352,15 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.6</version>
+				<version>3.28.0</version>
 				<configuration>
-					<targetJdk>${maven.compiler.target}</targetJdk>
+					<targetJdk>${maven.compiler.release}</targetJdk>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.19.1</version>
+				<version>3.5.6</version>
 				<reportSets>
 					<reportSet>
 						<reports>
@@ -410,15 +369,15 @@
 					</reportSet>
 				</reportSets>
 			</plugin>
-			<!--<plugin>-->
-			<!--<groupId>org.codehaus.mojo</groupId>-->
-			<!--<artifactId>cobertura-maven-plugin</artifactId>-->
-			<!--<version>2.7</version>-->
-			<!--</plugin>-->
+			<!--			<plugin>-->
+			<!--				<groupId>org.codehaus.mojo</groupId>-->
+			<!--				<artifactId>cobertura-maven-plugin</artifactId>-->
+			<!--				<version>2.7</version>-->
+			<!--			</plugin>-->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>taglist-maven-plugin</artifactId>
-				<version>3.2.1</version>
+				<version>3.3.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -454,7 +413,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.4</version>
+						<version>3.2.8</version>
 						<executions>
 							<execution>
 								<id>sign</id>

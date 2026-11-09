@@ -22,22 +22,23 @@ public class Delete implements Keywords {
 	private static final Logger log = LoggerFactory.getLogger(Delete.class);
 
 	public static List<Map<String, Object>> create(
-			Map<String, String> profileProperties,
-			Map<String, Map<String, Map<String, Object>>> profileStructure,
-			List<Map<String, Object>> dataset) {
+		Map<String, String> profileProperties,
+		Map<String, Map<String, Map<String, Object>>> profileStructure,
+		List<Map<String, Object>> dataset
+	) {
 		String schema = profileProperties.get(DATABASE_SCHEMA);
 
 		Objects.requireNonNull(schema, "Database schema is required.");
 
 		List<Map<String, Object>> statements = new ArrayList<>();
 		dataset.stream()
-				.map(row -> row.get(TABLE))
-				.distinct() // only delete each table once
-				.collect(toCollection(ArrayDeque::new))
-				.descendingIterator() // delete tables in reverse order
-				.forEachRemaining(tableName -> {
-					statements.add(createStatement(schema, (String) tableName));
-				});
+			.map(row -> row.get(TABLE))
+			.distinct() // only delete each table once
+			.collect(toCollection(ArrayDeque::new))
+			.descendingIterator() // delete tables in reverse order
+			.forEachRemaining(tableName -> {
+				statements.add(createStatement(schema, (String) tableName));
+			});
 		return Collections.unmodifiableList(statements);
 	}
 

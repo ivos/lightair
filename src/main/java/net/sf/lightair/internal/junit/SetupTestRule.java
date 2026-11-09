@@ -2,28 +2,27 @@ package net.sf.lightair.internal.junit;
 
 import net.sf.lightair.annotation.Setup;
 
-import org.junit.runners.model.FrameworkMethod;
+import java.lang.reflect.Method;
 
 /**
- * JUnit test rule to setup database before test method execution.
+ * Test rule helper to set up the database before test method execution.
  */
 public class SetupTestRule extends AbstractTestRule<Setup> {
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param frameworkMethod
-	 *            JUnit framework method on which the test rule is being applied
+	 *
+	 * @param testMethod Method on which the rule is being applied
 	 */
-	public SetupTestRule(FrameworkMethod frameworkMethod) {
-		super(frameworkMethod, Setup.class, Setup.List.class);
+	public SetupTestRule(Method testMethod) {
+		super(testMethod, Setup.class, Setup.List.class);
 	}
 
 	/**
 	 * If the method is annotated with @{@link Setup}, set up the database.
 	 */
 	@Override
-	protected void before() {
+	public void before() {
 		if (null != getAnnotation()) {
 			setupExecutor.execute(getAnnotation(), getTestMethod());
 		}
@@ -34,8 +33,8 @@ public class SetupTestRule extends AbstractTestRule<Setup> {
 	private SetupExecutor setupExecutor;
 
 	/**
-	 * Set setup executor.
-	 * 
+	 * Set the setup executor.
+	 *
 	 * @param setupExecutor executor
 	 */
 	public void setSetupExecutor(SetupExecutor setupExecutor) {

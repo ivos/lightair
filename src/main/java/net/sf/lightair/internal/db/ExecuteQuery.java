@@ -32,7 +32,8 @@ public class ExecuteQuery implements Keywords {
 	private static final Logger log = LoggerFactory.getLogger(ExecuteQuery.class);
 
 	public static Map<String, List<Map<String, Object>>> run(
-			Connection connection, List<Map<String, Object>> statements) {
+		Connection connection, List<Map<String, Object>> statements
+	) {
 		Map<String, List<Map<String, Object>>> dataset = new LinkedHashMap<>();
 		for (Map<String, Object> statement : statements) {
 			String tableName = (String) statement.get(TABLE);
@@ -45,7 +46,8 @@ public class ExecuteQuery implements Keywords {
 	}
 
 	private static List<Map<String, Object>> queryStatement(
-			Connection connection, String sql, Map<String, Map<String, Object>> columns) {
+		Connection connection, String sql, Map<String, Map<String, Object>> columns
+	) {
 		List<Map<String, Object>> rows = new ArrayList<>();
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			try (ResultSet rs = statement.executeQuery()) {
@@ -61,7 +63,9 @@ public class ExecuteQuery implements Keywords {
 	}
 
 	private static Map<String, Object> queryRow(
-			Map<String, Map<String, Object>> columns, ResultSet rs) throws SQLException {
+		Map<String, Map<String, Object>> columns,
+		ResultSet rs
+	) throws SQLException {
 		Map<String, Object> row = new LinkedHashMap<>();
 		for (String columnName : columns.keySet()) {
 			Map<String, Object> column = columns.get(columnName);
@@ -123,10 +127,10 @@ public class ExecuteQuery implements Keywords {
 				return readArray(rs, columnName, new String[0], String::valueOf);
 			case ARRAY_INTEGER:
 				return readArray(rs, columnName, new Integer[0],
-						object -> object instanceof Integer ? object : Integer.parseInt(String.valueOf(object)));
+					object -> object instanceof Integer ? object : Integer.parseInt(String.valueOf(object)));
 			case ARRAY_LONG:
 				return readArray(rs, columnName, new Long[0],
-						object -> object instanceof Long ? object : Long.parseLong(String.valueOf(object)));
+					object -> object instanceof Long ? object : Long.parseLong(String.valueOf(object)));
 		}
 		log.error("Unknown type {} on column {}, trying to get it as Object.", type, columnName);
 		return rs.getObject(columnName);
@@ -163,20 +167,20 @@ public class ExecuteQuery implements Keywords {
 	}
 
 	private static Object[] readArray(
-			ResultSet rs, String columnName, Object[] emptyValue, Function<Object, ?> valueConverter)
-			throws SQLException {
+		ResultSet rs, String columnName, Object[] emptyValue, Function<Object, ?> valueConverter
+	) throws SQLException {
 		Array array = rs.getArray(columnName);
 		if (array == null) {
 			return null;
 		}
 		return Arrays.stream((Object[]) array.getArray())
-				.map(object -> {
-					if (object == null) {
-						return null;
-					}
-					return valueConverter.apply(object);
-				})
-				.collect(Collectors.toList())
-				.toArray(emptyValue);
+			.map(object -> {
+				if (object == null) {
+					return null;
+				}
+				return valueConverter.apply(object);
+			})
+			.collect(Collectors.toList())
+			.toArray(emptyValue);
 	}
 }

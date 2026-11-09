@@ -1,0 +1,111 @@
+---
+title: Motivation
+author:
+  - Ivo Maixner
+date: 2011-11-26
+---
+
+# Motivation, or Is Light Air for me?
+
+I develop web applications. **I want my application tested** before I hand it out to my customer.
+
+I want to **test the application as a whole**,
+because that is what I hand out to my customer.
+I am not interested, for example, in testing a method on a DAO class,
+I want to test the relevant functionality of the complete application,
+from API (or user interface) down to the database.
+Once I have a test for the complete functionality,
+testing a method on a DAO usually becomes irrelevant.
+
+Testing the whole application implies
+it has to be deployed in a target runtime environment as a complete application,
+partial deployment of a couple of classes cannot be used,
+because almost the whole application would have to be deployed anyway before each test,
+so then it is more efficient to deploy it completely at the start of tests
+and then run all the tests,
+each one assuming the application is already deployed and accessible on a given URL.
+
+So, what will a typical test look like? It boils down to:
+
+1. Clean up database.
+2. Set up the database into a known state required for the particular test.
+3. Execute the tested functionality within the application.
+4. Verify application output.
+5. Verify database state after the functionality was executed.
+
+Each test will start with **setting up the test data**.
+I want the test to be **repeatable**,
+so it will first delete all rows from the relevant tables,
+then insert rows with data that the test will operate on.\
+Since the algorithm is given (delete, insert),
+I don't want to code it all over again,
+I want a test tool to take care of it and only declaratively define the setup data.
+
+I want to specify setup data in the DbUnit's "flat XML format".
+It's the **simplest data format**, based on XML.
+It's also **the most convenient one**:
+with any average XML-aware editor it requires less typing than any other format.
+
+Within the root `<dataset/>` element each sub-element declares a row in a database table.
+The name of the element specifies the name of the table.
+Attributes specify column names and their respective values:
+
+```xml
+<dataset>
+  <order id="1" number="1234-567" />
+  <line_item id="1" order_id="1" quantity="10" />
+  <line_item id="2" order_id="1" quantity="30" />
+</dataset>
+```
+
+I want the test tool to **generate an XSD from the database**
+to support me when writing the test data by **suggesting names of tables and columns**.
+I want to configure the generation of XSD in my build
+so that it is run whenever my database schema changes.
+
+Similarly, I want the tool to **verify database content** after each test execution.
+I want to specify the data in the same format as for the setup.
+
+For both setup and verification data definitions,
+I want to be able to use **standard tokens**, like @null, @any, @date, @time, @timestamp.
+
+I generally use surrogate primary keys generated as a sequence number.
+I want to be able to **verify foreign keys** referencing such generated
+primary keys.
+I want to use the mechanism of variables for this purpose (see
+[Features -> Verify](features/verify.html) for more info).
+
+When writing tests, I frequently want to use **unique values**,
+for example, to verify proper mapping of attributes from user to DB and vice versa.
+I do not care what particular values are used, I just want to have them unique,
+so that I can tell from the destination values that the mapping works correctly.\
+I want to be able to use an **@auto token** to have the test tool **generate a unique
+value** for the column automatically.
+
+This will:
+
+1. Save me the painstaking work of specifying all the values manually
+   and taking care that they really are unique.
+2. Help me distinguish columns that drive the functionality from columns
+   that just need to be unique but whose particular value is irrelevant for the test.
+
+So, for example, I want to write a dataset like this:
+
+```xml
+<dataset>
+  <user id="11" email="@auto" name="@auto" password="@auto" version="@auto" />
+  <user_session id="21" user_id="11" started="@auto" version="@auto" />
+
+  <user id="12" email="@auto" name="@auto" password="@auto" version="@auto" />
+  <user_session id="22" user_id="12" started="@auto" version="@auto" />
+</dataset>
+```
+
+Well, Light Air gives you all of these, and more!
+Continue to the next section to learn how to set up Light Air in your own project.
+
+<p>
+<a href="project-setup.html" class="btn" style="float: right;">
+Next: Project setup
+</a>
+</p>

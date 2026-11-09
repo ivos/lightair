@@ -1,11 +1,16 @@
 package net.sf.lightair.internal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.Callable;
 
 /**
- * Helper functions for awaiting target database state.
+ * Helper functions for awaiting the target database state.
  */
 public class Awaiting {
+
+	private static final Logger log = LoggerFactory.getLogger(Awaiting.class);
 
 	private static final long DELAY_BETWEEN_CALLS = 20;
 
@@ -13,7 +18,7 @@ public class Awaiting {
 		try {
 			Thread.sleep(DELAY_BETWEEN_CALLS);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			log.error("Await interrupted.", e);
 		}
 	}
 

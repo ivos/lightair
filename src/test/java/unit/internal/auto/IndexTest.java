@@ -3,16 +3,17 @@ package unit.internal.auto;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Index;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IndexTest implements Keywords {
 
@@ -58,61 +59,63 @@ public class IndexTest implements Keywords {
 		Map<String, String> index = Index.readAndUpdate(createProperties(), createStructures());
 
 		String expected = "{[profile1]/t11=2078,\n" +
-				" [profile1]/t11.t11a=169,\n" +
-				" [profile1]/t11.t11b=985,\n" +
-				" [profile1]/t12=4522,\n" +
-				" [profile1]/t12.t12a=494,\n" +
-				" [profile1]/t12.t12b=565,\n" +
-				" [profile2]/t21=6577,\n" +
-				" [profile2]/t21.t21a=894,\n" +
-				" [profile2]/t21.t21b=958,\n" +
-				" [profile2]/t22=6760,\n" +
-				" [profile2]/t22.t22a=809,\n" +
-				" [profile2]/t22.t22b=729}";
-		assertEquals("Index", expected, index.toString().replace(", ", ",\n "));
-		assertEquals("File",
-				expected.replace("{", "")
-						.replace(",\n ", "\n")
-						.replace("}", "\n"),
-				FileUtils.readFileToString(new File(FILE)));
+			" [profile1]/t11.t11a=169,\n" +
+			" [profile1]/t11.t11b=985,\n" +
+			" [profile1]/t12=4522,\n" +
+			" [profile1]/t12.t12a=494,\n" +
+			" [profile1]/t12.t12b=565,\n" +
+			" [profile2]/t21=6577,\n" +
+			" [profile2]/t21.t21a=894,\n" +
+			" [profile2]/t21.t21b=958,\n" +
+			" [profile2]/t22=6760,\n" +
+			" [profile2]/t22.t22a=809,\n" +
+			" [profile2]/t22.t22b=729}";
+		assertEquals(expected, index.toString().replace(", ", ",\n "), "Index");
+		assertEquals(
+			expected.replace("{", "")
+				.replace(",\n ", "\n")
+				.replace("}", "\n"),
+			FileUtils.readFileToString(new File(FILE), Charset.defaultCharset()),
+			"File");
 	}
 
 	@Test
 	public void updateFile() throws IOException {
 		String existing = "[profile1]/t12=4522\n" +
-				"[profile1]/t12.t12a=494\n" +
-				"[profile1]/t12.deleted_column=991\n" +
-				"[profile1]/deleted_table=9992\n" +
-				"[profile2]/t21=6577\n" +
-				"[profile2]/t21.t21b=958\n"+
-				"[deleted_profile]/some_table=9993\n" +
-				"[deleted_profile]/some_table.some_column=994\n";
+			"[profile1]/t12.t12a=494\n" +
+			"[profile1]/t12.deleted_column=991\n" +
+			"[profile1]/deleted_table=9992\n" +
+			"[profile2]/t21=6577\n" +
+			"[profile2]/t21.t21b=958\n" +
+			"[deleted_profile]/some_table=9993\n" +
+			"[deleted_profile]/some_table.some_column=994\n";
 		FileUtils.writeStringToFile(new File(FILE), existing, StandardCharsets.ISO_8859_1);
 
 		Map<String, String> index = Index.readAndUpdate(createProperties(), createStructures());
 
 		String expected = "{[profile1]/t12=4522,\n" +
-				" [profile1]/t12.t12a=494,\n" +
-				" [profile1]/t12.deleted_column=991,\n" +
-				" [profile1]/deleted_table=9992,\n" +
-				" [profile2]/t21=6577,\n" +
-				" [profile2]/t21.t21b=958,\n" +
-				" [deleted_profile]/some_table=9993,\n" +
-				" [deleted_profile]/some_table.some_column=994,\n" +
-				" [profile1]/t11=2078,\n" +
-				" [profile1]/t11.t11a=169,\n" +
-				" [profile1]/t11.t11b=985,\n" +
-				" [profile1]/t12.t12b=565,\n" +
-				" [profile2]/t21.t21a=894,\n" +
-				" [profile2]/t22=6760,\n" +
-				" [profile2]/t22.t22a=809,\n" +
-				" [profile2]/t22.t22b=729}";
-		assertEquals("Index", expected, index.toString().replace(", ", ",\n "));
-		assertEquals("File",
-				expected.replace("{", "")
-						.replace(",\n ", "\n")
-						.replace("}", "\n"),
-				FileUtils.readFileToString(new File(FILE)));
+			" [profile1]/t12.t12a=494,\n" +
+			" [profile1]/t12.deleted_column=991,\n" +
+			" [profile1]/deleted_table=9992,\n" +
+			" [profile2]/t21=6577,\n" +
+			" [profile2]/t21.t21b=958,\n" +
+			" [deleted_profile]/some_table=9993,\n" +
+			" [deleted_profile]/some_table.some_column=994,\n" +
+			" [profile1]/t11=2078,\n" +
+			" [profile1]/t11.t11a=169,\n" +
+			" [profile1]/t11.t11b=985,\n" +
+			" [profile1]/t12.t12b=565,\n" +
+			" [profile2]/t21.t21a=894,\n" +
+			" [profile2]/t22=6760,\n" +
+			" [profile2]/t22.t22a=809,\n" +
+			" [profile2]/t22.t22b=729}";
+		assertEquals(expected, index.toString().replace(", ", ",\n "), "Index");
+		assertEquals(
+			expected.replace("{", "")
+				.replace(",\n ", "\n")
+				.replace("}", "\n"),
+			FileUtils.readFileToString(new File(FILE), Charset.defaultCharset()),
+			"File");
 	}
 
 	@Test
@@ -130,7 +133,7 @@ public class IndexTest implements Keywords {
 			Index.readAndUpdate(createProperties(), structures);
 		} catch (Exception e) {
 			String expected = "Profile [profile1] contains more than 10.000 tables," +
-					" which is the maximum allowed limit (required by @auto functionality).";
+				" which is the maximum allowed limit (required by @auto functionality).";
 			assertEquals(expected, e.getMessage());
 		}
 	}
@@ -152,7 +155,7 @@ public class IndexTest implements Keywords {
 			Index.readAndUpdate(createProperties(), structures);
 		} catch (Exception e) {
 			String expected = "Table [profile1]/t1 contains more than 1.000 columns," +
-					" which is the maximum allowed limit (required by @auto functionality).";
+				" which is the maximum allowed limit (required by @auto functionality).";
 			assertEquals(expected, e.getMessage());
 		}
 	}

@@ -1,10 +1,11 @@
 package net.sf.lightair.internal.junit;
 
 import net.sf.lightair.annotation.Verify;
-import org.junit.runners.model.FrameworkMethod;
+
+import java.lang.reflect.Method;
 
 /**
- * JUnit test rule to verify database with multiple <code>@Verify</code>
+ * Test rule helper to verify the database with multiple <code>@Verify</code>
  * annotations after test method execution.
  */
 public class VerifyListTestRule extends AbstractTestRule<Verify.List> {
@@ -12,17 +13,17 @@ public class VerifyListTestRule extends AbstractTestRule<Verify.List> {
 	/**
 	 * Constructor.
 	 *
-	 * @param frameworkMethod JUnit framework method on which the test rule is being applied
+	 * @param testMethod Method on which the test rule is being applied
 	 */
-	public VerifyListTestRule(FrameworkMethod frameworkMethod) {
-		super(frameworkMethod, Verify.List.class, Verify.class);
+	public VerifyListTestRule(Method testMethod) {
+		super(testMethod, Verify.List.class, Verify.class);
 	}
 
 	/**
 	 * If the method is annotated with @{@link Verify}, verify the database.
 	 */
 	@Override
-	protected void after() {
+	public void after() {
 		if (null != getAnnotation()) {
 			Verify[] verifies = getAnnotation().value();
 			for (Verify verify : verifies) {
@@ -36,7 +37,7 @@ public class VerifyListTestRule extends AbstractTestRule<Verify.List> {
 	private VerifyExecutor verifyExecutor;
 
 	/**
-	 * Set verify executor.
+	 * Set the verify executor.
 	 *
 	 * @param verifyExecutor executor
 	 */

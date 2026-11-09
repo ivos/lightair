@@ -10,7 +10,7 @@ import java.security.MessageDigest;
  */
 public class Hash {
 
-	private static MessageDigest md5 = DigestUtils.getDigest(MessageDigestAlgorithms.MD5);
+	private static final MessageDigest md5 = DigestUtils.getDigest(MessageDigestAlgorithms.MD5);
 
 	public static int generate(String source, int digits) {
 		if (digits > 4) {

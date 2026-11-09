@@ -1,27 +1,27 @@
 package it.xsd;
 
-import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import test.support.PostgresUtils;
 
 import java.io.IOException;
 
 public class GenerateXsdPostgresTest extends GenerateXsdTestBase {
 
-	private static boolean replaceTemplates = false;
+	private static final boolean replaceTemplates = false;
 
 	private static final String DB = "postgres";
 	private static final String PROPERTIES_FILE_NAME = "target/test-classes/it/xsd/light-air-" + DB + ".properties";
 
-	private static EmbeddedPostgres postgres;
+	private static PostgreSQLContainer postgres;
 
 	static {
 		SingleConnectionDataSource dataSource = new SingleConnectionDataSource(
-				"jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres", true);
+			"jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres", true);
 		db = new JdbcTemplate(dataSource);
 	}
 
@@ -29,16 +29,17 @@ public class GenerateXsdPostgresTest extends GenerateXsdTestBase {
 		super(replaceTemplates);
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		postgres = PostgresUtils.initPostgres();
 		createTables();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		dropTables();
 		PostgresUtils.closePostgresIfOpen(postgres);
+		postgres = null;
 	}
 
 	@Test

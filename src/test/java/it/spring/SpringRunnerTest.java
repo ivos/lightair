@@ -1,19 +1,19 @@
 package it.spring;
 
-import static org.junit.Assert.assertEquals;
-
-import net.sf.lightair.LightAirSpringRunner;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import net.sf.lightair.LightAir;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(LightAirSpringRunner.class)
-@ContextConfiguration(locations = { "classpath:spring/test-context.xml" })
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@ExtendWith({SpringExtension.class, LightAir.class})
+@ContextConfiguration(locations = {"classpath:spring/test-context.xml"})
 public class SpringRunnerTest {
 
-    @Autowired
+	@Autowired
 	private SimpleBean simpleBean;
 
 	@Test

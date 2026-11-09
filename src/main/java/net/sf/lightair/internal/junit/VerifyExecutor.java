@@ -1,6 +1,6 @@
 package net.sf.lightair.internal.junit;
 
-import net.sf.lightair.Api;
+import net.sf.lightair.LightAirApi;
 import net.sf.lightair.annotation.Verify;
 import net.sf.lightair.internal.junit.util.DataSetResolver;
 import org.apache.commons.lang3.time.StopWatch;
@@ -19,12 +19,12 @@ public class VerifyExecutor {
 		String[] fileNames = verify.value();
 		String profile = verify.profile();
 		log.info("Verifying database for test method {} and profile {} with configured file names {}.",
-				testMethod, profile, fileNames);
+			testMethod, profile, fileNames);
 		StopWatch stopWatch = ExecutorUtils.startStopWatch(log);
 
 		Map<String, List<String>> apiFileNames = ExecutorUtils.getApiFileNames(
-				dataSetResolver, profile, testMethod, fileNames, "-verify");
-		Api.verify(apiFileNames);
+			dataSetResolver, profile, testMethod, fileNames, "-verify");
+		LightAirApi.verify(apiFileNames);
 
 		if (null != stopWatch) {
 			stopWatch.stop();

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
 	<!--full-->
-	<data_types id="0" char_type="efghijklmnopqrs" varchar_type="abcdefghijklmnopqrstuvxyz"
+	<data_types id="0" char_type="efghijklmnopqrs          " varchar_type="abcdefghijklmnopqrstuvxyz"
 	            integer_type="12345678" date_type="2999-12-31" time_type="23:59:58"
 	            timestamp_type="2998-11-30T22:57:56.789" double_type="8765.4321" boolean_type="TRUE"
 	            bigint_type="9223372036854770000" decimal_type="12345678901234.56" clob_type="text1"
@@ -10,7 +10,7 @@
 	            varchar_array_type="varchar 1,varchar 2,, ,@null,varchar 3"
 	/>
 	<!--empty-->
-	<data_types id="1" char_type="" varchar_type=""
+	<data_types id="1" char_type="                         " varchar_type=""
 	            integer_type="0" date_type="2000-01-02" time_type="00:00:00" timestamp_type="2000-01-02T03:04:05.678"
 	            double_type="0" boolean_type="FALSE" bigint_type="0" decimal_type="0.00" clob_type="" blob_type=""
 	            binary_type="" uuid_type="00000000-0000-0000-0000-000000000000" varchar_array_type=""
@@ -21,7 +21,7 @@
 	            clob_type="@null" blob_type="@null" binary_type="@null" uuid_type="@null" varchar_array_type="@null"
 	/>
 	<!--auto-->
-	<data_types id="3" char_type="unsupported" varchar_type="@auto" integer_type="@auto"
+	<data_types id="3" char_type="@auto" varchar_type="@auto" integer_type="@auto"
 	            date_type="@auto" time_type="@auto" timestamp_type="@auto" double_type="@auto" boolean_type="@auto"
 	            bigint_type="@auto" decimal_type="@auto" clob_type="@auto" blob_type="@auto" binary_type="@auto"
 	            uuid_type="@auto" varchar_array_type="@auto"

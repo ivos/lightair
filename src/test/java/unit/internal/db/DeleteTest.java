@@ -2,7 +2,7 @@ package unit.internal.db;
 
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.db.Delete;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DeleteTest implements Keywords {
 
@@ -28,17 +28,17 @@ public class DeleteTest implements Keywords {
 		Map<String, Map<String, Map<String, Object>>> profileStructure = new HashMap<>();
 
 		List<Map<String, Object>> dataset = Arrays.asList(
-				createRow("t1"),
-				createRow("t2"),
-				createRow("t3"),
-				createRow("t2")
+			createRow("t1"),
+			createRow("t2"),
+			createRow("t3"),
+			createRow("t2")
 		);
 
 		List<Map<String, Object>> data = Delete.create(profileProperties, profileStructure, dataset);
 
 		String expected = "[{SQL=delete from s1.t3, PARAMETERS=[]},\n" +
-				" {SQL=delete from s1.t2, PARAMETERS=[]},\n" +
-				" {SQL=delete from s1.t1, PARAMETERS=[]}]";
+			" {SQL=delete from s1.t2, PARAMETERS=[]},\n" +
+			" {SQL=delete from s1.t1, PARAMETERS=[]}]";
 		assertEquals(expected, data.toString().replace("}, ", "},\n "));
 	}
 }

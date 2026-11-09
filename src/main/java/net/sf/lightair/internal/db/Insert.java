@@ -20,9 +20,10 @@ public class Insert implements Keywords {
 	private static final Logger log = LoggerFactory.getLogger(Insert.class);
 
 	public static List<Map<String, Object>> create(
-			Map<String, String> profileProperties,
-			Map<String, Map<String, Map<String, Object>>> profileStructure,
-			List<Map<String, Object>> dataset) {
+		Map<String, String> profileProperties,
+		Map<String, Map<String, Map<String, Object>>> profileStructure,
+		List<Map<String, Object>> dataset
+	) {
 		String schema = profileProperties.get(DATABASE_SCHEMA);
 
 		Objects.requireNonNull(schema, "Database schema is required.");
@@ -38,9 +39,10 @@ public class Insert implements Keywords {
 	}
 
 	private static Map<String, Object> createStatement(
-			String schema,
-			Map<String, Map<String, Map<String, Object>>> profileStructure,
-			Map<String, Object> row) {
+		String schema,
+		Map<String, Map<String, Map<String, Object>>> profileStructure,
+		Map<String, Object> row
+	) {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> columns = (Map<String, Object>) row.get(COLUMNS);
 		if (columns.isEmpty()) {
@@ -58,18 +60,19 @@ public class Insert implements Keywords {
 
 	private static String buildSql(String schema, String tableName, Map<String, Object> columns) {
 		return "insert into " + schema + "." + tableName +
-				"(" + String.join(",", columns.keySet()) + ")" +
-				" values (" + String.join(",", Collections.nCopies(columns.size(), "?")) + ")";
+			"(" + String.join(",", columns.keySet()) + ")" +
+			" values (" + String.join(",", Collections.nCopies(columns.size(), "?")) + ")";
 	}
 
 	private static List<Map<String, Object>> createParameters(
-			String schema, String tableName,
-			Map<String, Map<String, Map<String, Object>>> profileStructure, Map<String, Object> columns) {
+		String schema, String tableName,
+		Map<String, Map<String, Map<String, Object>>> profileStructure, Map<String, Object> columns
+	) {
 		Map<String, Map<String, Object>> table = profileStructure.get(tableName);
 
 		if (null == table) {
 			throw new NullPointerException("Table " + Index.formatTableKey(schema, tableName) +
-					" not found in loaded database structure.");
+				" not found in loaded database structure.");
 		}
 
 		List<Map<String, Object>> parameters = new ArrayList<>();
@@ -80,19 +83,20 @@ public class Insert implements Keywords {
 	}
 
 	private static Map<String, Object> createParameter(
-			String schema, String tableName,
-			Map<String, Map<String, Object>> table, Map<String, Object> columns, String columnName) {
+		String schema, String tableName,
+		Map<String, Map<String, Object>> table, Map<String, Object> columns, String columnName
+	) {
 		Map<String, Object> column = table.get(columnName);
 
 		if (null == column) {
 			throw new NullPointerException("Column " + Index.formatColumnKey(schema, tableName, columnName) +
-					" not found in loaded database structure.");
+				" not found in loaded database structure.");
 		}
 
 		Object value = columns.get(columnName);
 		if (ANY_TOKEN.equals(value)) {
 			throw new AssertionError(
-					"Token @any found in setup dataset. This token is only allowed in verification datasets.");
+				"Token @any found in setup dataset. This token is only allowed in verification datasets.");
 		}
 
 		log.trace("Creating insert parameter for {}.{}.{}.", schema, tableName, columnName);

@@ -1,7 +1,7 @@
 package it.common;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import test.support.ConfigSupport;
@@ -14,20 +14,21 @@ public class ProfilesTestBase {
 
 	static JdbcTemplate connect(String url, String username, String password) {
 		DataSource dataSource = new SingleConnectionDataSource(url, username,
-				password, false);
+			password, false);
 		return new JdbcTemplate(dataSource);
 	}
 
 	public static JdbcTemplate dbDefaultH2;
 	public static JdbcTemplate dbHsqldb;
 	public static JdbcTemplate dbCustom;
+
 	static {
 		dbDefaultH2 = connect("jdbc:h2:mem:test", "sa", "");
 		dbHsqldb = connect("jdbc:hsqldb:mem:test", "sa", "");
 		dbCustom = connect("jdbc:h2:mem:test", "sa", "");
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		dbDefaultH2.execute("create table defaultPerson (defaultName varchar(50))");
 		dbHsqldb.execute("create table hsqldbPerson (hsqldbName varchar(50))");
@@ -36,7 +37,7 @@ public class ProfilesTestBase {
 		ConfigSupport.replaceConfig("profiles");
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		dbDefaultH2.execute("drop table defaultPerson");
 		dbHsqldb.execute("drop table hsqldbPerson");
@@ -57,5 +58,4 @@ public class ProfilesTestBase {
 		dbCustom.update("insert into custom.customPerson (customName) values ('Jake')");
 		dbCustom.update("insert into custom.customPerson (customName) values ('" + hank + "')");
 	}
-
 }

@@ -3,12 +3,12 @@ package unit.internal.auto;
 import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.auto.Auto;
 import net.sf.lightair.internal.auto.Index;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AutoTest implements Keywords {
 
@@ -54,62 +54,63 @@ public class AutoTest implements Keywords {
 		assertEquals("04:58:18", Auto.generate(index, "p1", "t1", TIME, 98, TIME, 0, null));
 		assertEquals("2094-08-29T04:58:18.098", Auto.generate(index, "p1", "t1", TIMESTAMP, 98, TIMESTAMP, 0, null));
 		assertEquals("string_column 1234576598",
-				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 100, null));
+			Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 100, null));
 		assertEquals("string_column 1234576598",
-				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 24, null));
+			Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 24, null));
 		assertEquals("string_column1234576598",
-				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 23, null));
+			Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 23, null));
 		assertEquals("strin1234576598",
-				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 15, null));
+			Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 15, null));
 		assertEquals("s1234576598",
-				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 11, null));
+			Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 11, null));
 		assertEquals("1234576598",
-				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 10, null));
+			Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 10, null));
 		assertEquals("234576598",
-				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 9, null));
+			Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 9, null));
 		assertEquals("98",
-				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 2, null));
+			Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 2, null));
 		assertEquals("8",
-				Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 1, null));
+			Auto.generate(index, "p1", "t1", "string_column", 98, STRING, 1, null));
 		assertEquals("fixed_string_column 1234576498          ",
-				Auto.generate(index, "p1", "t1", "fixed_string_column", 98, FIXED_STRING, 40, null));
+			Auto.generate(index, "p1", "t1", "fixed_string_column", 98, FIXED_STRING, 40, null));
 		assertEquals("fixed_string_column 1234576498",
-				Auto.generate(index, "p1", "t1", "fixed_string_column", 98, FIXED_STRING, 30, null));
+			Auto.generate(index, "p1", "t1", "fixed_string_column", 98, FIXED_STRING, 30, null));
 		assertEquals("fixed_stri1234576498",
-				Auto.generate(index, "p1", "t1", "fixed_string_column", 98, FIXED_STRING, 20, null));
+			Auto.generate(index, "p1", "t1", "fixed_string_column", 98, FIXED_STRING, 20, null));
 		assertEquals("nstring_column 1234501298",
-				Auto.generate(index, "p1", "t1", "nstring_column", 98, NSTRING, 100, null));
+			Auto.generate(index, "p1", "t1", "nstring_column", 98, NSTRING, 100, null));
 		assertEquals("fixed_nstring_column 1234576398          ",
-				Auto.generate(index, "p1", "t1", "fixed_nstring_column", 98, FIXED_NSTRING, 41, null));
+			Auto.generate(index, "p1", "t1", "fixed_nstring_column", 98, FIXED_NSTRING, 41, null));
 		assertEquals("fixed_nstring_column 1234576398",
-				Auto.generate(index, "p1", "t1", "fixed_nstring_column", 98, FIXED_NSTRING, 31, null));
+			Auto.generate(index, "p1", "t1", "fixed_nstring_column", 98, FIXED_NSTRING, 31, null));
 		assertEquals("fixed_nstri1234576398",
-				Auto.generate(index, "p1", "t1", "fixed_nstring_column", 98, FIXED_NSTRING, 21, null));
+			Auto.generate(index, "p1", "t1", "fixed_nstring_column", 98, FIXED_NSTRING, 21, null));
 		assertEquals("Ynl0ZXNfY29sdW1uIDEyMzQ1MDEzOTg=",
-				Auto.generate(index, "p1", "t1", "bytes_column", 98, BYTES, 100, null));
+			Auto.generate(index, "p1", "t1", "bytes_column", 98, BYTES, 100, null));
 		assertEquals("clob_column 1234501498", Auto.generate(index, "p1", "t1", "clob_column", 98, CLOB, 100, null));
-		assertEquals("nclob_column 1234501598", Auto.generate(index, "p1", "t1", "nclob_column", 98, NCLOB, 100, null));
+		assertEquals("nclob_column 1234501598", Auto.generate(index, "p1", "t1", "nclob_column", 98, NCLOB, 100,
+			null));
 		assertEquals("YmxvYl9jb2x1bW4gMTIzNDUwMTY5OA==",
-				Auto.generate(index, "p1", "t1", "blob_column", 98, BLOB, 100, null));
+			Auto.generate(index, "p1", "t1", "blob_column", 98, BLOB, 100, null));
 		assertEquals("af3077f9-779d-338c-bc2c-97b405f7a02a", // not a sequence...
-				Auto.generate(index, "p1", "t1", "uuid_column", 97, UUID, 0, null));
+			Auto.generate(index, "p1", "t1", "uuid_column", 97, UUID, 0, null));
 		assertEquals("5ab9d6e9-43f2-3d2b-a8d2-22244cbd7a08",
-				Auto.generate(index, "p1", "t1", "uuid_column", 98, UUID, 0, null));
+			Auto.generate(index, "p1", "t1", "uuid_column", 98, UUID, 0, null));
 		assertEquals("{\"json_column\": 1234510298}",
-				Auto.generate(index, "p1", "t1", "json_column", 98, JSON, 0, null));
+			Auto.generate(index, "p1", "t1", "json_column", 98, JSON, 0, null));
 		assertEquals("{\"jsonb_column\": 1234510398}",
-				Auto.generate(index, "p1", "t1", "jsonb_column", 98, JSONB, 0, null));
+			Auto.generate(index, "p1", "t1", "jsonb_column", 98, JSONB, 0, null));
 		assertEquals("array_column 12345111981,array_column 12345111982,array_column 12345111983",
-				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 100, null));
+			Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 100, null));
 		assertEquals("arra12345111981,arra12345111982,arra12345111983",
-				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 15, null));
+			Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 15, null));
 		assertEquals("81,82,83",
-				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 2, null));
+			Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 2, null));
 		assertEquals("1,2,3",
-				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 1, null));
+			Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_STRING, 1, null));
 		assertEquals("345111981,345111982,345111983",
-				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_INTEGER, 0, null));
+			Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_INTEGER, 0, null));
 		assertEquals("12345111981,12345111982,12345111983",
-				Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_LONG, 0, null));
+			Auto.generate(index, "p1", "t1", "array_column", 98, ARRAY_LONG, 0, null));
 	}
 }

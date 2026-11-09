@@ -9,19 +9,19 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Sets up database before test.
+ * Sets up the database before test.
  * <p>
- * Annotate test method with @Setup to setup database before the test method
+ * Annotate a test method with @Setup to set up the database before the test method
  * executes. Annotate the whole test class to have all its test methods set up
- * database. For example:
- * 
+ * the database. For example:
+ *
  * <pre>
  * &#064;Test &#064;Setup
  * public void myTestMethod {
  * }
  * </pre>
  * <p>
- * By default, system locates sequentially the following files in the package of
+ * By default, the system locates sequentially the following files in the package of
  * the class, the first file found wins:
  * <ol>
  * <li>&lt;test class name&gt;.&lt;test method name&gt;.xml</li>
@@ -30,9 +30,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * </ol>
  * <p>
  * Specify the names of files explicitly in the annotation to override the
- * default file name convention. Multiple files may be specified, system uses
+ * default file name convention. Multiple files may be specified, the system uses
  * all of them. The files are located in the package of the class. For example:
- * 
+ *
  * <pre>
  * &#064;Test
  * &#064;Setup({ &quot;custom-setup-1.xml&quot;, &quot;custom-setup-2.xml&quot;, &quot;custom-setup-3.xml&quot; })
@@ -44,14 +44,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * means there is a root &lt;dataset /&gt; element, which contains one element for
  * each row, where the name of the row element specifies the database table and
  * its elements specify the table columns. So, for example:
- * 
+ *
  * <pre>
  * &lt;dataset&gt;
  * 	&lt;person name="Joe" /&gt;
  * &lt;/dataset&gt;
  * </pre>
  * <p>
- * System performs "clean insert" database operation with all datasets located,
+ * System performs a "clean insert" database operation with all datasets located,
  * which means all tables in the datasets are deleted in reverse order, then all
  * rows are inserted in the order specified.
  * <p>
@@ -59,19 +59,21 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * the same element.
  *
  * <p>
- * See <a href="http://lightair.sourceforge.net/features/setup.html">http://lightair.sourceforge.net/features/setup.html</a>
+ * See
+ * <a href="http://lightair.sourceforge.net/features/setup.html">http://lightair.sourceforge.net/features/setup.html</a>
  * for more info.
  * </p>
  *
  * @see Setup.List
  */
-@Target({ TYPE, METHOD })
+@Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @Documented
 public @interface Setup {
 
 	/**
 	 * Names of files with datasets.
+	 *
 	 * @return datasets
 	 */
 	String[] value() default {};
@@ -80,18 +82,19 @@ public @interface Setup {
 	 * Name of the profile.
 	 * <p>
 	 * A profile lets you connect to a different database. A profile must be
-	 * defined in LightAir properties file and must have its own properties file
+	 * defined in the LightAir properties file and must have its own properties file
 	 * which defines the connection to the profile database.
+	 *
 	 * @return profile
 	 */
 	String profile() default "";
 
 	/**
 	 * Defines several @{@link Setup} annotations on the same element.
-	 * 
+	 *
 	 * @see Setup
 	 */
-	@Target({ TYPE, METHOD })
+	@Target({TYPE, METHOD})
 	@Retention(RUNTIME)
 	@Documented
 	@interface List {

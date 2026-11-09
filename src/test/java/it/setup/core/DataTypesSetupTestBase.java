@@ -5,13 +5,15 @@ import org.apache.commons.codec.binary.Base64;
 
 import java.util.function.Function;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public abstract class DataTypesSetupTestBase extends DataTypesTestBase {
 
 	protected void perform() {
-		assertEquals("Count", new Integer(4), db.queryForObject("select count(*) from data_types", Integer.class));
+		assertEquals(Integer.valueOf(4),
+			db.queryForObject("select count(*) from data_types", Integer.class),
+			"Count");
 		values = db.queryForList("select * from data_types");
 		verify();
 	}
@@ -27,14 +29,15 @@ public abstract class DataTypesSetupTestBase extends DataTypesTestBase {
 	}
 
 	protected <EV> void verifyField(
-			int id, String name, EV expectedValue,
-			Function<EV, ?> expectedConverter, Function<Object, ?> actualConverter) {
+		int id, String name, EV expectedValue,
+		Function<EV, ?> expectedConverter, Function<Object, ?> actualConverter
+	) {
 		Object rawActualValue = values.get(id).get(name);
 		if (null == expectedValue) {
-			assertNull(name + " " + id, rawActualValue);
+			assertNull(rawActualValue, name + " " + id);
 		} else {
-			assertEquals(name + " " + id, expectedConverter.apply(expectedValue),
-					actualConverter.apply(rawActualValue));
+			assertEquals(expectedConverter.apply(expectedValue), actualConverter.apply(rawActualValue),
+				name + " " + id);
 		}
 	}
 }

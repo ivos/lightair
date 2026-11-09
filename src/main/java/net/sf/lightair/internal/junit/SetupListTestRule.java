@@ -2,29 +2,28 @@ package net.sf.lightair.internal.junit;
 
 import net.sf.lightair.annotation.Setup;
 
-import org.junit.runners.model.FrameworkMethod;
+import java.lang.reflect.Method;
 
 /**
- * JUnit test rule to setup database with multiple <code>@Setup</code>
+ * Test rule helper to set up the database with multiple <code>@Setup</code>
  * annotations before test method execution.
  */
 public class SetupListTestRule extends AbstractTestRule<Setup.List> {
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param frameworkMethod
-	 *            JUnit framework method on which the test rule is being applied
+	 *
+	 * @param testMethod Method on which the test rule is being applied
 	 */
-	public SetupListTestRule(FrameworkMethod frameworkMethod) {
-		super(frameworkMethod, Setup.List.class, Setup.class);
+	public SetupListTestRule(Method testMethod) {
+		super(testMethod, Setup.List.class, Setup.class);
 	}
 
 	/**
 	 * If the method is annotated with @{@link Setup}, set up the database.
 	 */
 	@Override
-	protected void before() {
+	public void before() {
 		if (null != getAnnotation()) {
 			Setup[] setups = getAnnotation().value();
 			for (Setup setup : setups) {
@@ -38,7 +37,7 @@ public class SetupListTestRule extends AbstractTestRule<Setup.List> {
 	private SetupExecutor setupExecutor;
 
 	/**
-	 * Set setup executor.
+	 * Set the setup executor.
 	 *
 	 * @param setupExecutor executor
 	 */

@@ -9,12 +9,12 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Verifies database after an asynchronous test.
+ * Verifies the database after an asynchronous test.
  * Verifies the database repeatedly until either the result is successful or timeout has expired.
  * <p>
- * Annotate test method with @Await to verify database after the asynchronous test method
+ * Annotate a test method with @Await to verify database after the asynchronous test method
  * executed. Annotate the whole test class to have all its test methods verify
- * database asynchronously. For example:
+ * the database asynchronously. For example:
  * </p>
  * <pre>
  * &#064;Test &#064;Await
@@ -31,7 +31,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * </p>
  *
  * <p>
- * See <a href="http://lightair.sourceforge.net/features/await.html">http://lightair.sourceforge.net/features/await.html</a>
+ * See
+ * <a href="http://lightair.sourceforge.net/features/await.html">http://lightair.sourceforge.net/features/await.html</a>
  * for more info.
  * </p>
  *
@@ -45,6 +46,7 @@ public @interface Await {
 
 	/**
 	 * Names of files with datasets.
+	 *
 	 * @return datasets
 	 */
 	String[] value() default {};
@@ -53,8 +55,9 @@ public @interface Await {
 	 * Name of the profile.
 	 * <p>
 	 * A profile lets you connect to a different database. A profile must be
-	 * defined in LightAir properties file and must have its own properties file
+	 * defined in the LightAir properties file and must have its own properties file
 	 * which defines the connection to the profile database.
+	 *
 	 * @return profile
 	 */
 	String profile() default "";

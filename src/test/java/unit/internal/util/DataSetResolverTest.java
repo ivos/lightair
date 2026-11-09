@@ -1,15 +1,15 @@
 package unit.internal.util;
 
 import net.sf.lightair.internal.junit.util.DataSetResolver;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class DataSetResolverTest {
 
@@ -20,7 +20,7 @@ public class DataSetResolverTest {
 	public void aMethod() {
 	}
 
-	@Before
+	@BeforeEach
 	public void before() throws Exception {
 		testMethod = DataSetResolverTest.class.getDeclaredMethod("aMethod", (Class<?>[]) null);
 	}

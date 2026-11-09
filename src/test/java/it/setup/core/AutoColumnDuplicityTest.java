@@ -4,18 +4,18 @@ import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
 import net.sf.lightair.internal.auto.Hash;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup
 public class AutoColumnDuplicityTest extends CommonTestBase {
 
@@ -35,13 +35,13 @@ public class AutoColumnDuplicityTest extends CommonTestBase {
 
 	List<Map<String, Object>> values;
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
-		db.execute("create table a (dld char(20),glx char(20),gps char(20),hff char(20))");
+		db.execute("create table a (dld varchar(20),glx varchar(20),gps varchar(20),hff varchar(20))");
 		ApiTestSupport.reInitialize();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("drop table a");
 	}
@@ -72,8 +72,7 @@ public class AutoColumnDuplicityTest extends CommonTestBase {
 	}
 
 	private void verifyValue(String test, String column, String columnHash, int row) {
-		assertEquals(test + " " + row,
-				column + " 10421" + columnHash + "0" + row,
-				values.get(row - 1).get(column));
+		assertEquals(column + " 10421" + columnHash + "0" + row, values.get(row - 1).get(column),
+			test + " " + row);
 	}
 }

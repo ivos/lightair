@@ -3,33 +3,33 @@ package it.setup.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup
 public class ForeignKeysTest extends CommonTestBase {
 
 	List<Map<String, Object>> values;
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		db.execute("create table master (id int primary key, m1 varchar(50))");
 		db.execute("create table detail (id int primary key, master_id int, d1 varchar(50))");
 		db.execute("alter table detail add constraint fk_detail_master "
-				+ "foreign key (master_id) references master (id)");
+			+ "foreign key (master_id) references master (id)");
 		ApiTestSupport.reInitialize();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("alter table detail drop constraint fk_detail_master");
 		db.execute("drop table detail");
@@ -38,13 +38,13 @@ public class ForeignKeysTest extends CommonTestBase {
 
 	@Test
 	public void test() {
-		assertEquals("Count master", new Integer(2),
-				db.queryForObject("select count(*) from master", Integer.class));
+		assertEquals(Integer.valueOf(2),
+			db.queryForObject("select count(*) from master", Integer.class), "Count master");
 		values = db.queryForList("select * from master");
 		verifyMaster(0, "01");
 		verifyMaster(1, "11");
-		assertEquals("Count detail", new Integer(6),
-				db.queryForObject("select count(*) from detail", Integer.class));
+		assertEquals(Integer.valueOf(6),
+			db.queryForObject("select count(*) from detail", Integer.class), "Count detail");
 		values = db.queryForList("select * from detail");
 		verifyDetail(0, 0, 0, "001");
 		verifyDetail(1, 1, 0, "011");
@@ -55,15 +55,13 @@ public class ForeignKeysTest extends CommonTestBase {
 	}
 
 	private void verifyMaster(int id, String m1) {
-		assertEquals("id " + id, id, values.get(id).get("id"));
-		assertEquals("m1 " + id, m1, values.get(id).get("m1"));
+		assertEquals(id, values.get(id).get("id"), "id " + id);
+		assertEquals(m1, values.get(id).get("m1"), "m1 " + id);
 	}
 
 	private void verifyDetail(int id, int dbId, int masterId, String d1) {
-		assertEquals("id " + id, dbId, values.get(id).get("id"));
-		assertEquals("masterId " + id, masterId, values.get(id)
-				.get("master_id"));
-		assertEquals("d1 " + id, d1, values.get(id).get("d1"));
+		assertEquals(dbId, values.get(id).get("id"), "id " + id);
+		assertEquals(masterId, values.get(id).get("master_id"), "masterId " + id);
+		assertEquals(d1, values.get(id).get("d1"), "d1 " + id);
 	}
-
 }

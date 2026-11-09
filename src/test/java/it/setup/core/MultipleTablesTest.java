@@ -3,24 +3,24 @@ package it.setup.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup
 public class MultipleTablesTest extends CommonTestBase {
 
 	List<Map<String, Object>> values;
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		db.execute("create table a (id int primary key, a1 varchar(50))");
 		db.execute("create table b (id int primary key, b1 varchar(50))");
@@ -28,7 +28,7 @@ public class MultipleTablesTest extends CommonTestBase {
 		ApiTestSupport.reInitialize();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("drop table a");
 		db.execute("drop table b");
@@ -53,8 +53,7 @@ public class MultipleTablesTest extends CommonTestBase {
 
 	private void verifyTable(String tableName) {
 		Integer count = 3;
-		assertEquals("Count", count, db.queryForObject("select count(*) from "
-				+ tableName, Integer.class));
+		assertEquals(count, db.queryForObject("select count(*) from " + tableName, Integer.class), "Count");
 		values = db.queryForList("select * from " + tableName);
 		for (int i = 0; i < count; i++) {
 			verifyRow(i, tableName + "1", tableName + "1" + i);
@@ -62,8 +61,7 @@ public class MultipleTablesTest extends CommonTestBase {
 	}
 
 	private void verifyRow(int id, String column, String value) {
-		assertEquals("id " + id, id, values.get(id).get("id"));
-		assertEquals(column + " " + id, value, values.get(id).get(column));
+		assertEquals(id, values.get(id).get("id"), "id " + id);
+		assertEquals(value, values.get(id).get(column), column + " " + id);
 	}
-
 }

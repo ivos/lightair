@@ -3,24 +3,24 @@ package it.setup.core;
 import it.common.CommonTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(LightAir.class)
+@ExtendWith(LightAir.class)
 @Setup
 public class DeleteAllTest extends CommonTestBase {
 
 	List<Map<String, Object>> values;
 
-	@BeforeClass
+	@BeforeAll
 	public static void beforeClass() {
 		db.execute("create table a (id int primary key, a1 varchar(50))");
 		db.execute("insert into a (id, a1) values (10, 'deleted10')");
@@ -29,23 +29,23 @@ public class DeleteAllTest extends CommonTestBase {
 		ApiTestSupport.reInitialize();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		db.execute("drop table a");
 	}
 
 	@Test
 	public void test() {
-		assertEquals("Count", new Integer(2),
-				db.queryForObject("select count(*) from a", Integer.class));
+		assertEquals(Integer.valueOf(2),
+			db.queryForObject("select count(*) from a", Integer.class),
+			"Count");
 		values = db.queryForList("select * from a");
 		verifyRow(0, "a10");
 		verifyRow(1, "a11");
 	}
 
 	private void verifyRow(int id, String value) {
-		assertEquals("id " + id, id, values.get(id).get("id"));
-		assertEquals("a1 " + id, value, values.get(id).get("a1"));
+		assertEquals(id, values.get(id).get("id"), "id " + id);
+		assertEquals(value, values.get(id).get("a1"), "a1 " + id);
 	}
-
 }

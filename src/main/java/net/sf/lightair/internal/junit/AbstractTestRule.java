@@ -1,10 +1,5 @@
 package net.sf.lightair.internal.junit;
 
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -13,7 +8,7 @@ import java.lang.reflect.Method;
  *
  * @param <T> Type of annotation that configures the test rule
  */
-public abstract class AbstractTestRule<T extends Annotation> implements TestRule {
+public abstract class AbstractTestRule<T extends Annotation> {
 
 	private final T annotation;
 	private final Method testMethod;
@@ -21,18 +16,19 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 	/**
 	 * Constructor.
 	 *
-	 * @param frameworkMethod           JUnit framework method on which the test rule is being applied
+	 * @param testMethod                Java reflection method on which the test rule is being applied
 	 * @param annotationType            Type of annotation that configures the test rule
 	 * @param alternativeAnnotationType Alternative annotation type
 	 * @param <A>                       Generic support param
 	 */
 	public <A extends Annotation> AbstractTestRule(
-			FrameworkMethod frameworkMethod, Class<T> annotationType, Class<A> alternativeAnnotationType) {
-		testMethod = frameworkMethod.getMethod();
+		Method testMethod, Class<T> annotationType, Class<A> alternativeAnnotationType
+	) {
+		this.testMethod = testMethod;
 		T methodAnnotation = testMethod.getAnnotation(annotationType);
 		final boolean hasAlternativeAnnotation =
-				null != alternativeAnnotationType
-						&& null != testMethod.getAnnotation(alternativeAnnotationType);
+			null != alternativeAnnotationType
+				&& null != testMethod.getAnnotation(alternativeAnnotationType);
 		if (hasAlternativeAnnotation) {
 			annotation = null;
 		} else if (null != methodAnnotation) {
@@ -42,45 +38,17 @@ public abstract class AbstractTestRule<T extends Annotation> implements TestRule
 		}
 	}
 
-	// TestRule contract:
-
 	/**
-	 * JUnit test rule contract. Applies the rule to a statement, returning
-	 * wrapped statement.
-	 * <p>
-	 * Calls {@link AbstractTestRule#before()}, then the wrapped statement, then
-	 * {@link AbstractTestRule#after()}.
+	 * Executes before the test method.
 	 */
-	public Statement apply(final Statement base, Description description) {
-		return new Statement() {
-			@Override
-			public void evaluate() throws Throwable {
-				before();
-				base.evaluate();
-				after();
-			}
-		};
-	}
-
-	// hook methods for descendants:
-
-	/**
-	 * Called before wrapped statement.
-	 *
-	 * @throws Throwable Anything
-	 */
-	protected void before() throws Throwable {
+	public void before() {
 	}
 
 	/**
-	 * Called after wrapped statement.
-	 *
-	 * @throws Throwable Anything
+	 * Executes after the test method.
 	 */
-	protected void after() throws Throwable {
+	public void after() {
 	}
-
-	// getters:
 
 	/**
 	 * Return the configuring annotation.

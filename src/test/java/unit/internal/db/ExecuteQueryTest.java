@@ -4,7 +4,7 @@ import net.sf.lightair.internal.Keywords;
 import net.sf.lightair.internal.db.ExecuteQuery;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import test.support.DbTemplate;
 
 import java.io.ByteArrayInputStream;
@@ -22,14 +22,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ExecuteQueryTest implements Keywords {
 
 	private List<Map<String, Object>> createStatements(Object... data) {
-		assertTrue("Data in triples", data.length % 3 == 0);
+		assertTrue(data.length % 3 == 0, "Data in triples");
 		List<Map<String, Object>> statements = new ArrayList<>();
 		for (int i = 0; i < data.length; i = i + 3) {
 			Map<String, Object> statement = new LinkedHashMap<>();
@@ -43,7 +43,7 @@ public class ExecuteQueryTest implements Keywords {
 
 	private Map<String, Map<String, Object>> createColumns(Object... data) {
 		Map<String, Map<String, Object>> parameters = new LinkedHashMap<>();
-		assertTrue("Data in triples", data.length % 3 == 0);
+		assertTrue(data.length % 3 == 0, "Data in triples");
 		for (int i = 0; i < data.length; i = i + 3) {
 			Map<String, Object> parameter = new LinkedHashMap<>();
 			parameter.put(DATA_TYPE, data[i + 1]);
@@ -66,31 +66,31 @@ public class ExecuteQueryTest implements Keywords {
 		h2.db.execute("insert into t2 (t2a, t2b, t2c) values (3,'t2b3','t2c3')");
 
 		Map<String, List<Map<String, Object>>> data = ExecuteQuery.run(h2.getConnection(),
-				createStatements(
-						"t1",
-						"select t1a, t1b, t1c from t1",
-						createColumns("t1a", INTEGER, Types.INTEGER,
-								"t1b", STRING, Types.VARCHAR,
-								"t1c", STRING, Types.VARCHAR),
-						"t2",
-						"select t2a, t2b, t2c from t2",
-						createColumns("t2a", INTEGER, Types.INTEGER,
-								"t2b", STRING, Types.VARCHAR,
-								"t2c", STRING, Types.VARCHAR)
-				));
+			createStatements(
+				"t1",
+				"select t1a, t1b, t1c from t1",
+				createColumns("t1a", INTEGER, Types.INTEGER,
+					"t1b", STRING, Types.VARCHAR,
+					"t1c", STRING, Types.VARCHAR),
+				"t2",
+				"select t2a, t2b, t2c from t2",
+				createColumns("t2a", INTEGER, Types.INTEGER,
+					"t2b", STRING, Types.VARCHAR,
+					"t2c", STRING, Types.VARCHAR)
+			));
 
 		h2.db.execute("drop table t1");
 		h2.db.execute("drop table t2");
 
 		String expected = "{t1=[{t1a=1, t1b=t1b1, t1c=t1c1},\n" +
-				" {t1a=2, t1b=t1b2, t1c=t1c2},\n" +
-				" {t1a=3, t1b=t1b3, t1c=t1c3}],\n" +
-				"t2=[{t2a=1, t2b=t2b1, t2c=t2c1},\n" +
-				" {t2a=2, t2b=t2b2, t2c=t2c2},\n" +
-				" {t2a=3, t2b=t2b3, t2c=t2c3}]}";
+			" {t1a=2, t1b=t1b2, t1c=t1c2},\n" +
+			" {t1a=3, t1b=t1b3, t1c=t1c3}],\n" +
+			"t2=[{t2a=1, t2b=t2b1, t2c=t2c1},\n" +
+			" {t2a=2, t2b=t2b2, t2c=t2c2},\n" +
+			" {t2a=3, t2b=t2b3, t2c=t2c3}]}";
 		assertEquals(expected, data.toString()
-				.replace("}, ", "},\n ")
-				.replace("], ", "],\n"));
+			.replace("}, ", "},\n ")
+			.replace("], ", "],\n"));
 
 		assertEquals(Integer.class, data.get("t1").get(0).get("t1a").getClass());
 	}
@@ -99,149 +99,150 @@ public class ExecuteQueryTest implements Keywords {
 	public void dataTypesH2() throws IOException {
 		DbTemplate h2 = new DbTemplate("jdbc:h2:mem:test", "sa", "");
 		h2.db.execute("create table data_types (id int primary key," +
-				" bit_type bit, boolean_type boolean," +
-				" tinyint_type tinyint, smallint_type smallint, integer_type integer, bigint_type bigint," +
-				" real_type real, float_type double, double_type double," +
-				" numeric_type numeric(20,2), decimal_type decimal(20,2)," +
-				" date_type date, time_type time, timestamp_type timestamp," +
-				" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
-				" nchar_type nchar(20), nvarchar_type nvarchar(50), longnvarchar_type longnvarchar(5000)," +
-				" binary_type binary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
-				" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, json_type json, array_type array)");
+			" bit_type bit, boolean_type boolean," +
+			" tinyint_type tinyint, smallint_type smallint, integer_type integer, bigint_type bigint," +
+			" real_type real, float_type double, double_type double," +
+			" numeric_type numeric(20,2), decimal_type decimal(20,2)," +
+			" date_type date, time_type time, timestamp_type timestamp," +
+			" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
+			" nchar_type nchar(20), nvarchar_type nvarchar(50), longnvarchar_type longnvarchar(5000)," +
+			" binary_type binary(10), varbinary_type varbinary(10), longvarbinary_type longvarbinary(5000)," +
+			" clob_type clob, nclob_type nclob, blob_type blob, uuid_type uuid, json_type json," +
+			" array_type varchar(100) array)");
 		String columns = "(id," +
-				"bit_type,boolean_type,tinyint_type,smallint_type,integer_type,bigint_type," +
-				"real_type,float_type,double_type,numeric_type,decimal_type," +
-				"date_type,time_type,timestamp_type,char_type,varchar_type,longvarchar_type," +
-				"nchar_type,nvarchar_type,longnvarchar_type,binary_type,varbinary_type,longvarbinary_type," +
-				"clob_type,nclob_type,blob_type,uuid_type,json_type,array_type)";
+			"bit_type,boolean_type,tinyint_type,smallint_type,integer_type,bigint_type," +
+			"real_type,float_type,double_type,numeric_type,decimal_type," +
+			"date_type,time_type,timestamp_type,char_type,varchar_type,longvarchar_type," +
+			"nchar_type,nvarchar_type,longnvarchar_type,binary_type,varbinary_type,longvarbinary_type," +
+			"clob_type,nclob_type,blob_type,uuid_type,json_type,array_type)";
 		h2.db.update("insert into data_types " + columns +
-						" values (1,false,true,123,12345,1234567890,10000000000,123456.7890123,123456.7890123,123456.7890123," +
-						"123456.7890123,123456.7890123,'2015-12-31','12:34:56','2015-12-31T12:34:56'," +
-						"'char1','varchar1','longvarchar1','nchar1','nvarchar1','longnvarchar1'," +
-						"?,?,?,?,?,?,'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11','{\"key1\":\"value1\"}'," +
-						"array['value 1','value 2','value 3'])",
-				"binary1".getBytes(StandardCharsets.UTF_8),
-				"varbin1".getBytes(StandardCharsets.UTF_8),
-				"longvarbinary1".getBytes(StandardCharsets.UTF_8),
-				new StringReader("clob1"),
-				new StringReader("nclob1"),
-				new ByteArrayInputStream("blob1".getBytes()));
+				" values (1,false,true,123,12345,1234567890,10000000000,123456.7890123,123456.7890123,"
+				+ "123456.7890123,123456.7890123,123456.7890123,'2015-12-31','12:34:56','2015-12-31T12:34:56'," +
+				"'char1','varchar1','longvarchar1','nchar1','nvarchar1','longnvarchar1'," +
+				"?,?,?,?,?,?,'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11','{\"key1\":\"value1\"}'," +
+				"array['value 1','value 2','value 3'])",
+			"binary1".getBytes(StandardCharsets.UTF_8),
+			"varbin1".getBytes(StandardCharsets.UTF_8),
+			"longvarbinary1".getBytes(StandardCharsets.UTF_8),
+			new StringReader("clob1"),
+			new StringReader("nclob1"),
+			new ByteArrayInputStream("blob1".getBytes()));
 		h2.db.update("insert into data_types " + columns +
-				" values (2,null,null,null,null,null,null,null,null,null," +
-				"null,null,null,null,null," +
-				"null,null,null,null,null,null," +
-				"null,null,null,null,null,null,null,null,null)");
+			" values (2,null,null,null,null,null,null,null,null,null," +
+			"null,null,null,null,null," +
+			"null,null,null,null,null,null," +
+			"null,null,null,null,null,null,null,null,null)");
 
 		Map<String, List<Map<String, Object>>> data = ExecuteQuery.run(h2.getConnection(),
-				createStatements(
-						"data_types",
-						"select id,bit_type,boolean_type," +
-								"tinyint_type,smallint_type,integer_type,bigint_type," +
-								"real_type,float_type,double_type,numeric_type,decimal_type," +
-								"date_type,time_type,timestamp_type," +
-								"char_type,varchar_type,longvarchar_type,nchar_type,nvarchar_type,longnvarchar_type," +
-								"binary_type,varbinary_type,longvarbinary_type," +
-								"clob_type,nclob_type,blob_type,uuid_type,json_type,array_type from data_types",
-						createColumns("id", INTEGER, Types.INTEGER,
-								"bit_type", BOOLEAN, Types.BIT,
-								"boolean_type", BOOLEAN, Types.BOOLEAN,
-								"tinyint_type", BYTE, Types.TINYINT,
-								"smallint_type", SHORT, Types.SMALLINT,
-								"integer_type", INTEGER, Types.INTEGER,
-								"bigint_type", LONG, Types.BIGINT,
-								"real_type", FLOAT, Types.REAL,
-								"float_type", FLOAT, Types.REAL,
-								"double_type", DOUBLE, Types.DOUBLE,
-								"numeric_type", BIGDECIMAL, Types.NUMERIC,
-								"decimal_type", BIGDECIMAL, Types.DECIMAL,
-								"date_type", DATE, Types.DATE,
-								"time_type", TIME, Types.TIME,
-								"timestamp_type", TIMESTAMP, Types.TIMESTAMP,
-								"char_type", FIXED_STRING, Types.CHAR,
-								"varchar_type", STRING, Types.VARCHAR,
-								"longvarchar_type", STRING, Types.LONGVARCHAR,
-								"nchar_type", FIXED_NSTRING, Types.CHAR,
-								"nvarchar_type", NSTRING, Types.VARCHAR,
-								"longnvarchar_type", NSTRING, Types.LONGVARCHAR,
-								"binary_type", BYTES, Types.BINARY,
-								"varbinary_type", BYTES, Types.VARBINARY,
-								"longvarbinary_type", BYTES, Types.LONGVARBINARY,
-								"clob_type", CLOB, Types.CLOB,
-								"nclob_type", NCLOB, Types.NCLOB,
-								"blob_type", BLOB, Types.BLOB,
-								"uuid_type", UUID, Types.OTHER,
-								"json_type", JSON, Types.OTHER,
-								"array_type", ARRAY_STRING, Types.ARRAY
-						)));
+			createStatements(
+				"data_types",
+				"select id,bit_type,boolean_type," +
+					"tinyint_type,smallint_type,integer_type,bigint_type," +
+					"real_type,float_type,double_type,numeric_type,decimal_type," +
+					"date_type,time_type,timestamp_type," +
+					"char_type,varchar_type,longvarchar_type,nchar_type,nvarchar_type,longnvarchar_type," +
+					"binary_type,varbinary_type,longvarbinary_type," +
+					"clob_type,nclob_type,blob_type,uuid_type,json_type,array_type from data_types",
+				createColumns("id", INTEGER, Types.INTEGER,
+					"bit_type", BOOLEAN, Types.BIT,
+					"boolean_type", BOOLEAN, Types.BOOLEAN,
+					"tinyint_type", BYTE, Types.TINYINT,
+					"smallint_type", SHORT, Types.SMALLINT,
+					"integer_type", INTEGER, Types.INTEGER,
+					"bigint_type", LONG, Types.BIGINT,
+					"real_type", FLOAT, Types.REAL,
+					"float_type", FLOAT, Types.REAL,
+					"double_type", DOUBLE, Types.DOUBLE,
+					"numeric_type", BIGDECIMAL, Types.NUMERIC,
+					"decimal_type", BIGDECIMAL, Types.DECIMAL,
+					"date_type", DATE, Types.DATE,
+					"time_type", TIME, Types.TIME,
+					"timestamp_type", TIMESTAMP, Types.TIMESTAMP,
+					"char_type", FIXED_STRING, Types.CHAR,
+					"varchar_type", STRING, Types.VARCHAR,
+					"longvarchar_type", STRING, Types.LONGVARCHAR,
+					"nchar_type", FIXED_NSTRING, Types.CHAR,
+					"nvarchar_type", NSTRING, Types.VARCHAR,
+					"longnvarchar_type", NSTRING, Types.LONGVARCHAR,
+					"binary_type", BYTES, Types.BINARY,
+					"varbinary_type", BYTES, Types.VARBINARY,
+					"longvarbinary_type", BYTES, Types.LONGVARBINARY,
+					"clob_type", CLOB, Types.CLOB,
+					"nclob_type", NCLOB, Types.NCLOB,
+					"blob_type", BLOB, Types.BLOB,
+					"uuid_type", UUID, Types.OTHER,
+					"json_type", JSON, Types.OTHER,
+					"array_type", ARRAY_STRING, Types.ARRAY
+				)));
 
 		h2.db.execute("drop table data_types");
 
 		String expected = "{data_types=[{id=1,\n" +
-				"bit_type=false,\n" +
-				"boolean_type=true,\n" +
-				"tinyint_type=123,\n" +
-				"smallint_type=12345,\n" +
-				"integer_type=1234567890,\n" +
-				"bigint_type=10000000000,\n" +
-				"real_type=123456.79,\n" +
-				"float_type=123456.79,\n" +
-				"double_type=123456.7890123,\n" +
-				"numeric_type=123456.79,\n" +
-				"decimal_type=123456.79,\n" +
-				"date_type=2015-12-31,\n" +
-				"time_type=12:34:56,\n" +
-				"timestamp_type=2015-12-31 12:34:56.0,\n" +
-				"char_type=char1,\n" +
-				"varchar_type=varchar1,\n" +
-				"longvarchar_type=longvarchar1,\n" +
-				"nchar_type=nchar1,\n" +
-				"nvarchar_type=nvarchar1,\n" +
-				"longnvarchar_type=longnvarchar1,\n" +
-				"binary_type=REPLACED,\n" +
-				"varbinary_type=REPLACED,\n" +
-				"longvarbinary_type=REPLACED,\n" +
-				"clob_type=clob1,\n" +
-				"nclob_type=nclob1,\n" +
-				"blob_type=REPLACED,\n" +
-				"uuid_type=a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11,\n" +
-				"json_type=\"{\\\"key1\\\":\\\"value1\\\"}\",\n" +
-				"array_type=[Ljava.lang.String;REPLACED" +
-				"},\n" +
-				"{id=2,\n" +
-				"bit_type=null,\n" +
-				"boolean_type=null,\n" +
-				"tinyint_type=null,\n" +
-				"smallint_type=null,\n" +
-				"integer_type=null,\n" +
-				"bigint_type=null,\n" +
-				"real_type=null,\n" +
-				"float_type=null,\n" +
-				"double_type=null,\n" +
-				"numeric_type=null,\n" +
-				"decimal_type=null,\n" +
-				"date_type=null,\n" +
-				"time_type=null,\n" +
-				"timestamp_type=null,\n" +
-				"char_type=null,\n" +
-				"varchar_type=null,\n" +
-				"longvarchar_type=null,\n" +
-				"nchar_type=null,\n" +
-				"nvarchar_type=null,\n" +
-				"longnvarchar_type=null,\n" +
-				"binary_type=null,\n" +
-				"varbinary_type=null,\n" +
-				"longvarbinary_type=null,\n" +
-				"clob_type=null,\n" +
-				"nclob_type=null,\n" +
-				"blob_type=null,\n" +
-				"uuid_type=null,\n" +
-				"json_type=null,\n" +
-				"array_type=null" +
-				"}]}";
+			"bit_type=false,\n" +
+			"boolean_type=true,\n" +
+			"tinyint_type=123,\n" +
+			"smallint_type=12345,\n" +
+			"integer_type=1234567890,\n" +
+			"bigint_type=10000000000,\n" +
+			"real_type=123456.79,\n" +
+			"float_type=123456.79,\n" +
+			"double_type=123456.7890123,\n" +
+			"numeric_type=123456.79,\n" +
+			"decimal_type=123456.79,\n" +
+			"date_type=2015-12-31,\n" +
+			"time_type=12:34:56,\n" +
+			"timestamp_type=2015-12-31 12:34:56.0,\n" +
+			"char_type=char1               ,\n" +
+			"varchar_type=varchar1,\n" +
+			"longvarchar_type=longvarchar1,\n" +
+			"nchar_type=nchar1              ,\n" +
+			"nvarchar_type=nvarchar1,\n" +
+			"longnvarchar_type=longnvarchar1,\n" +
+			"binary_type=REPLACED,\n" +
+			"varbinary_type=REPLACED,\n" +
+			"longvarbinary_type=REPLACED,\n" +
+			"clob_type=clob1,\n" +
+			"nclob_type=nclob1,\n" +
+			"blob_type=REPLACED,\n" +
+			"uuid_type=a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11,\n" +
+			"json_type=\"{\\\"key1\\\":\\\"value1\\\"}\",\n" +
+			"array_type=[Ljava.lang.String;REPLACED" +
+			"},\n" +
+			"{id=2,\n" +
+			"bit_type=null,\n" +
+			"boolean_type=null,\n" +
+			"tinyint_type=null,\n" +
+			"smallint_type=null,\n" +
+			"integer_type=null,\n" +
+			"bigint_type=null,\n" +
+			"real_type=null,\n" +
+			"float_type=null,\n" +
+			"double_type=null,\n" +
+			"numeric_type=null,\n" +
+			"decimal_type=null,\n" +
+			"date_type=null,\n" +
+			"time_type=null,\n" +
+			"timestamp_type=null,\n" +
+			"char_type=null,\n" +
+			"varchar_type=null,\n" +
+			"longvarchar_type=null,\n" +
+			"nchar_type=null,\n" +
+			"nvarchar_type=null,\n" +
+			"longnvarchar_type=null,\n" +
+			"binary_type=null,\n" +
+			"varbinary_type=null,\n" +
+			"longvarbinary_type=null,\n" +
+			"clob_type=null,\n" +
+			"nclob_type=null,\n" +
+			"blob_type=null,\n" +
+			"uuid_type=null,\n" +
+			"json_type=null,\n" +
+			"array_type=null" +
+			"}]}";
 		assertEquals(expected, data.toString()
-				.replaceAll("\\[B@[^,}]+", "REPLACED")
-				.replaceAll("@[0-9a-fA-F]+", "REPLACED")
-				.replace(", ", ",\n"));
+			.replaceAll("\\[B@[^,}]+", "REPLACED")
+			.replaceAll("@[0-9a-fA-F]+", "REPLACED")
+			.replace(", ", ",\n"));
 
 		Map<String, Object> row = data.get("data_types").get(0);
 		assertEquals(Boolean.class, row.get("bit_type").getClass());
@@ -265,7 +266,7 @@ public class ExecuteQueryTest implements Keywords {
 		assertEquals(String.class, row.get("nvarchar_type").getClass());
 		assertEquals(String.class, row.get("longnvarchar_type").getClass());
 		assertEquals(byte[].class, row.get("binary_type").getClass());
-		assertEquals("binary1", new String((byte[]) row.get("binary_type")));
+		assertEquals("binary1\u0000\u0000\u0000", new String((byte[]) row.get("binary_type")));
 		assertEquals(byte[].class, row.get("varbinary_type").getClass());
 		assertEquals("varbin1", new String((byte[]) row.get("varbinary_type")));
 		assertEquals(byte[].class, row.get("longvarbinary_type").getClass());
@@ -280,118 +281,118 @@ public class ExecuteQueryTest implements Keywords {
 	public void dataTypesHsql() throws IOException, SQLException, DecoderException {
 		DbTemplate hsql = new DbTemplate("jdbc:hsqldb:mem:test", "sa", "");
 		hsql.db.execute("create table data_types (id int primary key," +
-				" bit_type bit, boolean_type boolean," +
-				" tinyint_type tinyint, smallint_type smallint, integer_type integer, bigint_type bigint," +
-				" real_type real, float_type double, double_type double," +
-				" numeric_type numeric(20,2), decimal_type decimal(20,2)," +
-				" date_type date, time_type time, timestamp_type timestamp," +
-				" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
-				" binary_type binary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
-				" clob_type clob, blob_type blob)");
+			" bit_type bit, boolean_type boolean," +
+			" tinyint_type tinyint, smallint_type smallint, integer_type integer, bigint_type bigint," +
+			" real_type real, float_type double, double_type double," +
+			" numeric_type numeric(20,2), decimal_type decimal(20,2)," +
+			" date_type date, time_type time, timestamp_type timestamp," +
+			" char_type char(20), varchar_type varchar(50), longvarchar_type longvarchar(5000)," +
+			" binary_type binary(8), varbinary_type varbinary(8), longvarbinary_type longvarbinary(5000)," +
+			" clob_type clob, blob_type blob)");
 		String columns = "(id," +
-				"bit_type,boolean_type,tinyint_type,smallint_type,integer_type,bigint_type," +
-				"real_type,float_type,double_type,numeric_type,decimal_type," +
-				"date_type,time_type,timestamp_type,char_type,varchar_type,longvarchar_type," +
-				"binary_type,varbinary_type,longvarbinary_type,clob_type,blob_type)";
+			"bit_type,boolean_type,tinyint_type,smallint_type,integer_type,bigint_type," +
+			"real_type,float_type,double_type,numeric_type,decimal_type," +
+			"date_type,time_type,timestamp_type,char_type,varchar_type,longvarchar_type," +
+			"binary_type,varbinary_type,longvarbinary_type,clob_type,blob_type)";
 		hsql.db.update("insert into data_types " + columns +
-						" values (1,false,true,123,12345,1234567890,10000000000,123456.7890123,123456.7890123,123456.7890123," +
-						"123456.7890123,123456.7890123,'2015-12-31','12:34:56','2015-12-31 12:34:56'," +
-						"'char1','varchar1','longvarchar1',?,?,?,'clob1','1234567890abcdef')",
-				"binary1".getBytes(StandardCharsets.UTF_8),
-				"varbin1".getBytes(StandardCharsets.UTF_8),
-				"longvarbinary1".getBytes(StandardCharsets.UTF_8)
+				" values (1,false,true,123,12345,1234567890,10000000000,123456.7890123,123456.7890123,"
+				+ "123456.7890123,123456.7890123,123456.7890123,'2015-12-31','12:34:56','2015-12-31 12:34:56'," +
+				"'char1','varchar1','longvarchar1',?,?,?,'clob1','1234567890abcdef')",
+			"binary1".getBytes(StandardCharsets.UTF_8),
+			"varbin1".getBytes(StandardCharsets.UTF_8),
+			"longvarbinary1".getBytes(StandardCharsets.UTF_8)
 		);
 		hsql.db.update("insert into data_types " + columns +
-				" values (2,null,null,null,null,null,null,null,null,null," +
-				"null,null,null,null,null," +
-				"null,null,null,null,null,null,null,null)");
+			" values (2,null,null,null,null,null,null,null,null,null," +
+			"null,null,null,null,null," +
+			"null,null,null,null,null,null,null,null)");
 
 		Map<String, List<Map<String, Object>>> data = ExecuteQuery.run(hsql.getConnection(),
-				createStatements(
-						"data_types",
-						"select id,bit_type,boolean_type," +
-								"tinyint_type,smallint_type,integer_type,bigint_type," +
-								"real_type,float_type,double_type,numeric_type,decimal_type," +
-								"date_type,time_type,timestamp_type," +
-								"char_type,varchar_type,longvarchar_type," +
-								"binary_type,varbinary_type,longvarbinary_type," +
-								"clob_type,blob_type from data_types",
-						createColumns("id", INTEGER, Types.INTEGER,
-								"bit_type", BOOLEAN, Types.BIT,
-								"boolean_type", BOOLEAN, Types.BOOLEAN,
-								"tinyint_type", BYTE, Types.TINYINT,
-								"smallint_type", SHORT, Types.SMALLINT,
-								"integer_type", INTEGER, Types.INTEGER,
-								"bigint_type", LONG, Types.BIGINT,
-								"real_type", FLOAT, Types.REAL,
-								"float_type", FLOAT, Types.REAL,
-								"double_type", DOUBLE, Types.DOUBLE,
-								"numeric_type", BIGDECIMAL, Types.NUMERIC,
-								"decimal_type", BIGDECIMAL, Types.DECIMAL,
-								"date_type", DATE, Types.DATE,
-								"time_type", TIME, Types.TIME,
-								"timestamp_type", TIMESTAMP, Types.TIMESTAMP,
-								"char_type", FIXED_STRING, Types.CHAR,
-								"varchar_type", STRING, Types.VARCHAR,
-								"longvarchar_type", STRING, Types.LONGVARCHAR,
-								"binary_type", BYTES, Types.BINARY,
-								"varbinary_type", BYTES, Types.VARBINARY,
-								"longvarbinary_type", BYTES, Types.LONGVARBINARY,
-								"clob_type", CLOB, Types.CLOB,
-								"blob_type", BLOB, Types.BLOB
-						)));
+			createStatements(
+				"data_types",
+				"select id,bit_type,boolean_type," +
+					"tinyint_type,smallint_type,integer_type,bigint_type," +
+					"real_type,float_type,double_type,numeric_type,decimal_type," +
+					"date_type,time_type,timestamp_type," +
+					"char_type,varchar_type,longvarchar_type," +
+					"binary_type,varbinary_type,longvarbinary_type," +
+					"clob_type,blob_type from data_types",
+				createColumns("id", INTEGER, Types.INTEGER,
+					"bit_type", BOOLEAN, Types.BIT,
+					"boolean_type", BOOLEAN, Types.BOOLEAN,
+					"tinyint_type", BYTE, Types.TINYINT,
+					"smallint_type", SHORT, Types.SMALLINT,
+					"integer_type", INTEGER, Types.INTEGER,
+					"bigint_type", LONG, Types.BIGINT,
+					"real_type", FLOAT, Types.REAL,
+					"float_type", FLOAT, Types.REAL,
+					"double_type", DOUBLE, Types.DOUBLE,
+					"numeric_type", BIGDECIMAL, Types.NUMERIC,
+					"decimal_type", BIGDECIMAL, Types.DECIMAL,
+					"date_type", DATE, Types.DATE,
+					"time_type", TIME, Types.TIME,
+					"timestamp_type", TIMESTAMP, Types.TIMESTAMP,
+					"char_type", FIXED_STRING, Types.CHAR,
+					"varchar_type", STRING, Types.VARCHAR,
+					"longvarchar_type", STRING, Types.LONGVARCHAR,
+					"binary_type", BYTES, Types.BINARY,
+					"varbinary_type", BYTES, Types.VARBINARY,
+					"longvarbinary_type", BYTES, Types.LONGVARBINARY,
+					"clob_type", CLOB, Types.CLOB,
+					"blob_type", BLOB, Types.BLOB
+				)));
 
 		hsql.db.execute("drop table data_types");
 
 		String expected = "{data_types=[{id=1,\n" +
-				"bit_type=false,\n" +
-				"boolean_type=true,\n" +
-				"tinyint_type=123,\n" +
-				"smallint_type=12345,\n" +
-				"integer_type=1234567890,\n" +
-				"bigint_type=10000000000,\n" +
-				"real_type=123456.79,\n" +
-				"float_type=123456.79,\n" +
-				"double_type=123456.7890123,\n" +
-				"numeric_type=123456.79,\n" +
-				"decimal_type=123456.79,\n" +
-				"date_type=2015-12-31,\n" +
-				"time_type=12:34:56,\n" +
-				"timestamp_type=2015-12-31 12:34:56.0,\n" +
-				"char_type=char1               ,\n" +
-				"varchar_type=varchar1,\n" +
-				"longvarchar_type=longvarchar1,\n" +
-				"binary_type=REPLACED,\n" +
-				"varbinary_type=REPLACED,\n" +
-				"longvarbinary_type=REPLACED,\n" +
-				"clob_type=clob1,\n" +
-				"blob_type=REPLACED},\n" +
-				"{id=2,\n" +
-				"bit_type=null,\n" +
-				"boolean_type=null,\n" +
-				"tinyint_type=null,\n" +
-				"smallint_type=null,\n" +
-				"integer_type=null,\n" +
-				"bigint_type=null,\n" +
-				"real_type=null,\n" +
-				"float_type=null,\n" +
-				"double_type=null,\n" +
-				"numeric_type=null,\n" +
-				"decimal_type=null,\n" +
-				"date_type=null,\n" +
-				"time_type=null,\n" +
-				"timestamp_type=null,\n" +
-				"char_type=null,\n" +
-				"varchar_type=null,\n" +
-				"longvarchar_type=null,\n" +
-				"binary_type=null,\n" +
-				"varbinary_type=null,\n" +
-				"longvarbinary_type=null,\n" +
-				"clob_type=null,\n" +
-				"blob_type=null}]}";
+			"bit_type=false,\n" +
+			"boolean_type=true,\n" +
+			"tinyint_type=123,\n" +
+			"smallint_type=12345,\n" +
+			"integer_type=1234567890,\n" +
+			"bigint_type=10000000000,\n" +
+			"real_type=123456.79,\n" +
+			"float_type=123456.79,\n" +
+			"double_type=123456.7890123,\n" +
+			"numeric_type=123456.79,\n" +
+			"decimal_type=123456.79,\n" +
+			"date_type=2015-12-31,\n" +
+			"time_type=12:34:56,\n" +
+			"timestamp_type=2015-12-31 12:34:56.0,\n" +
+			"char_type=char1               ,\n" +
+			"varchar_type=varchar1,\n" +
+			"longvarchar_type=longvarchar1,\n" +
+			"binary_type=REPLACED,\n" +
+			"varbinary_type=REPLACED,\n" +
+			"longvarbinary_type=REPLACED,\n" +
+			"clob_type=clob1,\n" +
+			"blob_type=REPLACED},\n" +
+			"{id=2,\n" +
+			"bit_type=null,\n" +
+			"boolean_type=null,\n" +
+			"tinyint_type=null,\n" +
+			"smallint_type=null,\n" +
+			"integer_type=null,\n" +
+			"bigint_type=null,\n" +
+			"real_type=null,\n" +
+			"float_type=null,\n" +
+			"double_type=null,\n" +
+			"numeric_type=null,\n" +
+			"decimal_type=null,\n" +
+			"date_type=null,\n" +
+			"time_type=null,\n" +
+			"timestamp_type=null,\n" +
+			"char_type=null,\n" +
+			"varchar_type=null,\n" +
+			"longvarchar_type=null,\n" +
+			"binary_type=null,\n" +
+			"varbinary_type=null,\n" +
+			"longvarbinary_type=null,\n" +
+			"clob_type=null,\n" +
+			"blob_type=null}]}";
 		assertEquals(expected, data.toString()
-				.replaceAll("\\[B@[^,}]+", "REPLACED")
-				.replace(", ", ",\n"));
+			.replaceAll("\\[B@[^,}]+", "REPLACED")
+			.replace(", ", ",\n"));
 
 		Map<String, Object> row = data.get("data_types").get(0);
 		assertEquals(Boolean.class, row.get("bit_type").getClass());
