@@ -14,14 +14,11 @@ import test.support.PostgresUtils;
 @Verify
 public class DataTypesPostgresTest extends DataTypesTestBase {
 
-	static {
+	@BeforeAll
+	public static void beforeClass() {
 		postgres = PostgresUtils.initPostgres();
 		connect("jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres");
 		ConfigSupport.replaceConfig("postgres");
-	}
-
-	@BeforeAll
-	public static void beforeClass() {
 		createTable();
 	}
 

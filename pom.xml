@@ -205,23 +205,39 @@
 			<version>${hsqlVersion}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!--TestContainers-->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!--Postgres-->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-postgresql</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>42.7.7</version>
 			<scope>test</scope>
 		</dependency>
+		<!--Oracle-->
 		<dependency>
 			<groupId>org.testcontainers</groupId>
-			<artifactId>testcontainers</artifactId>
+			<artifactId>testcontainers-oracle-free</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>testcontainers-postgresql</artifactId>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11</artifactId>
+			<version>23.26.3.0.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Oracle jdbc driver must be copied into jre/lib/ext directory in the JDK. -->
+
+		<!--Test utils-->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>

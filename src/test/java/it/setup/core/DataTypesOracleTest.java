@@ -3,37 +3,26 @@ package it.setup.core;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Setup;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
+import test.support.OracleUtils;
 
 import java.math.BigDecimal;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Requires:
- * <ul>
- * <li>Running Oracle XE 18.4.0.0.0 (18c)</li>
- * <li>User with credentials: SYSTEM / password.</li>
- * <li>Driver ojdbc8.jar copied into jre/lib/ext directory in the JDK.</li>
- * </ul>
- */
-@Disabled
 @ExtendWith(LightAir.class)
 @Setup
 public class DataTypesOracleTest extends DataTypesSetupTestBase {
 
-	static {
-		connect("jdbc:oracle:thin:@localhost:1521:xe", "SYSTEM", "password");
-		ConfigSupport.replaceConfig("oracle");
-	}
-
 	@BeforeAll
 	public static void beforeClass() {
+		oracle = OracleUtils.initOracle();
+		connect("jdbc:oracle:thin:@localhost:1521/freepdb1", "test", "test");
+		ConfigSupport.replaceConfig("oracle");
 		createTable();
 	}
 

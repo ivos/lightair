@@ -4,32 +4,21 @@ import it.common.DataTypesTestBase;
 import net.sf.lightair.LightAir;
 import net.sf.lightair.annotation.Verify;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
+import test.support.OracleUtils;
 
-/**
- * Requires:
- * <ul>
- * <li>Running Oracle XE 18.4.0.0.0 (18c)</li>
- * <li>User with credentials: SYSTEM / password.</li>
- * <li>Driver ojdbc8.jar copied into jre/lib/ext directory in the JDK.</li>
- * </ul>
- */
-@Disabled
 @ExtendWith(LightAir.class)
 @Verify
 public class DataTypesOracleTest extends DataTypesTestBase {
 
-	static {
-		connect("jdbc:oracle:thin:@localhost:1521:xe", "SYSTEM", "password");
-		ConfigSupport.replaceConfig("oracle");
-	}
-
 	@BeforeAll
 	public static void beforeClass() {
+		oracle = OracleUtils.initOracle();
+		connect("jdbc:oracle:thin:@localhost:1521/freepdb1", "test", "test");
+		ConfigSupport.replaceConfig("oracle");
 		createTable();
 	}
 

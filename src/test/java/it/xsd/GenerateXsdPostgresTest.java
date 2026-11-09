@@ -39,6 +39,7 @@ public class GenerateXsdPostgresTest extends GenerateXsdTestBase {
 	public static void afterClass() {
 		dropTables();
 		PostgresUtils.closePostgresIfOpen(postgres);
+		postgres = null;
 	}
 
 	@Test

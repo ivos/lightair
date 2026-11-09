@@ -28,14 +28,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @Setup
 public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 
-	static {
+	@BeforeAll
+	public static void beforeClass() {
 		postgres = PostgresUtils.initPostgres();
 		connect("jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres");
 		ConfigSupport.replaceConfig("postgres");
-	}
-
-	@BeforeAll
-	public static void beforeClass() {
 		createTable();
 	}
 

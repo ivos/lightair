@@ -5,8 +5,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.testcontainers.oracle.OracleContainer;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import test.support.ConfigSupport;
+import test.support.OracleUtils;
 import test.support.PostgresUtils;
 
 import javax.sql.DataSource;
@@ -29,6 +31,9 @@ public class DataTypesTestBase {
 		dropTable();
 		ConfigSupport.restoreConfig();
 		PostgresUtils.closePostgresIfOpen(postgres);
+		postgres = null;
+		OracleUtils.closeOracleIfOpen(oracle);
+		oracle = null;
 	}
 
 	public static void connect(String url, String username, String password) {
@@ -41,4 +46,5 @@ public class DataTypesTestBase {
 	}
 
 	protected static PostgreSQLContainer postgres;
+	protected static OracleContainer oracle;
 }
