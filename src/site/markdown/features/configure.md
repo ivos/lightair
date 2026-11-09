@@ -1,0 +1,93 @@
+---
+title: Configure Light Air
+author:
+  - Ivo Maixner
+date: 2011-09-26
+---
+
+# Configure Light Air
+
+**Light Air properties file**\
+Light Air reads configuration from a .properties file.\
+By default, it is named `light-air.properties`, and is read from the (test) classpath,
+so it should reside in `src/test/resources`.\
+You can override the location of the .properties file by setting a system (environment) property
+named `LIGHT_AIR_PROPERTIES` to the name of your custom .properties file.
+
+**Set time difference limit**\
+Set the `time.difference.limit.millis` property to define a **maximum
+allowable difference** in milliseconds of **temporal columns**.\
+Set this to an expected duration of the longest test on the slowest environment,
+with some safety margin.
+
+_Examples:_ 5000 (= 5 seconds), 60000 (= 1 minute).
+
+**Profiles**\
+Use profiles to **connect to multiple databases**.\
+To set up a new profile, create a new .properties file for the profile with the usual Light Air properties.
+Then link to this profile .properties from the "_main_" Light Air .properties file
+using a property of the following form:
+
+```properties
+profile.[profile name]=[profile properties file name]
+```
+
+_Example:_
+
+Apart from connecting to H2 as defined in the main `light-air.properties` file,
+we want to also connect to an Oracle database.
+
+We create a profile .properties file named `light-air-oracle.properties` that contains
+the `database.driverClassName`, `database.connectionUrl`, `database.userName`,
+`database.password`, etc. properties for connecting to the Oracle database.
+
+Then we link from the main `light-air.properties` file to the `light-air-oracle.properties`
+by adding the following property to it:
+
+```properties
+profile.oracle=light-air-oracle.properties
+```
+
+Now, Light Air will on start up connect both to H2 as defined in the main .properties file,
+but also to Oracle as defined in the `oracle` profile .properties file.
+
+We can now set the `profile` attribute of `@Setup` and `@Verify` annotations
+to designate their datasets to be applied on the profile connection.
+We can also use `@Setup.List` and `@Verify.List` to setup and verify
+multiple databases on the same test class or test method.
+
+**Override XSD directory**\
+Light Air by default generates XSD file\(s) into the `src/test/java` directory.
+You can override this by setting the `xsd.directory` in the main properties file:
+
+```properties
+xsd.directory=my/xsd/directory
+```
+
+**Override @auto index directory**\
+Light Air by default generates an index file to support proper functionality of the @auto token
+into the `src/test/resources` directory.
+You can override this by setting the `auto.index.directory` in the main properties file:
+
+```properties
+auto.index.directory=my/auto/index/directory
+```
+
+## Override properties using environment variables
+
+You can override the following Light Air properties using environment variables:
+
+| Light Air property           | Environment variable                   |
+|------------------------------|----------------------------------------|
+| database.driverClassName     | LIGHT_AIR_DATABASE_DRIVER_CLASS_NAME   |
+| database.connectionUrl       | LIGHT_AIR_DATABASE_CONNECTION_URL      |
+| database.userName            | LIGHT_AIR_DATABASE_USER_NAME           |
+| database.password            | LIGHT_AIR_DATABASE_PASSWORD            |
+| database.schema              | LIGHT_AIR_DATABASE_SCHEMA              |
+| time.difference.limit.millis | LIGHT_AIR_TIME_DIFFERENCE_LIMIT_MILLIS |
+
+<p>
+<a href="generate-xsd.html" class="btn" style="float: right;">
+Next: Generate XSD
+</a>
+</p>

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+<site xmlns="http://maven.apache.org/SITE/2.0.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
+	<publishDate position="right" />
+	<version position="right" />
 	<body>
+		<breadcrumbs>
+			<item name="Light Air" href="index.html" />
+		</breadcrumbs>
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
 			<item name="Motivation" href="motivation.html" />
@@ -35,9 +40,11 @@
 		</fluidoSkin>
 	</custom>
 	<poweredBy>
-		<logo name="Sourceforge.net" href="https://sourceforge.net/"
-			img="https://sourceforge.net/sflogo.php?group_id=348718&amp;type=1" />
-		<logo name="Maven" href="https://maven.apache.org/"
-			img="https://maven.apache.org/images/logos/maven-feather.png" />
+		<logo name="Sourceforge.net" href="https://sourceforge.net/">
+			<image src="https://sourceforge.net/sflogo.php?group_id=348718&amp;type=1" />
+		</logo>
+		<logo name="Maven" href="https://maven.apache.org/">
+			<image src="https://maven.apache.org/images/logos/maven-feather.png" />
+		</logo>
 	</poweredBy>
-</project>
+</site>
