@@ -36,7 +36,7 @@ To set up and verify the database:
 
 ```java
 Map<String, List<String>> fileNames = new HashMap<>();
-fileNames.put(Keywords.DEFAULT_PROFILE, Arrays.asList("my-dataset-1.xml", "my-dataset-2.xml"));
+fileNames.put(Keywords.DEFAULT_PROFILE, List.of("my-dataset-1.xml", "my-dataset-2.xml"));
 
 LightAirApi.initialize(LightAirApi.getPropertiesFileName());
 LightAirApi.setup(fileNames);

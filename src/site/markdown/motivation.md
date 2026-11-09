@@ -18,9 +18,9 @@ Once I have a test for the complete functionality,
 testing a method on a DAO usually becomes irrelevant.
 
 Testing the whole application implies
-it has to be deployed in a target runtime environment as a complete WAR,
+it has to be deployed in a target runtime environment as a complete application,
 partial deployment of a couple of classes cannot be used,
-because almost the whole WAR would have to be deployed anyway before each test,
+because almost the whole application would have to be deployed anyway before each test,
 so then it is more efficient to deploy it completely at the start of tests
 and then run all the tests,
 each one assuming the application is already deployed and accessible on a given URL.
@@ -42,7 +42,7 @@ I don't want to code it all over again,
 I want a test tool to take care of it and only declaratively define the setup data.
 
 I want to specify setup data in the DbUnit's "flat XML format".
-It's the **simplest data format** based on XML.
+It's the **simplest data format**, based on XML.
 It's also **the most convenient one**:
 with any average XML-aware editor it requires less typing than any other format.
 

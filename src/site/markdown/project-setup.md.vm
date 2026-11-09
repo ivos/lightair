@@ -86,8 +86,7 @@ To support this properly in Maven, use the following:
 
 #[[### Integration tests profile]]#
 
-As Light Air tests require the application to be deployed and running
-on an application server,
+As Light Air tests require the application to be running,
 it is typically not desirable that they be run as unit tests in
 the Maven `test` lifecycle phase.
 
@@ -105,15 +104,21 @@ Next, define a profile to run the Light Air tests:
     <build>
       <plugins>
         <plugin>
-          <!-- replace this with your app server maven plugin: -->
-          <groupId>my.app.server</groupId>
-          <artifactId>my-app-server-maven-plugin</artifactId>
+          <!-- Spring Boot example. -->
+          <!-- Replace with your way of starting your app. -->
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
           <executions>
             <execution>
-              <id>deploy-pre-integration-test</id>
               <phase>pre-integration-test</phase>
               <goals>
-                <goal>my-app-server-deploy-goal</goal>
+                <goal>start</goal>
+              </goals>
+            </execution>
+            <execution>
+              <phase>post-integration-test</phase>
+              <goals>
+                <goal>stop</goal>
               </goals>
             </execution>
           </executions>
@@ -121,14 +126,6 @@ Next, define a profile to run the Light Air tests:
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
-          <executions>
-            <execution>
-              <goals>
-                <goal>integration-test</goal>
-                <goal>verify</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
       </plugins>
     </build>
@@ -136,13 +133,10 @@ Next, define a profile to run the Light Air tests:
 </profiles>
 ```
 
-The example above also includes a template for the deployment of the packaged application
-to an application server.
-You would replace that with a configuration corresponding
-to your particular application/web server.
+The example above also includes a template for Spring Boot to start and stop the application.
+You would replace that with a configuration corresponding to your particular way of doing that.
 
-Now, you can package your WAR file, deploy it to the application server and
-execute all Light Air integration tests by issuing:
+Now, you can start your app and execute all Light Air integration tests by issuing:
 
 ```shell
 mvn clean install -Pit
@@ -190,8 +184,8 @@ to generate XSD files from the database.
 
 #[[## Logback test configuration file]]#
 
-If you use Logback as the slf4j runtime,
-create a file named <<<logback-test.xml>>> in <<<src/test/resources>>>
+If you use Logback as the Slf4J runtime,
+create a file named `logback-test.xml` in `src/test/resources`
 with content recommended on the Logback site.
 
 This file lets you manage logging in tests, including log output from Light Air.

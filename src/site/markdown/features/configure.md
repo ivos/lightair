@@ -48,12 +48,12 @@ by adding the following property to it:
 profile.oracle=light-air-oracle.properties
 ```
 
-Now, Light Air will on start up connect both to H2 as defined in the main .properties file,
+Now, Light Air will on startup connect both to H2 as defined in the main .properties file
 but also to Oracle as defined in the `oracle` profile .properties file.
 
 We can now set the `profile` attribute of `@Setup` and `@Verify` annotations
 to designate their datasets to be applied on the profile connection.
-We can also use `@Setup.List` and `@Verify.List` to setup and verify
+We can also use `@Setup.List` and `@Verify.List` to set up and verify
 multiple databases on the same test class or test method.
 
 **Override XSD directory**\
