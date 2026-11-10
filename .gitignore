@@ -1,7 +1,30 @@
-.idea/
+### STS ###
+.apt_generated
 .classpath
+.factorypath
 .project
-target
 .settings
-/derby.log
-light-air.iml
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Project files ###
+target/
