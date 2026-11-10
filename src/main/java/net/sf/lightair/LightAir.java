@@ -58,7 +58,4 @@ public class LightAir implements InvocationInterceptor, Keywords {
 			testRules.forEach(AbstractTestRule::after);
 		}
 	}
-
-	public static class Api extends LightAirApi {
-	}
 }

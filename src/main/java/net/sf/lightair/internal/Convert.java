@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Convert String values in datasets parsed from XML into proper data types based on the database structure.
@@ -294,7 +293,7 @@ public class Convert implements Keywords {
 		}
 		return Arrays.stream(value.split(ARRAY_ELEMENT_SEPARATOR))
 			.map(s -> NULL_TOKEN.equals(s) ? null : valueConverter.apply(s))
-			.collect(Collectors.toList())
+			.toList()
 			.toArray(emptyValue);
 	}
 }
