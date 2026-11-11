@@ -88,7 +88,7 @@
 		</repository>
 		<site>
 			<id>lightair.sf.net</id>
-			<url>scp://shell.sourceforge.net/home/project-web/lightair/htdocs/</url>
+			<url>sftp://web.sourceforge.net/home/project-web/lightair/htdocs/</url>
 		</site>
 	</distributionManagement>
 
