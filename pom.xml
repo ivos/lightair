@@ -9,11 +9,11 @@
 
 	<name>Light Air</name>
 	<description>Integration functional testing of web applications for developers.</description>
-	<url>http://lightair.sourceforge.net</url>
+	<url>https://lightair.sourceforge.net</url>
 	<inceptionYear>2011</inceptionYear>
 	<organization>
 		<name>Lastware, sro.</name>
-		<url>http://www.lastware.cz</url>
+		<url>https://www.lastware.cz</url>
 	</organization>
 	<developers>
 		<developer>
@@ -277,7 +277,6 @@
 						<chmod>false</chmod>
 					</configuration>
 					<dependencies>
-						<!-- add support for ssh/scp -->
 						<dependency>
 							<groupId>org.apache.maven.wagon</groupId>
 							<artifactId>wagon-ssh</artifactId>
