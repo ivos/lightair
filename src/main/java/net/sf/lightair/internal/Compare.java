@@ -253,7 +253,7 @@ public class Compare implements Keywords {
 			return Arrays.equals((Object[]) expectedValue, (Object[]) actualValue);
 		}
 		if (expectedValue instanceof BigDecimal && actualValue instanceof BigDecimal) {
-			return 0 == ((BigDecimal) expectedValue).compareTo(((BigDecimal) actualValue));
+			return 0 == ((BigDecimal) expectedValue).compareTo((BigDecimal) actualValue);
 		}
 		return Objects.equals(expectedValue, actualValue);
 	}

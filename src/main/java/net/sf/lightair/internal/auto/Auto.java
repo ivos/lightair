@@ -132,7 +132,7 @@ public class Auto implements Keywords {
 				return LocalDateTime.of(1900, 1, 1, 0, 0, 0)
 					.plusDays(number % 73_000)
 					.plusSeconds(number % 86_400)
-					.plusNanos((number % 1_000) * 1_000_000)
+					.plusNanos(number % 1_000 * 1_000_000)
 					.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 			case STRING:
 			case NSTRING:
@@ -154,7 +154,7 @@ public class Auto implements Keywords {
 				return generateArray(index ->
 					formatStringValue(columnName, autoNumber + index, columnLength));
 			case ARRAY_INTEGER:
-				return generateArray(index -> String.valueOf((number % 100_000_000) * 10 + index));
+				return generateArray(index -> String.valueOf(number % 100_000_000 * 10 + index));
 			case ARRAY_LONG:
 				return generateArray(index -> autoNumber + index);
 		}
