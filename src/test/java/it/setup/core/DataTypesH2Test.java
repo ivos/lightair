@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -38,7 +40,7 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 	public static void createTable() {
 		db.execute("create table data_types (id int primary key, char_type char(25), "
 			+ "varchar_type varchar(50), integer_type integer, "
-			+ "date_type date, time_type time, timestamp_type timestamp, "
+			+ "date_type date, time_type time, timestamp_type timestamp, zonetimestamp_type timestamp with time zone, "
 			+ "double_type double, boolean_type boolean, bigint_type bigint, "
 			+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type varbinary(8), "
 			+ "uuid_type uuid, varchar_array_type varchar(100) array)");
@@ -57,6 +59,8 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 			12345678, LocalDate.of(2999, 12, 31),
 			LocalTime.of(23, 59, 58),
 			LocalDateTime.of(2998, 11, 30, 22, 57, 56, 789000000),
+			ZonedDateTime.of(2998, 11, 30, 22, 57, 56, 789000000,
+				ZoneOffset.ofHours(5)),
 			8765.4321, true, 9223372036854770000L,
 			new BigDecimal("12345678901234.56"),
 			"text1", "EjRWeJCrzeI=", "/ty6CYdlQyI=",
@@ -68,6 +72,8 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 			LocalDate.of(2000, 1, 2),
 			LocalTime.of(0, 0, 0),
 			LocalDateTime.of(2000, 1, 2, 3, 4, 5, 678000000),
+			ZonedDateTime.of(2000, 1, 2, 3, 4, 5, 678000000,
+				ZoneOffset.ofHours(5)),
 			0., false, 0L,
 			new BigDecimal("0.00"), "", "", "",
 			"00000000-0000-0000-0000-000000000000",
@@ -75,14 +81,16 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 		);
 		// null
 		verifyRow(2, null, null, null, null, null,
-			null, null, null, null,
+			null, null, null, null, null,
 			null, null, null, null, null, null
 		);
 		// auto
 		verifyRow(3, "char_type 1384656904     ", "varchar_type 1384684104",
 			1384653604, LocalDate.parse("1976-12-12"), LocalTime.parse("08:26:44"),
-			LocalDateTime.parse("1900-01-05T04:53:24.004"), 13846684.04, false,
-			1384644904L, new BigDecimal("13846469.04"), "clob_type 1384603204",
+			LocalDateTime.parse("1900-01-05T04:53:24.004"),
+			ZonedDateTime.parse("1900-01-05T04:53:24.004+05:00"),
+			13846684.04, false, 1384644904L,
+			new BigDecimal("13846469.04"), "clob_type 1384603204",
 			"YmxvYl90eXBlIDEzODQ2NzU0MDQ=", "ODQ2NTIzMDQ=",
 			"988543c3-b42c-3ce1-8da5-9bad5175fd20",
 			new String[]{"varchar_array_type 13846786041", "varchar_array_type 13846786042",
@@ -93,7 +101,7 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 	private void verifyRow(
 		int id, String char_type, String varchar_type,
 		Integer integer_type, LocalDate date_type, LocalTime time_type,
-		LocalDateTime timestamp_type, Double double_type, Boolean boolean_type,
+		LocalDateTime timestamp_type, ZonedDateTime zonetimestamp_type, Double double_type, Boolean boolean_type,
 		Long bigint_type, BigDecimal decimal_type, String clob_type,
 		String blob_type, String binary_type, String uuid_type, Object[] varchar_array_type
 	) {
@@ -104,6 +112,7 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 		verifyField(id, "date_type", date_type, Function.identity(), TimeUtils::toLocalDate);
 		verifyField(id, "time_type", time_type, Function.identity(), TimeUtils::toLocalTime);
 		verifyField(id, "timestamp_type", timestamp_type, Function.identity(), TimeUtils::toLocalDateTime);
+		verifyField(id, "zonetimestamp_type", zonetimestamp_type, Function.identity(), TimeUtils::toZonedDateTime);
 		assertEquals(double_type, values.get(id).get("double_type"), "double_type type " + id);
 		assertEquals(boolean_type, values.get(id).get("boolean_type"), "boolean_type type " + id);
 		assertEquals(bigint_type, values.get(id).get("bigint_type"), "bigint_type type " + id);

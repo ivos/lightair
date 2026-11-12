@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 
 public class TimeUtils {
 
@@ -19,5 +21,9 @@ public class TimeUtils {
 
 	public static LocalDateTime toLocalDateTime(Object sqlTimestamp) {
 		return ((Timestamp) sqlTimestamp).toLocalDateTime();
+	}
+
+	public static ZonedDateTime toZonedDateTime(Object sqlTimestamp) {
+		return ((OffsetDateTime) sqlTimestamp).toZonedDateTime();
 	}
 }
