@@ -5,6 +5,9 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="2026-11-12" version="4.0.0" description="Switch to JUnit Jupiter 6">
+			<action type="update">Switch to JUnit Jupiter 6 with Java 17 and upgrade all dependencies.</action>
+		</release>
 		<release date="2020-11-09" version="3.3.0" description="Postgres CITEXT support">
 			<action type="add">Support Postgres CITEXT explicitly.</action>
 		</release>
