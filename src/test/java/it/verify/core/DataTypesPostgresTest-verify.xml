@@ -61,4 +61,6 @@
 	            json_type="@auto" jsonb_type="@auto"
 	            text_array_type="@auto" varchar_array_type="@auto" integer_array_type="@auto" bigint_array_type="@auto"
 	/>
+	<!--values with time zones-->
+	<data_types id="4" timestamp_type="2020-02-20T10:20:30.123+04:00" />
 </dataset>

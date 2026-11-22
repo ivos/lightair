@@ -112,5 +112,18 @@ public class DataTypesPostgresTest extends DataTypesTestBase {
 			+ " '{846767041,846767042,846767043}',"
 			+ " '{13846934041,13846934042,13846934043}'"
 			+ ")");
+		// values with time zones
+		db.update("insert into data_types values (4,"
+			+ " null, null, null, null,"
+			+ " null, null, null,"
+			+ " null, null,"
+			+ " null, null,"
+			+ " null, null, '2020-02-20 07:20:30.123',"
+			+ " null,"
+			+ " null,"
+			+ " null,"
+			+ " null,"
+			+ " null, null,"
+			+ " null, null, null, null)");
 	}
 }

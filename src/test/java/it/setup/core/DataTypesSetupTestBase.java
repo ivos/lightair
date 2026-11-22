@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public abstract class DataTypesSetupTestBase extends DataTypesTestBase {
 
 	protected void perform() {
-		assertEquals(Integer.valueOf(4),
+		assertEquals(Integer.valueOf(5),
 			db.queryForObject("select count(*) from data_types", Integer.class),
 			"Count");
 		values = db.queryForList("select * from data_types");

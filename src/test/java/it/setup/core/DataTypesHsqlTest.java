@@ -10,7 +10,6 @@ import test.support.ConfigSupport;
 
 import java.math.BigDecimal;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.function.Function;
 
@@ -71,6 +70,15 @@ public class DataTypesHsqlTest extends DataTypesSetupTestBase {
 			13846684.04, false, 1384644904L, new BigDecimal("13846469.04"),
 			"clob_type 1384603204", "YmxvYl90eXBlIDEzODQ2NzU0MDQ=", "ODQ2NTIzMDQ=",
 			"988543c3-b42c-3ce1-8da5-9bad5175fd20");
+		// values with time zones
+		verifyRow(4, null, null, null, null, null,
+			ZonedDateTime.parse("2020-02-20T10:20:30.123+04:00")
+				.withZoneSameInstant(ZoneId.systemDefault())
+				.toLocalDateTime()
+				.toString()
+				.replace('T', ' '),
+			null, null, null, null, null, null, null, null
+		);
 	}
 
 	private void verifyRow(

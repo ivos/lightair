@@ -92,5 +92,18 @@ public class DataTypesOracleTest extends DataTypesTestBase {
 			+ " 'clob_type 1384603204', 'nclob_type 1384602404',"
 			+ " '626c6f625f747970652031333834363735343034', '62696e617231333834363532333034'"
 			+ ")");
+		// values with time zones
+		db.update("insert into data_types values (4,"
+			+ " null, null, null,"
+			+ " null, null,"
+			+ " null, null,"
+			+ " null, null, null,"
+			+ " null, null,"
+			+ " null,"
+			+ " null,"
+			+ " to_timestamp('2020-02-20 07:20:30.123','yyyy-mm-dd hh24:mi:ss.FF3'),"
+			+ " null,"
+			+ " null, null, null, null"
+			+ ")");
 	}
 }

@@ -11,7 +11,6 @@ import test.support.OracleUtils;
 
 import java.math.BigDecimal;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.function.Function;
 
@@ -97,6 +96,22 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 			false,
 			"clob_type 1384603204", "nclob_type 1384602404",
 			"YmxvYl90eXBlIDEzODQ2NzU0MDQ=", "YmluYXIxMzg0NjUyMzA0"
+		);
+		// values with time zones
+		verifyRow(4,
+			null, null, null,
+			null, null,
+			null, null,
+			null, null, null,
+			null, null,
+			null, null,
+			ZonedDateTime.parse("2020-02-20T10:20:30.123+04:00")
+				.withZoneSameInstant(ZoneId.systemDefault())
+				.toLocalDateTime()
+				.toString()
+				.replace('T', ' '),
+			null,
+			null, null, null, null
 		);
 	}
 

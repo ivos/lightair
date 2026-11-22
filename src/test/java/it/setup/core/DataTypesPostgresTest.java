@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.sql.Array;
 import java.sql.SQLException;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.function.Function;
 
@@ -132,6 +131,25 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			new String[]{"varchar_array_13846786041", "varchar_array_13846786042", "varchar_array_13846786043"},
 			new Integer[]{846767041, 846767042, 846767043},
 			new Long[]{13846934041L, 13846934042L, 13846934043L}
+		);
+		// values with time zones
+		verifyRow(4,
+			null, null, null, null,
+			null, null, null,
+			null, null,
+			null, null,
+			null, null,
+			ZonedDateTime.parse("2020-02-20T10:20:30.123+04:00")
+				.withZoneSameInstant(ZoneId.systemDefault())
+				.toLocalDateTime()
+				.toString()
+				.replace('T', ' '),
+			null,
+			null,
+			null,
+			null,
+			null, null,
+			null, null, null, null
 		);
 	}
 

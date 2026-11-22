@@ -12,7 +12,6 @@ import test.support.ConfigSupport;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.function.Function;
 
@@ -83,6 +82,15 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 			"988543c3-b42c-3ce1-8da5-9bad5175fd20",
 			new String[]{"varchar_array_type 13846786041", "varchar_array_type 13846786042",
 				"varchar_array_type 13846786043"}
+		);
+		// values with time zones
+		verifyRow(4, null, null, null, null, null,
+			ZonedDateTime.parse("2020-02-20T10:20:30.123+04:00")
+				.withZoneSameInstant(ZoneId.systemDefault())
+				.toLocalDateTime()
+				.toString()
+				.replace('T', ' '),
+			null, null, null, null, null, null, null, null, null
 		);
 	}
 

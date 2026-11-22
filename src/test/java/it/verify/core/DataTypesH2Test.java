@@ -61,5 +61,9 @@ public class DataTypesH2Test extends DataTypesTestBase {
 			+ "X'3834363532333034', '988543c3-b42c-3ce1-8da5-9bad5175fd20', "
 			+ "array['varchar_array_type 13846786041','varchar_array_type 13846786042',"
 			+ "'varchar_array_type 13846786043'])");
+		// values with time zones
+		db.update("insert into data_types values (4, null, null, null, "
+			+ "null, null, '2020-02-20 07:20:30.123', "
+			+ "null, null, null, null, null, null, null, null, null)");
 	}
 }
