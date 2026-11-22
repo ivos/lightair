@@ -52,10 +52,7 @@ public class LightAir implements InvocationInterceptor, Keywords {
 			invocation.skip(); // Mark invocation as skipped to prevent JUnit from complaining about tests not run.
 			throw t;
 		}
-		try {
-			invocation.proceed();
-		} finally {
-			testRules.forEach(AbstractTestRule::after);
-		}
+		invocation.proceed();
+		testRules.forEach(AbstractTestRule::after);
 	}
 }
