@@ -16,9 +16,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.Clock;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,9 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static test.support.TimeUtils.toLocalDate;
-import static test.support.TimeUtils.toLocalDateTime;
-import static test.support.TimeUtils.toLocalTime;
 
 public class ConvertTest implements Keywords {
 
@@ -382,10 +377,9 @@ public class ConvertTest implements Keywords {
 		assertEquals(Time.class, dataTypes.get("time_type").getClass());
 		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
 		// values
-		assertEquals(LocalDate.parse("2015-12-31"), toLocalDate(dataTypes.get("date_type")));
-		assertEquals(LocalTime.parse("00:00:00"), toLocalTime(dataTypes.get("time_type")));
-		assertEquals(LocalDateTime.parse("2015-12-31T00:00:00.0"),
-			toLocalDateTime(dataTypes.get("timestamp_type")));
+		assertEquals("2015-12-31", dataTypes.get("date_type").toString());
+		assertEquals("00:00:00", dataTypes.get("time_type").toString());
+		assertEquals("2015-12-31 00:00:00.0", dataTypes.get("timestamp_type").toString());
 	}
 
 	@Test
@@ -423,10 +417,9 @@ public class ConvertTest implements Keywords {
 		assertEquals(Time.class, dataTypes.get("time_type").getClass());
 		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
 		// values
-		assertEquals(LocalDate.parse("1970-01-01"), toLocalDate(dataTypes.get("date_type")));
-		assertEquals(LocalTime.parse("12:34:56"), toLocalTime(dataTypes.get("time_type")));
-		assertEquals(LocalDateTime.parse("1970-01-01T12:34:56.0"),
-			toLocalDateTime(dataTypes.get("timestamp_type")));
+		assertEquals("1970-01-01", dataTypes.get("date_type").toString());
+		assertEquals("12:34:56", dataTypes.get("time_type").toString());
+		assertEquals("1970-01-01 12:34:56.0", dataTypes.get("timestamp_type").toString());
 	}
 
 	@Test
@@ -464,10 +457,9 @@ public class ConvertTest implements Keywords {
 		assertEquals(Time.class, dataTypes.get("time_type").getClass());
 		assertEquals(Timestamp.class, dataTypes.get("timestamp_type").getClass());
 		// values
-		assertEquals(LocalDate.parse("2015-12-31"), toLocalDate(dataTypes.get("date_type")));
-		assertEquals(LocalTime.parse("12:34:56"), toLocalTime(dataTypes.get("time_type")));
-		assertEquals(LocalDateTime.parse("2015-12-31T12:34:56.123"),
-			toLocalDateTime(dataTypes.get("timestamp_type")));
+		assertEquals("2015-12-31", dataTypes.get("date_type").toString());
+		assertEquals("12:34:56", dataTypes.get("time_type").toString());
+		assertEquals("2015-12-31 12:34:56.123", dataTypes.get("timestamp_type").toString());
 	}
 
 	@Test

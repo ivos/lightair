@@ -7,12 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
-import test.support.TimeUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,18 +49,14 @@ public class DataTypesHsqlTest extends DataTypesSetupTestBase {
 	protected void verify() {
 		// full
 		verifyRow(0, "efghijklmnopqrs          ", "abcdefghijklmnopqrstuvxyz",
-			12345678, LocalDate.of(2999, 12, 31),
-			LocalTime.of(23, 59, 58),
-			LocalDateTime.of(2998, 11, 30, 22, 57, 56, 789000000),
+			12345678, "2999-12-31", "23:59:58", "2998-11-30 22:57:56.789",
 			8765.4321, true, 9223372036854770000L,
 			new BigDecimal("12345678901234.56"),
 			"text1", "EjRWeJCrzeI=", "/ty6CYdlQyI=",
 			"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11");
 		// empty
 		verifyRow(1, "                         ", "", 0,
-			LocalDate.of(2000, 1, 2),
-			LocalTime.of(0, 0, 0),
-			LocalDateTime.of(2000, 1, 2, 3, 4, 5, 678000000),
+			"2000-01-02", "00:00:00", "2000-01-02 03:04:05.678",
 			0., false, 0L,
 			new BigDecimal("0.00"), "", "", "AAAAAAAAAAA=",
 			"00000000-0000-0000-0000-000000000000");
@@ -71,17 +66,17 @@ public class DataTypesHsqlTest extends DataTypesSetupTestBase {
 			null, null, null, null, null);
 		// auto
 		verifyRow(3, "char_type 1384656904     ", "varchar_type 1384684104",
-			1384653604, LocalDate.parse("1976-12-12"), LocalTime.parse("08:26:44"),
-			LocalDateTime.parse("1900-01-05T04:53:24.004"), 13846684.04, false,
-			1384644904L, new BigDecimal("13846469.04"), "clob_type 1384603204",
-			"YmxvYl90eXBlIDEzODQ2NzU0MDQ=", "ODQ2NTIzMDQ=",
+			1384653604,
+			"1976-12-12", "08:26:44", "1900-01-05 04:53:24.004",
+			13846684.04, false, 1384644904L, new BigDecimal("13846469.04"),
+			"clob_type 1384603204", "YmxvYl90eXBlIDEzODQ2NzU0MDQ=", "ODQ2NTIzMDQ=",
 			"988543c3-b42c-3ce1-8da5-9bad5175fd20");
 	}
 
 	private void verifyRow(
 		int id, String char_type, String varchar_type,
-		Integer integer_type, LocalDate date_type, LocalTime time_type,
-		LocalDateTime timestamp_type, Double double_type, Boolean boolean_type,
+		Integer integer_type, String date_type, String time_type,
+		String timestamp_type, Double double_type, Boolean boolean_type,
 		Long bigint_type, BigDecimal decimal_type, String clob_type,
 		String blob_type, String binary_type, String uuid_type
 	) {
@@ -89,9 +84,9 @@ public class DataTypesHsqlTest extends DataTypesSetupTestBase {
 		assertEquals(char_type, values.get(id).get("char_type"), "char_type " + id);
 		assertEquals(varchar_type, values.get(id).get("varchar_type"), "varchar_type " + id);
 		assertEquals(integer_type, values.get(id).get("integer_type"), "integer_type " + id);
-		verifyField(id, "date_type", date_type, Function.identity(), TimeUtils::toLocalDate);
-		verifyField(id, "time_type", time_type, Function.identity(), TimeUtils::toLocalTime);
-		verifyField(id, "timestamp_type", timestamp_type, Function.identity(), TimeUtils::toLocalDateTime);
+		verifyField(id, "date_type", date_type, Function.identity(), Object::toString);
+		verifyField(id, "time_type", time_type, Function.identity(), Object::toString);
+		verifyField(id, "timestamp_type", timestamp_type, Function.identity(), Object::toString);
 		assertEquals(double_type, values.get(id).get("double_type"), "double_type type " + id);
 		assertEquals(boolean_type, values.get(id).get("boolean_type"), "boolean_type type " + id);
 		assertEquals(bigint_type, values.get(id).get("bigint_type"), "bigint_type type " + id);

@@ -13,11 +13,9 @@ import test.support.PostgresUtils;
 import java.math.BigDecimal;
 import java.sql.Array;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -76,8 +74,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			5678, 12345678, 9223372036854770000L,
 			new BigDecimal("123456789012345678.91"), new BigDecimal("12345678.90123456"),
 			876.543f, 8765.4321,
-			LocalDate.parse("2999-12-31"), LocalTime.parse("23:59:58"),
-			LocalDateTime.parse("2998-11-30T22:57:56.789"),
+			"2999-12-31", "23:59:58", "2998-11-30 22:57:56.789",
 			true,
 			"EjRWeJCrzeI=",
 			"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
@@ -95,8 +92,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			0, 0, 0L,
 			new BigDecimal("0.00"), new BigDecimal("0E-8"),
 			0f, 0.,
-			LocalDate.parse("2000-01-02"), LocalTime.parse("00:00:00"),
-			LocalDateTime.parse("2000-01-02T03:04:05.678"),
+			"2000-01-02", "00:00:00", "2000-01-02 03:04:05.678",
 			false,
 			"",
 			"00000000-0000-0000-0000-000000000000",
@@ -126,8 +122,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 			7904, 1384653604, 1384644904L,
 			new BigDecimal("13846469.04"), new BigDecimal("13.84612704"),
 			13846530f, 13846684.04,
-			LocalDate.parse("1976-12-12"), LocalTime.parse("08:26:44"),
-			LocalDateTime.parse("1900-01-05T04:53:24.004"),
+			"1976-12-12", "08:26:44", "1900-01-05 04:53:24.004",
 			false,
 			"Ynl0ZWFfdHlwZSAxMzg0NjYwMzA0",
 			"988543c3-b42c-3ce1-8da5-9bad5175fd20",
@@ -146,7 +141,7 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		Integer smallint_type, Integer integer_type, Long bigint_type,
 		BigDecimal decimal_type, BigDecimal numeric_type,
 		Float real_type, Double double_type,
-		LocalDate date_type, LocalTime time_type, LocalDateTime timestamp_type,
+		String date_type, String time_type, String timestamp_type,
 		Boolean boolean_type,
 		String bytea_type,
 		String uuid_type,
@@ -171,9 +166,9 @@ public class DataTypesPostgresTest extends DataTypesSetupTestBase {
 		assertEquals(real_type, values.get(id).get("real_type"), "real_type type " + id);
 		assertEquals(double_type, values.get(id).get("double_type"), "double_type type " + id);
 		// date/time
-		verifyField(id, "date_type", date_type, Object::toString, Object::toString);
-		verifyField(id, "time_type", time_type, v -> Time.valueOf(v).toString(), Object::toString);
-		verifyField(id, "timestamp_type", timestamp_type, v -> Timestamp.valueOf(v).toString(), Object::toString);
+		verifyField(id, "date_type", date_type, Function.identity(), Object::toString);
+		verifyField(id, "time_type", time_type, Function.identity(), Object::toString);
+		verifyField(id, "timestamp_type", timestamp_type, Function.identity(), Object::toString);
 		// boolean
 		assertEquals(boolean_type, values.get(id).get("boolean_type"), "boolean_type type " + id);
 		// binary

@@ -10,6 +10,9 @@ import test.support.ConfigSupport;
 import test.support.OracleUtils;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -56,8 +59,7 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 			new BigDecimal("12345678901234.56"), new BigDecimal("12345678.90123456"),
 			new BigDecimal("876.543"),
 			765.432f, 8765.4321,
-			"2999-12-31 00:00:00.0", "1970-01-01 23:59:58.0",
-			"2998-11-30 22:57:56.789",
+			"2999-12-31 00:00:00.0", "1970-01-01 23:59:58.0", "2998-11-30 22:57:56.789",
 			true,
 			"text1", "ntext1", "EjRWeJCrzeI=", "/ty6CYdlQyI="
 		);
@@ -68,8 +70,7 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 			0, 0L,
 			new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"),
 			0f, 0.,
-			"2000-01-02 00:00:00.0", "1970-01-01 00:00:00.0",
-			"2000-01-02 03:04:05.678",
+			"2000-01-02 00:00:00.0", "1970-01-01 00:00:00.0", "2000-01-02 03:04:05.678",
 			false,
 			null, null, null, null
 		);
@@ -92,8 +93,7 @@ public class DataTypesOracleTest extends DataTypesSetupTestBase {
 			1384653604, 1384644904L,
 			new BigDecimal("13846469.04"), new BigDecimal("13.84603704"), new BigDecimal("13846568"),
 			13846789f, 13846774.04,
-			"1976-12-12 00:00:00.0", "1935-01-22 08:26:44.804",
-			"1900-01-05 04:53:24.004",
+			"1976-12-12 00:00:00.0", "1935-01-22 08:26:44.804", "1900-01-05 04:53:24.004",
 			false,
 			"clob_type 1384603204", "nclob_type 1384602404",
 			"YmxvYl90eXBlIDEzODQ2NzU0MDQ=", "YmluYXIxMzg0NjUyMzA0"
