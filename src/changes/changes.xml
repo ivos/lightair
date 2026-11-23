@@ -5,6 +5,10 @@
 		<title>Changes</title>
 	</properties>
 	<body>
+		<release date="2026-11-23" version="4.1.0" description="Time zone support. Fix throw error from invocation.">
+			<action type="add">Support time zone in dataset values.</action>
+			<action type="fix">Throw error from invocation, instead of calling Verify.</action>
+		</release>
 		<release date="2026-11-12" version="4.0.0" description="Switch to JUnit Jupiter 6">
 			<action type="update">Switch to JUnit Jupiter 6 with Java 17 and upgrade all dependencies.</action>
 		</release>
