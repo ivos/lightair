@@ -8,13 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 import test.support.ConfigSupport;
-import test.support.TimeUtils;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -36,11 +34,11 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 	}
 
 	public static void createTable() {
-		db.execute("create table data_types (id int primary key, char_type char(25), "
-			+ "varchar_type varchar(50), integer_type integer, "
+		db.execute("create table data_types (id int primary key, "
+			+ "char_type char(25), varchar_type varchar(50), "
+			+ "integer_type integer, double_type double precision, bigint_type bigint, decimal_type decimal(20,2), "
 			+ "date_type date, time_type time, timestamp_type timestamp, "
-			+ "double_type double, boolean_type boolean, bigint_type bigint, "
-			+ "decimal_type decimal(20,2), clob_type clob, blob_type blob, binary_type varbinary(8), "
+			+ "boolean_type boolean, clob_type clob, blob_type blob, binary_type varbinary(8), "
 			+ "uuid_type uuid, varchar_array_type varchar(100) array)");
 		ApiTestSupport.reInitialize();
 	}
@@ -53,65 +51,83 @@ public class DataTypesH2Test extends DataTypesSetupTestBase {
 	@Override
 	protected void verify() {
 		// full
-		verifyRow(0, "efghijklmnopqrs          ", "abcdefghijklmnopqrstuvxyz",
-			12345678, LocalDate.of(2999, 12, 31),
-			LocalTime.of(23, 59, 58),
-			LocalDateTime.of(2998, 11, 30, 22, 57, 56, 789000000),
-			8765.4321, true, 9223372036854770000L,
+		verifyRow(0,
+			"efghijklmnopqrs          ", "abcdefghijklmnopqrstuvxyz",
+			12345678, 8765.4321, 9223372036854770000L,
 			new BigDecimal("12345678901234.56"),
-			"text1", "EjRWeJCrzeI=", "/ty6CYdlQyI=",
+			"2999-12-31", "23:59:58", "2998-11-30 22:57:56.789",
+			true, "text1", "EjRWeJCrzeI=", "/ty6CYdlQyI=",
 			"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
 			new String[]{"varchar 1", "varchar 2", "", " ", null, "varchar 3"}
 		);
 		// empty
-		verifyRow(1, "                         ", "", 0,
-			LocalDate.of(2000, 1, 2),
-			LocalTime.of(0, 0, 0),
-			LocalDateTime.of(2000, 1, 2, 3, 4, 5, 678000000),
-			0., false, 0L,
-			new BigDecimal("0.00"), "", "", "",
-			"00000000-0000-0000-0000-000000000000",
-			new String[0]
+		verifyRow(1,
+			"                         ", "",
+			0, 0., 0L, new BigDecimal("0.00"),
+			"2000-01-02", "00:00:00", "2000-01-02 03:04:05.678",
+			false, "", "", "",
+			"00000000-0000-0000-0000-000000000000", new String[0]
 		);
 		// null
-		verifyRow(2, null, null, null, null, null,
+		verifyRow(2,
+			null, null, null, null, null,
 			null, null, null, null,
 			null, null, null, null, null, null
 		);
 		// auto
-		verifyRow(3, "char_type 1384656904     ", "varchar_type 1384684104",
-			1384653604, LocalDate.parse("1976-12-12"), LocalTime.parse("08:26:44"),
-			LocalDateTime.parse("1900-01-05T04:53:24.004"), 13846684.04, false,
-			1384644904L, new BigDecimal("13846469.04"), "clob_type 1384603204",
-			"YmxvYl90eXBlIDEzODQ2NzU0MDQ=", "ODQ2NTIzMDQ=",
+		verifyRow(3,
+			"char_type 1384656904     ", "varchar_type 1384684104",
+			1384653604, 13846684.04, 1384644904L, new BigDecimal("13846469.04"),
+			"1976-12-12", "08:26:44", "1900-01-05 04:53:24.004",
+			false,
+			"clob_type 1384603204", "YmxvYl90eXBlIDEzODQ2NzU0MDQ=", "ODQ2NTIzMDQ=",
 			"988543c3-b42c-3ce1-8da5-9bad5175fd20",
 			new String[]{"varchar_array_type 13846786041", "varchar_array_type 13846786042",
 				"varchar_array_type 13846786043"}
 		);
+		// values with time zones
+		verifyRow(4,
+			null, null, null, null, null,
+			null, null, null,
+			ZonedDateTime.parse("2020-02-20T10:20:30.123+04:00")
+				.withZoneSameInstant(ZoneId.systemDefault())
+				.toLocalDateTime()
+				.toString()
+				.replace('T', ' '),
+			null, null, null, null, null, null
+		);
 	}
 
-	private void verifyRow(
-		int id, String char_type, String varchar_type,
-		Integer integer_type, LocalDate date_type, LocalTime time_type,
-		LocalDateTime timestamp_type, Double double_type, Boolean boolean_type,
-		Long bigint_type, BigDecimal decimal_type, String clob_type,
-		String blob_type, String binary_type, String uuid_type, Object[] varchar_array_type
+	private void verifyRow(int id,
+		String char_type, String varchar_type,
+		Integer integer_type, Double double_type, Long bigint_type, BigDecimal decimal_type,
+		String date_type, String time_type, String timestamp_type,
+		Boolean boolean_type, String clob_type, String blob_type, String binary_type,
+		String uuid_type, Object[] varchar_array_type
 	) {
 		assertEquals(id, values.get(id).get("id"), "id " + id);
+		// char
 		assertEquals(char_type, values.get(id).get("char_type"), "char_type " + id);
 		assertEquals(varchar_type, values.get(id).get("varchar_type"), "varchar_type " + id);
+		// integer
 		assertEquals(integer_type, values.get(id).get("integer_type"), "integer_type " + id);
-		verifyField(id, "date_type", date_type, Function.identity(), TimeUtils::toLocalDate);
-		verifyField(id, "time_type", time_type, Function.identity(), TimeUtils::toLocalTime);
-		verifyField(id, "timestamp_type", timestamp_type, Function.identity(), TimeUtils::toLocalDateTime);
+		// numeric
 		assertEquals(double_type, values.get(id).get("double_type"), "double_type type " + id);
-		assertEquals(boolean_type, values.get(id).get("boolean_type"), "boolean_type type " + id);
 		assertEquals(bigint_type, values.get(id).get("bigint_type"), "bigint_type type " + id);
 		assertEquals(decimal_type, values.get(id).get("decimal_type"), "decimal_type type " + id);
+		// date/time
+		verifyField(id, "date_type", date_type, Function.identity(), Object::toString);
+		verifyField(id, "time_type", time_type, Function.identity(), Object::toString);
+		verifyField(id, "timestamp_type", timestamp_type, Function.identity(), Object::toString);
+		// boolean
+		assertEquals(boolean_type, values.get(id).get("boolean_type"), "boolean_type type " + id);
+		// binary
 		assertEquals(clob_type, values.get(id).get("clob_type"), "clob_type type " + id);
 		assertEquals(blob_type, convertBytesToString(values.get(id).get("blob_type")), "blob_type type " + id);
 		assertEquals(binary_type, convertBytesToString(values.get(id).get("binary_type")), "binary_type type " + id);
+		// uuid
 		verifyField(id, "uuid_type", uuid_type, Function.identity(), Object::toString);
+		// arrays
 		verifyArrayField(id, "varchar_array_type", varchar_array_type);
 	}
 

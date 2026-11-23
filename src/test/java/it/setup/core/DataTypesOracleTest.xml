@@ -45,4 +45,6 @@
 	            boolean_type="@auto"
 	            clob_type="@auto" nclob_type="@auto" blob_type="@auto" binary_type="@auto"
 	/>
+	<!--values with time zones-->
+	<data_types id="4" timestamp_type="2020-02-20T10:20:30.123+04:00" />
 </dataset>

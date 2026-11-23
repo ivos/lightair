@@ -16,7 +16,10 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -261,7 +264,11 @@ public class Convert implements Keywords {
 			case TIME:
 				return Time.valueOf(LocalTime.parse(value));
 			case TIMESTAMP:
-				return Timestamp.valueOf(LocalDateTime.parse(value));
+				TemporalAccessor parsed = DateTimeFormatter.ISO_DATE_TIME
+					.parseBest(value, OffsetDateTime::from, LocalDateTime::from);
+				return parsed instanceof OffsetDateTime odt
+					? Timestamp.from(odt.toInstant())
+					: Timestamp.valueOf((LocalDateTime) parsed);
 			case STRING:
 			case FIXED_STRING:
 			case NSTRING:

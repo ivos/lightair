@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
+import java.sql.Timestamp;
 import java.time.Clock;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -59,8 +59,8 @@ public class ReplaceNewTimestampTest extends CommonTestBase {
 	}
 
 	private void verifyColumn() {
-		long timeA = ((Date) bothValues.get(0).get("timestamp1")).getTime();
-		long timeB = ((Date) bothValues.get(1).get("timestamp1")).getTime();
+		long timeA = ((Timestamp) bothValues.get(0).get("timestamp1")).getTime();
+		long timeB = ((Timestamp) bothValues.get(1).get("timestamp1")).getTime();
 		assertTrue(timeB - timeA > 0, "Timestamp increased on second run");
 	}
 }

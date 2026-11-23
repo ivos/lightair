@@ -9,11 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import test.support.ApiTestSupport;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -41,26 +36,21 @@ public class ReplaceTest extends CommonTestBase {
 	public void test() {
 		assertEquals(Integer.valueOf(5), db.queryForObject("select count(*) from a", Integer.class), "Count");
 		values = db.queryForList("select * from a");
-		verifyRow(0, "01", LocalDate.of(2011, 10, 21), LocalTime.of(22, 49, 48),
-			LocalDateTime.of(2011, 11, 21, 23, 59, 58, 123000000));
+		verifyRow(0, "01", "2011-10-21", "22:49:48", "2011-11-21 23:59:58.123");
 		// @date:
-		verifyRow(1, null, LocalDate.of(2009, 8, 28), LocalTime.of(0, 0, 0),
-			LocalDateTime.of(2009, 8, 28, 0, 0, 0, 0));
+		verifyRow(1, null, "2009-08-28", "00:00:00", "2009-08-28 00:00:00.0");
 		// @time:
-		verifyRow(2, null, LocalDate.of(1970, 1, 1), LocalTime.of(19, 49, 59),
-			LocalDateTime.of(1970, 1, 1, 19, 49, 59));
+		verifyRow(2, null, "1970-01-01", "19:49:59", "1970-01-01 19:49:59.0");
 		// @timestamp:
-		verifyRow(3, null, LocalDate.of(2009, 8, 28), LocalTime.of(19, 49, 59),
-			LocalDateTime.of(2009, 8, 28, 19, 49, 59, 987000000));
-		verifyRow(4, "21", LocalDate.of(2011, 10, 22), LocalTime.of(22, 49, 49),
-			LocalDateTime.of(2011, 11, 22, 23, 59, 59, 124000000));
+		verifyRow(3, null, "2009-08-28", "19:49:59", "2009-08-28 19:49:59.987");
+		verifyRow(4, "21", "2011-10-22", "22:49:49", "2011-11-22 23:59:59.124");
 	}
 
-	private void verifyRow(int id, String a1, LocalDate date1, LocalTime time1, LocalDateTime timestamp1) {
+	private void verifyRow(int id, String a1, String date1, String time1, String timestamp1) {
 		assertEquals(id, values.get(id).get("id"), "id " + id);
 		assertEquals(a1, values.get(id).get("a1"), "a1 " + id);
-		assertEquals(date1.toString(), values.get(id).get("date1").toString(), "date1 " + id);
-		assertEquals(time1, ((Time) values.get(id).get("time1")).toLocalTime(), "time1 " + id);
-		assertEquals(Timestamp.valueOf(timestamp1), values.get(id).get("timestamp1"), "timestamp1 " + id);
+		assertEquals(date1, values.get(id).get("date1").toString(), "date1 " + id);
+		assertEquals(time1, values.get(id).get("time1").toString(), "time1 " + id);
+		assertEquals(timestamp1, values.get(id).get("timestamp1").toString(), "timestamp1 " + id);
 	}
 }
