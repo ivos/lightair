@@ -3,7 +3,7 @@
 
 	<groupId>net.sf.lightair</groupId>
 	<artifactId>light-air</artifactId>
-	<version>4.1.0</version>
+	<version>4.1.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Light Air</name>
@@ -56,7 +56,7 @@
 	</issueManagement>
 
 	<properties>
-		<project.build.outputTimestamp>2026-11-23T09:20:51Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2026-11-23T09:21:56Z</project.build.outputTimestamp>
 
 		<maven.compiler.release>17</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -74,7 +74,7 @@
 		<connection>scm:git:git@github.com:ivos/lightair.git</connection>
 		<developerConnection>scm:git:git@github.com:ivos/lightair.git</developerConnection>
 		<url>https://github.com/ivos/lightair</url>
-		<tag>light-air-4.1.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<distributionManagement>
 		<site>
